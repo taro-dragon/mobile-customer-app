@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "996138002872",
+    "project_id": "mobile-client-app-dev",
+    "storage_bucket": "mobile-client-app-dev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:996138002872:android:c8978b771fae8becad474d",
+        "android_client_info": {
+          "package_name": "com.mobile_car_app.ai_car_price.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "996138002872-4c66j3gsihpevml3cmascm9oqoac7bk5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEl7tXEuC667bj2zdZwaRScJECIr9827c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "996138002872-4c66j3gsihpevml3cmascm9oqoac7bk5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "996138002872-slfjb66mja9oqqre5b2mhv69hkvknp7i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mobile-car-app.ai-car-price.dev"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
