@@ -1,39 +1,52 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import React, { useEffect } from "react";
+import { SafeAreaView, StyleSheet, ActivityIndicator } from "react-native";
+import { Slot, useRouter } from "expo-router";
+import { useStore } from "@/hooks/useStore";
+import useAuthInitialization from "@/hooks/useAuthInitialization";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+export default function Layout() {
+  const router = useRouter();
+  const { customer, client, isAuthLoading } = useStore();
+  useAuthInitialization();
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+    if (!isAuthLoading) {
+      if (!customer && !client) {
+        router.replace("/login");
+      } else if (customer) {
+        router.replace("/(customer)");
+      } else if (client) {
+        router.replace("/(client)");
+      }
     }
-  }, [loaded]);
+  }, [customer, client, isAuthLoading, router]);
 
-  if (!loaded) {
-    return null;
+  if (isAuthLoading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ActivityIndicator size="large" color="#2196F3" />
+      </SafeAreaView>
+    );
   }
 
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
+  return <Slot />;
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+  header: {
+    height: 60,
+    backgroundColor: "#2196F3",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  headerText: { color: "#fff", fontSize: 20 },
+  content: { flex: 1 },
+  footer: {
+    height: 50,
+    backgroundColor: "#eee",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  footerText: { color: "#333", fontSize: 16 },
+});
