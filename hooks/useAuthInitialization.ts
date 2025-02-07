@@ -3,8 +3,10 @@ import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 import { useStore } from "@/hooks/useStore";
 import { Customer } from "@/types/models/Customer";
+import * as SplashScreen from "expo-splash-screen";
 
 export default function useAuthInitialization() {
+  SplashScreen.preventAutoHideAsync();
   const { setCustomer, setIsAuthLoading, deleteCustomer } = useStore();
 
   useEffect(() => {
@@ -30,6 +32,7 @@ export default function useAuthInitialization() {
         deleteCustomer();
       }
       setIsAuthLoading(false);
+      SplashScreen.hideAsync();
     });
 
     return () => unsubscribe();
