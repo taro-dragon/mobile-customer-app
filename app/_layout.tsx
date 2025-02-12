@@ -3,6 +3,7 @@ import { SafeAreaView, StyleSheet, ActivityIndicator } from "react-native";
 import { Slot, useRouter } from "expo-router";
 import { useStore } from "@/hooks/useStore";
 import useAuthInitialization from "@/hooks/useAuthInitialization";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 
 export default function Layout() {
   const router = useRouter();
@@ -12,7 +13,7 @@ export default function Layout() {
   useEffect(() => {
     if (!isAuthLoading) {
       if (!customer && !client) {
-        router.replace("/login");
+        router.replace("/(unauth)");
       } else if (customer) {
         router.replace("/(customer)");
       } else if (client) {
@@ -23,13 +24,19 @@ export default function Layout() {
 
   if (isAuthLoading) {
     return (
-      <SafeAreaView style={styles.container}>
-        <ActivityIndicator size="large" color="#2196F3" />
-      </SafeAreaView>
+      <ThemeProvider>
+        <SafeAreaView style={styles.container}>
+          <ActivityIndicator size="large" color="#2196F3" />
+        </SafeAreaView>
+      </ThemeProvider>
     );
   }
 
-  return <Slot />;
+  return (
+    <ThemeProvider>
+      <Slot />
+    </ThemeProvider>
+  );
 }
 
 const styles = StyleSheet.create({
