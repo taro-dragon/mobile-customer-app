@@ -1,3 +1,4 @@
+import { useTheme } from "@/contexts/ThemeContext";
 import { Text, TouchableOpacity } from "react-native";
 
 type ButtonProps = {
@@ -7,6 +8,7 @@ type ButtonProps = {
   color: string;
   fullWidth?: boolean;
   isBorder?: boolean;
+  notBorder?: boolean;
 };
 
 const Button = ({
@@ -16,13 +18,21 @@ const Button = ({
   color,
   fullWidth,
   isBorder,
+  notBorder,
 }: ButtonProps) => {
+  const { colors, typography } = useTheme();
   return (
     <TouchableOpacity
       onPress={onPress}
       disabled={disabled}
       style={{
-        backgroundColor: isBorder ? "transparent" : color,
+        backgroundColor: disabled
+          ? colors.gray200
+          : notBorder
+          ? "transparent"
+          : isBorder
+          ? "transparent"
+          : color,
         paddingVertical: 8,
         paddingHorizontal: 16,
         display: "flex",
@@ -32,14 +42,21 @@ const Button = ({
         borderRadius: 6,
         width: fullWidth ? "100%" : "auto",
         borderWidth: 1,
-        borderColor: isBorder ? color : "transparent",
+        borderColor: notBorder
+          ? "transparent"
+          : isBorder
+          ? color
+          : "transparent",
       }}
     >
       <Text
         style={{
-          color: isBorder ? color : "white",
-          fontSize: 16,
-          fontWeight: "bold",
+          color: disabled
+            ? colors.textPrimary
+            : notBorder || isBorder
+            ? color
+            : "white",
+          ...typography.heading3,
         }}
       >
         {label}

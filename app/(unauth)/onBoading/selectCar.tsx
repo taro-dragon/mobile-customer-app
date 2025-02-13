@@ -1,19 +1,18 @@
 import Button from "@/components/common/Button";
+import Divider from "@/components/common/Divider";
+import SafeAreaBottom from "@/components/common/SafeAreaBottom";
+import { CarSelect } from "@/components/OnBoading/CarSelect";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useRouter } from "expo-router";
+import { useFormContext } from "react-hook-form";
 import { View } from "react-native";
 
-import { MakerSelect } from "@/components/OnBoading/MakerSelect";
-import SafeAreaBottom from "@/components/common/SafeAreaBottom";
-import { useFormContext } from "react-hook-form";
-import Divider from "@/components/common/Divider";
-
-const OnBoading = () => {
+const SelectCar = () => {
   const { colors } = useTheme();
-  const router = useRouter();
   const form = useFormContext();
-  const { watch } = form;
-  const maker = watch("maker");
+  const { watch, resetField } = form;
+  const model = watch("model");
+  const router = useRouter();
   return (
     <View
       style={{
@@ -27,7 +26,7 @@ const OnBoading = () => {
           backgroundColor: colors.backgroundPrimary,
         }}
       >
-        <MakerSelect />
+        <CarSelect />
       </View>
       <Divider />
       <View
@@ -41,9 +40,19 @@ const OnBoading = () => {
         <Button
           color={colors.primary}
           label="次へ"
-          onPress={() => router.push("/onBoading/selectCar")}
+          onPress={() => router.push("/onBoading/selectYear")}
           fullWidth
-          disabled={!maker}
+          disabled={!model}
+        />
+        <Button
+          color={colors.primary}
+          label="前へ"
+          onPress={() => {
+            resetField("model");
+            router.back();
+          }}
+          fullWidth
+          notBorder
         />
         <SafeAreaBottom color={colors.backgroundPrimary} />
       </View>
@@ -51,4 +60,4 @@ const OnBoading = () => {
   );
 };
 
-export default OnBoading;
+export default SelectCar;

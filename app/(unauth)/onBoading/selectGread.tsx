@@ -1,19 +1,19 @@
 import Button from "@/components/common/Button";
+import Divider from "@/components/common/Divider";
+import SafeAreaBottom from "@/components/common/SafeAreaBottom";
+import { GreadSelect } from "@/components/OnBoading/GreadSelect";
+import { YearSelect } from "@/components/OnBoading/YearSelect";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useRouter } from "expo-router";
+import { useFormContext } from "react-hook-form";
 import { View } from "react-native";
 
-import { MakerSelect } from "@/components/OnBoading/MakerSelect";
-import SafeAreaBottom from "@/components/common/SafeAreaBottom";
-import { useFormContext } from "react-hook-form";
-import Divider from "@/components/common/Divider";
-
-const OnBoading = () => {
+const SelectGread = () => {
   const { colors } = useTheme();
-  const router = useRouter();
   const form = useFormContext();
-  const { watch } = form;
-  const maker = watch("maker");
+  const { watch, resetField } = form;
+  const gread = watch("gread");
+  const router = useRouter();
   return (
     <View
       style={{
@@ -27,7 +27,7 @@ const OnBoading = () => {
           backgroundColor: colors.backgroundPrimary,
         }}
       >
-        <MakerSelect />
+        <GreadSelect />
       </View>
       <Divider />
       <View
@@ -41,9 +41,19 @@ const OnBoading = () => {
         <Button
           color={colors.primary}
           label="次へ"
-          onPress={() => router.push("/onBoading/selectCar")}
+          onPress={() => console.log("next")}
           fullWidth
-          disabled={!maker}
+          disabled={!gread}
+        />
+        <Button
+          color={colors.primary}
+          label="前へ"
+          onPress={() => {
+            resetField("year");
+            router.back();
+          }}
+          fullWidth
+          notBorder
         />
         <SafeAreaBottom color={colors.backgroundPrimary} />
       </View>
@@ -51,4 +61,4 @@ const OnBoading = () => {
   );
 };
 
-export default OnBoading;
+export default SelectGread;

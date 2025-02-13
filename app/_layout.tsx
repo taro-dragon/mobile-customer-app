@@ -4,6 +4,7 @@ import { Slot, useRouter } from "expo-router";
 import { useStore } from "@/hooks/useStore";
 import useAuthInitialization from "@/hooks/useAuthInitialization";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function Layout() {
   const router = useRouter();
@@ -33,9 +34,11 @@ export default function Layout() {
   }
 
   return (
-    <ThemeProvider>
-      <Slot />
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <Slot />
+      </ThemeProvider>
+    </SafeAreaProvider>
   );
 }
 

@@ -121,7 +121,7 @@ const Index = () => {
           <Button
             color={colors.primary}
             label="初めての方はこちら"
-            onPress={() => router.push("/(unauth)/login")}
+            onPress={() => router.push("/(unauth)/onBoading")}
             fullWidth
           />
           <Button
