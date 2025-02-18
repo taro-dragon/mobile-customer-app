@@ -1,7 +1,6 @@
 export type Customer = {
   id: string;
   isAnonymous: boolean;
-  isFirstLogin: boolean;
   info?: {
     familyName: string;
     givenName: string;

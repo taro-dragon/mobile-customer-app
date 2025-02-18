@@ -1,3 +1,6 @@
+import { useRouter } from "expo-router";
+import { useFormContext } from "react-hook-form";
+import { ActivityIndicator, Modal, ScrollView, Text, View } from "react-native";
 import Button from "@/components/common/Button";
 import Divider from "@/components/common/Divider";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
@@ -5,12 +8,10 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { FullCarData } from "@/types/models/carData/fullCarData";
 import fullCarData from "@/constants/full_car_catalog.json";
 import { CarForm } from "@/types/models/CarForm";
-import { useRouter } from "expo-router";
-import { useFormContext } from "react-hook-form";
-import { ScrollView, Text, View } from "react-native";
 import ConfirmItem from "@/components/formItem/ConfirmItem";
 import CarIcon from "@/components/icons/car";
 import ConfirmImage from "@/components/formItem/ConfirmImage";
+import { useState } from "react";
 
 const Confirm = () => {
   const { watch } = useFormContext<CarForm>();
@@ -22,6 +23,7 @@ const Confirm = () => {
   const modelData = makerData?.carModels.find((c) => c.modelId === model);
   const yearData = modelData?.years.find((y) => y.yearId === year);
   const greadData = yearData?.grades.find((g) => g.gradeName === gread);
+  const [isLoading, setIsLoading] = useState(false);
   return (
     <View style={{ flex: 1, backgroundColor: colors.backgroundPrimary }}>
       <ScrollView
@@ -85,7 +87,9 @@ const Confirm = () => {
         <Button
           color={colors.primary}
           label="登録する"
-          onPress={() => router.push("/onBoading/confirm")}
+          onPress={() => {
+            setIsLoading(true);
+          }}
           fullWidth
         />
         <Button
@@ -99,6 +103,25 @@ const Confirm = () => {
         />
         <SafeAreaBottom color={colors.backgroundPrimary} />
       </View>
+      <Modal visible={isLoading} transparent animationType="slide">
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "#00000080",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 12,
+          }}
+        >
+          <ActivityIndicator size="large" color={colors.white} />
+          <Text
+            onPress={() => setIsLoading(false)}
+            style={{ color: colors.white, ...typography.title2 }}
+          >
+            登録処理中...
+          </Text>
+        </View>
+      </Modal>
     </View>
   );
 };

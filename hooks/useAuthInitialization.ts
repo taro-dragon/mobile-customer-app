@@ -4,30 +4,41 @@ import firestore from "@react-native-firebase/firestore";
 import { useStore } from "@/hooks/useStore";
 import { Customer } from "@/types/models/Customer";
 import * as SplashScreen from "expo-splash-screen";
+import { Client } from "@/types/models/Client";
 
 export default function useAuthInitialization() {
   SplashScreen.preventAutoHideAsync();
-  const { setCustomer, setIsAuthLoading, deleteCustomer } = useStore();
+  const { setCustomer, setClient, setIsAuthLoading, deleteCustomer } =
+    useStore();
 
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(async (user) => {
       if (user) {
-        await firestore()
-          .collection("customers")
-          .doc(user.uid)
-          .get()
-          .then((doc) => {
-            if (doc.exists) {
-              const customer = doc.data() as Customer;
-              setCustomer({
-                id: doc.id,
-                isAnonymous: customer.isAnonymous,
-                createdAt: customer.createdAt,
-                updatedAt: customer.updatedAt,
-                info: customer.info,
+        user.providerData.forEach(async (provider) => {
+          if (provider.providerId === "password") {
+            await firestore()
+              .collection("clients")
+              .doc(user.uid)
+              .onSnapshot((snapshot) => {
+                if (snapshot.exists) {
+                  const client = snapshot.data() as Client;
+                  client.id = user.uid;
+                  setClient(client);
+                }
               });
-            }
-          });
+          } else {
+            await firestore()
+              .collection("customers")
+              .doc(user.uid)
+              .onSnapshot((snapshot) => {
+                if (snapshot.exists) {
+                  const customer = snapshot.data() as Customer;
+                  customer.id = user.uid;
+                  setCustomer(customer);
+                }
+              });
+          }
+        });
       } else {
         deleteCustomer();
       }
