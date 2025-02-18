@@ -1,3 +1,5 @@
+import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
+
 export type Customer = {
   id: string;
   isAnonymous: boolean;
@@ -11,6 +13,6 @@ export type Customer = {
     phone: string;
     profileImage: string;
   };
-  createdAt: string;
-  updatedAt: string;
+  createdAt: FirebaseFirestoreTypes.Timestamp;
+  updatedAt: FirebaseFirestoreTypes.Timestamp;
 };

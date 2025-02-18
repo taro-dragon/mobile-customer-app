@@ -1,6 +1,10 @@
+import { useState } from "react";
 import { useRouter } from "expo-router";
 import { useFormContext } from "react-hook-form";
 import { ActivityIndicator, Modal, ScrollView, Text, View } from "react-native";
+import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
+
 import Button from "@/components/common/Button";
 import Divider from "@/components/common/Divider";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
@@ -11,11 +15,13 @@ import { CarForm } from "@/types/models/CarForm";
 import ConfirmItem from "@/components/formItem/ConfirmItem";
 import CarIcon from "@/components/icons/car";
 import ConfirmImage from "@/components/formItem/ConfirmImage";
-import { useState } from "react";
+import { useStore } from "@/hooks/useStore";
+import { Customer } from "@/types/models/Customer";
 
 const Confirm = () => {
   const { watch } = useFormContext<CarForm>();
   const { colors, typography } = useTheme();
+  const { setCustomer } = useStore();
   const router = useRouter();
   const { manufacturers } = fullCarData as FullCarData;
   const { front, back, left, right, maker, model, year, gread } = watch();
@@ -24,6 +30,37 @@ const Confirm = () => {
   const yearData = modelData?.years.find((y) => y.yearId === year);
   const greadData = yearData?.grades.find((g) => g.gradeName === gread);
   const [isLoading, setIsLoading] = useState(false);
+  const onSubmit = async () => {
+    setIsLoading(true);
+    try {
+      const user = await auth().signInAnonymously();
+      const userId = user.user?.uid;
+      if (!userId) {
+        throw new Error("ユーザーIDが取得できませんでした");
+      }
+      const createCustomerData: Customer = {
+        id: userId,
+        isAnonymous: true,
+        createdAt: firestore.Timestamp.now(),
+        updatedAt: firestore.Timestamp.now(),
+      };
+      await firestore()
+        .collection("customers")
+        .doc(userId)
+        .set(createCustomerData);
+      await firestore()
+        .collection("customers")
+        .doc(userId)
+        .onSnapshot((snapshot) => {
+          const customer = snapshot.data() as Customer;
+          setCustomer(customer);
+        });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <View style={{ flex: 1, backgroundColor: colors.backgroundPrimary }}>
       <ScrollView
