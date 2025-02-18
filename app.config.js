@@ -36,6 +36,7 @@ const commonConfig = {
       "@react-native-firebase/app",
       "expo-router",
       "expo-dev-client",
+      "react-native-vision-camera",
       [
         "expo-build-properties",
         {

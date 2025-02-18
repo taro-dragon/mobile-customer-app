@@ -1,5 +1,3 @@
-import AudiLogo from "@/components/Logos/Audi";
-import ToyotaLogo from "@/components/Logos/Toyota";
 import { useTheme } from "@/contexts/ThemeContext";
 import { SafeAreaView, View } from "react-native";
 
@@ -13,8 +11,6 @@ const Login = () => {
       }}
     >
       <SafeAreaView />
-      <AudiLogo size={48} color={colors.primary} />
-      <ToyotaLogo size={48} color={colors.primary} />
     </View>
   );
 };

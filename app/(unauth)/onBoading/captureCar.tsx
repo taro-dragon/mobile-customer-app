@@ -1,18 +1,23 @@
 import Button from "@/components/common/Button";
 import Divider from "@/components/common/Divider";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
-import { GreadSelect } from "@/components/OnBoading/GreadSelect";
+import CarIcon from "@/components/icons/car";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useRouter } from "expo-router";
+import { TouchableOpacity, View } from "react-native";
+import { Image } from "expo-image";
+import Picture from "@/components/formItem/picture";
 import { useFormContext } from "react-hook-form";
-import { View } from "react-native";
 
-const SelectGread = () => {
+const CaptureCar = () => {
   const { colors } = useTheme();
-  const form = useFormContext();
-  const { watch, resetField } = form;
-  const gread = watch("gread");
   const router = useRouter();
+  const { watch } = useFormContext();
+  const front = watch("front");
+  const back = watch("back");
+  const left = watch("left");
+  const right = watch("right");
+  const isAllCapture = front && back && left && right;
   return (
     <View
       style={{
@@ -23,10 +28,25 @@ const SelectGread = () => {
       <View
         style={{
           flex: 1,
-          backgroundColor: colors.backgroundPrimary,
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 24,
         }}
       >
-        <GreadSelect />
+        <Picture name="front" />
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 24,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Picture name="left" />
+          <CarIcon size={80} color={colors.primary} />
+          <Picture name="right" />
+        </View>
+        <Picture name="back" />
       </View>
       <Divider />
       <View
@@ -42,13 +62,12 @@ const SelectGread = () => {
           label="次へ"
           onPress={() => router.push("/onBoading/captureCar")}
           fullWidth
-          disabled={!gread}
+          disabled={!isAllCapture}
         />
         <Button
           color={colors.primary}
           label="前へ"
           onPress={() => {
-            resetField("gread");
             router.back();
           }}
           fullWidth
@@ -60,4 +79,4 @@ const SelectGread = () => {
   );
 };
 
-export default SelectGread;
+export default CaptureCar;

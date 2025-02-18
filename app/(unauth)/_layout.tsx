@@ -12,7 +12,7 @@ const UnauthLayout = () => {
         options={{
           gestureEnabled: false,
           headerTintColor: colors.primary,
-          headerBackButtonDisplayMode: "minimal",
+          headerBackVisible: false,
           title: "車両情報登録",
           headerStyle: {
             backgroundColor: colors.backgroundPrimary,

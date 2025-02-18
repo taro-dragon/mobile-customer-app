@@ -3,22 +3,27 @@ import fullCarData from "@/constants/full_car_catalog.json";
 import { FullCarData } from "@/types/models/carData/fullCarData";
 import Select from "../formItem/RadioButton";
 import { useFormContext } from "react-hook-form";
-
+import { useMemo } from "react";
 export const GreadSelect = () => {
   const { watch } = useFormContext();
   const maker = watch("maker");
   const model = watch("model");
   const year = watch("year");
   const { manufacturers } = fullCarData as FullCarData;
-  const cars = manufacturers.find((m) => m.manufacturerId === maker)?.carModels;
-  const years = cars?.find((c) => c.modelId === model)?.years;
-  const rawGrades = years?.find((y) => y.yearId === year)?.grades;
-  const uniqueGrades = rawGrades
-    ? rawGrades.filter(
-        (grade, index) =>
-          rawGrades.findIndex((g) => g.gradeName === grade.gradeName) === index
-      )
-    : [];
+  const uniqueGrades = useMemo(() => {
+    const cars = manufacturers.find(
+      (m) => m.manufacturerId === maker
+    )?.carModels;
+    const years = cars?.find((c) => c.modelId === model)?.years;
+    const rawGrades = years?.find((y) => y.yearId === year)?.grades;
+    return rawGrades
+      ? rawGrades.filter(
+          (grade, index) =>
+            rawGrades.findIndex((g) => g.gradeName === grade.gradeName) ===
+            index
+        )
+      : [];
+  }, [manufacturers, maker, model, year]);
   return (
     <FlatList
       data={uniqueGrades}

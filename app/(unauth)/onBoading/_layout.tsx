@@ -10,6 +10,15 @@ const OnBoadingLayout = () => {
         <Stack.Screen name="selectCar" options={{ headerShown: false }} />
         <Stack.Screen name="selectYear" options={{ headerShown: false }} />
         <Stack.Screen name="selectGread" options={{ headerShown: false }} />
+        <Stack.Screen name="captureCar" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="camera"
+          options={{
+            headerShown: false,
+            animation: "slide_from_bottom",
+            gestureEnabled: false,
+          }}
+        />
       </Stack>
     </FormProvider>
   );

@@ -10,6 +10,8 @@ export default function Layout() {
   const router = useRouter();
   const { customer, client, isAuthLoading } = useStore();
   useAuthInitialization();
+  console.log("customer", customer);
+  console.log("client", client);
 
   useEffect(() => {
     if (!isAuthLoading) {

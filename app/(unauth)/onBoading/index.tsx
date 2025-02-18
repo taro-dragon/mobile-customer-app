@@ -45,6 +45,15 @@ const OnBoading = () => {
           fullWidth
           disabled={!maker}
         />
+        <Button
+          color={colors.primary}
+          label="前へ"
+          onPress={() => {
+            router.back();
+          }}
+          fullWidth
+          notBorder
+        />
         <SafeAreaBottom color={colors.backgroundPrimary} />
       </View>
     </View>
