@@ -15,7 +15,6 @@ const Picture = ({ name }: PictureProps) => {
   const router = useRouter();
   const { watch } = useFormContext();
   const source = watch(name);
-  console.log(source);
   const { requestPermission } = useCameraPermission();
   const onPress = useCallback(async () => {
     const permissionGranted = await requestPermission();
@@ -40,11 +39,12 @@ const Picture = ({ name }: PictureProps) => {
         borderStyle: source ? "solid" : "dashed",
         alignItems: "center",
         justifyContent: "center",
+        overflow: "hidden",
       }}
     >
       {source ? (
         <Image
-          style={{ width: "100%", height: "100%", borderRadius: 12 }}
+          style={{ width: "100%", height: "100%" }}
           contentFit="cover"
           source={{ uri: source }}
         />

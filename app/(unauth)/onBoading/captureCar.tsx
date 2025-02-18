@@ -4,8 +4,7 @@ import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import CarIcon from "@/components/icons/car";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useRouter } from "expo-router";
-import { TouchableOpacity, View } from "react-native";
-import { Image } from "expo-image";
+import { View } from "react-native";
 import Picture from "@/components/formItem/picture";
 import { useFormContext } from "react-hook-form";
 
@@ -60,7 +59,7 @@ const CaptureCar = () => {
         <Button
           color={colors.primary}
           label="次へ"
-          onPress={() => router.push("/onBoading/captureCar")}
+          onPress={() => router.push("/onBoading/confirm")}
           fullWidth
           disabled={!isAllCapture}
         />

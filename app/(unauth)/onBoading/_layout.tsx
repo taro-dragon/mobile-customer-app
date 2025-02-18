@@ -11,6 +11,7 @@ const OnBoadingLayout = () => {
         <Stack.Screen name="selectYear" options={{ headerShown: false }} />
         <Stack.Screen name="selectGread" options={{ headerShown: false }} />
         <Stack.Screen name="captureCar" options={{ headerShown: false }} />
+        <Stack.Screen name="confirm" options={{ headerShown: false }} />
         <Stack.Screen
           name="camera"
           options={{

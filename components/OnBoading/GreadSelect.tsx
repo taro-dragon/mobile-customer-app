@@ -4,11 +4,10 @@ import { FullCarData } from "@/types/models/carData/fullCarData";
 import Select from "../formItem/RadioButton";
 import { useFormContext } from "react-hook-form";
 import { useMemo } from "react";
+import { CarForm } from "@/types/models/CarForm";
 export const GreadSelect = () => {
-  const { watch } = useFormContext();
-  const maker = watch("maker");
-  const model = watch("model");
-  const year = watch("year");
+  const { watch } = useFormContext<CarForm>();
+  const { maker, model, year } = watch();
   const { manufacturers } = fullCarData as FullCarData;
   const uniqueGrades = useMemo(() => {
     const cars = manufacturers.find(
