@@ -17,12 +17,14 @@ import CarIcon from "@/components/icons/car";
 import ConfirmImage from "@/components/formItem/ConfirmImage";
 import { useStore } from "@/hooks/useStore";
 import { Customer } from "@/types/models/Customer";
+import useCreateCustomer from "@/hooks/useCreateCustomer";
 
 const Confirm = () => {
   const { watch } = useFormContext<CarForm>();
   const { colors, typography } = useTheme();
   const { setCustomer } = useStore();
   const router = useRouter();
+  const { createCustomer } = useCreateCustomer();
   const { manufacturers } = fullCarData as FullCarData;
   const { front, back, left, right, maker, model, year, gread } = watch();
   const makerData = manufacturers.find((m) => m.manufacturerId === maker);
@@ -33,28 +35,7 @@ const Confirm = () => {
   const onSubmit = async () => {
     setIsLoading(true);
     try {
-      const user = await auth().signInAnonymously();
-      const userId = user.user?.uid;
-      if (!userId) {
-        throw new Error("ユーザーIDが取得できませんでした");
-      }
-      const createCustomerData: Customer = {
-        id: userId,
-        isAnonymous: true,
-        createdAt: firestore.Timestamp.now(),
-        updatedAt: firestore.Timestamp.now(),
-      };
-      await firestore()
-        .collection("customers")
-        .doc(userId)
-        .set(createCustomerData);
-      await firestore()
-        .collection("customers")
-        .doc(userId)
-        .onSnapshot((snapshot) => {
-          const customer = snapshot.data() as Customer;
-          setCustomer(customer);
-        });
+      await createCustomer();
     } catch (error) {
       console.error(error);
     } finally {
@@ -124,9 +105,7 @@ const Confirm = () => {
         <Button
           color={colors.primary}
           label="登録する"
-          onPress={() => {
-            setIsLoading(true);
-          }}
+          onPress={onSubmit}
           fullWidth
         />
         <Button

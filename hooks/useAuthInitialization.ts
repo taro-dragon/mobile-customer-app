@@ -39,6 +39,18 @@ export default function useAuthInitialization() {
               });
           }
         });
+        if (user.isAnonymous) {
+          await firestore()
+            .collection("customers")
+            .doc(user.uid)
+            .onSnapshot((snapshot) => {
+              if (snapshot.exists) {
+                const customer = snapshot.data() as Customer;
+                customer.id = user.uid;
+                setCustomer(customer);
+              }
+            });
+        }
       } else {
         deleteCustomer();
       }
