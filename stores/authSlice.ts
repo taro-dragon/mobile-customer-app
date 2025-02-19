@@ -9,20 +9,23 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (
   customer: undefined,
   client: undefined,
   isAuthLoading: false,
-  setCustomer: (customer: Customer) => set({ customer }),
+  setCustomer: (customer: Customer) => set((state) => ({ ...state, customer })),
   editCustomer: (updatedCustomer: Customer) =>
     set((state) => ({
+      ...state,
       customer: { ...state.customer, ...updatedCustomer },
     })),
-  deleteCustomer: () => set({ customer: undefined }),
-  setClient: (client: Client) => set({ client }),
+  deleteCustomer: () => set((state) => ({ ...state, customer: undefined })),
+  setClient: (client: Client) => set((state) => ({ ...state, client })),
   editClient: (updatedClient: Client) =>
     set((state) => ({
+      ...state,
       client: { ...state.client, ...updatedClient },
     })),
-  deleteClient: () => set({ client: undefined }),
+  deleteClient: () => set((state) => ({ ...state, client: undefined })),
   setIsAuthLoading: (isAuthLoading: boolean) =>
-    set(() => ({
+    set((state) => ({
+      ...state,
       isAuthLoading: isAuthLoading,
     })),
 });
