@@ -7,7 +7,7 @@ const useUserCarFetch = () => {
     if (customer) {
       fetchCars(customer.id);
     }
-  }, [customer]);
+  }, []);
 };
 
 export default useUserCarFetch;

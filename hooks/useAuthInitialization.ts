@@ -13,20 +13,34 @@ export default function useAuthInitialization() {
 
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(async (user) => {
-      if (user) {
-        user.providerData.forEach(async (provider) => {
-          if (provider.providerId === "password") {
-            await firestore()
-              .collection("clients")
-              .doc(user.uid)
-              .onSnapshot((snapshot) => {
-                if (snapshot.exists) {
-                  const client = snapshot.data() as Client;
-                  client.id = user.uid;
-                  setClient(client);
-                }
-              });
-          } else {
+      try {
+        if (user) {
+          user.providerData.forEach(async (provider) => {
+            if (provider.providerId === "password") {
+              await firestore()
+                .collection("clients")
+                .doc(user.uid)
+                .onSnapshot((snapshot) => {
+                  if (snapshot.exists) {
+                    const client = snapshot.data() as Client;
+                    client.id = user.uid;
+                    setClient(client);
+                  }
+                });
+            } else {
+              await firestore()
+                .collection("customers")
+                .doc(user.uid)
+                .onSnapshot((snapshot) => {
+                  if (snapshot.exists) {
+                    const customer = snapshot.data() as Customer;
+                    customer.id = user.uid;
+                    setCustomer(customer);
+                  }
+                });
+            }
+          });
+          if (user.isAnonymous) {
             await firestore()
               .collection("customers")
               .doc(user.uid)
@@ -38,24 +52,15 @@ export default function useAuthInitialization() {
                 }
               });
           }
-        });
-        if (user.isAnonymous) {
-          await firestore()
-            .collection("customers")
-            .doc(user.uid)
-            .onSnapshot((snapshot) => {
-              if (snapshot.exists) {
-                const customer = snapshot.data() as Customer;
-                customer.id = user.uid;
-                setCustomer(customer);
-              }
-            });
+        } else {
+          deleteCustomer();
         }
-      } else {
-        deleteCustomer();
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsAuthLoading(false);
+        SplashScreen.hideAsync();
       }
-      setIsAuthLoading(false);
-      SplashScreen.hideAsync();
     });
 
     return () => unsubscribe();

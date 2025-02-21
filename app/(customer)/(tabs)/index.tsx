@@ -1,13 +1,35 @@
+import CarInfoItem from "@/components/CarInfo/CarInfoItem";
+import Button from "@/components/common/Button";
+import { useTheme } from "@/contexts/ThemeContext";
 import { useStore } from "@/hooks/useStore";
-import { Text, View } from "react-native";
+import { ScrollView, Text } from "react-native";
 
 const CustomerIndex = () => {
-  const { cars, carLoading } = useStore();
-  console.log(cars);
+  const { cars, deleteCustomer } = useStore();
+  const { colors, typography } = useTheme();
   return (
-    <View>
-      <Text>CustomerIndex</Text>
-    </View>
+    <ScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={{ padding: 16, gap: 8 }}
+    >
+      <Text style={{ color: colors.textPrimary, ...typography.heading2 }}>
+        愛車
+      </Text>
+      {cars.length > 0 ? (
+        <CarInfoItem car={cars[0]} />
+      ) : (
+        <Text style={{ color: colors.textPrimary, ...typography.heading2 }}>
+          愛車がありません
+        </Text>
+      )}
+      <Button
+        label="ログアウト"
+        onPress={() => {
+          deleteCustomer();
+        }}
+        color={colors.primary}
+      />
+    </ScrollView>
   );
 };
 

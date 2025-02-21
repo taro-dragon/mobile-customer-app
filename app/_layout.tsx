@@ -21,7 +21,7 @@ export default function Layout() {
         router.replace("/(client)");
       }
     }
-  }, [customer, client, isAuthLoading, router]);
+  }, [customer, client, isAuthLoading]);
 
   if (isAuthLoading) {
     return (
