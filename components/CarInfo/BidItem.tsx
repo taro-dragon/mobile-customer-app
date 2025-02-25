@@ -5,7 +5,6 @@ import { Text, TouchableOpacity, View } from "react-native";
 import Divider from "../common/Divider";
 import Button from "../common/Button";
 import { ChevronRight } from "lucide-react-native";
-import { Rating } from "react-native-ratings";
 import { useRouter } from "expo-router";
 type BidItemProps = {
   bid: AppraisalBid;

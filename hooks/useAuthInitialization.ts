@@ -35,6 +35,7 @@ export default function useAuthInitialization() {
                   if (snapshot.exists) {
                     const customer = snapshot.data() as Customer;
                     customer.id = user.uid;
+                    customer.isAnonymous = false;
                     setCustomer(customer);
                   }
                 });

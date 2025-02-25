@@ -46,7 +46,7 @@ const CarInfoItem: React.FC<CarInfoItemProps> = ({ car }) => {
           }}
         >
           <View style={{ gap: 8, flex: 1 }}>
-            <View>
+            <View style={{ gap: 4 }}>
               <Text
                 style={{ color: colors.textPrimary, ...typography.heading2 }}
                 numberOfLines={1}

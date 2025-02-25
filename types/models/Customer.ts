@@ -6,12 +6,13 @@ export type Customer = {
   info?: {
     familyName: string;
     givenName: string;
-    familyNameKana: string;
-    givenNameKana: string;
     postalCode: string;
-    address: string;
+    address1: string;
+    address2: string;
+    address3: string;
     phone: string;
-    profileImage: string;
+    lat: number;
+    lng: number;
   };
   createdAt: FirebaseFirestoreTypes.Timestamp;
   updatedAt: FirebaseFirestoreTypes.Timestamp;

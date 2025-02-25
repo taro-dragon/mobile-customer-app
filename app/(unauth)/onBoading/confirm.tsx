@@ -125,10 +125,7 @@ const Confirm = () => {
           }}
         >
           <ActivityIndicator size="large" color={colors.white} />
-          <Text
-            onPress={() => setIsLoading(false)}
-            style={{ color: colors.white, ...typography.title2 }}
-          >
+          <Text style={{ color: colors.white, ...typography.title2 }}>
             登録処理中...
           </Text>
         </View>

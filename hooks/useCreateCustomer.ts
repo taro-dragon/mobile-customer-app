@@ -11,6 +11,7 @@ const useCreateCustomer = () => {
   const { setCustomer } = useStore();
   const { watch } = useFormContext<CarForm>();
   const { front, back, left, right, maker, model, year, gread } = watch();
+
   const createCustomer = async () => {
     try {
       const user = await auth().signInAnonymously();
@@ -18,8 +19,10 @@ const useCreateCustomer = () => {
       if (!userId) {
         throw new Error("ユーザーIDが取得できませんでした");
       }
-      const carRef = firestore().collection("cars").doc();
-      const carId = carRef.id;
+
+      const carDocRef = firestore().collection("cars").doc();
+      const carId = carDocRef.id;
+
       const uploadImages = async (): Promise<{ [key: string]: string }> => {
         const images: { [key: string]: string | null } = {
           front,
@@ -41,18 +44,7 @@ const useCreateCustomer = () => {
       };
 
       const photos = await uploadImages();
-      const storeCarImageUrls = async (
-        carId: string,
-        imageUrls: { [key: string]: string }
-      ) => {
-        await firestore().collection("cars").doc(carId).set(
-          {
-            images: imageUrls,
-            updatedAt: firestore.FieldValue.serverTimestamp(),
-          },
-          { merge: true }
-        );
-      };
+
       const carData = {
         id: carId,
         ownerId: userId,
@@ -60,21 +52,26 @@ const useCreateCustomer = () => {
         model,
         year,
         gread,
+        images: photos,
         createdAt: firestore.Timestamp.now(),
+        updatedAt: firestore.FieldValue.serverTimestamp(),
       };
-      await firestore().collection("cars").doc(carId).set(carData);
-      await storeCarImageUrls(carId, photos);
+
       const createCustomerData: Customer = {
         id: userId,
         isAnonymous: true,
         createdAt: firestore.Timestamp.now(),
         updatedAt: firestore.Timestamp.now(),
       };
-      await firestore()
-        .collection("customers")
-        .doc(userId)
-        .set(createCustomerData);
-      await firestore()
+
+      await firestore().runTransaction(async (transaction) => {
+        transaction.set(carDocRef, carData);
+
+        const customerDocRef = firestore().collection("customers").doc(userId);
+        transaction.set(customerDocRef, createCustomerData);
+      });
+
+      firestore()
         .collection("customers")
         .doc(userId)
         .onSnapshot((snapshot) => {
@@ -85,6 +82,7 @@ const useCreateCustomer = () => {
       console.error(error);
     }
   };
+
   return { createCustomer };
 };
 

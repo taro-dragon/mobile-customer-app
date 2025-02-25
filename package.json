@@ -39,6 +39,7 @@
     "expo-symbols": "~0.2.2",
     "expo-system-ui": "~4.0.7",
     "expo-web-browser": "~14.0.2",
+    "google-libphonenumber": "^3.2.40",
     "lucide-react-native": "^0.475.0",
     "react": "18.3.1",
     "react-content-loader": "^7.0.2",
@@ -64,6 +65,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@types/google-libphonenumber": "^7.4.30",
     "@types/jest": "^29.5.12",
     "@types/react": "~18.3.12",
     "@types/react-test-renderer": "^18.3.0",

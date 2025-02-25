@@ -3,6 +3,7 @@ import Button from "@/components/common/Button";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useStore } from "@/hooks/useStore";
 import { ScrollView, Text } from "react-native";
+import auth from "@react-native-firebase/auth";
 
 const CustomerIndex = () => {
   const { cars, deleteCustomer } = useStore();
@@ -26,6 +27,7 @@ const CustomerIndex = () => {
         label="ログアウト"
         onPress={() => {
           deleteCustomer();
+          auth().signOut();
         }}
         color={colors.primary}
       />

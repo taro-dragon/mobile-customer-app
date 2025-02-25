@@ -5,6 +5,7 @@ import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import ShopDetailSkeleton from "@/components/Skelton/SkeltonShopInfo";
 import { useTheme } from "@/contexts/ThemeContext";
 import useClient from "@/hooks/useFetchClient";
+import { useRegistrationGuard } from "@/hooks/useRegistrationGuard";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { X } from "lucide-react-native";
@@ -26,7 +27,16 @@ const ShopDetail = () => {
   const { colors, typography } = useTheme();
   const ref = useRef<ICarouselInstance>(null);
   const width = Dimensions.get("window").width;
+  const guard = useRegistrationGuard();
   const { client, isLoading, isError } = useClient(id);
+
+  const onMailPress = guard(() => {
+    console.log("mail");
+  });
+
+  const onPhonePress = () => {
+    console.log("phone");
+  };
 
   useEffect(() => {
     if (!isLoading && !client) {
@@ -142,7 +152,7 @@ const ShopDetail = () => {
             <Button
               color={colors.primary}
               label="トーク"
-              onPress={() => {}}
+              onPress={onMailPress}
               fullWidth
             />
           </View>
@@ -150,7 +160,7 @@ const ShopDetail = () => {
             <Button
               color={colors.primary}
               label="電話"
-              onPress={() => {}}
+              onPress={onPhonePress}
               isBorder
               fullWidth
             />

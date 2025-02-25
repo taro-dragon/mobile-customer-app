@@ -11,6 +11,10 @@ export default function Layout() {
         contentStyle: {
           backgroundColor: colors.backgroundPrimary,
         },
+        headerTintColor: colors.primary,
+        headerStyle: {
+          backgroundColor: colors.backgroundPrimary,
+        },
       }}
     >
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -28,6 +32,14 @@ export default function Layout() {
           headerShown: false,
           animation: "slide_from_bottom",
           gestureDirection: "vertical",
+        }}
+      />
+      <Stack.Screen
+        name="registration"
+        options={{
+          headerShown: false,
+          animation: "slide_from_bottom",
+          gestureEnabled: false,
         }}
       />
     </Stack>

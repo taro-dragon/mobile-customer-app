@@ -22,6 +22,7 @@ import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import Button from "@/components/common/Button";
 import { X } from "lucide-react-native";
 import BidItem from "@/components/CarInfo/BidItem";
+import { useRegistrationGuard } from "@/hooks/useRegistrationGuard";
 
 const CarDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -34,9 +35,10 @@ const CarDetail = () => {
   const carImages = Object.values(car?.images ?? {});
   const width = Dimensions.get("window").width;
   const router = useRouter();
-  const onButtonPress = () => {
-    console.log("push");
-  };
+  const guard = useRegistrationGuard();
+  const onButtonPress = guard(() => {
+    router.push("/registration");
+  });
 
   return (
     <View style={{ flex: 1, paddingTop: safeAreaInsets.top }}>
@@ -133,31 +135,30 @@ const CarDetail = () => {
           </View>
         </View>
       </ScrollView>
-      {sampleAppraisal.status !== "active" && (
-        <View>
-          <Divider />
-          <View style={{ padding: 16, gap: 8, flexDirection: "row" }}>
-            <View style={{ flex: 1 }}>
-              <Button
-                color={colors.primary}
-                label="買取オファーを見る"
-                onPress={onButtonPress}
-                fullWidth
-              />
-            </View>
-            <View style={{ flex: 1 }}>
-              <Button
-                color={colors.primary}
-                label="一括査定依頼をする"
-                onPress={onButtonPress}
-                isBorder
-                fullWidth
-              />
-            </View>
+
+      <View>
+        <Divider />
+        <View style={{ padding: 16, gap: 8, flexDirection: "row" }}>
+          <View style={{ flex: 1 }}>
+            <Button
+              color={colors.primary}
+              label="買取オファーを見る"
+              onPress={onButtonPress}
+              fullWidth
+            />
           </View>
-          <SafeAreaBottom />
+          <View style={{ flex: 1 }}>
+            <Button
+              color={colors.primary}
+              label="一括査定依頼をする"
+              onPress={onButtonPress}
+              isBorder
+              fullWidth
+            />
+          </View>
         </View>
-      )}
+        <SafeAreaBottom />
+      </View>
     </View>
   );
 };
