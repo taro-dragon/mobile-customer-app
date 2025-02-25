@@ -22,6 +22,14 @@ export default function Layout() {
           gestureDirection: "vertical",
         }}
       />
+      <Stack.Screen
+        name="shops/[id]"
+        options={{
+          headerShown: false,
+          animation: "slide_from_bottom",
+          gestureDirection: "vertical",
+        }}
+      />
     </Stack>
   );
 }

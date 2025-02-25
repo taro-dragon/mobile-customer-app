@@ -8,11 +8,10 @@ export type Client = {
     phoneNumber: string;
     email: string;
   };
-  companyInfo: {
-    name: string;
-    postalCode: string;
-    address: string;
-    phoneNumber: string;
-    email: string;
-  };
+  name: string;
+  postalCode: string;
+  address: string;
+  phoneNumber: string;
+  email: string;
+  imageUrls?: string[];
 };

@@ -6,6 +6,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import ConditionTag from "./ConditionTag";
 import { transformCarData } from "@/libs/transformCarData";
 import { useRouter } from "expo-router";
+import Divider from "../common/Divider";
 type CarInfoItemProps = {
   car: Car;
 };
@@ -27,19 +28,6 @@ const CarInfoItem: React.FC<CarInfoItemProps> = ({ car }) => {
         borderColor: colors.borderPrimary,
       }}
     >
-      <View style={{ gap: 8, alignItems: "flex-start" }}>
-        <Image
-          source={{ uri: car.images.front }}
-          style={{
-            width: 100,
-            height: 100,
-            borderRadius: 12,
-            borderWidth: 1,
-            borderColor: colors.borderPrimary,
-          }}
-          contentFit="cover"
-        />
-      </View>
       <View
         style={{
           flex: 1,
@@ -53,26 +41,28 @@ const CarInfoItem: React.FC<CarInfoItemProps> = ({ car }) => {
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
-            alignItems: "flex-start",
+            alignItems: "flex-end",
+            gap: 12,
           }}
         >
-          <View style={{ gap: 4 }}>
+          <View style={{ gap: 8, flex: 1 }}>
             <View>
-              <Text
-                style={{ color: colors.textSecondary, ...typography.heading3 }}
-              >
-                {carData.maker.name}
-              </Text>
               <Text
                 style={{ color: colors.textPrimary, ...typography.heading2 }}
                 numberOfLines={1}
               >
                 {carData.model.name}
               </Text>
+              <Text
+                style={{ color: colors.textSecondary, ...typography.heading3 }}
+              >
+                {carData.maker.name}
+              </Text>
             </View>
+            <Divider />
             <View>
               <Text
-                style={{ color: colors.textSecondary, ...typography.heading4 }}
+                style={{ color: colors.textSecondary, ...typography.heading3 }}
               >
                 年式
               </Text>
@@ -85,7 +75,7 @@ const CarInfoItem: React.FC<CarInfoItemProps> = ({ car }) => {
             </View>
             <View>
               <Text
-                style={{ color: colors.textSecondary, ...typography.heading4 }}
+                style={{ color: colors.textSecondary, ...typography.heading3 }}
               >
                 グレード
               </Text>
@@ -97,8 +87,21 @@ const CarInfoItem: React.FC<CarInfoItemProps> = ({ car }) => {
               </Text>
             </View>
           </View>
+          <View style={{ gap: 8, alignItems: "flex-end" }}>
+            <ConditionTag condition={car.condition || "解析中"} />
+            <Image
+              source={{ uri: car.images.front }}
+              style={{
+                width: 100,
+                height: 100,
+                borderRadius: 12,
+                borderWidth: 1,
+                borderColor: colors.borderPrimary,
+              }}
+              contentFit="cover"
+            />
+          </View>
         </View>
-        <ConditionTag condition={car.condition || "解析中"} />
       </View>
     </TouchableOpacity>
   );

@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native";
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
+import { sampleAppraisal } from "@/constants/SampleAppraisal";
 
 import { useStore } from "@/hooks/useStore";
 import { transformCarData } from "@/libs/transformCarData";
@@ -20,6 +21,7 @@ import CarInfoItem from "@/components/CarDetail/CarInfoIten";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import Button from "@/components/common/Button";
 import { X } from "lucide-react-native";
+import BidItem from "@/components/CarInfo/BidItem";
 
 const CarDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -79,7 +81,7 @@ const CarDetail = () => {
             </View>
           )}
         />
-        <View style={{ padding: 16, gap: 12 }}>
+        <View style={{ padding: 16, gap: 24 }}>
           <View>
             <Text style={{ ...typography.heading3, color: colors.primary }}>
               {carData.maker.name}
@@ -89,7 +91,7 @@ const CarDetail = () => {
             </Text>
           </View>
           <View style={{ gap: 8 }}>
-            <Text style={{ ...typography.heading2, color: colors.textPrimary }}>
+            <Text style={{ ...typography.heading3, color: colors.textPrimary }}>
               車両情報
             </Text>
             <View
@@ -106,27 +108,56 @@ const CarDetail = () => {
               <CarInfoItem label="AI分析結果" value={car?.condition || ""} />
             </View>
           </View>
+          <View style={{ gap: 8 }}>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <Text
+                style={{ ...typography.heading3, color: colors.textPrimary }}
+              >
+                一括査定情報
+              </Text>
+
+              <Text
+                style={{ ...typography.body3, color: colors.primary }}
+                onPress={() => {
+                  console.log("さらに見る");
+                }}
+              >
+                さらに見る
+              </Text>
+            </View>
+            {sampleAppraisal.bids?.map((bid) => (
+              <BidItem key={bid.id} bid={bid} />
+            ))}
+          </View>
         </View>
       </ScrollView>
-      <View>
-        <Divider />
-        <View style={{ padding: 16, gap: 8 }}>
-          <Button
-            color={colors.primary}
-            label="買取オファーを見る"
-            onPress={onButtonPress}
-            fullWidth
-          />
-          <Button
-            color={colors.primary}
-            label="一括査定依頼をする"
-            onPress={onButtonPress}
-            fullWidth
-            isBorder
-          />
+      {sampleAppraisal.status !== "active" && (
+        <View>
+          <Divider />
+          <View style={{ padding: 16, gap: 8, flexDirection: "row" }}>
+            <View style={{ flex: 1 }}>
+              <Button
+                color={colors.primary}
+                label="買取オファーを見る"
+                onPress={onButtonPress}
+                fullWidth
+              />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Button
+                color={colors.primary}
+                label="一括査定依頼をする"
+                onPress={onButtonPress}
+                isBorder
+                fullWidth
+              />
+            </View>
+          </View>
+          <SafeAreaBottom />
         </View>
-        <SafeAreaBottom />
-      </View>
+      )}
     </View>
   );
 };
