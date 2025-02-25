@@ -63,6 +63,7 @@ const BidItem: React.FC<BidItemProps> = ({ bid }) => {
           <Button
             color={colors.primary}
             label="この店舗と連絡を取る"
+            isBorder
             onPress={() => {
               console.log("買取オファーを見る");
             }}

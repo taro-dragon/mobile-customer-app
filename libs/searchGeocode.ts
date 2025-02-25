@@ -1,6 +1,8 @@
 import Geocoder from "react-native-geocoding";
 
-Geocoder.init("AIzaSyCEvo19EOmI45wb7kcpIpT2GtpP5l9Qk4Q");
+const GOOGLE_MAP_API_KEY = process.env.EXPO_PUBLIC_GOOGLE_MAP_API_KEY as string;
+
+Geocoder.init(GOOGLE_MAP_API_KEY);
 
 export const searchGeocode = async (
   address: string

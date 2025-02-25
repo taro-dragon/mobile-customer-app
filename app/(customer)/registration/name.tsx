@@ -74,7 +74,7 @@ const Name = () => {
                 color={colors.primary}
                 label="次へ"
                 onPress={() => {
-                  router.replace("/(customer)/(tabs)");
+                  router.replace("/(customer)/registration/geocode");
                 }}
                 fullWidth
                 disabled={!familyName || !givenName}

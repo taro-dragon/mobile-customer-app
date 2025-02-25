@@ -5,6 +5,7 @@ import { useStore } from "@/hooks/useStore";
 import useAuthInitialization from "@/hooks/useAuthInitialization";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
 export default function Layout() {
   const router = useRouter();
@@ -37,6 +38,7 @@ export default function Layout() {
     <SafeAreaProvider>
       <ThemeProvider>
         <Slot />
+        <Toast />
       </ThemeProvider>
     </SafeAreaProvider>
   );
