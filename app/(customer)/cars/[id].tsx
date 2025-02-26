@@ -37,7 +37,7 @@ const CarDetail = () => {
   const router = useRouter();
   const guard = useRegistrationGuard();
   const onButtonPress = guard(() => {
-    router.push("/registration");
+    console.log("買取オファーを見る");
   });
 
   return (

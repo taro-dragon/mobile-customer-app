@@ -4,6 +4,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { useStore } from "@/hooks/useStore";
 import { ScrollView, Text } from "react-native";
 import auth from "@react-native-firebase/auth";
+import Toast from "react-native-toast-message";
 
 const CustomerIndex = () => {
   const { cars, deleteCustomer } = useStore();
@@ -23,11 +24,44 @@ const CustomerIndex = () => {
           愛車がありません
         </Text>
       )}
-      <Button
+      {/* <Button
         label="ログアウト"
         onPress={() => {
           deleteCustomer();
           auth().signOut();
+        }}
+        color={colors.primary}
+      /> */}
+      <Button
+        label="トースト確認"
+        onPress={() => {
+          Toast.show({
+            type: "success",
+            text1: "成功",
+            text2: "成功しました",
+          });
+        }}
+        color={colors.primary}
+      />
+      <Button
+        label="トースト確認"
+        onPress={() => {
+          Toast.show({
+            type: "error",
+            text1: "エラー",
+            text2: "エラーが発生しました",
+          });
+        }}
+        color={colors.primary}
+      />
+      <Button
+        label="トースト確認"
+        onPress={() => {
+          Toast.show({
+            type: "warning",
+            text1: "警告",
+            text2: "警告が発生しました",
+          });
         }}
         color={colors.primary}
       />

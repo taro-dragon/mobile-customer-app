@@ -14,6 +14,7 @@ import ConfirmItem from "@/components/formItem/ConfirmItem";
 import CarIcon from "@/components/icons/car";
 import ConfirmImage from "@/components/formItem/ConfirmImage";
 import useCreateCustomer from "@/hooks/useCreateCustomer";
+import Toast from "react-native-toast-message";
 
 const Confirm = () => {
   const { watch } = useFormContext<CarForm>();
@@ -31,8 +32,17 @@ const Confirm = () => {
     setIsLoading(true);
     try {
       await createCustomer();
+      Toast.show({
+        type: "success",
+        text1: "登録完了",
+        text2: "車両登録が完了しました",
+      });
     } catch (error) {
-      console.error(error);
+      Toast.show({
+        type: "error",
+        text1: "エラー",
+        text2: "車両登録エラーが発生しました",
+      });
     } finally {
       setIsLoading(false);
     }

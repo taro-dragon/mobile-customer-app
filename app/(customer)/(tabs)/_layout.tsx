@@ -1,7 +1,7 @@
 import { useTheme } from "@/contexts/ThemeContext";
 
 import { Tabs } from "expo-router";
-import { House, MessageSquare, Store } from "lucide-react-native";
+import { House, MessageSquare, Search, Store } from "lucide-react-native";
 
 export default function TabLayout() {
   const { colors } = useTheme();
@@ -39,10 +39,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="client"
+        name="search"
         options={{
-          title: "店舗",
-          tabBarIcon: ({ color }) => <Store size={24} color={color} />,
+          title: "検索",
+          tabBarIcon: ({ color }) => <Search size={24} color={color} />,
         }}
       />
     </Tabs>

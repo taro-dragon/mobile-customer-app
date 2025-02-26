@@ -1,19 +1,10 @@
-import Toast, {
-  BaseToast,
-  ErrorToast,
-  ToastProps,
-} from "react-native-toast-message";
+import ToastBase from "@/components/common/ToastBase";
+import { CheckCircle } from "lucide-react-native";
+import { Text, View } from "react-native";
+import { BaseToastProps } from "react-native-toast-message";
 
 export const ToastConfig = {
-  success: (props: ToastProps) => (
-    <BaseToast
-      {...props}
-      style={{ borderLeftColor: "pink" }}
-      contentContainerStyle={{ paddingHorizontal: 15 }}
-      text1Style={{
-        fontSize: 15,
-        fontWeight: "400",
-      }}
-    />
-  ),
+  success: (props: BaseToastProps) => <ToastBase {...props} type="success" />,
+  error: (props: BaseToastProps) => <ToastBase {...props} type="error" />,
+  warning: (props: BaseToastProps) => <ToastBase {...props} type="warning" />,
 };

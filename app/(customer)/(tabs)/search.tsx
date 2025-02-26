@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 
-const Client = () => {
+const Search = () => {
   return (
     <View>
       <Text>Client</Text>
@@ -8,4 +8,4 @@ const Client = () => {
   );
 };
 
-export default Client;
+export default Search;

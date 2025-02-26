@@ -23,6 +23,7 @@ import { Platform } from "react-native";
 import { useFormContext } from "react-hook-form";
 import { usePhoneAuth } from "@/hooks/usePhoneAuth";
 import firestore from "@react-native-firebase/firestore";
+import Toast from "react-native-toast-message";
 
 const PhoneAuth: React.FC = () => {
   const { colors, typography } = useTheme();
@@ -44,7 +45,6 @@ const PhoneAuth: React.FC = () => {
       if (!confirmation) {
         await sendVerificationCode(data.phoneNumber);
       } else {
-        console.log(data);
         setIsLoading(true);
         try {
           await confirmCode(data.smsCode);
@@ -65,6 +65,11 @@ const PhoneAuth: React.FC = () => {
                 phone: data.phoneNumber,
               },
             });
+          Toast.show({
+            type: "success",
+            text1: "登録完了",
+            text2: "本登録が完了しました",
+          });
           navigation.getParent()?.goBack();
         } catch (err) {
           throw err;
@@ -73,7 +78,11 @@ const PhoneAuth: React.FC = () => {
         }
       }
     } catch (err) {
-      console.error("認証処理エラー:", err);
+      Toast.show({
+        type: "error",
+        text1: "エラー",
+        text2: "認証処理エラーが発生しました",
+      });
     }
   });
 
