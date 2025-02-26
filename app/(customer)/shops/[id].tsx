@@ -19,6 +19,7 @@ import {
 } from "react-native";
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
 const ShopDetail = () => {
   const safeAreaInsets = useSafeAreaInsets();
@@ -40,6 +41,11 @@ const ShopDetail = () => {
 
   useEffect(() => {
     if (!isLoading && !client) {
+      Toast.show({
+        type: "error",
+        text1: "エラー",
+        text2: "店舗情報が見つかりませんでした",
+      });
       router.back();
     }
   }, [isLoading, client]);
