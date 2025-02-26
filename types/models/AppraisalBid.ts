@@ -1,5 +1,5 @@
 import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
-import { Client } from "./Client";
+import { Shop } from "./Shop";
 
 export type AppraisalBid = {
   id: string;
@@ -8,5 +8,5 @@ export type AppraisalBid = {
   comment: string;
   createdAt: FirebaseFirestoreTypes.Timestamp;
   status: "pending" | "accepted" | "rejected";
-  client: Client;
+  shop: Shop;
 };

@@ -4,7 +4,8 @@ import Divider from "@/components/common/Divider";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import ShopDetailSkeleton from "@/components/Skelton/SkeltonShopInfo";
 import { useTheme } from "@/contexts/ThemeContext";
-import useClient from "@/hooks/useFetchClient";
+import useShop from "@/hooks/useFetchShop";
+import useClient from "@/hooks/useFetchShop";
 import { useRegistrationGuard } from "@/hooks/useRegistrationGuard";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -28,19 +29,10 @@ const ShopDetail = () => {
   const { colors, typography } = useTheme();
   const ref = useRef<ICarouselInstance>(null);
   const width = Dimensions.get("window").width;
-  const guard = useRegistrationGuard();
-  const { client, isLoading, isError } = useClient(id);
-
-  const onMailPress = guard(() => {
-    console.log("mail");
-  });
-
-  const onPhonePress = () => {
-    console.log("phone");
-  };
+  const { shop, isLoading } = useShop(id);
 
   useEffect(() => {
-    if (!isLoading && !client) {
+    if (!isLoading && !shop) {
       Toast.show({
         type: "error",
         text1: "エラー",
@@ -48,7 +40,7 @@ const ShopDetail = () => {
       });
       router.back();
     }
-  }, [isLoading, client]);
+  }, [isLoading, shop]);
   if (isLoading)
     return (
       <View style={{ flex: 1, paddingTop: safeAreaInsets.top }}>
@@ -74,7 +66,7 @@ const ShopDetail = () => {
         <ShopDetailSkeleton />
       </View>
     );
-  if (!client) return null;
+  if (!shop) return null;
   return (
     <View style={{ flex: 1, paddingTop: safeAreaInsets.top }}>
       <View
@@ -97,12 +89,12 @@ const ShopDetail = () => {
       </View>
       <Divider />
       <ScrollView style={{ flex: 1 }}>
-        {client.imageUrls && (
+        {shop.imageUrls && (
           <Carousel
             ref={ref}
             width={width}
             height={width}
-            data={client?.imageUrls}
+            data={shop?.imageUrls}
             renderItem={({ index }) => (
               <View
                 style={{
@@ -111,9 +103,9 @@ const ShopDetail = () => {
                   justifyContent: "center",
                 }}
               >
-                {client.imageUrls && (
+                {shop.imageUrls && (
                   <Image
-                    source={{ uri: client.imageUrls[index] }}
+                    source={{ uri: shop.imageUrls[index] }}
                     style={{ width: width, height: width }}
                     contentFit="cover"
                   />
@@ -125,10 +117,12 @@ const ShopDetail = () => {
         <View style={{ padding: 16, gap: 24 }}>
           <View style={{ gap: 8 }}>
             <Text style={{ ...typography.title1, color: colors.textPrimary }}>
-              {client.name}
+              {shop.shopName}
             </Text>
             <Text style={{ ...typography.body2, color: colors.textSecondary }}>
-              {client.address}
+              {shop.address1}
+              {shop.address2}
+              {shop.address3}
             </Text>
           </View>
           <View style={{ gap: 8 }}>
@@ -144,36 +138,18 @@ const ShopDetail = () => {
                 borderRadius: 12,
               }}
             >
-              <CarInfoItem label="電話番号" value={client.phoneNumber} />
-              <CarInfoItem label="メールアドレス" value={client.email} />
+              <CarInfoItem label="営業時間" value={shop.businessHours} />
+              {shop.holiday && (
+                <CarInfoItem label="定休日" value={shop.holiday} />
+              )}
+              {shop.client?.name && (
+                <CarInfoItem label="法人名" value={shop.client.name} />
+              )}
               {/* <CarInfoItem label="営業時間" value={client.businessHours} /> */}
             </View>
           </View>
         </View>
       </ScrollView>
-      <View>
-        <Divider />
-        <View style={{ padding: 16, gap: 8, flexDirection: "row" }}>
-          <View style={{ flex: 1 }}>
-            <Button
-              color={colors.primary}
-              label="トーク"
-              onPress={onMailPress}
-              fullWidth
-            />
-          </View>
-          <View style={{ flex: 1 }}>
-            <Button
-              color={colors.primary}
-              label="電話"
-              onPress={onPhonePress}
-              isBorder
-              fullWidth
-            />
-          </View>
-        </View>
-        <SafeAreaBottom />
-      </View>
     </View>
   );
 };

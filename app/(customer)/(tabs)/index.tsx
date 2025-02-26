@@ -5,10 +5,12 @@ import { useStore } from "@/hooks/useStore";
 import { ScrollView, Text } from "react-native";
 import auth from "@react-native-firebase/auth";
 import Toast from "react-native-toast-message";
+import { useRouter } from "expo-router";
 
 const CustomerIndex = () => {
   const { cars, deleteCustomer } = useStore();
   const { colors, typography } = useTheme();
+  const router = useRouter();
   return (
     <ScrollView
       style={{ flex: 1 }}

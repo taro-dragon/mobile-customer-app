@@ -1,11 +1,12 @@
 import { Appraisal } from "@/types/models/Appraisal";
 import { AppraisalBid } from "@/types/models/AppraisalBid";
 import { Client } from "@/types/models/Client";
+import { Shop } from "@/types/models/Shop";
 import firestore from "@react-native-firebase/firestore";
 
 // Clientのサンプルデータ
-const sampleClient1: Client = {
-  id: "client_001",
+const sampleShop1: Shop = {
+  id: "shop_001",
   staffInfo: {
     familyName: "山田",
     givenName: "太郎",
@@ -15,16 +16,21 @@ const sampleClient1: Client = {
     email: "yamada@example.com",
   },
 
-  name: "株式会社カーズジャパン",
+  shopName: "株式会社カーズジャパン",
   postalCode: "150-0002",
-  address: "東京都渋谷区渋谷1-1-1",
+  address1: "東京都",
+  address2: "渋谷区",
+  address3: "渋谷1-1-1",
+  lat: 35.681236,
+  lng: 139.767125,
+  businessHours: "9:00-18:00",
   phoneNumber: "03-1234-5678",
   email: "info@carsjapan.example.com",
   imageUrls: ["https://picsum.photos/200/300", "https://picsum.photos/200/300"],
 };
 
-const sampleClient2: Client = {
-  id: "client_002",
+const sampleShop2: Shop = {
+  id: "shop_002",
   staffInfo: {
     familyName: "鈴木",
     givenName: "花子",
@@ -33,9 +39,14 @@ const sampleClient2: Client = {
     phoneNumber: "090-8765-4321",
     email: "suzuki@example.com",
   },
-  name: "オートバリュー株式会社",
+  shopName: "オートバリュー株式会社",
   postalCode: "160-0022",
-  address: "東京都新宿区新宿3-1-1",
+  address1: "東京都",
+  address2: "新宿区",
+  address3: "新宿3-1-1",
+  lat: 35.681236,
+  lng: 139.767125,
+  businessHours: "9:00-18:00",
   phoneNumber: "03-8765-4321",
   email: "info@autovalue.example.com",
   imageUrls: ["https://picsum.photos/200/300", "https://picsum.photos/200/300"],
@@ -50,7 +61,7 @@ const sampleAppraisalBids: AppraisalBid[] = [
     comment: "走行距離が少なく、状態が良好です。即日査定可能です。",
     createdAt: firestore.Timestamp.fromDate(new Date("2024-03-01")), // 2024-03-01
     status: "pending",
-    client: sampleClient1,
+    shop: sampleShop1,
   },
   {
     id: "bid_790",
@@ -60,7 +71,7 @@ const sampleAppraisalBids: AppraisalBid[] = [
       "内装の状態が特に良好です。お客様のご要望に応じて柔軟に対応させていただきます。",
     createdAt: firestore.Timestamp.fromDate(new Date("2024-03-01")), // 2024-03-01
     status: "pending",
-    client: sampleClient2,
+    shop: sampleShop2,
   },
 ];
 

@@ -40,6 +40,8 @@ const CarDetail = () => {
     console.log("買取オファーを見る");
   });
 
+  console.log(car);
+
   return (
     <View style={{ flex: 1, paddingTop: safeAreaInsets.top }}>
       <View
@@ -136,29 +138,31 @@ const CarDetail = () => {
         </View>
       </ScrollView>
 
-      <View>
-        <Divider />
-        <View style={{ padding: 16, gap: 8, flexDirection: "row" }}>
-          <View style={{ flex: 1 }}>
-            <Button
-              color={colors.primary}
-              label="買取オファーを見る"
-              onPress={onButtonPress}
-              fullWidth
-            />
+      {!car?.status && (
+        <View>
+          <Divider />
+          <View style={{ padding: 16, gap: 8, flexDirection: "row" }}>
+            <View style={{ flex: 1 }}>
+              <Button
+                color={colors.primary}
+                label="買取オファーを見る"
+                onPress={onButtonPress}
+                fullWidth
+              />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Button
+                color={colors.primary}
+                label="一括査定依頼をする"
+                onPress={onButtonPress}
+                isBorder
+                fullWidth
+              />
+            </View>
           </View>
-          <View style={{ flex: 1 }}>
-            <Button
-              color={colors.primary}
-              label="一括査定依頼をする"
-              onPress={onButtonPress}
-              isBorder
-              fullWidth
-            />
-          </View>
+          <SafeAreaBottom />
         </View>
-        <SafeAreaBottom />
-      </View>
+      )}
     </View>
   );
 };

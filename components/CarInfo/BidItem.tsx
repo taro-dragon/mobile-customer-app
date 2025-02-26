@@ -25,7 +25,7 @@ const BidItem: React.FC<BidItemProps> = ({ bid }) => {
     >
       <TouchableOpacity
         onPress={() => {
-          router.push(`/shops/${bid.client.id}`);
+          router.push(`/shops/${bid.shop.id}`);
         }}
         style={{
           flexDirection: "row",
@@ -43,10 +43,12 @@ const BidItem: React.FC<BidItemProps> = ({ bid }) => {
         >
           <View style={{ gap: 8 }}>
             <Text style={{ ...typography.heading3, color: colors.textPrimary }}>
-              {bid.client.name}
+              {bid.shop.shopName}
             </Text>
             <Text style={{ ...typography.body3, color: colors.textSecondary }}>
-              {bid.client.address}
+              {bid.shop.address1}
+              {bid.shop.address2}
+              {bid.shop.address3}
             </Text>
             <View>
               <Text style={{ ...typography.heading1, color: colors.primary }}>

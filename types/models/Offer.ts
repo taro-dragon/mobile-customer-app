@@ -1,11 +1,9 @@
 export type Offer = {
   clientId: string;
-  vehicle: {
-    maker: string;
-    model: string;
-    year: number;
-    gread: string;
-  };
+  maker: string;
+  model: string;
+  year: string;
+  gread: string;
   pricing: {
     basePrice: number;
     discountMultipliers: {
