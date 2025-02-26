@@ -2,7 +2,7 @@ import { Client } from "./Client";
 
 export type Shop = {
   id: string;
-  clientId?: string;
+  clientId: string;
   client?: Client;
   staffInfo?: {
     familyName: string;

@@ -1,16 +1,14 @@
 import CarInfoItem from "@/components/CarDetail/CarInfoIten";
-import Button from "@/components/common/Button";
+
 import Divider from "@/components/common/Divider";
-import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import ShopDetailSkeleton from "@/components/Skelton/SkeltonShopInfo";
 import { useTheme } from "@/contexts/ThemeContext";
 import useShop from "@/hooks/useFetchShop";
-import useClient from "@/hooks/useFetchShop";
-import { useRegistrationGuard } from "@/hooks/useRegistrationGuard";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { X } from "lucide-react-native";
 import { useEffect, useRef } from "react";
+import MapView, { Marker } from "react-native-maps";
 import {
   Dimensions,
   ScrollView,
@@ -21,6 +19,7 @@ import {
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
+import { openMapWithLatlng } from "@/libs/openMapWithLatlng";
 
 const ShopDetail = () => {
   const safeAreaInsets = useSafeAreaInsets();
@@ -115,16 +114,9 @@ const ShopDetail = () => {
           />
         )}
         <View style={{ padding: 16, gap: 24 }}>
-          <View style={{ gap: 8 }}>
-            <Text style={{ ...typography.title1, color: colors.textPrimary }}>
-              {shop.shopName}
-            </Text>
-            <Text style={{ ...typography.body2, color: colors.textSecondary }}>
-              {shop.address1}
-              {shop.address2}
-              {shop.address3}
-            </Text>
-          </View>
+          <Text style={{ ...typography.title1, color: colors.textPrimary }}>
+            {shop.shopName}
+          </Text>
           <View style={{ gap: 8 }}>
             <Text style={{ ...typography.heading3, color: colors.textPrimary }}>
               店舗情報
@@ -138,6 +130,10 @@ const ShopDetail = () => {
                 borderRadius: 12,
               }}
             >
+              <CarInfoItem
+                label="住所"
+                value={`${shop.address1} ${shop.address2} ${shop.address3}`}
+              />
               <CarInfoItem label="営業時間" value={shop.businessHours} />
               {shop.holiday && (
                 <CarInfoItem label="定休日" value={shop.holiday} />
@@ -145,7 +141,50 @@ const ShopDetail = () => {
               {shop.client?.name && (
                 <CarInfoItem label="法人名" value={shop.client.name} />
               )}
+              {shop.client?.antiqueDealerLicenseNumber && (
+                <CarInfoItem
+                  label="古物商許可証番号"
+                  value={shop.client.antiqueDealerLicenseNumber}
+                />
+              )}
               {/* <CarInfoItem label="営業時間" value={client.businessHours} /> */}
+            </View>
+          </View>
+          <View style={{ gap: 8 }}>
+            <Text style={{ ...typography.heading3, color: colors.textPrimary }}>
+              店舗地図
+            </Text>
+            <View
+              style={{
+                width: "100%",
+                aspectRatio: 16 / 9,
+                borderRadius: 12,
+                overflow: "hidden",
+              }}
+            >
+              <MapView
+                style={{ width: "100%", height: "100%" }}
+                initialRegion={{
+                  latitude: shop.lat,
+                  longitude: shop.lng,
+                  latitudeDelta: 0.0082,
+                  longitudeDelta: 0.0082,
+                }}
+                scrollEnabled={false}
+              >
+                <Marker
+                  coordinate={{
+                    latitude: shop.lat,
+                    longitude: shop.lng,
+                  }}
+                  onPress={() => {
+                    openMapWithLatlng(
+                      { latitude: shop.lat, longitude: shop.lng },
+                      shop.shopName
+                    );
+                  }}
+                />
+              </MapView>
             </View>
           </View>
         </View>

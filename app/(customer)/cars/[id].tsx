@@ -40,8 +40,6 @@ const CarDetail = () => {
     console.log("買取オファーを見る");
   });
 
-  console.log(car);
-
   return (
     <View style={{ flex: 1, paddingTop: safeAreaInsets.top }}>
       <View
