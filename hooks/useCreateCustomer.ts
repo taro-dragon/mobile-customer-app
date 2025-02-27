@@ -3,12 +3,12 @@ import firestore from "@react-native-firebase/firestore";
 import storage from "@react-native-firebase/storage";
 
 import { useStore } from "@/hooks/useStore";
-import { Customer } from "@/types/models/Customer";
 import { useFormContext } from "react-hook-form";
 import { CarForm } from "@/types/models/CarForm";
+import { User } from "@/types/firestore_schema/users";
 
 const useCreateCustomer = () => {
-  const { setCustomer } = useStore();
+  const { setUser } = useStore();
   const { watch } = useFormContext<CarForm>();
   const { front, back, left, right, maker, model, year, gread } = watch();
 
@@ -57,7 +57,7 @@ const useCreateCustomer = () => {
         updatedAt: firestore.FieldValue.serverTimestamp(),
       };
 
-      const createCustomerData: Customer = {
+      const createUserData: User = {
         id: userId,
         isAnonymous: true,
         createdAt: firestore.Timestamp.now(),
@@ -67,16 +67,17 @@ const useCreateCustomer = () => {
       await firestore().runTransaction(async (transaction) => {
         transaction.set(carDocRef, carData);
 
-        const customerDocRef = firestore().collection("customers").doc(userId);
-        transaction.set(customerDocRef, createCustomerData);
+        const userDocRef = firestore().collection("users").doc(userId);
+        transaction.set(userDocRef, createUserData);
       });
 
       firestore()
-        .collection("customers")
+        .collection("users")
         .doc(userId)
         .onSnapshot((snapshot) => {
-          const customer = snapshot.data() as Customer;
-          setCustomer(customer);
+          const user = snapshot.data() as User;
+          user.id = userId;
+          setUser(user);
         });
     } catch (error) {
       console.error(error);

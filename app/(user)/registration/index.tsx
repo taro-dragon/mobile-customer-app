@@ -54,7 +54,7 @@ const Registration: React.FC = () => {
           <Button
             color={colors.primary}
             label="次へ"
-            onPress={() => router.push("/(customer)/registration/name")}
+            onPress={() => router.push("/(user)/registration/name")}
             fullWidth
           />
           <SafeAreaBottom />

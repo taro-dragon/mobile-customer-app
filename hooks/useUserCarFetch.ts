@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import { useStore } from "./useStore";
 
 const useUserCarFetch = () => {
-  const { customer, fetchCars } = useStore();
+  const { user, fetchCars } = useStore();
   useEffect(() => {
-    if (customer) {
-      fetchCars(customer.id);
+    if (user) {
+      fetchCars(user.id);
     }
   }, []);
 };

@@ -53,7 +53,7 @@ const Geocode: React.FC = () => {
         familyName: data.familyName,
         givenName: data.givenName,
       });
-      router.push("/(customer)/registration/phoneAuth");
+      router.push("/(user)/registration/phoneAuth");
     } catch (error) {
       console.log(error);
     }

@@ -7,6 +7,8 @@ import { useRouter } from "expo-router";
 import { View } from "react-native";
 import Picture from "@/components/formItem/picture";
 import { useFormContext } from "react-hook-form";
+import { OnBoardingLayout } from "@/components/OnBoading/OnBoardingLayout";
+import { useOnBoarding } from "@/hooks/useOnBoarding";
 
 const CaptureCar = () => {
   const { colors } = useTheme();
@@ -17,12 +19,16 @@ const CaptureCar = () => {
   const left = watch("left");
   const right = watch("right");
   const isAllCapture = front && back && left && right;
+  const { goToNextStep, goToPreviousStep, currentStepIndex } = useOnBoarding();
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: colors.backgroundPrimary,
-      }}
+    <OnBoardingLayout
+      onNext={goToNextStep}
+      onBack={goToPreviousStep}
+      fieldName="model"
+      currentStep={currentStepIndex}
+      totalSteps={6}
+      title="自動車を撮影"
+      disabled={!isAllCapture}
     >
       <View
         style={{
@@ -47,34 +53,7 @@ const CaptureCar = () => {
         </View>
         <Picture name="back" />
       </View>
-      <Divider />
-      <View
-        style={{
-          backgroundColor: colors.backgroundPrimary,
-          paddingHorizontal: 24,
-          paddingTop: 12,
-          gap: 12,
-        }}
-      >
-        <Button
-          color={colors.primary}
-          label="次へ"
-          onPress={() => router.push("/onBoading/confirm")}
-          fullWidth
-          disabled={!isAllCapture}
-        />
-        <Button
-          color={colors.primary}
-          label="前へ"
-          onPress={() => {
-            router.back();
-          }}
-          fullWidth
-          notBorder
-        />
-        <SafeAreaBottom color={colors.backgroundPrimary} />
-      </View>
-    </View>
+    </OnBoardingLayout>
   );
 };
 

@@ -3,9 +3,7 @@ import { useRouter } from "expo-router";
 import { useFormContext } from "react-hook-form";
 import { ActivityIndicator, Modal, ScrollView, Text, View } from "react-native";
 
-import Button from "@/components/common/Button";
 import Divider from "@/components/common/Divider";
-import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import { useTheme } from "@/contexts/ThemeContext";
 import { FullCarData } from "@/types/models/carData/fullCarData";
 import fullCarData from "@/constants/full_car_catalog.json";
@@ -15,6 +13,8 @@ import CarIcon from "@/components/icons/car";
 import ConfirmImage from "@/components/formItem/ConfirmImage";
 import useCreateCustomer from "@/hooks/useCreateCustomer";
 import Toast from "react-native-toast-message";
+import { OnBoardingLayout } from "@/components/OnBoading/OnBoardingLayout";
+import { useOnBoarding } from "@/hooks/useOnBoarding";
 
 const Confirm = () => {
   const { watch } = useFormContext<CarForm>();
@@ -28,6 +28,7 @@ const Confirm = () => {
   const yearData = modelData?.years.find((y) => y.yearId === year);
   const greadData = yearData?.grades.find((g) => g.gradeName === gread);
   const [isLoading, setIsLoading] = useState(false);
+  const { currentStepIndex } = useOnBoarding();
   const onSubmit = async () => {
     setIsLoading(true);
     try {
@@ -48,7 +49,14 @@ const Confirm = () => {
     }
   };
   return (
-    <View style={{ flex: 1, backgroundColor: colors.backgroundPrimary }}>
+    <OnBoardingLayout
+      onNext={onSubmit}
+      onBack={() => router.back()}
+      fieldName="model"
+      currentStep={currentStepIndex}
+      totalSteps={6}
+      title="登録する"
+    >
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 12,
@@ -98,32 +106,6 @@ const Confirm = () => {
           <ConfirmImage source={back} />
         </View>
       </ScrollView>
-      <Divider />
-      <View
-        style={{
-          backgroundColor: colors.backgroundPrimary,
-          paddingHorizontal: 24,
-          paddingTop: 12,
-          gap: 12,
-        }}
-      >
-        <Button
-          color={colors.primary}
-          label="登録する"
-          onPress={onSubmit}
-          fullWidth
-        />
-        <Button
-          color={colors.primary}
-          label="前へ"
-          onPress={() => {
-            router.back();
-          }}
-          fullWidth
-          notBorder
-        />
-        <SafeAreaBottom color={colors.backgroundPrimary} />
-      </View>
       <Modal visible={isLoading} transparent animationType="slide">
         <View
           style={{
@@ -140,7 +122,7 @@ const Confirm = () => {
           </Text>
         </View>
       </Modal>
-    </View>
+    </OnBoardingLayout>
   );
 };
 

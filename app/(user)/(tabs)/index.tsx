@@ -2,14 +2,12 @@ import CarInfoItem from "@/components/CarInfo/CarInfoItem";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useStore } from "@/hooks/useStore";
 import { ScrollView, Text } from "react-native";
-import { useRouter } from "expo-router";
 import Button from "@/components/common/Button";
 import auth from "@react-native-firebase/auth";
 
 const CustomerIndex = () => {
   const { cars, deleteUser } = useStore();
   const { colors, typography } = useTheme();
-  const router = useRouter();
   return (
     <ScrollView
       style={{ flex: 1 }}
