@@ -1,0 +1,147 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ユーザー認証関連
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isRegisteredUser() {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isRegistered == true;
+    }
+    
+    function isOwnDocument(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    function isStaffMember() {
+      return isAuthenticated() && 
+             exists(/databases/$(database)/documents/staff/$(request.auth.uid));
+    }
+    
+    function isAffiliateStoreStaff(storeId) {
+      return isStaffMember() && 
+             get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.affiliateStoreId == storeId;
+    }
+    
+    // ユーザー情報
+    match /users/{userId} {
+      allow read: if isOwnDocument(userId) || isStaffMember();
+      allow create: if isAuthenticated() && isOwnDocument(userId);
+      allow update: if isOwnDocument(userId);
+    }
+    
+    // 運営会社
+    match /managementCompanies/{companyId} {
+      allow read: if true; // 公開情報
+      allow write: if false; // 管理者のみ（Cloud Functions経由）
+    }
+    
+    // 加盟店
+    match /affiliateStores/{storeId} {
+      allow read: if true; // 公開情報
+      allow write: if false; // 管理者のみ（Cloud Functions経由）
+    }
+    
+    // スタッフ
+    match /staff/{staffId} {
+      allow read: if isOwnDocument(staffId) || 
+                   (isStaffMember() && 
+                    (get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.managementCompanyId == 
+                     get(/databases/$(database)/documents/staff/$(staffId)).data.managementCompanyId));
+      allow write: if false; // 管理者のみ（Cloud Functions経由）
+    }
+    
+    // 車情報
+    match /cars/{carId} {
+      allow read: if isOwnDocument(resource.data.userId) || 
+                   (isStaffMember() && 
+                    (exists(/databases/$(database)/documents/bids/{bid}) && 
+                     get(/databases/$(database)/documents/bids/{bid}).data.affiliateStoreId == 
+                     get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.affiliateStoreId &&
+                     get(/databases/$(database)/documents/bulkAppraisalRequests/{req}).data.carId == carId));
+      allow create, update: if isAuthenticated() && isOwnDocument(request.resource.data.userId);
+    }
+    
+    // 買取オファー
+    match /buyOffers/{offerId} {
+      allow read: if true; // 公開情報
+      allow create, update: if isStaffMember() && 
+                              isAffiliateStoreStaff(request.resource.data.affiliateStoreId);
+      allow delete: if isStaffMember() && 
+                     isAffiliateStoreStaff(resource.data.affiliateStoreId);
+    }
+    
+    // 一括査定依頼
+    match /bulkAppraisalRequests/{requestId} {
+      allow read: if isOwnDocument(resource.data.userId) || 
+                   isStaffMember();
+      allow create: if isRegisteredUser() && 
+                     isOwnDocument(request.resource.data.userId);
+      allow update: if isOwnDocument(resource.data.userId) || 
+                     (isStaffMember() && resource.data.status == 'open');
+    }
+    
+    // 入札
+    match /bids/{bidId} {
+      allow read: if isOwnDocument(get(/databases/$(database)/documents/bulkAppraisalRequests/$(resource.data.bulkAppraisalRequestId)).data.userId) || 
+                   (isStaffMember() && 
+                    isAffiliateStoreStaff(resource.data.affiliateStoreId));
+      allow create: if isStaffMember() && 
+                     isAffiliateStoreStaff(request.resource.data.affiliateStoreId) &&
+                     get(/databases/$(database)/documents/bulkAppraisalRequests/$(request.resource.data.bulkAppraisalRequestId)).data.status == 'open';
+      allow update: if isOwnDocument(get(/databases/$(database)/documents/bulkAppraisalRequests/$(resource.data.bulkAppraisalRequestId)).data.userId) &&
+                     (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isSelected']));
+    }
+    
+    // チャット
+    match /chats/{chatId} {
+      allow read: if isOwnDocument(resource.data.userId) || 
+                   (isStaffMember() && 
+                    isAffiliateStoreStaff(resource.data.affiliateStoreId));
+      allow create: if isRegisteredUser() && 
+                     (isOwnDocument(request.resource.data.userId) || 
+                      (isStaffMember() && 
+                       isAffiliateStoreStaff(request.resource.data.affiliateStoreId)));
+      allow update: if isOwnDocument(resource.data.userId) || 
+                     (isStaffMember() && 
+                      isAffiliateStoreStaff(resource.data.affiliateStoreId));
+    }
+    
+    // メッセージ
+    match /messages/{messageId} {
+      allow read: if isOwnDocument(get(/databases/$(database)/documents/chats/$(resource.data.chatId)).data.userId) || 
+                   (isStaffMember() && 
+                    isAffiliateStoreStaff(get(/databases/$(database)/documents/chats/$(resource.data.chatId)).data.affiliateStoreId));
+      allow create: if (isRegisteredUser() && 
+                       isOwnDocument(get(/databases/$(database)/documents/chats/$(request.resource.data.chatId)).data.userId) && 
+                       request.resource.data.senderType == 'user') || 
+                      (isStaffMember() && 
+                       isAffiliateStoreStaff(get(/databases/$(database)/documents/chats/$(request.resource.data.chatId)).data.affiliateStoreId) && 
+                       request.resource.data.senderType == 'staff');
+      allow update: if (isStaffMember() && 
+                       resource.data.senderType == 'user' && 
+                       request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead'])) || 
+                      (isRegisteredUser() && 
+                       isOwnDocument(get(/databases/$(database)/documents/chats/$(resource.data.chatId)).data.userId) && 
+                       resource.data.senderType == 'staff' && 
+                       request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead']));
+    }
+    
+    // 口コミ
+    match /reviews/{reviewId} {
+      allow read: if true; // 公開情報
+      allow create: if isRegisteredUser() && 
+                     isOwnDocument(request.resource.data.userId);
+      allow update: if isOwnDocument(resource.data.userId);
+    }
+    
+    // 在庫
+    match /inventory/{itemId} {
+      allow read: if true; // 公開情報
+      allow write: if isStaffMember() && 
+                    isAffiliateStoreStaff(request.resource.data.affiliateStoreId);
+    }
+  }
+} 

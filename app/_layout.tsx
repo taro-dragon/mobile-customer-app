@@ -1,38 +1,61 @@
-import React, { useEffect } from "react";
-import { SafeAreaView, StyleSheet, ActivityIndicator } from "react-native";
-import { Slot, useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { Href, Slot, useRouter, useSegments } from "expo-router";
 import { useStore } from "@/hooks/useStore";
 import useAuthInitialization from "@/hooks/useAuthInitialization";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { ToastConfig } from "@/constants/ToastConfig";
+import * as SplashScreen from "expo-splash-screen";
 
+SplashScreen.preventAutoHideAsync();
 export default function Layout() {
   const router = useRouter();
-  const { customer, client, isAuthLoading } = useStore();
+  const segments = useSegments();
+  const { user, staff, isAppReady } = useStore();
+  const [initialRoute, setInitialRoute] = useState<string | null>(null);
   useAuthInitialization();
 
   useEffect(() => {
-    if (!isAuthLoading) {
-      if (!customer && !client) {
-        router.replace("/(unauth)");
-      } else if (customer) {
-        router.replace("/(customer)/(tabs)");
-      } else if (client) {
-        router.replace("/(client)");
-      }
-    }
-  }, [customer, client, isAuthLoading]);
+    if (!isAppReady) return;
 
-  if (isAuthLoading) {
-    return (
-      <ThemeProvider>
-        <SafeAreaView style={styles.container}>
-          <ActivityIndicator size="large" color="#2196F3" />
-        </SafeAreaView>
-      </ThemeProvider>
-    );
+    const determineRoute = () => {
+      if (user) return "/(user)/(tabs)";
+      if (staff) return "/(staff)/";
+      return "/(unauth)";
+    };
+
+    setInitialRoute(determineRoute());
+  }, [user, staff, isAppReady]);
+
+  // ルートリダイレクトとスプラッシュスクリーン制御
+  useEffect(() => {
+    if (!initialRoute) return;
+
+    const initialSegment = initialRoute.split("/")[1];
+    const currentSegment = segments.length > 0 ? segments[0] : "";
+    const needsRedirect = initialSegment !== currentSegment;
+
+    const hideSplashScreen = async () => {
+      await SplashScreen.hideAsync();
+    };
+
+    if (needsRedirect) {
+      // リダイレクトが必要な場合
+      const redirectTimer = setTimeout(() => {
+        router.replace(initialRoute as Href);
+        setTimeout(hideSplashScreen, 150);
+      }, 50);
+
+      return () => clearTimeout(redirectTimer);
+    } else {
+      // 現在のルートが正しい場合はスプラッシュスクリーンを非表示に
+      setTimeout(hideSplashScreen, 150);
+    }
+  }, [initialRoute, segments, router]);
+
+  if (!isAppReady || !initialRoute) {
+    return null;
   }
 
   return (
@@ -44,22 +67,3 @@ export default function Layout() {
     </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1 },
-  header: {
-    height: 60,
-    backgroundColor: "#2196F3",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  headerText: { color: "#fff", fontSize: 20 },
-  content: { flex: 1 },
-  footer: {
-    height: 50,
-    backgroundColor: "#eee",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  footerText: { color: "#333", fontSize: 16 },
-});

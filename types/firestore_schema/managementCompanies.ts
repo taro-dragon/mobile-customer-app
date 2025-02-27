@@ -1,12 +1,13 @@
 import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 
-export type Staff = {
+export type ManagementCompany = {
   id: string;
-  familyName: string;
-  givenName: string;
-  familyNameKana: string;
-  givenNameKana: string;
-  profileImageUrl?: string;
+  name: string;
+  address: string;
+  phoneNumber: string;
+  email: string;
+  website: string;
+  logoUrl: string;
   createdAt: FirebaseFirestoreTypes.Timestamp;
   updatedAt: FirebaseFirestoreTypes.Timestamp;
 };

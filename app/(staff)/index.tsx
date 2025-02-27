@@ -1,11 +1,11 @@
 import { Text, View } from "react-native";
 
-const ClientIndex = () => {
+const StaffIndex = () => {
   return (
     <View>
-      <Text>ClientIndex</Text>
+      <Text>StaffIndex</Text>
     </View>
   );
 };
 
-export default ClientIndex;
+export default StaffIndex;

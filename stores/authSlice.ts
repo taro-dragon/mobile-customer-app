@@ -1,28 +1,28 @@
-import { Client } from "@/types/models/Client";
-import { Customer } from "@/types/models/Customer";
+import { Staff } from "@/types/firestore_schema/staff";
+import { User } from "@/types/firestore_schema/users";
 import { AuthSlice } from "@/types/slices/AuthSlice";
 import { StateCreator } from "zustand";
 
 export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (
   set
 ) => ({
-  customer: undefined,
-  client: undefined,
+  staff: undefined,
+  user: undefined,
   isAuthLoading: false,
-  setCustomer: (customer: Customer) => set((state) => ({ ...state, customer })),
-  editCustomer: (updatedCustomer: Customer) =>
+  setStaff: (staff: Staff) => set((state) => ({ ...state, staff })),
+  editStaff: (updatedStaff: Staff) =>
     set((state) => ({
       ...state,
-      customer: { ...state.customer, ...updatedCustomer },
+      staff: { ...state.staff, ...updatedStaff },
     })),
-  deleteCustomer: () => set((state) => ({ ...state, customer: undefined })),
-  setClient: (client: Client) => set((state) => ({ ...state, client })),
-  editClient: (updatedClient: Client) =>
+  deleteStaff: () => set((state) => ({ ...state, staff: undefined })),
+  setUser: (user: User) => set((state) => ({ ...state, user })),
+  editUser: (updatedUser: User) =>
     set((state) => ({
       ...state,
-      client: { ...state.client, ...updatedClient },
+      user: { ...state.user, ...updatedUser },
     })),
-  deleteClient: () => set((state) => ({ ...state, client: undefined })),
+  deleteUser: () => set((state) => ({ ...state, user: undefined })),
   setIsAuthLoading: (isAuthLoading: boolean) =>
     set((state) => ({
       ...state,

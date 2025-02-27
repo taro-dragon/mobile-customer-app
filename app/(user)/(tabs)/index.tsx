@@ -3,9 +3,11 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { useStore } from "@/hooks/useStore";
 import { ScrollView, Text } from "react-native";
 import { useRouter } from "expo-router";
+import Button from "@/components/common/Button";
+import auth from "@react-native-firebase/auth";
 
 const CustomerIndex = () => {
-  const { cars } = useStore();
+  const { cars, deleteUser } = useStore();
   const { colors, typography } = useTheme();
   const router = useRouter();
   return (
@@ -23,6 +25,14 @@ const CustomerIndex = () => {
           愛車がありません
         </Text>
       )}
+      <Button
+        label="ログアウト"
+        color={colors.error}
+        onPress={() => {
+          deleteUser();
+          auth().signOut();
+        }}
+      />
     </ScrollView>
   );
 };
