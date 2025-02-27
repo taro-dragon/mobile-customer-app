@@ -4,9 +4,13 @@ import Logo from "@/components/common/Logo";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useRouter } from "expo-router";
 import { Text, View } from "react-native";
-
+import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
+import { User } from "@/types/firestore_schema/users";
+import { useStore } from "@/hooks/useStore";
 const Index = () => {
   const { colors, typography } = useTheme();
+  const { setUser } = useStore();
   const router = useRouter();
   return (
     <View
@@ -122,6 +126,30 @@ const Index = () => {
             color={colors.primary}
             label="初めての方はこちら"
             onPress={() => router.push("/(unauth)/onBoading")}
+            fullWidth
+          />
+          <Button
+            color={colors.primary}
+            label="デバッグよう機能"
+            onPress={async () => {
+              const user = await auth().signInAnonymously();
+              const userId = user.user?.uid;
+              await firestore().collection("users").doc(userId).set({
+                id: userId,
+                isAnonymous: true,
+                createdAt: firestore.Timestamp.now(),
+                updatedAt: firestore.Timestamp.now(),
+              });
+              await firestore()
+                .collection("users")
+                .doc(userId)
+                .onSnapshot((snapshot) => {
+                  const firebaseUser = snapshot.data() as User;
+                  firebaseUser.id = userId;
+                  console.log(firebaseUser);
+                  setUser(firebaseUser);
+                });
+            }}
             fullWidth
           />
           <Button

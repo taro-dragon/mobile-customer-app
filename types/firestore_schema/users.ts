@@ -8,7 +8,8 @@ export type User = {
   address1?: string;
   address2?: string;
   address3?: string;
-  location?: FirebaseFirestoreTypes.GeoPoint; // 位置情報
+  lat?: number;
+  lng?: number;
   phoneNumber?: string;
   isAnonymous: boolean; // 匿名認証かどうか
   createdAt: FirebaseFirestoreTypes.Timestamp;
