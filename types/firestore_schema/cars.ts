@@ -2,19 +2,19 @@ import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 
 export type Car = {
   id: string;
-  userId: string; // 所有者
-  maker: string; // メーカー
-  model: string; // 車種
-  year: number; // 年式
-  mileage: number; // 走行距離
+  userId: string;
+  maker: string;
+  model: string;
+  year: number;
+  mileage: number;
   color: string;
-  fuelType: string; // 燃料タイプ
-  transmission: string; // トランスミッション
-  grade: string; // グレード
-  bodyType: string; // ボディタイプ
-  condition: string; // AI判定による状態
-  conditionScore: number; // AI判定によるスコア（0-100）
-  photoUrls: string[]; // 写真URL配列
+  fuelType: string;
+  transmission: string;
+  grade: string;
+  bodyType: string;
+  condition: string;
+  conditionScore: number;
+  photoUrls: string[];
   aiAnalysisResults: {
     exterior: {
       scratches: boolean;

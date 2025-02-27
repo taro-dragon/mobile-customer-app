@@ -21,7 +21,7 @@ const CarInfoItem: React.FC<CarInfoItemProps> = ({ car }) => {
       style={{
         flexDirection: "row",
         gap: 8,
-        backgroundColor: colors.backgroundPrimary,
+        backgroundColor: colors.backgroundSecondary,
         padding: 8,
         borderRadius: 12,
         borderWidth: 1,

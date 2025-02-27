@@ -5,7 +5,8 @@ export type AffiliateStore = {
   managementCompanyId: string; // 運営会社への参照
   name: string;
   address: string;
-  location: FirebaseFirestoreTypes.GeoPoint; // 位置情報
+  lat: number;
+  lng: number;
   phoneNumber: string;
   email: string;
   website: string;

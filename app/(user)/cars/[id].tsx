@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import {
   Dimensions,
@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Alert,
 } from "react-native";
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
 import { sampleAppraisal } from "@/constants/SampleAppraisal";
@@ -23,10 +24,19 @@ import Button from "@/components/common/Button";
 import { X } from "lucide-react-native";
 import BidItem from "@/components/CarInfo/BidItem";
 import { useRegistrationGuard } from "@/hooks/useRegistrationGuard";
+import Tag from "@/components/common/Tag";
 
 const CarDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { cars } = useStore();
+  const {
+    cars,
+    user,
+    createBulkAppraisalRequest,
+    loading,
+    bulkAppraisalRequests,
+    fetchBulkAppraisalRequests,
+  } = useStore();
+  const [isRequesting, setIsRequesting] = useState(false);
   const car = cars.find((car) => car.id === id);
   const ref = React.useRef<ICarouselInstance>(null);
   const carData = transformCarData(car as Car);
@@ -36,8 +46,56 @@ const CarDetail = () => {
   const width = Dimensions.get("window").width;
   const router = useRouter();
   const guard = useRegistrationGuard();
-  const onButtonPress = guard(() => {
+
+  const hasActiveRequest = bulkAppraisalRequests.some(
+    (request) =>
+      request.carId === id &&
+      (request.status === "in_progress" || request.status === "deadline")
+  );
+
+  useEffect(() => {
+    if (user?.id) {
+      fetchBulkAppraisalRequests(user.id);
+    }
+  }, [user?.id]);
+
+  const onViewOffersPress = guard(() => {
     console.log("買取オファーを見る");
+  });
+
+  const onRequestAppraisalPress = guard(async () => {
+    if (!user?.id || !id) return;
+
+    // 既に一括査定リクエストがある場合
+    if (hasActiveRequest) {
+      Alert.alert(
+        "一括査定依頼済み",
+        "この車両はすでに一括査定依頼を出しています。",
+        [{ text: "OK" }]
+      );
+      return;
+    }
+
+    try {
+      setIsRequesting(true);
+      const requestId = await createBulkAppraisalRequest(id, user.id);
+      setIsRequesting(false);
+
+      if (requestId) {
+        Alert.alert(
+          "一括査定依頼完了",
+          "一括査定依頼を送信しました。査定結果をお待ちください。",
+          [{ text: "OK" }]
+        );
+      }
+    } catch (error) {
+      setIsRequesting(false);
+      Alert.alert(
+        "エラー",
+        "一括査定依頼の送信に失敗しました。もう一度お試しください。",
+        [{ text: "OK" }]
+      );
+    }
   });
 
   return (
@@ -84,13 +142,14 @@ const CarDetail = () => {
           )}
         />
         <View style={{ padding: 16, gap: 24 }}>
-          <View>
+          <View style={{ alignItems: "flex-start", gap: 4 }}>
             <Text style={{ ...typography.heading3, color: colors.primary }}>
               {carData.maker.name}
             </Text>
             <Text style={{ ...typography.title1, color: colors.textPrimary }}>
               {carData.model.name}
             </Text>
+            {hasActiveRequest && <Tag label="査定中" color="info" />}
           </View>
           <View style={{ gap: 8 }}>
             <Text style={{ ...typography.heading3, color: colors.textPrimary }}>
@@ -144,19 +203,22 @@ const CarDetail = () => {
               <Button
                 color={colors.primary}
                 label="買取オファーを見る"
-                onPress={onButtonPress}
+                onPress={onViewOffersPress}
                 fullWidth
               />
             </View>
-            <View style={{ flex: 1 }}>
-              <Button
-                color={colors.primary}
-                label="一括査定依頼をする"
-                onPress={onButtonPress}
-                isBorder
-                fullWidth
-              />
-            </View>
+            {!hasActiveRequest && (
+              <View style={{ flex: 1 }}>
+                <Button
+                  color={colors.primary}
+                  label="一括査定依頼をする"
+                  onPress={onRequestAppraisalPress}
+                  isBorder
+                  fullWidth
+                  disabled={isRequesting || hasActiveRequest}
+                />
+              </View>
+            )}
           </View>
           <SafeAreaBottom />
         </View>

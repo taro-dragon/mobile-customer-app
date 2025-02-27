@@ -1,4 +1,4 @@
-export type AppState = {
+export type AppSlice = {
   isAuthLoading: boolean;
   isAppReady: boolean;
   setIsAuthLoading: (loading: boolean) => void;

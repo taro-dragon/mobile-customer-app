@@ -1,67 +1,33 @@
 import { useTheme } from "@/contexts/ThemeContext";
 import { useCallback, useMemo } from "react";
 import { Text, View } from "react-native";
+import Tag from "../common/Tag";
 
 type ConditionTagProps = {
   condition: string;
 };
 
 const ConditionTag: React.FC<ConditionTagProps> = ({ condition }) => {
-  const { colors, typography } = useTheme();
+  const { colors } = useTheme();
   const getTagColor = useCallback(
-    (condition: string): { color: string; backgroundColor: string } => {
+    (condition: string): "info" | "success" | "warning" | "error" => {
       switch (condition) {
         case "S":
-          return {
-            color: colors.textWarning,
-            backgroundColor: colors.backgroundWarning,
-          };
+          return "warning";
         case "A":
-          return {
-            color: colors.textSuccess,
-            backgroundColor: colors.backgroundSuccess,
-          };
+          return "success";
         case "B":
-          return {
-            color: colors.textLink,
-            backgroundColor: colors.backgroundInfo,
-          };
+          return "error";
         case "C":
-          return {
-            color: colors.textError,
-            backgroundColor: colors.backgroundError,
-          };
+          return "info";
         default:
-          return {
-            color: colors.textInfo,
-            backgroundColor: colors.backgroundInfo,
-          };
+          return "info";
       }
     },
     [colors]
   );
   const tagColor = useMemo(() => getTagColor(condition), [condition]);
-  return (
-    <View
-      style={{
-        padding: 4,
-        borderRadius: 4,
-        borderWidth: 1,
-        borderColor: tagColor.color,
-        backgroundColor: tagColor.backgroundColor,
-      }}
-    >
-      <Text
-        style={{
-          color: tagColor.color,
-          ...typography.body3,
-          fontWeight: "bold",
-        }}
-      >
-        {condition}
-      </Text>
-    </View>
-  );
+  return <Tag label={condition} color={tagColor} />;
 };
 
 export default ConditionTag;
