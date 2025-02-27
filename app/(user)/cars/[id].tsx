@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import {
   Dimensions,
@@ -6,10 +6,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Alert,
 } from "react-native";
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
-import { sampleAppraisal } from "@/constants/SampleAppraisal";
 
 import { useStore } from "@/hooks/useStore";
 import { transformCarData } from "@/libs/transformCarData";
@@ -25,18 +23,19 @@ import { X } from "lucide-react-native";
 import BidItem from "@/components/CarInfo/BidItem";
 import { useRegistrationGuard } from "@/hooks/useRegistrationGuard";
 import Tag from "@/components/common/Tag";
+import { useBulkAppraisal } from "@/hooks/useBulkAppraisal";
+import AppraisalSection from "@/components/CarInfo/AppraisalSection";
+import AppraisalStatusTag from "@/components/appraisal/AppraisalStatusTag";
 
 const CarDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { cars, fetchBulkAppraisalRequests, user } = useStore();
   const {
-    cars,
-    user,
-    createBulkAppraisalRequest,
-    loading,
-    bulkAppraisalRequests,
-    fetchBulkAppraisalRequests,
-  } = useStore();
-  const [isRequesting, setIsRequesting] = useState(false);
+    isRequesting,
+    onRequestAppraisalPress,
+    hasActiveRequest,
+    isDeadlineRequest,
+  } = useBulkAppraisal();
   const car = cars.find((car) => car.id === id);
   const ref = React.useRef<ICarouselInstance>(null);
   const carData = transformCarData(car as Car);
@@ -47,12 +46,6 @@ const CarDetail = () => {
   const router = useRouter();
   const guard = useRegistrationGuard();
 
-  const hasActiveRequest = bulkAppraisalRequests.some(
-    (request) =>
-      request.carId === id &&
-      (request.status === "in_progress" || request.status === "deadline")
-  );
-
   useEffect(() => {
     if (user?.id) {
       fetchBulkAppraisalRequests(user.id);
@@ -61,41 +54,6 @@ const CarDetail = () => {
 
   const onViewOffersPress = guard(() => {
     console.log("買取オファーを見る");
-  });
-
-  const onRequestAppraisalPress = guard(async () => {
-    if (!user?.id || !id) return;
-
-    // 既に一括査定リクエストがある場合
-    if (hasActiveRequest) {
-      Alert.alert(
-        "一括査定依頼済み",
-        "この車両はすでに一括査定依頼を出しています。",
-        [{ text: "OK" }]
-      );
-      return;
-    }
-
-    try {
-      setIsRequesting(true);
-      const requestId = await createBulkAppraisalRequest(id, user.id);
-      setIsRequesting(false);
-
-      if (requestId) {
-        Alert.alert(
-          "一括査定依頼完了",
-          "一括査定依頼を送信しました。査定結果をお待ちください。",
-          [{ text: "OK" }]
-        );
-      }
-    } catch (error) {
-      setIsRequesting(false);
-      Alert.alert(
-        "エラー",
-        "一括査定依頼の送信に失敗しました。もう一度お試しください。",
-        [{ text: "OK" }]
-      );
-    }
   });
 
   return (
@@ -149,7 +107,7 @@ const CarDetail = () => {
             <Text style={{ ...typography.title1, color: colors.textPrimary }}>
               {carData.model.name}
             </Text>
-            {hasActiveRequest && <Tag label="査定中" color="info" />}
+            <AppraisalStatusTag />
           </View>
           <View style={{ gap: 8 }}>
             <Text style={{ ...typography.heading3, color: colors.textPrimary }}>
@@ -179,18 +137,18 @@ const CarDetail = () => {
                 一括査定情報
               </Text>
 
-              <Text
-                style={{ ...typography.body3, color: colors.primary }}
-                onPress={() => {
-                  console.log("さらに見る");
-                }}
-              >
-                さらに見る
-              </Text>
+              {isDeadlineRequest && (
+                <Text
+                  style={{ ...typography.body3, color: colors.primary }}
+                  onPress={() => {
+                    console.log("さらに見る");
+                  }}
+                >
+                  さらに見る
+                </Text>
+              )}
             </View>
-            {sampleAppraisal.bids?.map((bid) => (
-              <BidItem key={bid.id} bid={bid} />
-            ))}
+            <AppraisalSection />
           </View>
         </View>
       </ScrollView>

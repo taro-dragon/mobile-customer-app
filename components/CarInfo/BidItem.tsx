@@ -6,12 +6,14 @@ import Divider from "../common/Divider";
 import Button from "../common/Button";
 import { ChevronRight } from "lucide-react-native";
 import { useRouter } from "expo-router";
+import { useBulkAppraisal } from "@/hooks/useBulkAppraisal";
 type BidItemProps = {
   bid: AppraisalBid;
 };
 
 const BidItem: React.FC<BidItemProps> = ({ bid }) => {
   const { colors, typography } = useTheme();
+  const { isDeadlineRequest } = useBulkAppraisal();
   const router = useRouter();
   return (
     <View
@@ -60,19 +62,21 @@ const BidItem: React.FC<BidItemProps> = ({ bid }) => {
         <ChevronRight size={24} color={colors.textSecondary} />
       </TouchableOpacity>
       <Divider />
-      <View style={{ gap: 8, flexDirection: "row" }}>
-        <View style={{ flex: 1 }}>
-          <Button
-            color={colors.primary}
-            label="この店舗と連絡を取る"
-            isBorder
-            onPress={() => {
-              console.log("買取オファーを見る");
-            }}
-            fullWidth
-          />
+      {isDeadlineRequest && (
+        <View style={{ gap: 8, flexDirection: "row" }}>
+          <View style={{ flex: 1 }}>
+            <Button
+              color={colors.primary}
+              label="この店舗と連絡を取る"
+              isBorder
+              onPress={() => {
+                console.log("買取オファーを見る");
+              }}
+              fullWidth
+            />
+          </View>
         </View>
-      </View>
+      )}
     </View>
   );
 };

@@ -1,6 +1,7 @@
 import { BulkAppraisalRequest } from "@/types/firestore_schema/bulkAppraisalRequests";
 import { StateCreator } from "zustand";
 import firestore from "@react-native-firebase/firestore";
+import dayjs from "dayjs";
 import { BulkAppraisalSlice } from "@/types/slices/BulkAppraisalSlice";
 export const createBulkAppraisalSlice: StateCreator<
   BulkAppraisalSlice,
@@ -26,9 +27,13 @@ export const createBulkAppraisalSlice: StateCreator<
       .onSnapshot(
         (snapshot) => {
           set({
-            bulkAppraisalRequests: snapshot.docs.map(
-              (doc) => doc.data() as BulkAppraisalRequest
-            ),
+            bulkAppraisalRequests: snapshot.docs.map((doc) => {
+              const data = doc.data() as BulkAppraisalRequest;
+              return {
+                ...data,
+                id: doc.id,
+              };
+            }),
             loading: false,
           });
         },
@@ -58,14 +63,11 @@ export const createBulkAppraisalSlice: StateCreator<
         set({ loading: false });
         return existingRequests.docs[0].id; // 既存のリクエストIDを返す
       }
-
-      // 新しいリクエストを作成
       const requestRef = firestore().collection("bulkAppraisalRequests").doc();
       const now = firestore.Timestamp.now();
 
-      // 締切日を7日後に設定
-      const deadline = new Date();
-      deadline.setDate(deadline.getDate() + 7);
+      // 締切日を翌日の0時に設定
+      const deadline = dayjs().add(1, "day").startOf("day").toDate();
 
       const newRequest: Omit<BulkAppraisalRequest, "id"> = {
         userId,
