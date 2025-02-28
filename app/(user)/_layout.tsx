@@ -25,9 +25,15 @@ export default function Layout() {
       <Stack.Screen
         name="cars/[id]"
         options={{
-          headerShown: false,
           animation: "slide_from_bottom",
           gestureDirection: "vertical",
+          headerBackVisible: false,
+          title: "車両詳細",
+          headerRight: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <X size={24} color={colors.primary} />
+            </TouchableOpacity>
+          ),
         }}
       />
       <Stack.Screen
@@ -36,8 +42,8 @@ export default function Layout() {
           title: "店舗詳細",
           animation: "slide_from_bottom",
           gestureDirection: "vertical",
-          headerBackVisible: false,
           headerShadowVisible: false,
+          headerBackVisible: false,
           headerRight: () => (
             <TouchableOpacity onPress={() => router.back()}>
               <X size={24} color={colors.primary} />

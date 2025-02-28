@@ -8,7 +8,6 @@ import {
   View,
 } from "react-native";
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
-import { Tabs } from "react-native-collapsible-tab-view";
 
 import { useStore } from "@/hooks/useStore";
 import { transformCarData } from "@/libs/transformCarData";
@@ -56,26 +55,7 @@ const CarDetail = () => {
   });
 
   return (
-    <View style={{ flex: 1, paddingTop: safeAreaInsets.top }}>
-      <View
-        style={{
-          height: 56,
-          justifyContent: "center",
-          alignItems: "center",
-          position: "relative",
-        }}
-      >
-        <Text style={{ ...typography.heading2, color: colors.primary }}>
-          車両詳細
-        </Text>
-        <TouchableOpacity
-          style={{ position: "absolute", right: 16 }}
-          onPress={() => router.back()}
-        >
-          <X size={24} color={colors.primary} />
-        </TouchableOpacity>
-      </View>
-      <Divider />
+    <View style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }}>
         <Carousel
           ref={ref}
