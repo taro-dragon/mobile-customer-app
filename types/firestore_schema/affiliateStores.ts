@@ -1,21 +1,21 @@
 import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
+import { ManagementCompany } from "./managementCompanies";
 
 export type AffiliateStore = {
   id: string;
   managementCompanyId: string; // 運営会社への参照
-  name: string;
-  address: string;
+  shopName: string;
+  address1: string;
+  address2: string;
+  address3: string;
   lat: number;
   lng: number;
   phoneNumber: string;
   email: string;
   website: string;
-  businessHours: {
-    [day: string]: {
-      open: string;
-      close: string;
-    };
-  };
+  businessHours?: string;
+  holiday?: string;
+  imageUrls: string[];
   logoUrl: string;
   coverImageUrl: string;
   averagePriceDeviation: number; // 平均乖離金額

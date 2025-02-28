@@ -6,7 +6,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import useShop from "@/hooks/useFetchShop";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { X } from "lucide-react-native";
+import { Clock, MapPin, X } from "lucide-react-native";
 import { useEffect, useRef } from "react";
 import MapView, { Marker } from "react-native-maps";
 import {
@@ -20,14 +20,15 @@ import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { openMapWithLatlng } from "@/libs/openMapWithLatlng";
+import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
+import ShopHeader from "@/components/shop/ShopHeader";
 
 const ShopDetail = () => {
   const safeAreaInsets = useSafeAreaInsets();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { colors, typography } = useTheme();
-  const ref = useRef<ICarouselInstance>(null);
-  const width = Dimensions.get("window").width;
+
   const { shop, isLoading } = useShop(id);
 
   useEffect(() => {
@@ -67,128 +68,308 @@ const ShopDetail = () => {
     );
   if (!shop) return null;
   return (
-    <View style={{ flex: 1, paddingTop: safeAreaInsets.top }}>
-      <View
-        style={{
-          height: 56,
-          justifyContent: "center",
-          alignItems: "center",
-          position: "relative",
+    <View style={{ flex: 1 }}>
+      <Tabs.Container
+        renderHeader={() => <ShopHeader shop={shop} />}
+        headerContainerStyle={{
+          backgroundColor: colors.backgroundPrimary,
+          elevation: 0,
+          shadowOpacity: 0,
+          shadowOffset: { height: 0, width: 0 },
+          borderBottomWidth: 1,
+          borderBottomColor: colors.gray200,
         }}
-      >
-        <Text style={{ ...typography.heading2, color: colors.primary }}>
-          店舗詳細
-        </Text>
-        <TouchableOpacity
-          style={{ position: "absolute", right: 16 }}
-          onPress={() => router.back()}
-        >
-          <X size={24} color={colors.primary} />
-        </TouchableOpacity>
-      </View>
-      <Divider />
-      <ScrollView style={{ flex: 1 }}>
-        {shop.imageUrls && (
-          <Carousel
-            ref={ref}
-            width={width}
-            height={width}
-            data={shop?.imageUrls}
-            renderItem={({ index }) => (
-              <View
-                style={{
-                  flex: 1,
-                  borderWidth: 1,
-                  justifyContent: "center",
-                }}
-              >
-                {shop.imageUrls && (
-                  <Image
-                    source={{ uri: shop.imageUrls[index] }}
-                    style={{ width: width, height: width }}
-                    contentFit="cover"
-                  />
-                )}
-              </View>
-            )}
+        renderTabBar={(props) => (
+          <MaterialTabBar
+            {...props}
+            activeColor={colors.primary}
+            inactiveColor={colors.textSecondary}
+            indicatorStyle={{
+              backgroundColor: colors.primary,
+              height: 3,
+              borderRadius: 3,
+            }}
+            style={{
+              backgroundColor: colors.backgroundPrimary,
+            }}
+            labelStyle={typography.heading3}
           />
         )}
-        <View style={{ padding: 16, gap: 24 }}>
-          <Text style={{ ...typography.title1, color: colors.textPrimary }}>
-            {shop.shopName}
-          </Text>
-          <View style={{ gap: 8 }}>
-            <Text style={{ ...typography.heading3, color: colors.textPrimary }}>
-              店舗情報
-            </Text>
-            <View
-              style={{
-                gap: 8,
-                borderWidth: 1,
-                borderColor: colors.borderPrimary,
-                padding: 12,
-                borderRadius: 12,
-              }}
-            >
-              <CarInfoItem
-                label="住所"
-                value={`${shop.address1} ${shop.address2} ${shop.address3}`}
-              />
-              <CarInfoItem label="営業時間" value={shop.businessHours} />
-              {shop.holiday && (
-                <CarInfoItem label="定休日" value={shop.holiday} />
-              )}
-              {shop.client?.name && (
-                <CarInfoItem label="法人名" value={shop.client.name} />
-              )}
-              {shop.client?.antiqueDealerLicenseNumber && (
-                <CarInfoItem
-                  label="古物商許可証番号"
-                  value={shop.client.antiqueDealerLicenseNumber}
-                />
-              )}
-              {/* <CarInfoItem label="営業時間" value={client.businessHours} /> */}
-            </View>
-          </View>
-          <View style={{ gap: 8 }}>
-            <Text style={{ ...typography.heading3, color: colors.textPrimary }}>
-              店舗地図
-            </Text>
-            <View
-              style={{
-                width: "100%",
-                aspectRatio: 16 / 9,
-                borderRadius: 12,
-                overflow: "hidden",
-              }}
-            >
-              <MapView
-                style={{ width: "100%", height: "100%" }}
-                initialRegion={{
-                  latitude: shop.lat,
-                  longitude: shop.lng,
-                  latitudeDelta: 0.0082,
-                  longitudeDelta: 0.0082,
-                }}
-                scrollEnabled={false}
-              >
-                <Marker
-                  coordinate={{
-                    latitude: shop.lat,
-                    longitude: shop.lng,
+      >
+        <Tabs.Tab name="買取オファー">
+          <Tabs.ScrollView>
+            <View style={{ padding: 16, gap: 16 }}>
+              <View style={{ gap: 8 }}>
+                <Text
+                  style={{
+                    ...typography.heading3,
+                    color: colors.textPrimary,
                   }}
-                  onPress={() => {
-                    openMapWithLatlng(
-                      { latitude: shop.lat, longitude: shop.lng },
-                      shop.shopName
-                    );
+                >
+                  店舗情報
+                </Text>
+                <View
+                  style={{
+                    gap: 8,
+                    borderWidth: 1,
+                    borderColor: colors.borderPrimary,
+                    padding: 12,
+                    borderRadius: 12,
                   }}
-                />
-              </MapView>
+                >
+                  <CarInfoItem
+                    label="住所"
+                    value={`${shop.address1} ${shop.address2} ${shop.address3}`}
+                  />
+                  {shop.businessHours && (
+                    <CarInfoItem label="営業時間" value={shop.businessHours} />
+                  )}
+                  {shop.holiday && (
+                    <CarInfoItem label="定休日" value={shop.holiday} />
+                  )}
+                  {shop.managementCompany?.name && (
+                    <CarInfoItem
+                      label="法人名"
+                      value={shop.managementCompany.name}
+                    />
+                  )}
+                  {shop.managementCompany?.antiqueDealerLicenseNumber && (
+                    <CarInfoItem
+                      label="古物商許可証番号"
+                      value={shop.managementCompany.antiqueDealerLicenseNumber}
+                    />
+                  )}
+                  {/* <CarInfoItem label="営業時間" value={client.businessHours} /> */}
+                </View>
+              </View>
+              <View style={{ gap: 8 }}>
+                <Text
+                  style={{
+                    ...typography.heading3,
+                    color: colors.textPrimary,
+                  }}
+                >
+                  店舗地図
+                </Text>
+                <View
+                  style={{
+                    width: "100%",
+                    aspectRatio: 16 / 9,
+                    borderRadius: 12,
+                    overflow: "hidden",
+                  }}
+                >
+                  <MapView
+                    style={{ width: "100%", height: "100%" }}
+                    initialRegion={{
+                      latitude: shop.lat,
+                      longitude: shop.lng,
+                      latitudeDelta: 0.0082,
+                      longitudeDelta: 0.0082,
+                    }}
+                    scrollEnabled={false}
+                  >
+                    <Marker
+                      coordinate={{
+                        latitude: shop.lat,
+                        longitude: shop.lng,
+                      }}
+                      onPress={() => {
+                        openMapWithLatlng(
+                          { latitude: shop.lat, longitude: shop.lng },
+                          shop.shopName
+                        );
+                      }}
+                    />
+                  </MapView>
+                </View>
+              </View>
             </View>
-          </View>
-        </View>
-      </ScrollView>
+          </Tabs.ScrollView>
+        </Tabs.Tab>
+        <Tabs.Tab name="在庫車両">
+          <Tabs.ScrollView>
+            <View style={{ padding: 16, gap: 16 }}>
+              <View style={{ gap: 8 }}>
+                <Text
+                  style={{
+                    ...typography.heading3,
+                    color: colors.textPrimary,
+                  }}
+                >
+                  店舗情報
+                </Text>
+                <View
+                  style={{
+                    gap: 8,
+                    borderWidth: 1,
+                    borderColor: colors.borderPrimary,
+                    padding: 12,
+                    borderRadius: 12,
+                  }}
+                >
+                  <CarInfoItem
+                    label="住所"
+                    value={`${shop.address1} ${shop.address2} ${shop.address3}`}
+                  />
+                  {shop.businessHours && (
+                    <CarInfoItem label="営業時間" value={shop.businessHours} />
+                  )}
+                  {shop.holiday && (
+                    <CarInfoItem label="定休日" value={shop.holiday} />
+                  )}
+                  {shop.managementCompany?.name && (
+                    <CarInfoItem
+                      label="法人名"
+                      value={shop.managementCompany.name}
+                    />
+                  )}
+                  {shop.managementCompany?.antiqueDealerLicenseNumber && (
+                    <CarInfoItem
+                      label="古物商許可証番号"
+                      value={shop.managementCompany.antiqueDealerLicenseNumber}
+                    />
+                  )}
+                  {/* <CarInfoItem label="営業時間" value={client.businessHours} /> */}
+                </View>
+              </View>
+              <View style={{ gap: 8 }}>
+                <Text
+                  style={{
+                    ...typography.heading3,
+                    color: colors.textPrimary,
+                  }}
+                >
+                  店舗地図
+                </Text>
+                <View
+                  style={{
+                    width: "100%",
+                    aspectRatio: 16 / 9,
+                    borderRadius: 12,
+                    overflow: "hidden",
+                  }}
+                >
+                  <MapView
+                    style={{ width: "100%", height: "100%" }}
+                    initialRegion={{
+                      latitude: shop.lat,
+                      longitude: shop.lng,
+                      latitudeDelta: 0.0082,
+                      longitudeDelta: 0.0082,
+                    }}
+                    scrollEnabled={false}
+                  >
+                    <Marker
+                      coordinate={{
+                        latitude: shop.lat,
+                        longitude: shop.lng,
+                      }}
+                      onPress={() => {
+                        openMapWithLatlng(
+                          { latitude: shop.lat, longitude: shop.lng },
+                          shop.shopName
+                        );
+                      }}
+                    />
+                  </MapView>
+                </View>
+              </View>
+            </View>
+          </Tabs.ScrollView>
+        </Tabs.Tab>
+        <Tabs.Tab name="店舗詳細">
+          <Tabs.ScrollView>
+            <View style={{ padding: 16, gap: 16 }}>
+              <View style={{ gap: 8 }}>
+                <Text
+                  style={{
+                    ...typography.heading3,
+                    color: colors.textPrimary,
+                  }}
+                >
+                  店舗情報
+                </Text>
+                <View
+                  style={{
+                    gap: 8,
+                    borderWidth: 1,
+                    borderColor: colors.borderPrimary,
+                    padding: 12,
+                    borderRadius: 12,
+                  }}
+                >
+                  <CarInfoItem
+                    label="住所"
+                    value={`${shop.address1} ${shop.address2} ${shop.address3}`}
+                  />
+                  {shop.businessHours && (
+                    <CarInfoItem label="営業時間" value={shop.businessHours} />
+                  )}
+                  {shop.holiday && (
+                    <CarInfoItem label="定休日" value={shop.holiday} />
+                  )}
+                  {shop.managementCompany?.name && (
+                    <CarInfoItem
+                      label="法人名"
+                      value={shop.managementCompany.name}
+                    />
+                  )}
+                  {shop.managementCompany?.antiqueDealerLicenseNumber && (
+                    <CarInfoItem
+                      label="古物商許可証番号"
+                      value={shop.managementCompany.antiqueDealerLicenseNumber}
+                    />
+                  )}
+                  {/* <CarInfoItem label="営業時間" value={client.businessHours} /> */}
+                </View>
+              </View>
+              <View style={{ gap: 8 }}>
+                <Text
+                  style={{
+                    ...typography.heading3,
+                    color: colors.textPrimary,
+                  }}
+                >
+                  店舗地図
+                </Text>
+                <View
+                  style={{
+                    width: "100%",
+                    aspectRatio: 16 / 9,
+                    borderRadius: 12,
+                    overflow: "hidden",
+                  }}
+                >
+                  <MapView
+                    style={{ width: "100%", height: "100%" }}
+                    initialRegion={{
+                      latitude: shop.lat,
+                      longitude: shop.lng,
+                      latitudeDelta: 0.0082,
+                      longitudeDelta: 0.0082,
+                    }}
+                    scrollEnabled={false}
+                  >
+                    <Marker
+                      coordinate={{
+                        latitude: shop.lat,
+                        longitude: shop.lng,
+                      }}
+                      onPress={() => {
+                        openMapWithLatlng(
+                          { latitude: shop.lat, longitude: shop.lng },
+                          shop.shopName
+                        );
+                      }}
+                    />
+                  </MapView>
+                </View>
+              </View>
+            </View>
+          </Tabs.ScrollView>
+        </Tabs.Tab>
+      </Tabs.Container>
     </View>
   );
 };

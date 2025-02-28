@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native";
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
+import { Tabs } from "react-native-collapsible-tab-view";
 
 import { useStore } from "@/hooks/useStore";
 import { transformCarData } from "@/libs/transformCarData";
@@ -20,9 +21,7 @@ import CarInfoItem from "@/components/CarDetail/CarInfoIten";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import Button from "@/components/common/Button";
 import { X } from "lucide-react-native";
-import BidItem from "@/components/CarInfo/BidItem";
 import { useRegistrationGuard } from "@/hooks/useRegistrationGuard";
-import Tag from "@/components/common/Tag";
 import { useBulkAppraisal } from "@/hooks/useBulkAppraisal";
 import AppraisalSection from "@/components/CarInfo/AppraisalSection";
 import AppraisalStatusTag from "@/components/appraisal/AppraisalStatusTag";

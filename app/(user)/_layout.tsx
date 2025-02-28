@@ -1,10 +1,14 @@
 import { useTheme } from "@/contexts/ThemeContext";
 import useUserCarFetch from "@/hooks/useUserCarFetch";
+import { useRouter } from "expo-router";
 import { Stack } from "expo-router/stack";
+import { X } from "lucide-react-native";
+import { TouchableOpacity } from "react-native";
 
 export default function Layout() {
   useUserCarFetch();
   const { colors } = useTheme();
+  const router = useRouter();
   return (
     <Stack
       screenOptions={{
@@ -29,9 +33,16 @@ export default function Layout() {
       <Stack.Screen
         name="shops/[id]"
         options={{
-          headerShown: false,
+          title: "店舗詳細",
           animation: "slide_from_bottom",
           gestureDirection: "vertical",
+          headerBackVisible: false,
+          headerShadowVisible: false,
+          headerRight: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <X size={24} color={colors.primary} />
+            </TouchableOpacity>
+          ),
         }}
       />
       <Stack.Screen

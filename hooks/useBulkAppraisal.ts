@@ -14,11 +14,11 @@ export const useBulkAppraisal = (): {
   isInProgressRequest: boolean;
   isDeadlineRequest: boolean;
 } => {
+  const { id } = useLocalSearchParams<{ id: string }>();
   const { bulkAppraisalRequests, user, createBulkAppraisalRequest } =
     useStore();
   const guard = useRegistrationGuard();
   const [isRequesting, setIsRequesting] = useState(false);
-  const { id } = useLocalSearchParams<{ id: string }>();
   const hasActiveRequest = bulkAppraisalRequests.some(
     (request) => request.carId === id && request.status
   );

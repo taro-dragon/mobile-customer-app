@@ -8,6 +8,7 @@ export type ManagementCompany = {
   email: string;
   website: string;
   logoUrl: string;
+  antiqueDealerLicenseNumber: string;
   createdAt: FirebaseFirestoreTypes.Timestamp;
   updatedAt: FirebaseFirestoreTypes.Timestamp;
 };

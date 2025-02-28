@@ -1,7 +1,13 @@
+import { AffiliateStore } from "@/types/firestore_schema/affiliateStores";
+import { ManagementCompany } from "@/types/firestore_schema/managementCompanies";
 import { Client } from "@/types/models/Client";
 import { Shop } from "@/types/models/Shop";
 import firestore from "@react-native-firebase/firestore";
 import useSWR from "swr";
+
+type ShopWithManagementCompany = AffiliateStore & {
+  managementCompany: ManagementCompany;
+};
 
 const fetchShop = async (id: string) => {
   const shopSnapshot = await firestore().collection("shops").doc(id).get();
@@ -17,7 +23,7 @@ const fetchShop = async (id: string) => {
   return {
     ...shopData,
     id: shopSnapshot.id,
-    client: clientData,
+    managementCompany: clientData,
   };
 };
 
@@ -31,7 +37,7 @@ const useShop = (id: string) => {
   );
 
   return {
-    shop: data as Shop | undefined,
+    shop: data as ShopWithManagementCompany | undefined,
     isLoading,
     isError: !!error,
     mutate,
