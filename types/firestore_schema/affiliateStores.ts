@@ -18,6 +18,8 @@ export type AffiliateStore = {
   imageUrls: string[];
   logoUrl: string;
   coverImageUrl: string;
+  shopCatchCopy: string;
+  description: string;
   averagePriceDeviation: number; // 平均乖離金額
   rating: number; // 評価平均
   reviewCount: number; // レビュー数

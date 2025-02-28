@@ -1,11 +1,9 @@
 import { AffiliateStore } from "@/types/firestore_schema/affiliateStores";
 import { ManagementCompany } from "@/types/firestore_schema/managementCompanies";
-import { Client } from "@/types/models/Client";
-import { Shop } from "@/types/models/Shop";
 import firestore from "@react-native-firebase/firestore";
 import useSWR from "swr";
 
-type ShopWithManagementCompany = AffiliateStore & {
+export type ShopWithManagementCompany = AffiliateStore & {
   managementCompany: ManagementCompany;
 };
 
