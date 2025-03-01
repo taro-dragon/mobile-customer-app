@@ -39,16 +39,9 @@ export default function Layout() {
       <Stack.Screen
         name="shops/[id]"
         options={{
-          title: "店舗詳細",
           animation: "slide_from_bottom",
           gestureDirection: "vertical",
-          headerShadowVisible: false,
-          headerBackVisible: false,
-          headerRight: () => (
-            <TouchableOpacity onPress={() => router.back()}>
-              <X size={24} color={colors.primary} />
-            </TouchableOpacity>
-          ),
+          headerShown: false,
         }}
       />
       <Stack.Screen

@@ -2,7 +2,7 @@ import Divider from "@/components/common/Divider";
 import ShopDetailSkeleton from "@/components/Skelton/SkeltonShopInfo";
 import { useTheme } from "@/contexts/ThemeContext";
 import useShop from "@/hooks/useFetchShop";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { X } from "lucide-react-native";
 import { useEffect } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
@@ -58,6 +58,15 @@ const ShopDetail = () => {
   if (!shop) return null;
   return (
     <View style={{ flex: 1 }}>
+      <Stack.Screen
+        options={{
+          headerRight: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <X size={24} color={colors.primary} />
+            </TouchableOpacity>
+          ),
+        }}
+      />
       <Tabs.Container
         renderHeader={() => <ShopHeader shop={shop} />}
         headerContainerStyle={{
