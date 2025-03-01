@@ -1,31 +1,22 @@
-import { useTheme } from "@/contexts/ThemeContext";
-import useShopOffer from "@/hooks/useFetchShopOffer";
-import { useLocalSearchParams } from "expo-router";
-import {
-  ActivityIndicator,
-  FlatList,
-  RefreshControl,
-  Text,
-} from "react-native";
+import { ActivityIndicator } from "react-native";
 import { Tabs } from "react-native-collapsible-tab-view";
 import ShopCarOfferItem from "./ShopCarOfferItem";
+import { useShopContext } from "@/contexts/ShopContext";
 
 const ShopOfferTab = () => {
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const { offers, isLoading, hasMore, loadMore, refresh } = useShopOffer(id);
+  const { offers, hasMoreOffers, loadMoreOffers } = useShopContext();
   return (
     <Tabs.FlatList
       data={offers}
       renderItem={({ item }) => <ShopCarOfferItem offer={item} />}
       keyExtractor={(item) => item.id}
-      onEndReached={hasMore ? loadMore : undefined}
+      onEndReached={hasMoreOffers ? loadMoreOffers : undefined}
       onEndReachedThreshold={0.5}
       contentContainerStyle={{ gap: 8, padding: 16, paddingTop: 16 }}
-      refreshControl={
-        <RefreshControl refreshing={isLoading} onRefresh={refresh} />
-      }
       style={{ flex: 1 }}
-      ListFooterComponent={hasMore ? <ActivityIndicator size="small" /> : null}
+      ListFooterComponent={
+        hasMoreOffers ? <ActivityIndicator size="small" /> : null
+      }
     />
   );
 };

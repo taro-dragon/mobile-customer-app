@@ -1,8 +1,7 @@
 import Divider from "@/components/common/Divider";
 import ShopDetailSkeleton from "@/components/Skelton/SkeltonShopInfo";
 import { useTheme } from "@/contexts/ThemeContext";
-import useShop from "@/hooks/useFetchShop";
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { X } from "lucide-react-native";
 import { useEffect } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
@@ -12,14 +11,15 @@ import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
 import ShopHeader from "@/components/shop/ShopHeader";
 import ShopInfoTab from "@/components/shop/ShopInfoTab";
 import ShopOfferTab from "@/components/shop/ShopOfferTab";
+import { useShopContext } from "@/contexts/ShopContext";
 
 const ShopDetail = () => {
   const safeAreaInsets = useSafeAreaInsets();
   const router = useRouter();
-  const { id } = useLocalSearchParams<{ id: string }>();
+
   const { colors, typography } = useTheme();
 
-  const { shop, isLoading } = useShop(id);
+  const { shop, isLoading } = useShopContext();
 
   useEffect(() => {
     if (!isLoading && !shop) {
