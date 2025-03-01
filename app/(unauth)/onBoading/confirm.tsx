@@ -22,11 +22,11 @@ const Confirm = () => {
   const router = useRouter();
   const { createCustomer } = useCreateCustomer();
   const { manufacturers } = fullCarData as FullCarData;
-  const { front, back, left, right, maker, model, year, gread } = watch();
+  const { front, back, left, right, maker, model, year, grade } = watch();
   const makerData = manufacturers.find((m) => m.manufacturerId === maker);
   const modelData = makerData?.carModels.find((c) => c.modelId === model);
   const yearData = modelData?.years.find((y) => y.yearId === year);
-  const greadData = yearData?.grades.find((g) => g.gradeName === gread);
+  const gradeData = yearData?.grades.find((g) => g.gradeName === grade);
   const [isLoading, setIsLoading] = useState(false);
   const { currentStepIndex } = useOnBoarding();
   const onSubmit = async () => {
@@ -77,7 +77,7 @@ const Confirm = () => {
           <ConfirmItem label="メーカー" value={makerData?.name || ""} />
           <ConfirmItem label="モデル" value={modelData?.name || ""} />
           <ConfirmItem label="年式" value={yearData?.year || ""} />
-          <ConfirmItem label="グレード" value={greadData?.gradeName || ""} />
+          <ConfirmItem label="グレード" value={gradeData?.gradeName || ""} />
         </View>
         <Divider />
         <Text style={{ color: colors.textSecondary, ...typography.title3 }}>

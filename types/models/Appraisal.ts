@@ -8,7 +8,7 @@ export type Appraisal = {
   maker: string;
   model: string;
   year: string;
-  gread: string;
+  grade: string;
   prefecture: string;
   city: string;
   createdAt: FirebaseFirestoreTypes.Timestamp;

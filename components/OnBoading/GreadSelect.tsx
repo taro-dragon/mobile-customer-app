@@ -5,7 +5,7 @@ import Select from "../formItem/RadioButton";
 import { useFormContext } from "react-hook-form";
 import { useMemo } from "react";
 import { CarForm } from "@/types/models/CarForm";
-export const GreadSelect = () => {
+export const gradeSelect = () => {
   const { watch } = useFormContext<CarForm>();
   const { maker, model, year } = watch();
   const { manufacturers } = fullCarData as FullCarData;
@@ -32,7 +32,7 @@ export const GreadSelect = () => {
         paddingVertical: 12,
       }}
       renderItem={({ item }) => (
-        <Select name="gread" label={item.gradeName} value={item.gradeName} />
+        <Select name="grade" label={item.gradeName} value={item.gradeName} />
       )}
       style={{ flex: 1 }}
     />

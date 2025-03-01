@@ -11,6 +11,7 @@ import Toast from "react-native-toast-message";
 import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
 import ShopHeader from "@/components/shop/ShopHeader";
 import ShopInfoTab from "@/components/shop/ShopInfoTab";
+import ShopOfferTab from "@/components/shop/ShopOfferTab";
 
 const ShopDetail = () => {
   const safeAreaInsets = useSafeAreaInsets();
@@ -95,7 +96,7 @@ const ShopDetail = () => {
         )}
       >
         <Tabs.Tab name="買取オファー">
-          <Tabs.ScrollView></Tabs.ScrollView>
+          <ShopOfferTab />
         </Tabs.Tab>
         <Tabs.Tab name="在庫車両">
           <Tabs.ScrollView></Tabs.ScrollView>

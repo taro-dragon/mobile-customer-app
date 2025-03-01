@@ -1,7 +1,7 @@
 export type CarForm = {
   back: string;
   front: string;
-  gread: string;
+  grade: string;
   left: string;
   maker: string;
   model: string;

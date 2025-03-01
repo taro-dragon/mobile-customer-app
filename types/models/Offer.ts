@@ -3,7 +3,7 @@ export type Offer = {
   maker: string;
   model: string;
   year: string;
-  gread: string;
+  grade: string;
   pricing: {
     basePrice: number;
     discountMultipliers: {

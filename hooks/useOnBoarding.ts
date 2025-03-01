@@ -8,7 +8,7 @@ const STEPS = [
   { route: "/onBoading", field: "maker" },
   { route: "/onBoading/selectCar", field: "model" },
   { route: "/onBoading/selectYear", field: "year" },
-  { route: "/onBoading/selectGread", field: "gread" },
+  { route: "/onBoading/selectgrade", field: "grade" },
   { route: "/onBoading/captureCar", field: "photos" },
   { route: "/onBoading/confirm", field: null },
 ];

@@ -5,6 +5,7 @@ import React from "react";
 import { ShopWithManagementCompany } from "@/hooks/useFetchShop";
 import MapView, { Marker } from "react-native-maps";
 import { openMapWithLatlng } from "@/libs/openMapWithLatlng";
+import Card from "../common/Card";
 
 type ShopInfoTabProps = {
   shop: ShopWithManagementCompany;
@@ -12,6 +13,7 @@ type ShopInfoTabProps = {
 
 const ShopInfoTab: React.FC<ShopInfoTabProps> = ({ shop }) => {
   const { colors, typography } = useTheme();
+
   return (
     <View style={{ paddingHorizontal: 16, gap: 16, paddingVertical: 24 }}>
       <View style={{ gap: 24 }}>
@@ -48,36 +50,37 @@ const ShopInfoTab: React.FC<ShopInfoTabProps> = ({ shop }) => {
           >
             店舗情報
           </Text>
-          <View
-            style={{
-              gap: 8,
-              borderWidth: 1,
-              borderColor: colors.borderPrimary,
-              padding: 12,
-              borderRadius: 12,
-            }}
-          >
-            <CarInfoItem
-              label="住所"
-              value={`${shop.address1} ${shop.address2} ${shop.address3}`}
-            />
-            {shop.businessHours && (
-              <CarInfoItem label="営業時間" value={shop.businessHours} />
-            )}
-            {shop.holiday && (
-              <CarInfoItem label="定休日" value={shop.holiday} />
-            )}
-            {shop.managementCompany?.name && (
-              <CarInfoItem label="法人名" value={shop.managementCompany.name} />
-            )}
-            {shop.managementCompany?.antiqueDealerLicenseNumber && (
+          <Card>
+            <View
+              style={{
+                gap: 8,
+              }}
+            >
               <CarInfoItem
-                label="古物商許可証番号"
-                value={shop.managementCompany.antiqueDealerLicenseNumber}
+                label="住所"
+                value={`${shop.address1} ${shop.address2} ${shop.address3}`}
               />
-            )}
-            {/* <CarInfoItem label="営業時間" value={client.businessHours} /> */}
-          </View>
+              {shop.businessHours && (
+                <CarInfoItem label="営業時間" value={shop.businessHours} />
+              )}
+              {shop.holiday && (
+                <CarInfoItem label="定休日" value={shop.holiday} />
+              )}
+              {shop.managementCompany?.name && (
+                <CarInfoItem
+                  label="法人名"
+                  value={shop.managementCompany.name}
+                />
+              )}
+              {shop.managementCompany?.antiqueDealerLicenseNumber && (
+                <CarInfoItem
+                  label="古物商許可証番号"
+                  value={shop.managementCompany.antiqueDealerLicenseNumber}
+                />
+              )}
+              {/* <CarInfoItem label="営業時間" value={client.businessHours} /> */}
+            </View>
+          </Card>
         </View>
       </View>
       <View style={{ gap: 8 }}>

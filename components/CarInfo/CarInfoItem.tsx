@@ -83,7 +83,7 @@ const CarInfoItem: React.FC<CarInfoItemProps> = ({ car }) => {
                 style={{ color: colors.textPrimary, ...typography.body3 }}
                 numberOfLines={1}
               >
-                {carData.grade.gradeName}
+                {carData.grade?.gradeName}
               </Text>
             </View>
           </View>

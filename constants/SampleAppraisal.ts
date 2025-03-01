@@ -83,7 +83,7 @@ export const sampleAppraisal: Appraisal = {
   maker: "toyota",
   model: "prius",
   year: "202410",
-  gread: "G",
+  grade: "G",
   prefecture: "tokyo",
   city: "shibuya",
   createdAt: firestore.Timestamp.fromDate(new Date("2024-03-01")), // 2024-03-01

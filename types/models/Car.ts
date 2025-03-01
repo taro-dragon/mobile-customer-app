@@ -6,7 +6,7 @@ export type Car = {
   maker: string;
   model: string;
   year: string;
-  gread: string;
+  grade: string;
   condition?: string;
   images: {
     front: string;

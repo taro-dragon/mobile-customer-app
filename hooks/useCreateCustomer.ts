@@ -10,7 +10,7 @@ import { User } from "@/types/firestore_schema/users";
 const useCreateCustomer = () => {
   const { setUser } = useStore();
   const { watch } = useFormContext<CarForm>();
-  const { front, back, left, right, maker, model, year, gread } = watch();
+  const { front, back, left, right, maker, model, year, grade } = watch();
 
   const createCustomer = async () => {
     try {
@@ -51,7 +51,7 @@ const useCreateCustomer = () => {
         maker,
         model,
         year,
-        gread,
+        grade,
         images: photos,
         createdAt: firestore.Timestamp.now(),
         updatedAt: firestore.FieldValue.serverTimestamp(),

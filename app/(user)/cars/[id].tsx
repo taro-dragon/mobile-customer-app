@@ -37,11 +37,9 @@ const CarDetail = () => {
   const car = cars.find((car) => car.id === id);
   const ref = React.useRef<ICarouselInstance>(null);
   const carData = transformCarData(car as Car);
-  const safeAreaInsets = useSafeAreaInsets();
   const { colors, typography } = useTheme();
   const carImages = Object.values(car?.images ?? {});
   const width = Dimensions.get("window").width;
-  const router = useRouter();
   const guard = useRegistrationGuard();
 
   useEffect(() => {

@@ -19,7 +19,7 @@ export function transformCarData(car: Car): CarDetails {
   const makerData = manufacturers.find((m) => m.manufacturerId === car.maker);
   const modelData = makerData?.carModels.find((c) => c.modelId === car.model);
   const yearData = modelData?.years.find((y) => y.yearId === car.year);
-  const gradeData = yearData?.grades.find((g) => g.gradeName === car.gread);
+  const gradeData = yearData?.grades.find((g) => g.gradeName === car.grade);
 
   return {
     maker: makerData as Manufacture,
