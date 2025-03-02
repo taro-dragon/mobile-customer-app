@@ -1,25 +1,17 @@
 import React, { useEffect } from "react";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import {
-  Dimensions,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { useLocalSearchParams } from "expo-router";
+import { Dimensions, ScrollView, Text, View } from "react-native";
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
 
 import { useStore } from "@/hooks/useStore";
 import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTheme } from "@/contexts/ThemeContext";
 import Divider from "@/components/common/Divider";
 import { Image } from "expo-image";
 import CarInfoItem from "@/components/CarDetail/CarInfoIten";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import Button from "@/components/common/Button";
-import { X } from "lucide-react-native";
 import { useRegistrationGuard } from "@/hooks/useRegistrationGuard";
 import { useBulkAppraisal } from "@/hooks/useBulkAppraisal";
 import AppraisalSection from "@/components/CarInfo/AppraisalSection";

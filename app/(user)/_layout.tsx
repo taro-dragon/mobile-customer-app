@@ -27,7 +27,7 @@ export default function Layout() {
         options={{
           animation: "slide_from_bottom",
           gestureDirection: "vertical",
-          headerBackVisible: false,
+          headerShown: false,
           title: "車両詳細",
           headerRight: () => (
             <TouchableOpacity onPress={() => router.back()}>
