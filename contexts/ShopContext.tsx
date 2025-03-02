@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from "react";
+import React, { createContext, useContext, ReactNode } from "react";
 import useShop, { ShopWithManagementCompany } from "@/hooks/useFetchShop";
 import useFetchShopOffer from "@/hooks/useFetchShopOffer";
 import { BuyOffer } from "@/types/firestore_schema/buyOffers";

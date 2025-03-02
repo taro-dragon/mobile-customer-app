@@ -99,7 +99,6 @@ const SearchScreen: React.FC = () => {
               ...doc.data(),
             } as AffiliateStore)
         );
-        console.log("storesData", storesData);
 
         setStores(storesData);
       } catch (error) {
@@ -368,7 +367,7 @@ const SearchScreen: React.FC = () => {
                   renderItem={renderStoreItem}
                   keyExtractor={(item) => item.id}
                   contentContainerStyle={{
-                    gap: 8,
+                    gap: 12,
                   }}
                   scrollEnabled={false}
                 />
