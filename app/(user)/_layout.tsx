@@ -52,6 +52,23 @@ export default function Layout() {
           gestureEnabled: false,
         }}
       />
+      <Stack.Screen
+        name="offers/[offerId]/index"
+        options={{
+          title: "買取オファー",
+          presentation: "modal",
+          headerShadowVisible: false,
+          headerTintColor: colors.white,
+          headerStyle: {
+            backgroundColor: colors.primary,
+          },
+          headerRight: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <X size={24} color={colors.white} />
+            </TouchableOpacity>
+          ),
+        }}
+      />
     </Stack>
   );
 }

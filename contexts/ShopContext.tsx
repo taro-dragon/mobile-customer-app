@@ -42,7 +42,6 @@ export const ShopProvider: React.FC<ShopProviderProps> = ({
     isError: offersError,
     hasMore,
     loadMore,
-    refresh,
   } = useFetchShopOffer(shopId);
 
   // さらにオファーを読み込む関数

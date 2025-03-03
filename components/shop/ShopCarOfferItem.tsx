@@ -23,7 +23,7 @@ const ShopCarOfferItem: React.FC<ShopCarOfferItemProps> = ({ offer }) => {
   const { id } = useLocalSearchParams<{ id: string }>();
 
   return (
-    <Card onPress={() => router.push(`/shops/${id}/offers/${offer.id}`)}>
+    <Card onPress={() => router.push(`/offers/${offer.id}`)}>
       <View
         style={{
           flexDirection: "row",
@@ -53,9 +53,16 @@ const ShopCarOfferItem: React.FC<ShopCarOfferItemProps> = ({ offer }) => {
             )}
           </View>
           <Divider />
-          <View>
-            <Text style={{ ...typography.heading1, color: colors.primary }}>
-              ¥{offer.price.toLocaleString()}
+          <View style={{ gap: 4 }}>
+            <Text
+              style={{
+                ...typography.title2,
+                color: colors.primary,
+                fontWeight: "700",
+              }}
+            >
+              ¥{offer.minPrice.toLocaleString()} - ¥
+              {offer.maxPrice.toLocaleString()}
             </Text>
           </View>
         </View>

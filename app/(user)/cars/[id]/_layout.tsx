@@ -18,6 +18,9 @@ const CarDetailLayout = () => {
           headerStyle: {
             backgroundColor: colors.backgroundPrimary,
           },
+          contentStyle: {
+            backgroundColor: colors.backgroundPrimary,
+          },
           headerRight: () => (
             <TouchableOpacity onPress={() => router.back()}>
               <X size={24} color={colors.primary} />

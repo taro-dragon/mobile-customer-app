@@ -23,23 +23,6 @@ const ShopDetailLayout = () => {
         }}
       >
         <Stack.Screen name="index" options={{ title: "店舗詳細" }} />
-        <Stack.Screen
-          name="offers"
-          options={{
-            title: "買取オファー",
-            presentation: "modal",
-            headerShadowVisible: false,
-            headerTintColor: colors.white,
-            headerStyle: {
-              backgroundColor: colors.primary,
-            },
-            headerRight: () => (
-              <TouchableOpacity onPress={() => router.back()}>
-                <X size={24} color={colors.white} />
-              </TouchableOpacity>
-            ),
-          }}
-        />
       </Stack>
     </ShopProvider>
   );

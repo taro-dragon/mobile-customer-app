@@ -51,9 +51,7 @@ const ToastBase = (props: ToastBaseProps) => {
       }}
     >
       <View style={{ gap: 8 }}>
-        <View
-          style={{ flexDirection: "row", alignItems: "flex-start", gap: 8 }}
-        >
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
           {icon}
           <Text style={{ ...typography.heading2, color: text }}>
             {props.text1}
