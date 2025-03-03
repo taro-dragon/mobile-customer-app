@@ -1,5 +1,4 @@
 import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
-import { ManagementCompany } from "./managementCompanies";
 
 export type AffiliateStore = {
   id: string;

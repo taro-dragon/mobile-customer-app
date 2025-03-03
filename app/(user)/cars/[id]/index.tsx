@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { Image } from "expo-image";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Dimensions, ScrollView, Text, View } from "react-native";
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
 
@@ -8,7 +9,6 @@ import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
 import { useTheme } from "@/contexts/ThemeContext";
 import Divider from "@/components/common/Divider";
-import { Image } from "expo-image";
 import CarInfoItem from "@/components/CarDetail/CarInfoIten";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import Button from "@/components/common/Button";
@@ -33,6 +33,7 @@ const CarDetail = () => {
   const carImages = Object.values(car?.images ?? {});
   const width = Dimensions.get("window").width;
   const guard = useRegistrationGuard();
+  const router = useRouter();
 
   useEffect(() => {
     if (user?.id) {
@@ -41,7 +42,7 @@ const CarDetail = () => {
   }, [user?.id]);
 
   const onViewOffersPress = guard(() => {
-    console.log("買取オファーを見る");
+    router.push(`/cars/${id}/offers`);
   });
 
   return (

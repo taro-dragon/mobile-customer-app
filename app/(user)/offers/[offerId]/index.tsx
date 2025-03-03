@@ -14,15 +14,11 @@ import useOffer from "@/hooks/useFetchOffer";
 
 const OfferDetail = () => {
   const { offerId } = useLocalSearchParams<{ offerId: string }>();
-  const { offer, isLoading, isError } = useOffer(offerId);
+  const { offer, isLoading } = useOffer(offerId);
 
   const router = useRouter();
   const { colors, typography } = useTheme();
   useEffect(() => {
-    console.log(offerId);
-    console.log(offer);
-    console.log(isLoading);
-    console.log(isError);
     if (!isLoading && !offer) {
       Toast.show({
         type: "error",
@@ -46,15 +42,18 @@ const OfferDetail = () => {
       <ScrollView style={{ flex: 1 }}>
         <View
           style={{
-            paddingVertical: 40,
+            paddingVertical: 32,
             backgroundColor: colors.primary,
             alignItems: "center",
             justifyContent: "center",
             gap: 4,
           }}
         >
-          <Text style={{ ...typography.heading2, color: colors.white }}>
-            {carData.maker.name} {carData.model.name}
+          <Text style={{ ...typography.body3, color: colors.white }}>
+            {carData.maker.name}
+          </Text>
+          <Text style={{ ...typography.heading1, color: colors.white }}>
+            {carData.model.name}
           </Text>
           <Text style={{ ...typography.body3, color: colors.white }}>
             {carData?.year?.year} {carData?.grade?.gradeName}

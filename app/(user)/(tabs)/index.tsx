@@ -23,14 +23,6 @@ const CustomerIndex = () => {
           愛車がありません
         </Text>
       )}
-      <Button
-        label="ログアウト"
-        color={colors.error}
-        onPress={() => {
-          deleteUser();
-          auth().signOut();
-        }}
-      />
     </ScrollView>
   );
 };

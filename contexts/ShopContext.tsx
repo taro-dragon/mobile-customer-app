@@ -32,10 +32,8 @@ export const ShopProvider: React.FC<ShopProviderProps> = ({
   children,
   shopId,
 }) => {
-  // 店舗データの取得
   const { shop, isLoading, isError } = useShop(shopId);
 
-  // 店舗のオファーデータを取得
   const {
     offers,
     isLoading: offersLoading,
@@ -44,7 +42,6 @@ export const ShopProvider: React.FC<ShopProviderProps> = ({
     loadMore,
   } = useFetchShopOffer(shopId);
 
-  // さらにオファーを読み込む関数
   const loadMoreOffers = () => {
     if (hasMore) {
       loadMore();

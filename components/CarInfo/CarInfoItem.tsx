@@ -88,7 +88,6 @@ const CarInfoItem: React.FC<CarInfoItemProps> = ({ car }) => {
             </View>
           </View>
           <View style={{ gap: 8, alignItems: "flex-end" }}>
-            <ConditionTag condition={car.condition || "解析中"} />
             <Image
               source={{ uri: car.images.front }}
               style={{
