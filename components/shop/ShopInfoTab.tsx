@@ -19,7 +19,7 @@ const ShopInfoTab: React.FC<ShopInfoTabProps> = ({ shop }) => {
       style={{ paddingHorizontal: 16, gap: 16, paddingVertical: 24 }}
       pointerEvents="box-none"
     >
-      <View style={{ gap: 24 }}>
+      <View style={{ gap: 24 }} pointerEvents="none">
         {shop.shopCatchCopy && shop.description && (
           <View style={{ gap: 16 }}>
             {shop.shopCatchCopy && (
@@ -86,7 +86,7 @@ const ShopInfoTab: React.FC<ShopInfoTabProps> = ({ shop }) => {
           </Card>
         </View>
       </View>
-      <View style={{ gap: 8 }}>
+      <View style={{ gap: 8 }} pointerEvents="box-none">
         <Text
           style={{
             ...typography.heading3,

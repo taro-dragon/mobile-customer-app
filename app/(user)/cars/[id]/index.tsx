@@ -17,6 +17,9 @@ import { useBulkAppraisal } from "@/hooks/useBulkAppraisal";
 import AppraisalSection from "@/components/CarInfo/AppraisalSection";
 import AppraisalStatusTag from "@/components/appraisal/AppraisalStatusTag";
 import OfferSection from "@/components/CarInfo/OfferSection";
+import CarDetailHeader from "@/components/CarDetail/CarHeader";
+import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
+import OfferList from "@/components/CarDetail/CarDetailOfferTab";
 
 const CarDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -43,102 +46,40 @@ const CarDetail = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={{ flex: 1 }}>
-        <Carousel
-          ref={ref}
-          width={width}
-          height={width}
-          data={carImages}
-          renderItem={({ index }) => (
-            <View
-              style={{
-                flex: 1,
-                borderWidth: 1,
-                justifyContent: "center",
-              }}
-            >
-              <Image
-                source={{ uri: carImages[index] }}
-                style={{ width: width, height: width }}
-                contentFit="cover"
-              />
-            </View>
-          )}
-        />
-        <View style={{ padding: 16, gap: 24 }}>
-          <View style={{ alignItems: "flex-start", gap: 4 }}>
-            <Text style={{ ...typography.heading3, color: colors.primary }}>
-              {carData.maker.name}
-            </Text>
-            <Text style={{ ...typography.title1, color: colors.textPrimary }}>
-              {carData.model.name}
-            </Text>
-            <AppraisalStatusTag />
-          </View>
-          <View style={{ gap: 8 }}>
-            <Text style={{ ...typography.heading3, color: colors.textPrimary }}>
-              車両情報
-            </Text>
-            <View
-              style={{
-                gap: 8,
-                borderWidth: 1,
-                borderColor: colors.borderPrimary,
-                padding: 12,
-                borderRadius: 12,
-              }}
-            >
-              <CarInfoItem label="年式" value={carData.year.year} />
-              <CarInfoItem label="グレード" value={carData.grade.gradeName} />
-            </View>
-          </View>
-          <View style={{ gap: 8 }}>
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
-            >
-              <Text
-                style={{ ...typography.heading3, color: colors.textPrimary }}
-              >
-                一括査定情報
-              </Text>
-
-              {isDeadlineRequest && (
-                <Text
-                  style={{ ...typography.body3, color: colors.primary }}
-                  onPress={() => {
-                    console.log("さらに見る");
-                  }}
-                >
-                  さらに見る
-                </Text>
-              )}
-            </View>
-            <AppraisalSection />
-          </View>
-          <View style={{ gap: 8 }}>
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
-            >
-              <Text
-                style={{ ...typography.heading3, color: colors.textPrimary }}
-              >
-                買取オファー
-              </Text>
-
-              <Text
-                style={{ ...typography.body3, color: colors.primary }}
-                onPress={() => {
-                  console.log("さらに見る");
-                }}
-              >
-                さらに見る
-              </Text>
-            </View>
-            <OfferSection />
-          </View>
-        </View>
-        <SafeAreaBottom />
-      </ScrollView>
+      <Tabs.Container
+        renderHeader={() => <CarDetailHeader />}
+        headerContainerStyle={{
+          backgroundColor: colors.backgroundPrimary,
+          elevation: 0,
+          shadowOpacity: 0,
+          shadowOffset: { height: 0, width: 0 },
+          borderBottomWidth: 1,
+          borderBottomColor: colors.gray200,
+        }}
+        renderTabBar={(props) => (
+          <MaterialTabBar
+            {...props}
+            activeColor={colors.primary}
+            inactiveColor={colors.textSecondary}
+            indicatorStyle={{
+              backgroundColor: colors.primary,
+              height: 3,
+              borderRadius: 3,
+            }}
+            style={{
+              backgroundColor: colors.backgroundPrimary,
+            }}
+            labelStyle={typography.heading3}
+          />
+        )}
+      >
+        <Tabs.Tab name="買取オファー">
+          <OfferList />
+        </Tabs.Tab>
+        <Tabs.Tab name="一括査定結果">
+          <Tabs.ScrollView></Tabs.ScrollView>
+        </Tabs.Tab>
+      </Tabs.Container>
     </View>
   );
 };

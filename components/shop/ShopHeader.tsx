@@ -44,7 +44,7 @@ const ShopHeader: React.FC<ShopHeaderProps> = ({ shop }) => {
         />
       )}
 
-      <View style={{ gap: 8, padding: 16 }}>
+      <View style={{ gap: 8, padding: 16 }} pointerEvents="none">
         <Text style={{ ...typography.title1, color: colors.textPrimary }}>
           {shop.shopName}
         </Text>
