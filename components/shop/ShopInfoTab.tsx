@@ -15,7 +15,10 @@ const ShopInfoTab: React.FC<ShopInfoTabProps> = ({ shop }) => {
   const { colors, typography } = useTheme();
 
   return (
-    <View style={{ paddingHorizontal: 16, gap: 16, paddingVertical: 24 }}>
+    <View
+      style={{ paddingHorizontal: 16, gap: 16, paddingVertical: 24 }}
+      pointerEvents="box-none"
+    >
       <View style={{ gap: 24 }}>
         {shop.shopCatchCopy && shop.description && (
           <View style={{ gap: 16 }}>

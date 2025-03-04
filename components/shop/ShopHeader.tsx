@@ -1,13 +1,14 @@
 import { useTheme } from "@/contexts/ThemeContext";
-import { AffiliateStore } from "@/types/firestore_schema/affiliateStores";
 import { Image } from "expo-image";
 import { Clock, MapPin } from "lucide-react-native";
 import { useRef } from "react";
 import { Dimensions, Text, View } from "react-native";
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
+import ShopInfoSection from "./ShopInfoTab";
+import { ShopWithManagementCompany } from "@/hooks/useFetchShop";
 
 type ShopHeaderProps = {
-  shop: AffiliateStore;
+  shop: ShopWithManagementCompany;
 };
 
 const ShopHeader: React.FC<ShopHeaderProps> = ({ shop }) => {
@@ -15,7 +16,7 @@ const ShopHeader: React.FC<ShopHeaderProps> = ({ shop }) => {
   const width = Dimensions.get("window").width;
   const { colors, typography } = useTheme();
   return (
-    <View>
+    <View pointerEvents="box-none">
       {shop.imageUrls && (
         <Carousel
           ref={ref}
@@ -35,6 +36,7 @@ const ShopHeader: React.FC<ShopHeaderProps> = ({ shop }) => {
                   source={{ uri: shop.imageUrls[index] }}
                   style={{ width: width, height: width }}
                   contentFit="cover"
+                  pointerEvents="none"
                 />
               )}
             </View>
@@ -61,6 +63,7 @@ const ShopHeader: React.FC<ShopHeaderProps> = ({ shop }) => {
           </Text>
         </View>
       </View>
+      <ShopInfoSection shop={shop} />
     </View>
   );
 };
