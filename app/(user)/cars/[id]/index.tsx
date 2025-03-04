@@ -16,6 +16,7 @@ import { useRegistrationGuard } from "@/hooks/useRegistrationGuard";
 import { useBulkAppraisal } from "@/hooks/useBulkAppraisal";
 import AppraisalSection from "@/components/CarInfo/AppraisalSection";
 import AppraisalStatusTag from "@/components/appraisal/AppraisalStatusTag";
+import OfferSection from "@/components/CarInfo/OfferSection";
 
 const CarDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -94,7 +95,6 @@ const CarDetail = () => {
             >
               <CarInfoItem label="年式" value={carData.year.year} />
               <CarInfoItem label="グレード" value={carData.grade.gradeName} />
-              <CarInfoItem label="AI分析結果" value={car?.condition || ""} />
             </View>
           </View>
           <View style={{ gap: 8 }}>
@@ -120,37 +120,30 @@ const CarDetail = () => {
             </View>
             <AppraisalSection />
           </View>
-        </View>
-      </ScrollView>
+          <View style={{ gap: 8 }}>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <Text
+                style={{ ...typography.heading3, color: colors.textPrimary }}
+              >
+                買取オファー
+              </Text>
 
-      {!car?.status && (
-        <View>
-          <Divider />
-          <View style={{ padding: 16, gap: 8, flexDirection: "row" }}>
-            <View style={{ flex: 1 }}>
-              <Button
-                color={colors.primary}
-                label="買取オファーを見る"
-                onPress={onViewOffersPress}
-                fullWidth
-              />
+              <Text
+                style={{ ...typography.body3, color: colors.primary }}
+                onPress={() => {
+                  console.log("さらに見る");
+                }}
+              >
+                さらに見る
+              </Text>
             </View>
-            {!hasActiveRequest && (
-              <View style={{ flex: 1 }}>
-                <Button
-                  color={colors.primary}
-                  label="一括査定依頼をする"
-                  onPress={onRequestAppraisalPress}
-                  isBorder
-                  fullWidth
-                  disabled={isRequesting || hasActiveRequest}
-                />
-              </View>
-            )}
+            <OfferSection />
           </View>
-          <SafeAreaBottom />
         </View>
-      )}
+        <SafeAreaBottom />
+      </ScrollView>
     </View>
   );
 };

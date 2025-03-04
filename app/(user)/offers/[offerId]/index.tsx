@@ -43,6 +43,7 @@ const OfferDetail = () => {
         <View
           style={{
             paddingVertical: 32,
+            paddingHorizontal: 16,
             backgroundColor: colors.primary,
             alignItems: "center",
             justifyContent: "center",
@@ -96,6 +97,21 @@ const OfferDetail = () => {
                 ￥{offer.maxPrice.toLocaleString()}
               </Text>
             </View>
+          </View>
+          <View style={{ flex: 1, width: "100%", marginTop: 16 }}>
+            <Button
+              label="買取査定依頼をする"
+              color={colors.white}
+              isBorder
+              onPress={() => {
+                router.back();
+                Toast.show({
+                  type: "success",
+                  text1: "買取査定依頼を送信しました",
+                  text2: "トーク画面から加盟店とやり取りが可能です",
+                });
+              }}
+            />
           </View>
         </View>
         <View style={{ padding: 16, gap: 16 }}>
@@ -164,23 +180,6 @@ const OfferDetail = () => {
           </View>
         </View>
       </ScrollView>
-      <Divider />
-      <View
-        style={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 96 }}
-      >
-        <Button
-          label="買取査定依頼をする"
-          onPress={() => {
-            router.back();
-            Toast.show({
-              type: "success",
-              text1: "買取査定依頼を送信しました",
-              text2: "トーク画面から加盟店とやり取りが可能です",
-            });
-          }}
-          color={colors.primary}
-        />
-      </View>
     </View>
   );
 };

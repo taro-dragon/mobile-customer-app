@@ -1,10 +1,9 @@
 import React, { createContext, useContext, ReactNode } from "react";
-import useCarOffer from "@/hooks/useFetchCarOffer";
-import { BuyOffer } from "@/types/firestore_schema/buyOffers";
+import useCarOffer, { CarBuyOffer } from "@/hooks/useFetchCarOffer";
 import { Car } from "@/types/models/Car";
 
 type CarOfferContextType = {
-  offers: BuyOffer[];
+  offers: CarBuyOffer[];
   isLoading: boolean;
   isError: boolean;
   hasMore: boolean;
