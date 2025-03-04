@@ -21,12 +21,7 @@ import OfferSection from "@/components/CarInfo/OfferSection";
 const CarDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { cars, fetchBulkAppraisalRequests, user } = useStore();
-  const {
-    isRequesting,
-    onRequestAppraisalPress,
-    hasActiveRequest,
-    isDeadlineRequest,
-  } = useBulkAppraisal();
+  const { isDeadlineRequest } = useBulkAppraisal();
   const car = cars.find((car) => car.id === id);
   const ref = React.useRef<ICarouselInstance>(null);
   const carData = transformCarData(car as Car);
