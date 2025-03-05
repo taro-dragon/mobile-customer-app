@@ -1,3 +1,4 @@
+import React from "react";
 import { CarBuyOffer } from "@/hooks/useFetchCarOffer";
 import { Text, TouchableOpacity, View } from "react-native";
 import Card from "../common/Card";
@@ -42,14 +43,16 @@ const CarOfferItem: React.FC<CarOfferItemProps> = ({ offer }) => {
           <View style={{ flex: 1, gap: 8 }}>
             <View style={{ gap: 4 }}>
               <Text
-                style={{ ...typography.body3, color: colors.textSecondary }}
-              >
-                {offer.affiliateStore.shopName}
-              </Text>
-              <Text
                 style={{ ...typography.heading2, color: colors.textPrimary }}
               >
-                {offer.affiliateStore.shopName}
+                {isAnonymous
+                  ? "店舗名は本登録後に表示されます"
+                  : offer.affiliateStore.shopName}
+              </Text>
+              <Text
+                style={{ ...typography.body3, color: colors.textSecondary }}
+              >
+                {offer.affiliateStore.address1} {offer.affiliateStore.address2}
               </Text>
             </View>
             <Text
@@ -65,20 +68,24 @@ const CarOfferItem: React.FC<CarOfferItemProps> = ({ offer }) => {
           </View>
           <ChevronRight size={24} color={colors.textSecondary} />
         </TouchableOpacity>
-        <Divider />
-        <View style={{ gap: 4 }}>
-          <View style={{ gap: 8, flexDirection: "row" }}>
-            <View style={{ flex: 1 }}>
-              <Button
-                color={colors.primary}
-                label="買取オファー詳細を見る"
-                isBorder
-                onPress={onOfferDetailPress}
-                fullWidth
-              />
+        {!isAnonymous && (
+          <>
+            <Divider />
+            <View style={{ gap: 4 }}>
+              <View style={{ gap: 8, flexDirection: "row" }}>
+                <View style={{ flex: 1 }}>
+                  <Button
+                    color={colors.primary}
+                    label="買取オファー詳細を見る"
+                    isBorder
+                    onPress={onOfferDetailPress}
+                    fullWidth
+                  />
+                </View>
+              </View>
             </View>
-          </View>
-        </View>
+          </>
+        )}
       </View>
     </Card>
   );

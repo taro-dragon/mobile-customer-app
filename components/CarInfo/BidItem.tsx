@@ -8,8 +8,9 @@ import { ChevronRight } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import { useBulkAppraisal } from "@/hooks/useBulkAppraisal";
 import Card from "../common/Card";
+import { ExtendedBid } from "@/hooks/useFetchCarBids";
 type BidItemProps = {
-  bid: AppraisalBid;
+  bid: ExtendedBid;
 };
 
 const BidItem: React.FC<BidItemProps> = ({ bid }) => {
@@ -25,7 +26,7 @@ const BidItem: React.FC<BidItemProps> = ({ bid }) => {
       >
         <TouchableOpacity
           onPress={() => {
-            router.push(`/shops/${bid.shop.id}`);
+            router.push(`/shops/${bid.affiliateStoreId}`);
           }}
           style={{
             flexDirection: "row",
@@ -45,18 +46,18 @@ const BidItem: React.FC<BidItemProps> = ({ bid }) => {
               <Text
                 style={{ ...typography.heading3, color: colors.textPrimary }}
               >
-                {bid.shop.shopName}
+                {bid.affiliateStore.shopName}
               </Text>
               <Text
                 style={{ ...typography.body3, color: colors.textSecondary }}
               >
-                {bid.shop.address1}
-                {bid.shop.address2}
-                {bid.shop.address3}
+                {bid.affiliateStore.address1}
+                {bid.affiliateStore.address2}
+                {bid.affiliateStore.address3}
               </Text>
               <View>
                 <Text style={{ ...typography.heading1, color: colors.primary }}>
-                  ¥{bid.amount.toLocaleString()}
+                  ¥{bid.price.toLocaleString()}
                 </Text>
               </View>
             </View>

@@ -3,14 +3,14 @@ import Card from "@/components/common/Card";
 import { useTheme } from "@/contexts/ThemeContext";
 import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
-import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect } from "react";
 import { ScrollView, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
 import dayjs from "dayjs";
-import Divider from "@/components/common/Divider";
 import Button from "@/components/common/Button";
 import useOffer from "@/hooks/useFetchOffer";
+import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 
 const OfferDetail = () => {
   const { offerId } = useLocalSearchParams<{ offerId: string }>();
@@ -38,7 +38,7 @@ const OfferDetail = () => {
 
   if (!offer) return null;
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, paddingBottom: 24 }}>
       <ScrollView style={{ flex: 1 }}>
         <View
           style={{
@@ -180,6 +180,7 @@ const OfferDetail = () => {
           </View>
         </View>
       </ScrollView>
+      <SafeAreaBottom />
     </View>
   );
 };

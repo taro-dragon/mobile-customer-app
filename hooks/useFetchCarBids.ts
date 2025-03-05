@@ -1,43 +1,42 @@
 import { AffiliateStore } from "@/types/firestore_schema/affiliateStores";
+import { Bid } from "@/types/firestore_schema/bids";
 import { BuyOffer } from "@/types/firestore_schema/buyOffers";
-import { Car } from "@/types/models/Car";
 import firestore from "@react-native-firebase/firestore";
 import { useCallback } from "react";
 import useSWRInfinite from "swr/infinite";
 
-export type CarBuyOffer = BuyOffer & {
+export type ExtendedBid = Bid & {
   affiliateStore: AffiliateStore;
 };
 
-const LIMIT = 20;
-const getKey = (carInfo: Car) => (pageIndex: number, previousPageData: any) => {
-  if (previousPageData && !previousPageData.buyOffers.length) return null;
-  const lastDoc = previousPageData?.lastDoc || null;
-  return [carInfo, pageIndex, lastDoc];
-};
-const fetchCarOffers = async ([carInfo, pageIndex, lastDoc]: [
-  Car,
+// 一度に読み込むデータ数
+const LIMIT = 10;
+const getKey =
+  (bulkAppraisalRequestId: string) =>
+  (pageIndex: number, previousPageData: any) => {
+    if (previousPageData && !previousPageData.buyOffers.length) return null;
+    const lastDoc = previousPageData?.lastDoc || null;
+    return [bulkAppraisalRequestId, pageIndex, lastDoc];
+  };
+const fetchCarBids = async ([bulkAppraisalRequestId, pageIndex, lastDoc]: [
+  string,
   number,
   any
 ]) => {
-  if (!carInfo) return { buyOffers: [], lastDoc: null };
   let query = firestore()
-    .collection("buyOffers")
-    .where("model", "==", carInfo.model)
-    .where("year", "==", carInfo.year)
-    .where("grade", "==", carInfo.grade)
-    .where("isActive", "==", true)
-    .orderBy("minPrice", "desc")
-    .limit(LIMIT);
+    .collection("bids")
+    .where("bulkAppraisalRequestId", "==", bulkAppraisalRequestId)
+    .orderBy("price", "desc")
+    .limit(10);
 
   if (lastDoc) {
     query = query.startAfter(lastDoc);
   }
 
-  const buyOffersSnapshot = await query.get();
+  const bidsSnapshot = await query.get();
 
-  const buyOffers = (await Promise.all(
-    buyOffersSnapshot.docs.map(async (doc) => {
+  const bids = (await Promise.all(
+    bidsSnapshot.docs.map(async (doc) => {
       const data = doc.data();
       const affiliateStore = await firestore()
         .collection("shops")
@@ -50,35 +49,30 @@ const fetchCarOffers = async ([carInfo, pageIndex, lastDoc]: [
         affiliateStore: affiliateStoreData,
       };
     })
-  )) as CarBuyOffer[];
+  )) as ExtendedBid[];
 
   return {
-    buyOffers,
+    bids,
     lastDoc:
-      buyOffersSnapshot.docs.length > 0
-        ? buyOffersSnapshot.docs[buyOffersSnapshot.docs.length - 1]
+      bidsSnapshot.docs.length > 0
+        ? bidsSnapshot.docs[bidsSnapshot.docs.length - 1]
         : null,
   };
 };
 
-const useCarOffer = (carInfo: Car) => {
+const useCarBids = (bulkAppraisalRequestId: string) => {
   const { data, error, size, setSize, isLoading, isValidating, mutate } =
-    useSWRInfinite(getKey(carInfo), fetchCarOffers, {
+    useSWRInfinite(getKey(bulkAppraisalRequestId), fetchCarBids, {
       revalidateFirstPage: true,
       revalidateAll: false,
       persistSize: true,
     });
 
-  const offers = data
-    ? data.reduce(
-        (acc, page) => [...acc, ...page.buyOffers],
-        [] as CarBuyOffer[]
-      )
+  const bids = data
+    ? data.reduce((acc, page) => [...acc, ...page.bids], [] as ExtendedBid[])
     : [];
 
-  const hasMore = data
-    ? data[data.length - 1].buyOffers.length === LIMIT
-    : false;
+  const hasMore = data ? data[data.length - 1].bids.length === LIMIT : false;
 
   const loadMore = useCallback(() => {
     if (!hasMore || isLoading || isValidating) return;
@@ -90,7 +84,7 @@ const useCarOffer = (carInfo: Car) => {
   }, [mutate]);
 
   return {
-    offers,
+    bids,
     isLoading,
     isError: !!error,
     hasMore,
@@ -99,4 +93,4 @@ const useCarOffer = (carInfo: Car) => {
   };
 };
 
-export default useCarOffer;
+export default useCarBids;
