@@ -13,8 +13,8 @@ import useOffer from "@/hooks/useFetchOffer";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 
 const OfferDetail = () => {
-  const { offerId } = useLocalSearchParams<{ offerId: string }>();
-  const { offer, isLoading } = useOffer(offerId);
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const { offer, isLoading } = useOffer(id);
 
   const router = useRouter();
   const { colors, typography } = useTheme();

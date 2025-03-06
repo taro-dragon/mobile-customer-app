@@ -7,6 +7,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { ToastConfig } from "@/constants/ToastConfig";
 import * as SplashScreen from "expo-splash-screen";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 SplashScreen.preventAutoHideAsync();
 export default function Layout() {
@@ -61,7 +63,11 @@ export default function Layout() {
   return (
     <SafeAreaProvider>
       <ThemeProvider>
-        <Slot />
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <BottomSheetModalProvider>
+            <Slot />
+          </BottomSheetModalProvider>
+        </GestureHandlerRootView>
         <Toast config={ToastConfig} />
       </ThemeProvider>
     </SafeAreaProvider>
