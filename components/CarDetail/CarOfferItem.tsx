@@ -1,12 +1,11 @@
 import React from "react";
 import { CarBuyOffer } from "@/hooks/useFetchCarOffer";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, View } from "react-native";
 import Card from "../common/Card";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useStore } from "@/hooks/useStore";
 import Divider from "../common/Divider";
 import { useRouter } from "expo-router";
-import { ChevronRight } from "lucide-react-native";
 import Button from "../common/Button";
 import { useRegistrationGuard } from "@/hooks/useRegistrationGuard";
 
@@ -31,20 +30,17 @@ const CarOfferItem: React.FC<CarOfferItemProps> = ({ offer }) => {
   return (
     <Card>
       <View style={{ gap: 8 }}>
-        <TouchableOpacity
+        <View
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
             gap: 8,
           }}
-          onPress={onShopInfoPress}
         >
           <View style={{ flex: 1, gap: 8 }}>
             <View style={{ gap: 4 }}>
-              <Text
-                style={{ ...typography.heading2, color: colors.textPrimary }}
-              >
+              <Text style={{ ...typography.title2, color: colors.textPrimary }}>
                 {isAnonymous
                   ? "店舗名は本登録後に表示されます"
                   : offer.affiliateStore.shopName}
@@ -52,7 +48,9 @@ const CarOfferItem: React.FC<CarOfferItemProps> = ({ offer }) => {
               <Text
                 style={{ ...typography.body3, color: colors.textSecondary }}
               >
-                {offer.affiliateStore.address1} {offer.affiliateStore.address2}
+                {offer.affiliateStore.address1}
+                {offer.affiliateStore.address2}
+                {!isAnonymous && offer.affiliateStore.address3}
               </Text>
             </View>
             <Text
@@ -66,8 +64,7 @@ const CarOfferItem: React.FC<CarOfferItemProps> = ({ offer }) => {
               {offer.maxPrice.toLocaleString()}
             </Text>
           </View>
-          <ChevronRight size={24} color={colors.textSecondary} />
-        </TouchableOpacity>
+        </View>
         {!isAnonymous && (
           <>
             <Divider />
@@ -76,8 +73,16 @@ const CarOfferItem: React.FC<CarOfferItemProps> = ({ offer }) => {
                 <View style={{ flex: 1 }}>
                   <Button
                     color={colors.primary}
-                    label="買取オファー詳細を見る"
+                    label="加盟店詳細"
                     isBorder
+                    onPress={onShopInfoPress}
+                    fullWidth
+                  />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Button
+                    color={colors.primary}
+                    label="買取オファー詳細"
                     onPress={onOfferDetailPress}
                     fullWidth
                   />

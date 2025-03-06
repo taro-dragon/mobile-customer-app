@@ -61,7 +61,7 @@ const Alert = ({ title, message, type }: AlertProps) => {
           {title}
         </Text>
       </View>
-      <Text style={{ color: colors.textPrimary, ...typography.body3 }}>
+      <Text style={{ color: colors.textPrimary, ...typography.body2 }}>
         {message}
       </Text>
     </View>
