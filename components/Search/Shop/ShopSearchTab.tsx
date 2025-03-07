@@ -23,8 +23,15 @@ const ShopSearchTab = () => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const { dismissAll } = useBottomSheetModal();
 
-  const { shops, isLoading, isLoadingMore, loadMore, refresh } =
-    useShopSearch();
+  const {
+    shops,
+    isLoading,
+    isLoadingMore,
+    loadMore,
+    refresh,
+    applyFilters,
+    resetFilters,
+  } = useShopSearch();
 
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
@@ -33,7 +40,12 @@ const ShopSearchTab = () => {
   const isFiltered = !!watch("prefecture");
 
   const onClear = () => {
-    resetField("prefecture");
+    resetFilters();
+    dismissAll();
+  };
+
+  const onSubmit = () => {
+    applyFilters();
     dismissAll();
   };
 
@@ -134,7 +146,11 @@ const ShopSearchTab = () => {
         />
       </View>
 
-      <BottomSheet ref={bottomSheetModalRef} onClear={onClear} />
+      <BottomSheet
+        ref={bottomSheetModalRef}
+        onClear={onClear}
+        onSubmit={onSubmit}
+      />
     </Tabs.ScrollView>
   );
 };

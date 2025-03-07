@@ -7,7 +7,6 @@ import {
   StyleSheet,
   Dimensions,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { Check } from "lucide-react-native";
 
 type OptionType = {
@@ -92,18 +91,22 @@ const CheckBox: React.FC<CheckBoxProps> = ({
             : [];
 
           const toggleOption = (optionValue: string) => {
-            if (multiple) {
-              if (currentValues.includes(optionValue)) {
-                onChange(currentValues.filter((val) => val !== optionValue));
+            try {
+              if (multiple) {
+                if (currentValues.includes(optionValue)) {
+                  onChange(currentValues.filter((val) => val !== optionValue));
+                } else {
+                  onChange([...currentValues, optionValue]);
+                }
               } else {
-                onChange([...currentValues, optionValue]);
+                if (currentValues.includes(optionValue)) {
+                  onChange(null);
+                } else {
+                  onChange(optionValue);
+                }
               }
-            } else {
-              if (currentValues.includes(optionValue)) {
-                onChange(null);
-              } else {
-                onChange(optionValue);
-              }
+            } catch (error) {
+              console.error("Error in toggleOption:", error);
             }
           };
 

@@ -9,10 +9,10 @@ import {
 } from "@gorhom/bottom-sheet";
 import { forwardRef } from "react";
 import { Text, View } from "react-native";
-import CheckBox from "../Uiparts/CheckBox";
 import prefectureSectionsData from "@/constants/prefectureSections.json";
 import { useFormContext } from "react-hook-form";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import CheckBox from "../Uiparts/CheckBox";
 
 // フォームデータの型定義
 export type FilterFormData = {
@@ -25,12 +25,13 @@ export type FilterFormData = {
 type BottomSheetProps = {
   ref: React.RefObject<BottomSheetModal>;
   onClear: () => void;
+  onSubmit: () => void;
 };
 
 const BottomSheet = forwardRef<BottomSheetModal, BottomSheetProps>(
   (props, ref) => {
     const { colors, typography } = useTheme();
-    const { onClear } = props;
+    const { onSubmit, onClear } = props;
     const insets = useSafeAreaInsets();
     const { getValues } = useFormContext();
 
@@ -48,6 +49,13 @@ const BottomSheet = forwardRef<BottomSheetModal, BottomSheetProps>(
               onPress={onClear}
               color={colors.primary}
               isBorder
+            />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Button
+              label="絞り込み"
+              onPress={() => onSubmit()}
+              color={colors.primary}
             />
           </View>
         </View>
