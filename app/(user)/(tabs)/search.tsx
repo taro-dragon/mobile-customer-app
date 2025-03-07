@@ -16,6 +16,9 @@ import { InventoryItem } from "@/types/firestore_schema/inventory";
 import { Car, ChevronDown, Filter } from "lucide-react-native";
 import { Image } from "expo-image";
 import ShopItem from "@/components/shop/ShopItem";
+import ShopSearchTab from "@/components/Search/Shop/ShopSearchTab";
+import { FormProvider } from "react-hook-form";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 const PREFECTURES = [
   "全国",
@@ -319,71 +322,8 @@ const SearchScreen: React.FC = () => {
         )}
       >
         <Tabs.Tab name="加盟店">
-          <Tabs.ScrollView>
-            <View style={styles.tabContent}>
-              {/* 店舗フィルター */}
-              <View style={styles.filterContainer}>
-                <View style={styles.filterRow}>
-                  {renderFilterButton(
-                    selectedPrefecture,
-                    showStoreFilters,
-                    () => setShowStoreFilters(!showStoreFilters)
-                  )}
-
-                  <TouchableOpacity
-                    style={[
-                      styles.sortButton,
-                      {
-                        backgroundColor: colors.backgroundSecondary,
-                        borderColor: colors.borderPrimary,
-                      },
-                    ]}
-                  >
-                    <Filter size={16} color={colors.textSecondary} />
-                    <Text
-                      style={[typography.body3, { color: colors.textPrimary }]}
-                    >
-                      評価順
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-
-                {showStoreFilters &&
-                  renderFilterOptions(
-                    PREFECTURES,
-                    selectedPrefecture,
-                    setSelectedPrefecture
-                  )}
-              </View>
-
-              {/* 店舗リスト */}
-              {loadingStores ? (
-                <View style={styles.loadingContainer}>
-                  <ActivityIndicator size="large" color={colors.primary} />
-                </View>
-              ) : stores.length > 0 ? (
-                <FlatList
-                  data={stores}
-                  renderItem={renderStoreItem}
-                  keyExtractor={(item) => item.id}
-                  contentContainerStyle={{
-                    gap: 12,
-                  }}
-                  scrollEnabled={false}
-                />
-              ) : (
-                <View style={styles.emptyContainer}>
-                  <Text
-                    style={[typography.body1, { color: colors.textSecondary }]}
-                  >
-                    条件に一致する店舗が見つかりませんでした
-                  </Text>
-                </View>
-              )}
-            </View>
-          </Tabs.ScrollView>
+          <ShopSearchTab />
         </Tabs.Tab>
-
         <Tabs.Tab name="中古車">
           <Tabs.ScrollView>
             <View style={styles.tabContent}>

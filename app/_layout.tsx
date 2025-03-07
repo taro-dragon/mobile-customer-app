@@ -64,9 +64,7 @@ export default function Layout() {
     <SafeAreaProvider>
       <ThemeProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
-          <BottomSheetModalProvider>
-            <Slot />
-          </BottomSheetModalProvider>
+          <Slot />
         </GestureHandlerRootView>
         <Toast config={ToastConfig} />
       </ThemeProvider>
