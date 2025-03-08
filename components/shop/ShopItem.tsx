@@ -67,7 +67,7 @@ const ShopItem: React.FC<ShopItemProps> = ({ item }) => {
           }}
         >
           <Text
-            style={[typography.heading2, { color: colors.textPrimary }]}
+            style={[typography.heading3, { color: colors.textPrimary }]}
             numberOfLines={1}
           >
             {item.shopName}
