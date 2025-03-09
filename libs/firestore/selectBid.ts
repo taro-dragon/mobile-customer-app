@@ -21,7 +21,7 @@ const selectBid = async (bid: Bid, userId: string) => {
         sourceId: bid.id,
         status: "active",
         isArchived: false,
-        lastMessage: "一括査定が選択されました",
+        lastMessage: "一括査定を選択しました",
         lastMessageAt: firestore.Timestamp.now(),
         createdAt: firestore.Timestamp.now(),
         updatedAt: firestore.Timestamp.now(),

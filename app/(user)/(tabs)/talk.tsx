@@ -1,3 +1,4 @@
+import TalkItem from "@/components/talks/TalkItem";
 import { useStore } from "@/hooks/useStore";
 import { FlatList, Text, View } from "react-native";
 
@@ -7,8 +8,8 @@ const Talk = () => {
     <View style={{ flex: 1 }}>
       <FlatList
         data={talks}
-        renderItem={({ item }) => <Text>{item.affiliateStore.shopName}</Text>}
-        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => <TalkItem talk={item} />}
+        keyExtractor={(item) => item.id}
       />
     </View>
   );
