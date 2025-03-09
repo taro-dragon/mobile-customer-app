@@ -4,7 +4,7 @@ import firestore from "@react-native-firebase/firestore";
 const selectBid = async (bid: Bid, userId: string) => {
   try {
     await firestore().runTransaction(async (transaction) => {
-      const tolkRef = firestore().collection("tolks").doc();
+      const talkRef = firestore().collection("talks").doc();
       const targetBid = await transaction.get(
         firestore().collection("bids").doc(bid.id)
       );
@@ -14,7 +14,7 @@ const selectBid = async (bid: Bid, userId: string) => {
       transaction.update(targetBid.ref, {
         isSelected: true,
       });
-      transaction.set(tolkRef, {
+      transaction.set(talkRef, {
         userId: userId,
         affiliateStoreId: bid.affiliateStoreId,
         sourceType: "buyOffer",
