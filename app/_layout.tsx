@@ -8,7 +8,8 @@ import Toast from "react-native-toast-message";
 import { ToastConfig } from "@/constants/ToastConfig";
 import * as SplashScreen from "expo-splash-screen";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import ErrorBoundary from "@/components/ErrorBoundary";
+import ErrorService from "@/libs/ErrorService";
 
 SplashScreen.preventAutoHideAsync();
 export default function Layout() {
@@ -17,6 +18,27 @@ export default function Layout() {
   const { user, staff, isAppReady } = useStore();
   const [initialRoute, setInitialRoute] = useState<string | null>(null);
   useAuthInitialization();
+
+  // グローバルエラーハンドラーの設定
+  useEffect(() => {
+    ErrorService.setupGlobalHandlers();
+
+    // カスタムエラーハンドラーの追加例（必要に応じて）
+    const customHandler = (error: Error, isFatal?: boolean) => {
+      // 特定のエラーに対する追加処理をここに記述
+      console.log(
+        `Custom handler caught ${isFatal ? "fatal" : ""} error:`,
+        error.message
+      );
+    };
+
+    ErrorService.addErrorHandler(customHandler);
+
+    return () => {
+      // クリーンアップ
+      ErrorService.removeErrorHandler(customHandler);
+    };
+  }, []);
 
   useEffect(() => {
     if (!isAppReady) return;
@@ -61,13 +83,15 @@ export default function Layout() {
   }
 
   return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <Slot />
-        </GestureHandlerRootView>
-        <Toast config={ToastConfig} />
-      </ThemeProvider>
-    </SafeAreaProvider>
+    <ErrorBoundary>
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <Slot />
+          </GestureHandlerRootView>
+          <Toast config={ToastConfig} />
+        </ThemeProvider>
+      </SafeAreaProvider>
+    </ErrorBoundary>
   );
 }

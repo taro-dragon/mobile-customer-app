@@ -11,10 +11,13 @@ import dayjs from "dayjs";
 import Button from "@/components/common/Button";
 import useOffer from "@/hooks/useFetchOffer";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
+import { useStore } from "@/hooks/useStore";
+import isTargetOffer from "@/libs/isTargetOffer";
 
 const OfferDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { offer, isLoading } = useOffer(id);
+  const { cars } = useStore();
 
   const router = useRouter();
   const { colors, typography } = useTheme();
@@ -35,8 +38,9 @@ const OfferDetail = () => {
     grade: offer?.grade,
   };
   const carData = transformCarData(car as unknown as Car);
-
   if (!offer) return null;
+
+  const isCurrentTargetOffer = isTargetOffer(cars, offer);
   return (
     <View style={{ flex: 1, paddingBottom: 24 }}>
       <ScrollView style={{ flex: 1 }}>
@@ -98,21 +102,23 @@ const OfferDetail = () => {
               </Text>
             </View>
           </View>
-          <View style={{ flex: 1, width: "100%", marginTop: 16 }}>
-            <Button
-              label="買取査定依頼をする"
-              color={colors.white}
-              isBorder
-              onPress={() => {
-                router.back();
-                Toast.show({
-                  type: "success",
-                  text1: "買取査定依頼を送信しました",
-                  text2: "トーク画面から加盟店とやり取りが可能です",
-                });
-              }}
-            />
-          </View>
+          {isCurrentTargetOffer && (
+            <View style={{ flex: 1, width: "100%", marginTop: 16 }}>
+              <Button
+                label="買取査定依頼をする"
+                color={colors.white}
+                isBorder
+                onPress={() => {
+                  router.back();
+                  Toast.show({
+                    type: "success",
+                    text1: "買取査定依頼を送信しました",
+                    text2: "トーク画面から加盟店とやり取りが可能です",
+                  });
+                }}
+              />
+            </View>
+          )}
         </View>
         <View style={{ padding: 16, gap: 16 }}>
           {offer?.description && (

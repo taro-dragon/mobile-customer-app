@@ -11,10 +11,13 @@ import dayjs from "dayjs";
 import Button from "@/components/common/Button";
 import useBid from "@/hooks/useFetchBid";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
+import selectBid from "@/libs/firestore/selectBid";
+import { useStore } from "@/hooks/useStore";
 
 const BidDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { bid, isLoading } = useBid(id);
+  const { user } = useStore();
 
   const router = useRouter();
   const { colors, typography } = useTheme();
@@ -30,6 +33,24 @@ const BidDetail = () => {
   }, [bid]);
 
   if (!bid) return null;
+  const showSelectButton = !bid.isSelected;
+  const handleSelectBid = async () => {
+    if (!user?.id) {
+      Toast.show({
+        type: "error",
+        text1: "エラー",
+        text2: "ユーザー情報が見つかりませんでした",
+      });
+      return;
+    }
+    await selectBid(bid, user.id);
+    router.back();
+    Toast.show({
+      type: "success",
+      text1: "一括査定を選択しました",
+      text2: "トーク画面から加盟店とやり取りが可能です",
+    });
+  };
   return (
     <View style={{ flex: 1, paddingBottom: 24 }}>
       <ScrollView style={{ flex: 1 }}>
@@ -90,21 +111,16 @@ const BidDetail = () => {
               </Text>
             </View>
           </View>
-          <View style={{ flex: 1, width: "100%", marginTop: 16 }}>
-            <Button
-              label="この査定を選択する"
-              color={colors.white}
-              isBorder
-              onPress={() => {
-                router.back();
-                Toast.show({
-                  type: "success",
-                  text1: "査定を選択しました",
-                  text2: "トーク画面から加盟店とやり取りが可能です",
-                });
-              }}
-            />
-          </View>
+          {showSelectButton && (
+            <View style={{ flex: 1, width: "100%", marginTop: 16 }}>
+              <Button
+                label="この査定を選択する"
+                color={colors.white}
+                isBorder
+                onPress={handleSelectBid}
+              />
+            </View>
+          )}
         </View>
         <View style={{ padding: 16, gap: 16 }}>
           {bid?.comment && (

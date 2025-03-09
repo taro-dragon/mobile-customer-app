@@ -1,6 +1,6 @@
 import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 
-export type Chat = {
+export type Tolk = {
   id: string;
   userId: string; // ユーザーID
   affiliateStoreId: string; // 加盟店ID

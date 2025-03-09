@@ -131,17 +131,17 @@ const ShopSearchTab = () => {
 
       <View style={{ flex: 1, paddingHorizontal: 16 }}>
         <FlatList
-          data={shops}
+          data={[...shops, ...shops, ...shops, ...shops, ...shops, ...shops]}
           style={{ flex: 1 }}
           contentContainerStyle={{ flex: 1, gap: 12 }}
           renderItem={renderShopItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item, index) => `${item.id}-${index}`}
           onEndReached={loadMore}
           onEndReachedThreshold={0.3}
           ListFooterComponent={renderFooter}
           onRefresh={refresh}
           refreshing={isLoading}
-          scrollEnabled={false} // Tabs.ScrollViewが親なのでスクロールは無効化
+          scrollEnabled={false}
           ListEmptyComponent={renderEmptyList}
         />
       </View>
