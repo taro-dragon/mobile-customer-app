@@ -86,6 +86,13 @@ export default function Layout() {
           ),
         }}
       />
+      <Stack.Screen
+        name="talks/[talkId]/index"
+        options={{
+          title: "トーク詳細",
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
     </Stack>
   );
 }

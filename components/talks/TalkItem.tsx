@@ -2,8 +2,15 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { TalkWithAffiliate } from "@/types/extendType/TalkWithAffiliate";
 import { Image } from "expo-image";
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import dayjs from "dayjs";
+import { useRouter } from "expo-router";
+import relativeTime from "dayjs/plugin/relativeTime";
+import "dayjs/locale/ja";
+
+// dayjsの設定
+dayjs.extend(relativeTime);
+dayjs.locale("ja");
 
 type TalkItemProps = {
   talk: TalkWithAffiliate;
@@ -11,46 +18,90 @@ type TalkItemProps = {
 
 const TalkItem: React.FC<TalkItemProps> = ({ talk }) => {
   const { colors, typography } = useTheme();
+  const router = useRouter();
+
+  const handlePress = () => {
+    router.push(`/talks/${talk.id}`);
+  };
+
   return (
-    <View
-      style={{
-        padding: 12,
-        backgroundColor: colors.backgroundPrimary,
-        justifyContent: "space-between",
-        flexDirection: "row",
-      }}
-    >
-      <View
-        style={{ flexDirection: "row", gap: 12, alignItems: "center", flex: 1 }}
-      >
-        <Image
-          source={{ uri: talk.affiliateStore.imageUrls[0] }}
-          style={{ width: 56, height: 56, borderRadius: 20 }}
-        />
-        <View
-          style={{
-            gap: 4,
-          }}
-        >
-          <Text
-            numberOfLines={1}
-            style={{ color: colors.textPrimary, ...typography.heading3 }}
-          >
-            {talk.affiliateStore.shopName}
+    <TouchableOpacity style={styles.container} onPress={handlePress}>
+      <Image
+        source={{
+          uri:
+            talk.affiliateStore?.imageUrls[0] ||
+            "https://via.placeholder.com/50",
+        }}
+        style={styles.avatar}
+      />
+      <View style={styles.content}>
+        <View style={styles.header}>
+          <Text style={styles.name} numberOfLines={1}>
+            {talk.affiliateStore?.shopName || "不明な店舗"}
           </Text>
-          <Text
-            numberOfLines={1}
-            style={{ color: colors.textSecondary, ...typography.body3 }}
-          >
+          <Text style={styles.time}>
+            {dayjs(talk.lastMessageAt.toDate()).fromNow()}
+          </Text>
+        </View>
+        <View style={styles.messageRow}>
+          <Text style={styles.message} numberOfLines={1}>
             {talk.lastMessage}
           </Text>
         </View>
       </View>
-      <Text style={{ color: colors.textSecondary, ...typography.body3 }}>
-        {dayjs(talk.lastMessageAt.toDate()).format("YYYY/MM/DD")}
-      </Text>
-    </View>
+    </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f0f0f0",
+    backgroundColor: "white",
+  },
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 12,
+  },
+  content: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 4,
+  },
+  name: {
+    fontSize: 16,
+    fontWeight: "600",
+    flex: 1,
+    marginRight: 8,
+  },
+  time: {
+    fontSize: 12,
+    color: "#8e8e8e",
+  },
+  messageRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  message: {
+    fontSize: 14,
+    color: "#8e8e8e",
+    flex: 1,
+    marginRight: 4,
+  },
+  statusDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "#3897f0",
+  },
+});
 
 export default TalkItem;
