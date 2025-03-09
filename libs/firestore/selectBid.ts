@@ -20,6 +20,9 @@ const selectBid = async (bid: Bid, userId: string) => {
         sourceType: "buyOffer",
         sourceId: bid.id,
         status: "active",
+        lastMessageAt: firestore.Timestamp.now(),
+        createdAt: firestore.Timestamp.now(),
+        updatedAt: firestore.Timestamp.now(),
       });
     });
   } catch (error) {

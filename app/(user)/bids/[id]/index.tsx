@@ -4,7 +4,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
 import dayjs from "dayjs";
@@ -18,6 +18,7 @@ const BidDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { bid, isLoading } = useBid(id);
   const { user } = useStore();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
   const { colors, typography } = useTheme();
@@ -35,21 +36,28 @@ const BidDetail = () => {
   if (!bid) return null;
   const showSelectButton = !bid.isSelected;
   const handleSelectBid = async () => {
-    if (!user?.id) {
+    try {
+      setIsSubmitting(true);
+      if (!user?.id) {
+        throw new Error("ユーザー情報が見つかりませんでした");
+      }
+      await selectBid(bid, user.id);
+      router.back();
+      Toast.show({
+        type: "success",
+        text1: "一括査定を選択しました",
+        text2: "トーク画面から加盟店とやり取りが可能です",
+      });
+    } catch (error) {
+      console.error(error);
       Toast.show({
         type: "error",
         text1: "エラー",
-        text2: "ユーザー情報が見つかりませんでした",
+        text2: "一括査定を選択できませんでした",
       });
-      return;
+    } finally {
+      setIsSubmitting(false);
     }
-    await selectBid(bid, user.id);
-    router.back();
-    Toast.show({
-      type: "success",
-      text1: "一括査定を選択しました",
-      text2: "トーク画面から加盟店とやり取りが可能です",
-    });
   };
   return (
     <View style={{ flex: 1, paddingBottom: 24 }}>
@@ -114,6 +122,7 @@ const BidDetail = () => {
           {showSelectButton && (
             <View style={{ flex: 1, width: "100%", marginTop: 16 }}>
               <Button
+                isLoading={isSubmitting}
                 label="この査定を選択する"
                 color={colors.white}
                 isBorder

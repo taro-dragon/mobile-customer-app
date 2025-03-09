@@ -1,5 +1,11 @@
 import { useTheme } from "@/contexts/ThemeContext";
-import { Text, TouchableOpacity, ViewStyle, TextStyle } from "react-native";
+import {
+  Text,
+  TouchableOpacity,
+  ViewStyle,
+  TextStyle,
+  ActivityIndicator,
+} from "react-native";
 
 type ButtonProps = {
   label: string;
@@ -9,6 +15,7 @@ type ButtonProps = {
   fullWidth?: boolean;
   isBorder?: boolean;
   notBorder?: boolean;
+  isLoading?: boolean;
 };
 
 const Button = ({
@@ -19,6 +26,7 @@ const Button = ({
   fullWidth,
   isBorder,
   notBorder,
+  isLoading,
 }: ButtonProps) => {
   const { colors, typography } = useTheme();
   const getButtonStyle = (): ViewStyle => {
@@ -77,10 +85,14 @@ const Button = ({
   return (
     <TouchableOpacity
       onPress={onPress}
-      disabled={disabled}
+      disabled={disabled || isLoading}
       style={getButtonStyle()}
     >
-      <Text style={getTextStyle()}>{label}</Text>
+      {isLoading ? (
+        <ActivityIndicator size="small" color={colors.white} />
+      ) : (
+        <Text style={getTextStyle()}>{label}</Text>
+      )}
     </TouchableOpacity>
   );
 };
