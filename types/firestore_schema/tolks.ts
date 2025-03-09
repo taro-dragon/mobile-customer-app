@@ -8,6 +8,7 @@ export type Tolk = {
   sourceType: "buyOffer" | "bulkAppraisal"; // チャットの発生源
   sourceId: string; // 発生源ID（買取オファーIDまたは一括査定依頼ID）
   status: "active" | "closed"; // チャットの状態
+  lastMessage: string; // 最後のメッセージ
   lastMessageAt: FirebaseFirestoreTypes.Timestamp; // 最後のメッセージ時間
   createdAt: FirebaseFirestoreTypes.Timestamp;
   updatedAt: FirebaseFirestoreTypes.Timestamp;
