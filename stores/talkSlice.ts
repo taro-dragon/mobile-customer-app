@@ -20,6 +20,7 @@ export const createTalkSlice: StateCreator<TalkSlice, [], [], TalkSlice> = (
     const unsubscribe = firestore()
       .collection("talks")
       .where("userId", "==", userId)
+      .where("isArchived", "==", false)
       .orderBy("lastMessageAt", "desc")
       .onSnapshot(
         async (snapshot) => {
