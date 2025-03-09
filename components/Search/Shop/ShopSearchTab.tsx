@@ -74,7 +74,7 @@ const ShopSearchTab = () => {
             padding: 20,
           }}
         >
-          <ActivityIndicator size="large" color={colors.textInfo} />
+          <ActivityIndicator size="large" color={colors.primary} />
         </View>
       );
     }
@@ -131,7 +131,7 @@ const ShopSearchTab = () => {
 
       <View style={{ flex: 1, paddingHorizontal: 16 }}>
         <FlatList
-          data={[...shops, ...shops, ...shops, ...shops, ...shops, ...shops]}
+          data={shops}
           style={{ flex: 1 }}
           contentContainerStyle={{ flex: 1, gap: 12 }}
           renderItem={renderShopItem}

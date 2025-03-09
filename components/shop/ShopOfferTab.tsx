@@ -1,10 +1,14 @@
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import { Tabs } from "react-native-collapsible-tab-view";
 import ShopCarOfferItem from "./ShopCarOfferItem";
 import { useShopContext } from "@/contexts/ShopContext";
+import { Book } from "lucide-react-native";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const ShopOfferTab = () => {
   const { offers, hasMoreOffers, loadMoreOffers } = useShopContext();
+  const { colors, typography } = useTheme();
+
   return (
     <Tabs.FlatList
       data={offers}
@@ -16,6 +20,27 @@ const ShopOfferTab = () => {
       style={{ flex: 1 }}
       ListFooterComponent={
         hasMoreOffers ? <ActivityIndicator size="small" /> : null
+      }
+      ListEmptyComponent={
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            paddingVertical: 40,
+            gap: 16,
+          }}
+        >
+          <Book size={48} color={colors.iconSecondary} strokeWidth={1.5} />
+          <Text
+            style={{
+              ...typography.heading2,
+              color: colors.textSecondary,
+            }}
+          >
+            買取オファーがありません
+          </Text>
+        </View>
       }
     />
   );
