@@ -26,7 +26,7 @@ const fetchCarBids = async ([bulkAppraisalRequestId, pageIndex, lastDoc]: [
   let query = firestore()
     .collection("bids")
     .where("bulkAppraisalRequestId", "==", bulkAppraisalRequestId)
-    .orderBy("price", "desc")
+    .orderBy("minPrice", "desc")
     .limit(10);
 
   if (lastDoc) {
