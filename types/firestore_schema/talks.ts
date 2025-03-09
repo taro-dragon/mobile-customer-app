@@ -3,6 +3,7 @@ import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 export type Talk = {
   id: string;
   userId: string; // ユーザーID
+  carId: string; // 車両ID
   affiliateStoreId: string; // 加盟店ID
   staffId: string | null; // 対応スタッフID
   sourceType: "buyOffer" | "bulkAppraisal"; // チャットの発生源

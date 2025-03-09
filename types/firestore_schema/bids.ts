@@ -2,6 +2,7 @@ import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 
 export type Bid = {
   id: string;
+  carId: string; // 車両ID
   bulkAppraisalRequestId: string; // 一括査定依頼ID
   affiliateStoreId: string; // 入札した加盟店
   minPrice: number; // 提示価格

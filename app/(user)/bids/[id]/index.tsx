@@ -41,7 +41,7 @@ const BidDetail = () => {
       if (!user?.id) {
         throw new Error("ユーザー情報が見つかりませんでした");
       }
-      await selectBid(bid, user.id);
+      await selectBid(bid, user.id, bid.carId);
       router.back();
       Toast.show({
         type: "success",

@@ -1,7 +1,7 @@
 import { Bid } from "@/types/firestore_schema/bids";
 import firestore from "@react-native-firebase/firestore";
 
-const selectBid = async (bid: Bid, userId: string) => {
+const selectBid = async (bid: Bid, userId: string, carId: string) => {
   try {
     await firestore().runTransaction(async (transaction) => {
       const talkRef = firestore().collection("talks").doc();
@@ -19,6 +19,7 @@ const selectBid = async (bid: Bid, userId: string) => {
         affiliateStoreId: bid.affiliateStoreId,
         sourceType: "buyOffer",
         sourceId: bid.id,
+        carId: carId,
         status: "active",
         isArchived: false,
         lastMessage: "一括査定を選択しました",
