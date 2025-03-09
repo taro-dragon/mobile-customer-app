@@ -1,12 +1,12 @@
 import { useTheme } from "@/contexts/ThemeContext";
-import useUserCarFetch from "@/hooks/useUserCarFetch";
+import useUserInfoData from "@/hooks/useUserInfoData";
 import { useRouter } from "expo-router";
 import { Stack } from "expo-router/stack";
 import { X } from "lucide-react-native";
 import { TouchableOpacity } from "react-native";
 
 export default function Layout() {
-  useUserCarFetch();
+  useUserInfoData();
   const { colors } = useTheme();
   const router = useRouter();
   return (

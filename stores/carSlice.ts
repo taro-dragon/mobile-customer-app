@@ -2,6 +2,7 @@ import { Car } from "@/types/models/Car";
 import { CarSlice } from "@/types/slices/CarSlice";
 import { StateCreator } from "zustand";
 import firestore from "@react-native-firebase/firestore";
+
 export const createCarSlice: StateCreator<CarSlice, [], [], CarSlice> = (
   set,
   get
@@ -9,32 +10,46 @@ export const createCarSlice: StateCreator<CarSlice, [], [], CarSlice> = (
   cars: [],
   carLoading: false,
   unsubscribe: undefined,
-  setCars: (cars: Car[]) => set((state) => ({ ...state, cars })),
-  fetchCars: (ownerId: string) => {
-    if (get().unsubscribe) {
-      get().unsubscribe!();
+  fetchCars: async (ownerId: string) => {
+    const currentUnsubscribe = get().unsubscribe;
+    if (currentUnsubscribe) {
+      currentUnsubscribe();
     }
+
     set((state) => ({ ...state, carLoading: true }));
-    const unsubscribe = firestore()
-      .collection("cars")
-      .where("ownerId", "==", ownerId)
-      .onSnapshot(
-        (snapshot) => {
-          set((state) => ({
-            ...state,
-            cars: snapshot.docs.map((doc) => doc.data() as Car),
-            carLoading: false,
-          }));
-        },
-        (error) => {
-          console.error(error);
-          set((state) => ({ ...state, carLoading: false }));
-        }
-      );
-    set((state) => ({ ...state, unsubscribe }));
-    return unsubscribe;
+
+    try {
+      const unsubscribe = await firestore()
+        .collection("cars")
+        .where("ownerId", "==", ownerId)
+        .onSnapshot(
+          (snapshot) => {
+            const cars = snapshot.docs.map((doc) => {
+              return {
+                id: doc.id,
+                ...doc.data(),
+              } as Car;
+            });
+            set((state) => ({
+              ...state,
+              cars: cars,
+              carLoading: false,
+            }));
+          },
+          (error) => {
+            console.error("Error fetching cars:", error);
+            set((state) => ({ ...state, carLoading: false }));
+          }
+        );
+
+      set((state) => ({ ...state, unsubscribe }));
+      return unsubscribe;
+    } catch (error) {
+      console.error("Error setting up cars listener:", error);
+      set((state) => ({ ...state, carLoading: false }));
+      return undefined;
+    }
   },
-  deleteCar: () => set((state) => ({ ...state, cars: [] })),
   setCarLoading: (carLoading: boolean) =>
     set((state) => ({
       ...state,

@@ -2,11 +2,9 @@ import CarInfoItem from "@/components/CarInfo/CarInfoItem";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useStore } from "@/hooks/useStore";
 import { ScrollView, Text } from "react-native";
-import Button from "@/components/common/Button";
-import auth from "@react-native-firebase/auth";
 
 const CustomerIndex = () => {
-  const { cars, deleteUser } = useStore();
+  const { cars } = useStore();
   const { colors, typography } = useTheme();
   return (
     <ScrollView
