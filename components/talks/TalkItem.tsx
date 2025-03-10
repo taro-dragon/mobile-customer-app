@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import { useRouter } from "expo-router";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ja";
+import Divider from "../common/Divider";
 
 // dayjsの設定
 dayjs.extend(relativeTime);
@@ -25,31 +26,38 @@ const TalkItem: React.FC<TalkItemProps> = ({ talk }) => {
   };
 
   return (
-    <TouchableOpacity style={styles.container} onPress={handlePress}>
-      <Image
-        source={{
-          uri:
-            talk.affiliateStore?.imageUrls[0] ||
-            "https://via.placeholder.com/50",
-        }}
-        style={styles.avatar}
-      />
-      <View style={styles.content}>
-        <View style={styles.header}>
-          <Text style={styles.name} numberOfLines={1}>
-            {talk.affiliateStore?.shopName || "不明な店舗"}
-          </Text>
-          <Text style={styles.time}>
-            {dayjs(talk.lastMessageAt.toDate()).fromNow()}
-          </Text>
+    <>
+      <TouchableOpacity style={styles.container} onPress={handlePress}>
+        <Image
+          source={{
+            uri: talk.affiliateStore?.imageUrls[0],
+          }}
+          style={styles.avatar}
+        />
+        <View style={styles.content}>
+          <View style={styles.header}>
+            <Text
+              style={[styles.name, { color: colors.textPrimary }]}
+              numberOfLines={1}
+            >
+              {talk.affiliateStore?.shopName || "不明な店舗"}
+            </Text>
+            <Text style={[styles.time, { color: colors.textSecondary }]}>
+              {dayjs(talk.lastMessageAt.toDate()).fromNow()}
+            </Text>
+          </View>
+          <View style={styles.messageRow}>
+            <Text
+              style={[styles.message, { color: colors.textSecondary }]}
+              numberOfLines={1}
+            >
+              {talk.lastMessage}
+            </Text>
+          </View>
         </View>
-        <View style={styles.messageRow}>
-          <Text style={styles.message} numberOfLines={1}>
-            {talk.lastMessage}
-          </Text>
-        </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+      <Divider />
+    </>
   );
 };
 
@@ -57,9 +65,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f0f0f0",
-    backgroundColor: "white",
   },
   avatar: {
     width: 50,
@@ -84,7 +89,6 @@ const styles = StyleSheet.create({
   },
   time: {
     fontSize: 12,
-    color: "#8e8e8e",
   },
   messageRow: {
     flexDirection: "row",
@@ -92,7 +96,6 @@ const styles = StyleSheet.create({
   },
   message: {
     fontSize: 14,
-    color: "#8e8e8e",
     flex: 1,
     marginRight: 4,
   },

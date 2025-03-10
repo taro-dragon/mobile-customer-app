@@ -19,6 +19,7 @@ import { Message } from "@/types/firestore_schema/messages";
 import dayjs from "dayjs";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import { useTheme } from "@/contexts/ThemeContext";
+import MessageItem from "@/components/talks/MessageItem";
 
 const TalkDetail = () => {
   const { talkId } = useLocalSearchParams<{ talkId: string }>();
@@ -33,8 +34,6 @@ const TalkDetail = () => {
 
   useEffect(() => {
     if (!talkId) return;
-
-    // メッセージのリアルタイム取得
     const unsubscribe = firestore()
       .collection("talks")
       .doc(talkId)
@@ -66,7 +65,6 @@ const TalkDetail = () => {
         createdAt: firestore.Timestamp.now(),
       };
 
-      // メッセージを保存
       await firestore()
         .collection("talks")
         .doc(talkId)
@@ -97,105 +95,76 @@ const TalkDetail = () => {
   if (loading) {
     return (
       <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
 
-  const renderMessage = ({ item }: { item: Message }) => {
-    const isUser = item.senderType === "user";
-    return (
-      <View
-        style={[
-          styles.messageContainer,
-          isUser ? styles.userMessage : styles.otherMessage,
-        ]}
-      >
-        {!isUser && (
-          <Image
-            source={{
-              uri:
-                talk.affiliateStore?.logoUrl ||
-                "https://via.placeholder.com/40",
-            }}
-            style={styles.avatar}
-          />
-        )}
-        <View
-          style={[
-            styles.messageBubble,
-            isUser ? styles.userBubble : styles.otherBubble,
-          ]}
-        >
-          <Text
-            style={[
-              styles.messageText,
-              isUser ? styles.userMessageText : styles.otherMessageText,
-            ]}
-          >
-            {item.text}
-          </Text>
-          <Text style={styles.timeText}>
-            {dayjs(item.createdAt.toDate()).format("HH:mm")}
-          </Text>
-        </View>
-      </View>
-    );
-  };
-
   return (
-    <KeyboardAvoidingView
-      style={{
-        ...styles.container,
-        backgroundColor: colors.backgroundSecondary,
-      }}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
-    >
-      <Stack.Screen
-        options={{
-          title: talk.affiliateStore?.shopName || "チャット",
-          headerTitleStyle: styles.headerTitle,
-        }}
-      />
-
-      <FlatList
-        ref={flatListRef}
-        data={messages}
-        renderItem={renderMessage}
-        keyExtractor={(item) => item.id}
-        inverted
-        contentContainerStyle={styles.messagesContainer}
-      />
-
-      <View
+    <>
+      <KeyboardAvoidingView
         style={{
-          ...styles.inputContainer,
-          backgroundColor: colors.backgroundPrimary,
+          ...styles.container,
+          backgroundColor: colors.backgroundSecondary,
         }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
       >
-        <TextInput
-          style={styles.input}
-          value={text}
-          onChangeText={setText}
-          placeholder="メッセージを入力..."
-          multiline
+        <Stack.Screen
+          options={{
+            title: talk.affiliateStore?.shopName || "チャット",
+            headerTitleStyle: styles.headerTitle,
+          }}
         />
 
-        <TouchableOpacity
-          style={[styles.sendButton, !text.trim() && styles.disabledButton]}
-          onPress={sendMessage}
-          disabled={!text.trim() || sending}
+        <FlatList
+          ref={flatListRef}
+          data={messages}
+          renderItem={({ item }) => <MessageItem message={item} talk={talk} />}
+          keyExtractor={(item) => item.id}
+          inverted
+          contentContainerStyle={styles.messagesContainer}
+        />
+
+        <View
+          style={{
+            ...styles.inputContainer,
+            backgroundColor: colors.backgroundPrimary,
+          }}
         >
-          {sending ? (
-            <ActivityIndicator size="small" color="white" />
-          ) : (
-            <Ionicons name="send" size={20} color="white" />
-          )}
-        </TouchableOpacity>
-      </View>
+          <TextInput
+            style={[
+              styles.input,
+              {
+                color: colors.textPrimary,
+                backgroundColor: colors.backgroundSecondary,
+              },
+            ]}
+            value={text}
+            onChangeText={setText}
+            placeholder="メッセージを入力..."
+            multiline
+          />
+
+          <TouchableOpacity
+            style={[
+              styles.sendButton,
+              { backgroundColor: colors.primary },
+              !text.trim() && { backgroundColor: colors.primary, opacity: 0.2 },
+            ]}
+            onPress={sendMessage}
+            disabled={!text.trim() || sending}
+          >
+            {sending ? (
+              <ActivityIndicator size="small" color={colors.white} />
+            ) : (
+              <Ionicons name="send" size={20} color={colors.white} />
+            )}
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
       <SafeAreaBottom color={colors.backgroundPrimary} />
-    </KeyboardAvoidingView>
+    </>
   );
 };
 
@@ -215,78 +184,25 @@ const styles = StyleSheet.create({
   messagesContainer: {
     padding: 10,
   },
-  messageContainer: {
-    flexDirection: "row",
-    marginBottom: 10,
-    alignItems: "flex-end",
-  },
-  userMessage: {
-    justifyContent: "flex-end",
-  },
-  otherMessage: {
-    justifyContent: "flex-start",
-  },
-  avatar: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    marginRight: 8,
-  },
-  messageBubble: {
-    maxWidth: "70%",
-    padding: 12,
-    borderRadius: 18,
-  },
-  userBubble: {
-    backgroundColor: "#3897f0",
-    borderBottomRightRadius: 4,
-  },
-  otherBubble: {
-    backgroundColor: "white",
-    borderBottomLeftRadius: 4,
-  },
-  messageText: {
-    fontSize: 15,
-  },
-  userMessageText: {
-    color: "white",
-  },
-  otherMessageText: {
-    color: "#333",
-  },
-  timeText: {
-    fontSize: 10,
-    color: "#888",
-    alignSelf: "flex-end",
-    marginTop: 4,
-  },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
-    backgroundColor: "white",
-    borderTopWidth: 1,
-    borderTopColor: "#eee",
   },
   input: {
     flex: 1,
-    backgroundColor: "#f1f1f1",
     borderRadius: 20,
     paddingHorizontal: 15,
-    paddingVertical: 8,
+    paddingVertical: 12,
     maxHeight: 100,
     marginRight: 8,
   },
   sendButton: {
-    backgroundColor: "#3897f0",
     width: 36,
     height: 36,
     borderRadius: 18,
     justifyContent: "center",
     alignItems: "center",
-  },
-  disabledButton: {
-    backgroundColor: "#b2dffc",
   },
 });
 
