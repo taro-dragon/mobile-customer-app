@@ -1,5 +1,5 @@
 import { useStore } from "@/hooks/useStore";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -17,6 +17,7 @@ import firestore from "@react-native-firebase/firestore";
 import { Message } from "@/types/firestore_schema/messages";
 import { useTheme } from "@/contexts/ThemeContext";
 import MessageItem from "@/components/talks/MessageItem";
+import { ChevronLeft } from "lucide-react-native";
 
 const TalkDetail = () => {
   const { talkId } = useLocalSearchParams<{ talkId: string }>();
@@ -28,6 +29,7 @@ const TalkDetail = () => {
   const [sending, setSending] = useState(false);
   const flatListRef = useRef<FlatList>(null);
   const { colors } = useTheme();
+  const router = useRouter();
 
   useEffect(() => {
     if (!talkId) return;
@@ -109,6 +111,11 @@ const TalkDetail = () => {
         options={{
           title: talk.affiliateStore?.shopName || "チャット",
           headerTitleStyle: styles.headerTitle,
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <ChevronLeft size={24} color={colors.primary} />
+            </TouchableOpacity>
+          ),
         }}
       />
       <FlatList

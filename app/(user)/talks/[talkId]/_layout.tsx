@@ -7,6 +7,10 @@ const TalkLayout = () => {
     <Stack
       screenOptions={{
         contentStyle: { backgroundColor: colors.backgroundSecondary },
+        headerTintColor: colors.primary,
+        headerStyle: {
+          backgroundColor: colors.backgroundPrimary,
+        },
       }}
     >
       <Stack.Screen name="index" />

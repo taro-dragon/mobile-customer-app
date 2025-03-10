@@ -89,7 +89,7 @@ export default function Layout() {
       <Stack.Screen
         name="talks/[talkId]"
         options={{
-          title: "トーク詳細",
+          headerShown: false,
           animation: "slide_from_right",
           headerBackButtonDisplayMode: "minimal",
         }}
