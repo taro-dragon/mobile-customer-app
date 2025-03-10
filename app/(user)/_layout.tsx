@@ -53,37 +53,19 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
-        name="offers/[id]/index"
+        name="offers/[id]"
         options={{
-          title: "買取オファー詳細",
-          presentation: "modal",
-          headerShadowVisible: false,
-          headerTintColor: colors.white,
-          headerStyle: {
-            backgroundColor: colors.primary,
-          },
-          headerRight: () => (
-            <TouchableOpacity onPress={() => router.back()}>
-              <X size={24} color={colors.white} />
-            </TouchableOpacity>
-          ),
+          gestureDirection: "vertical",
+          headerShown: false,
+          animation: "slide_from_bottom",
         }}
       />
       <Stack.Screen
-        name="bids/[id]/index"
+        name="bids/[id]"
         options={{
-          title: "一括査定詳細",
-          presentation: "modal",
-          headerShadowVisible: false,
-          headerTintColor: colors.white,
-          headerStyle: {
-            backgroundColor: colors.primary,
-          },
-          headerRight: () => (
-            <TouchableOpacity onPress={() => router.back()}>
-              <X size={24} color={colors.white} />
-            </TouchableOpacity>
-          ),
+          gestureDirection: "vertical",
+          headerShown: false,
+          animation: "slide_from_bottom",
         }}
       />
       <Stack.Screen
