@@ -87,9 +87,10 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
-        name="talks/[talkId]/index"
+        name="talks/[talkId]"
         options={{
           title: "トーク詳細",
+          animation: "slide_from_right",
           headerBackButtonDisplayMode: "minimal",
         }}
       />

@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
@@ -16,8 +15,6 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import firestore from "@react-native-firebase/firestore";
 import { Message } from "@/types/firestore_schema/messages";
-import dayjs from "dayjs";
-import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import { useTheme } from "@/contexts/ThemeContext";
 import MessageItem from "@/components/talks/MessageItem";
 
@@ -101,70 +98,66 @@ const TalkDetail = () => {
   }
 
   return (
-    <>
-      <KeyboardAvoidingView
-        style={{
-          ...styles.container,
-          backgroundColor: colors.backgroundSecondary,
+    <KeyboardAvoidingView
+      style={{
+        ...styles.container,
+      }}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
+    >
+      <Stack.Screen
+        options={{
+          title: talk.affiliateStore?.shopName || "チャット",
+          headerTitleStyle: styles.headerTitle,
         }}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
+      />
+      <FlatList
+        ref={flatListRef}
+        data={messages}
+        renderItem={({ item }) => <MessageItem message={item} talk={talk} />}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.messagesContainer}
+        style={{ flex: 1 }}
+        inverted
+      />
+
+      <View
+        style={{
+          ...styles.inputContainer,
+          backgroundColor: colors.backgroundPrimary,
+        }}
       >
-        <Stack.Screen
-          options={{
-            title: talk.affiliateStore?.shopName || "チャット",
-            headerTitleStyle: styles.headerTitle,
-          }}
+        <TextInput
+          style={[
+            styles.input,
+            {
+              color: colors.textPrimary,
+              backgroundColor: colors.backgroundSecondary,
+            },
+          ]}
+          value={text}
+          onChangeText={setText}
+          placeholder="メッセージを入力..."
+          multiline
         />
 
-        <FlatList
-          ref={flatListRef}
-          data={messages}
-          renderItem={({ item }) => <MessageItem message={item} talk={talk} />}
-          keyExtractor={(item) => item.id}
-          inverted
-          contentContainerStyle={styles.messagesContainer}
-        />
-
-        <View
-          style={{
-            ...styles.inputContainer,
-            backgroundColor: colors.backgroundPrimary,
-          }}
+        <TouchableOpacity
+          style={[
+            styles.sendButton,
+            { backgroundColor: colors.primary },
+            !text.trim() && { backgroundColor: colors.primary, opacity: 0.2 },
+          ]}
+          onPress={sendMessage}
+          disabled={!text.trim() || sending}
         >
-          <TextInput
-            style={[
-              styles.input,
-              {
-                color: colors.textPrimary,
-                backgroundColor: colors.backgroundSecondary,
-              },
-            ]}
-            value={text}
-            onChangeText={setText}
-            placeholder="メッセージを入力..."
-            multiline
-          />
-
-          <TouchableOpacity
-            style={[
-              styles.sendButton,
-              { backgroundColor: colors.primary },
-              !text.trim() && { backgroundColor: colors.primary, opacity: 0.2 },
-            ]}
-            onPress={sendMessage}
-            disabled={!text.trim() || sending}
-          >
-            {sending ? (
-              <ActivityIndicator size="small" color={colors.white} />
-            ) : (
-              <Ionicons name="send" size={20} color={colors.white} />
-            )}
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
-      <SafeAreaBottom color={colors.backgroundPrimary} />
-    </>
+          {sending ? (
+            <ActivityIndicator size="small" color={colors.white} />
+          ) : (
+            <Ionicons name="send" size={20} color={colors.white} />
+          )}
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -183,6 +176,7 @@ const styles = StyleSheet.create({
   },
   messagesContainer: {
     padding: 10,
+    flex: 1,
   },
   inputContainer: {
     flexDirection: "row",
