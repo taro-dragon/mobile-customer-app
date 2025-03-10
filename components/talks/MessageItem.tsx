@@ -1,11 +1,12 @@
 import React from "react";
 import { Message } from "@/types/firestore_schema/messages";
 import { useTheme } from "@/contexts/ThemeContext";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Image } from "expo-image";
 import dayjs from "dayjs";
 import { TalkWithAffiliate } from "@/types/extendType/TalkWithAffiliate";
 import { Check } from "lucide-react-native";
+import { useRouter } from "expo-router";
 
 type MessageItemProps = {
   message: Message;
@@ -14,6 +15,7 @@ type MessageItemProps = {
 
 const MessageItem: React.FC<MessageItemProps> = ({ message, talk }) => {
   const { colors } = useTheme();
+  const router = useRouter();
   const isUser = message.senderType === "user";
   const userBubbleColor = isUser
     ? {
@@ -32,12 +34,16 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, talk }) => {
       ]}
     >
       {!isUser && (
-        <Image
-          source={{
-            uri: talk.affiliateStore?.imageUrls[0],
-          }}
-          style={styles.avatar}
-        />
+        <TouchableOpacity
+          onPress={() => router.push(`/shops/${talk.affiliateStoreId}`)}
+        >
+          <Image
+            source={{
+              uri: talk.affiliateStore?.imageUrls[0],
+            }}
+            style={styles.avatar}
+          />
+        </TouchableOpacity>
       )}
       <View
         style={[

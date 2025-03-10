@@ -64,7 +64,7 @@ const TalkItem: React.FC<TalkItemProps> = ({ talk }) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    padding: 16,
+    padding: 12,
   },
   avatar: {
     width: 50,

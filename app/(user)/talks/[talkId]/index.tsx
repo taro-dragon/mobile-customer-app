@@ -78,15 +78,18 @@ const TalkDetail = () => {
         createdAt: firestore.Timestamp.now(),
       };
 
-      await firestore()
-        .collection("talks")
-        .doc(talkId)
-        .collection("messages")
-        .add(messageData);
-
-      await firestore().collection("talks").doc(talkId).update({
-        lastMessage: text.trim(),
-        lastMessageAt: firestore.Timestamp.now(),
+      await firestore().runTransaction(async (transaction) => {
+        const messageRef = await firestore()
+          .collection("talks")
+          .doc(talkId)
+          .collection("messages")
+          .doc();
+        const talkRef = await firestore().collection("talks").doc(talkId);
+        await transaction.set(messageRef, messageData);
+        await transaction.update(talkRef, {
+          lastMessage: text.trim(),
+          lastMessageAt: firestore.Timestamp.now(),
+        });
       });
 
       setText("");
