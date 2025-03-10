@@ -5,6 +5,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Image } from "expo-image";
 import dayjs from "dayjs";
 import { TalkWithAffiliate } from "@/types/extendType/TalkWithAffiliate";
+import { Check } from "lucide-react-native";
 
 type MessageItemProps = {
   message: Message;
@@ -52,9 +53,19 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, talk }) => {
         <Text style={[styles.messageText, { color: colors.textPrimary }]}>
           {message.text}
         </Text>
-        <Text style={[styles.timeText, { color: colors.textSecondary }]}>
-          {dayjs(message.createdAt.toDate()).format("HH:mm")}
-        </Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            alignItems: "flex-end",
+            gap: 8,
+          }}
+        >
+          {message.read && isUser && <Check size={12} color={colors.primary} />}
+          <Text style={[styles.timeText, { color: colors.textSecondary }]}>
+            {dayjs(message.createdAt.toDate()).format("HH:mm")}
+          </Text>
+        </View>
       </View>
     </View>
   );

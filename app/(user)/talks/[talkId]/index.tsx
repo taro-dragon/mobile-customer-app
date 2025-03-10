@@ -34,6 +34,19 @@ const TalkDetail = () => {
 
   useEffect(() => {
     if (!talkId) return;
+    const changeReadMessages = async () => {
+      const messagesRef = await firestore()
+        .collection("talks")
+        .doc(talkId)
+        .collection("messages")
+        .where("read", "==", false)
+        .where("senderType", "==", "staff")
+        .get();
+      messagesRef.forEach((doc) => {
+        doc.ref.update({ read: true });
+      });
+    };
+    changeReadMessages();
     const unsubscribe = firestore()
       .collection("talks")
       .doc(talkId)
