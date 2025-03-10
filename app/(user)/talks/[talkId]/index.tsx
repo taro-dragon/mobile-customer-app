@@ -17,8 +17,9 @@ import firestore from "@react-native-firebase/firestore";
 import { Message } from "@/types/firestore_schema/messages";
 import { useTheme } from "@/contexts/ThemeContext";
 import MessageItem from "@/components/talks/MessageItem";
-import { ChevronLeft } from "lucide-react-native";
+import { Car, ChevronLeft, File, Store } from "lucide-react-native";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
+import Divider from "@/components/common/Divider";
 
 const TalkDetail = () => {
   const { talkId } = useLocalSearchParams<{ talkId: string }>();
@@ -29,7 +30,7 @@ const TalkDetail = () => {
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
   const flatListRef = useRef<FlatList>(null);
-  const { colors } = useTheme();
+  const { colors, typography } = useTheme();
   const router = useRouter();
 
   useEffect(() => {
@@ -107,6 +108,13 @@ const TalkDetail = () => {
       </View>
     );
   }
+  const createInfoPath = () => {
+    if (talk.sourceType === "buyOffer") {
+      return `/offers/${talk.sourceId}`;
+    } else {
+      return `/bids/${talk.sourceId}`;
+    }
+  };
 
   if (loading) {
     return (
@@ -118,6 +126,48 @@ const TalkDetail = () => {
 
   return (
     <View style={{ flex: 1 }}>
+      <View style={{ flexDirection: "row" }}>
+        <TouchableOpacity
+          onPress={() => router.push(`/shops/${talk.affiliateStoreId}`)}
+          style={[
+            styles.headerMenu,
+            { borderRightWidth: 1, borderColor: colors.borderPrimary },
+          ]}
+        >
+          <Store size={24} color={colors.textPrimary} />
+          <Text style={{ ...typography.title5, color: colors.textPrimary }}>
+            店舗情報
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => router.push(`/cars/${talk.carId}`)}
+          style={[
+            styles.headerMenu,
+            { borderRightWidth: 1, borderColor: colors.borderPrimary },
+          ]}
+        >
+          <Car size={24} color={colors.textPrimary} />
+          <Text style={{ ...typography.title5, color: colors.textPrimary }}>
+            車両情報
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            router.push(
+              talk.sourceType === "buyOffer"
+                ? `/offers/${talk.sourceId}`
+                : `/bids/${talk.sourceId}`
+            )
+          }
+          style={styles.headerMenu}
+        >
+          <File size={24} color={colors.textPrimary} />
+          <Text style={{ ...typography.title5, color: colors.textPrimary }}>
+            {talk.sourceType === "buyOffer" ? "オファー情報" : "一括査定情報"}
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <Divider />
       <KeyboardAvoidingView
         style={{
           ...styles.container,
@@ -194,6 +244,13 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 16,
     fontWeight: "600",
+  },
+  headerMenu: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
+    gap: 8,
   },
   centerContainer: {
     flex: 1,
