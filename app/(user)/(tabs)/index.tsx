@@ -46,32 +46,39 @@ const CustomerIndex = () => {
   return (
     <ScrollView
       style={{ flex: 1 }}
-      contentContainerStyle={{ padding: 16, gap: 8 }}
+      contentContainerStyle={{ padding: 16, gap: 24 }}
     >
-      <TouchableOpacity
-        onPress={() => {
-          console.log("test");
-        }}
-        style={styles.carRegistrationButton}
-      >
-        <Car size={24} color={colors.primary} />
-        <Text style={{ color: colors.textPrimary, ...typography.heading2 }}>
-          車両登録
+      <View style={{ gap: 8 }}>
+        <TouchableOpacity
+          onPress={() => {
+            console.log("test");
+          }}
+          style={styles.carRegistrationButton}
+        >
+          <Car size={24} color={colors.primary} />
+          <Text style={{ color: colors.textPrimary, ...typography.heading2 }}>
+            車両登録
+          </Text>
+        </TouchableOpacity>
+        <View style={{ flexDirection: "row", gap: 8 }}>
+          <TouchableOpacity style={styles.secondaryButton}>
+            <List size={24} color={colors.primary} />
+            <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
+              車両一覧
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.secondaryButton}>
+            <User size={24} color={colors.primary} />
+            <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
+              ユーザー情報更新
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View>
+        <Text style={{ ...typography.heading2, color: colors.textPrimary }}>
+          一括査定状況
         </Text>
-      </TouchableOpacity>
-      <View style={{ flexDirection: "row", gap: 8 }}>
-        <TouchableOpacity style={styles.secondaryButton}>
-          <List size={24} color={colors.primary} />
-          <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
-            車両一覧
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.secondaryButton}>
-          <User size={24} color={colors.primary} />
-          <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
-            ユーザー情報更新
-          </Text>
-        </TouchableOpacity>
       </View>
     </ScrollView>
   );

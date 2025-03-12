@@ -1,3 +1,4 @@
+import { Heading5 } from "lucide-react-native";
 import { TextStyle } from "react-native";
 
 export const Typography = {
@@ -15,7 +16,11 @@ export const Typography = {
   } as TextStyle,
   heading4: {
     fontSize: 13,
-    fontWeight: "400", // Regular
+    fontWeight: "700", // Regular
+  } as TextStyle,
+  heading5: {
+    fontSize: 12,
+    fontWeight: "700", // Regular
   } as TextStyle,
   title1: {
     fontSize: 23,

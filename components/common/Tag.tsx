@@ -40,7 +40,7 @@ const Tag: React.FC<{
       }}
     >
       <Text
-        style={{ color: colorTheme[color].textColor, ...typography.heading3 }}
+        style={{ color: colorTheme[color].textColor, ...typography.heading5 }}
       >
         {label}
       </Text>
