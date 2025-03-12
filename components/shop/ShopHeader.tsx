@@ -6,43 +6,17 @@ import { Dimensions, Text, View } from "react-native";
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
 import ShopInfoSection from "./ShopInfoTab";
 import { ShopWithManagementCompany } from "@/hooks/useFetchShop";
+import ImageCarousel from "../common/ImageCarousel";
 
 type ShopHeaderProps = {
   shop: ShopWithManagementCompany;
 };
 
 const ShopHeader: React.FC<ShopHeaderProps> = ({ shop }) => {
-  const ref = useRef<ICarouselInstance>(null);
-  const width = Dimensions.get("window").width;
   const { colors, typography } = useTheme();
   return (
     <View pointerEvents="box-none">
-      {shop.imageUrls && (
-        <Carousel
-          ref={ref}
-          width={width}
-          height={width}
-          data={shop?.imageUrls}
-          renderItem={({ index }) => (
-            <View
-              style={{
-                flex: 1,
-                borderWidth: 1,
-                justifyContent: "center",
-              }}
-            >
-              {shop.imageUrls && (
-                <Image
-                  source={{ uri: shop.imageUrls[index] }}
-                  style={{ width: width, height: width }}
-                  contentFit="cover"
-                  pointerEvents="none"
-                />
-              )}
-            </View>
-          )}
-        />
-      )}
+      {shop.imageUrls && <ImageCarousel images={shop.imageUrls} />}
 
       <View style={{ gap: 8, padding: 16 }} pointerEvents="none">
         <Text style={{ ...typography.title1, color: colors.textPrimary }}>
