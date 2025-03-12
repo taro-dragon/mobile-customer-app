@@ -126,7 +126,12 @@ const TalkDetail = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ flexDirection: "row" }}>
+      <View
+        style={{
+          flexDirection: "row",
+          backgroundColor: colors.backgroundPrimary,
+        }}
+      >
         <TouchableOpacity
           onPress={() => router.push(`/shops/${talk.affiliateStoreId}`)}
           style={[

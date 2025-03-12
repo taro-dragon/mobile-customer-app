@@ -8,6 +8,7 @@ import { useRouter } from "expo-router";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ja";
 import Divider from "../common/Divider";
+import Tag from "../common/Tag";
 
 // dayjsの設定
 dayjs.extend(relativeTime);
@@ -18,7 +19,7 @@ type TalkItemProps = {
 };
 
 const TalkItem: React.FC<TalkItemProps> = ({ talk }) => {
-  const { colors, typography } = useTheme();
+  const { colors } = useTheme();
   const router = useRouter();
 
   const handlePress = () => {
@@ -42,9 +43,6 @@ const TalkItem: React.FC<TalkItemProps> = ({ talk }) => {
             >
               {talk.affiliateStore?.shopName || "不明な店舗"}
             </Text>
-            <Text style={[styles.time, { color: colors.textSecondary }]}>
-              {dayjs(talk.lastMessageAt.toDate()).fromNow()}
-            </Text>
           </View>
           <View style={styles.messageRow}>
             <Text
@@ -54,6 +52,15 @@ const TalkItem: React.FC<TalkItemProps> = ({ talk }) => {
               {talk.lastMessage}
             </Text>
           </View>
+        </View>
+        <View style={{ alignItems: "center", gap: 8 }}>
+          <Text style={[styles.time, { color: colors.textSecondary }]}>
+            {dayjs(talk.lastMessageAt.toDate()).fromNow()}
+          </Text>
+          <Tag
+            label={talk.sourceType === "bids" ? "一括査定" : "買取オファー"}
+            color={talk.sourceType === "bids" ? "info" : "success"}
+          />
         </View>
       </TouchableOpacity>
       <Divider />
