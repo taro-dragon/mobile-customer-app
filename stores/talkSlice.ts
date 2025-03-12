@@ -76,7 +76,7 @@ export const createTalkSlice: StateCreator<TalkSlice, [], [], TalkSlice> = (
     return unsubscribe;
   },
   deleteTalk: () => {
-    set({ talks: [] });
+    set((state) => ({ ...state, talks: [] }));
   },
   setTalkLoading: (talkLoading: boolean) => {
     set((state) => ({ ...state, talkLoading }));

@@ -1,6 +1,6 @@
 import TalkItem from "@/components/talks/TalkItem";
 import { useStore } from "@/hooks/useStore";
-import { FlatList, Text, View } from "react-native";
+import { FlatList, View } from "react-native";
 
 const Talk = () => {
   const { talks } = useStore();

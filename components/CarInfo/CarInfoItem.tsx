@@ -7,6 +7,7 @@ import ConditionTag from "./ConditionTag";
 import { transformCarData } from "@/libs/transformCarData";
 import { useRouter } from "expo-router";
 import Divider from "../common/Divider";
+import Tag from "../common/Tag";
 type CarInfoItemProps = {
   car: Car;
 };
@@ -88,6 +89,24 @@ const CarInfoItem: React.FC<CarInfoItemProps> = ({ car }) => {
             </View>
           </View>
           <View style={{ gap: 8, alignItems: "flex-end" }}>
+            {car.status && (
+              <Tag
+                label={
+                  car.status === "appraising"
+                    ? "査定中"
+                    : car.status === "company_selection"
+                    ? "選定中"
+                    : "完了"
+                }
+                color={
+                  car.status === "appraising"
+                    ? "info"
+                    : car.status === "company_selection"
+                    ? "success"
+                    : "primary"
+                }
+              />
+            )}
             <Image
               source={{ uri: car.images.front }}
               style={{

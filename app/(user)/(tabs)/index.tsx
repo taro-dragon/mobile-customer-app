@@ -1,7 +1,9 @@
 import CarInfoItem from "@/components/CarInfo/CarInfoItem";
+import Button from "@/components/common/Button";
+import Card from "@/components/common/Card";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useStore } from "@/hooks/useStore";
-import { Car, List, User } from "lucide-react-native";
+import { Car, CarIcon, List, User } from "lucide-react-native";
 import {
   ScrollView,
   StyleSheet,
@@ -12,6 +14,10 @@ import {
 
 const CustomerIndex = () => {
   const { colors, typography } = useTheme();
+  const { cars } = useStore();
+  const currentAppraisalCar = cars.find(
+    (car) => car.status === "appraising" || car.status === "company_selection"
+  );
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -75,10 +81,38 @@ const CustomerIndex = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <View>
+      <View style={{ gap: 8 }}>
         <Text style={{ ...typography.heading2, color: colors.textPrimary }}>
-          一括査定状況
+          査定中の車両
         </Text>
+        {currentAppraisalCar ? (
+          <CarInfoItem car={currentAppraisalCar} />
+        ) : (
+          <Card>
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8,
+                paddingVertical: 12,
+              }}
+            >
+              <CarIcon size={24} color={colors.textSecondary} />
+              <Text
+                style={{ ...typography.body2, color: colors.textSecondary }}
+              >
+                査定中の車両はありません
+              </Text>
+              <Button
+                label="車両登録"
+                color={colors.primary}
+                onPress={() => {
+                  console.log("test");
+                }}
+              />
+            </View>
+          </Card>
+        )}
       </View>
     </ScrollView>
   );

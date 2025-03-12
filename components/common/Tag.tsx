@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 
 const Tag: React.FC<{
   label: string;
-  color: "info" | "success" | "warning" | "error";
+  color: "info" | "success" | "warning" | "error" | "primary";
 }> = ({ label, color }) => {
   const { colors, typography } = useTheme();
   const colorTheme = {
@@ -27,6 +27,11 @@ const Tag: React.FC<{
       borderColor: colors.borderError,
       backgroundColor: colors.backgroundError,
       textColor: colors.textError,
+    },
+    primary: {
+      borderColor: colors.primary,
+      backgroundColor: colors.primary,
+      textColor: colors.white,
     },
   };
   return (
