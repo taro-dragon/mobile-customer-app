@@ -54,8 +54,14 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
           dotStyle={{
             backgroundColor: colors.borderPrimary,
             borderRadius: 50,
+            width: 8,
+            height: 8,
           }}
-          activeDotStyle={{ backgroundColor: colors.primary }}
+          activeDotStyle={{
+            backgroundColor: colors.primary,
+            width: 8,
+            height: 8,
+          }}
           containerStyle={{ gap: 6, marginTop: 10 }}
           customReanimatedStyle={(progress, index) => {
             "worklet";
