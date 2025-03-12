@@ -1,30 +1,22 @@
 import React, { useEffect } from "react";
-import { useLocalSearchParams, useRouter } from "expo-router";
 import { View } from "react-native";
 
 import { useStore } from "@/hooks/useStore";
 import { useTheme } from "@/contexts/ThemeContext";
-import { useRegistrationGuard } from "@/hooks/useRegistrationGuard";
 import CarDetailHeader from "@/components/CarDetail/CarHeader";
 import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
 import CarDetailOfferTab from "@/components/CarDetail/CarDetailOfferTab";
 import CarDetailBulkAppraisalRequestsTab from "@/components/CarDetail/CarDetailBulkAppraisalRequestsTab";
+
 const CarDetail = () => {
-  const { id } = useLocalSearchParams<{ id: string }>();
   const { fetchBulkAppraisalRequests, user } = useStore();
   const { colors, typography } = useTheme();
-  const guard = useRegistrationGuard();
-  const router = useRouter();
 
   useEffect(() => {
     if (user?.id) {
       fetchBulkAppraisalRequests(user.id);
     }
   }, [user?.id]);
-
-  const onViewOffersPress = guard(() => {
-    router.push(`/cars/${id}/offers`);
-  });
 
   return (
     <View style={{ flex: 1 }}>

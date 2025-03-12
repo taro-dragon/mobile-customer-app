@@ -10,9 +10,13 @@ import Carousel, {
 
 type ImageCarouselProps = {
   images: string[];
+  showPaginationEnabled?: boolean;
 };
 
-const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
+const ImageCarousel: React.FC<ImageCarouselProps> = ({
+  images,
+  showPaginationEnabled = true,
+}) => {
   const ref = useRef<ICarouselInstance>(null);
   const progress = useSharedValue<number>(0);
   const { colors } = useTheme();
@@ -43,30 +47,32 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
           </View>
         )}
       />
-      <Pagination.Custom
-        progress={progress}
-        data={images}
-        dotStyle={{
-          backgroundColor: colors.backgroundSecondary,
-          borderRadius: 50,
-        }}
-        activeDotStyle={{ backgroundColor: colors.primary }}
-        containerStyle={{ gap: 12, marginTop: 10 }}
-        customReanimatedStyle={(progress, index) => {
-          "worklet";
-          return {
-            transform: [
-              {
-                scale: interpolate(
-                  progress,
-                  [index - 1, index, index + 1],
-                  [0.8, 1, 0.8]
-                ),
-              },
-            ],
-          };
-        }}
-      />
+      {showPaginationEnabled && (
+        <Pagination.Custom
+          progress={progress}
+          data={images}
+          dotStyle={{
+            backgroundColor: colors.backgroundSecondary,
+            borderRadius: 50,
+          }}
+          activeDotStyle={{ backgroundColor: colors.primary }}
+          containerStyle={{ gap: 12, marginTop: 10 }}
+          customReanimatedStyle={(progress, index) => {
+            "worklet";
+            return {
+              transform: [
+                {
+                  scale: interpolate(
+                    progress,
+                    [index - 1, index, index + 1],
+                    [0.8, 1, 0.8]
+                  ),
+                },
+              ],
+            };
+          }}
+        />
+      )}
     </>
   );
 };

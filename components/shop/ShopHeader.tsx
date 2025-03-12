@@ -1,9 +1,6 @@
 import { useTheme } from "@/contexts/ThemeContext";
-import { Image } from "expo-image";
 import { Clock, MapPin } from "lucide-react-native";
-import { useRef } from "react";
-import { Dimensions, Text, View } from "react-native";
-import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
+import { Text, View } from "react-native";
 import ShopInfoSection from "./ShopInfoTab";
 import { ShopWithManagementCompany } from "@/hooks/useFetchShop";
 import ImageCarousel from "../common/ImageCarousel";

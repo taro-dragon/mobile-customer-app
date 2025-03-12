@@ -1,26 +1,18 @@
 import { useTheme } from "@/contexts/ThemeContext";
 import { useStore } from "@/hooks/useStore";
-import { Image } from "expo-image";
 import { useLocalSearchParams } from "expo-router";
-import { useRef } from "react";
-import { Dimensions, Text, View } from "react-native";
-import Carousel, {
-  ICarouselInstance,
-  Pagination,
-} from "react-native-reanimated-carousel";
+import { Text, View } from "react-native";
 import AppraisalStatusTag from "../appraisal/AppraisalStatusTag";
 import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
 import CarInfoItem from "./CarInfoIten";
-import { interpolate, useSharedValue } from "react-native-reanimated";
+import { useSharedValue } from "react-native-reanimated";
 import ImageCarousel from "../common/ImageCarousel";
 
 const CarDetailHeader = () => {
   const { cars } = useStore();
   const progress = useSharedValue<number>(0);
   const { id } = useLocalSearchParams<{ id: string }>();
-  const ref = useRef<ICarouselInstance>(null);
-  const width = Dimensions.get("window").width;
   const { colors, typography } = useTheme();
   const car = cars.find((car) => car.id === id);
   const carData = transformCarData(car as Car);
