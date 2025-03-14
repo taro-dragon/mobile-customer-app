@@ -7,6 +7,7 @@ export type Car = {
   model: string;
   year: string;
   grade: string;
+  modelNumber: string;
   condition?: string;
   images: {
     front: string;
