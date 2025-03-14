@@ -8,7 +8,6 @@ const RegistrationCarLayout = () => {
   const { colors } = useTheme();
   const router = useRouter();
   const form = useForm();
-  console.log(form.watch());
   return (
     <FormProvider {...form}>
       <Stack
@@ -16,6 +15,11 @@ const RegistrationCarLayout = () => {
           contentStyle: {
             backgroundColor: colors.backgroundPrimary,
           },
+          animation: "slide_from_right",
+          gestureEnabled: true,
+          gestureDirection: "horizontal",
+          animationDuration: 200,
+          presentation: "card",
         }}
       >
         <Stack.Screen
@@ -27,7 +31,11 @@ const RegistrationCarLayout = () => {
             headerTintColor: colors.primary,
             headerTitle: "メーカー選択",
             headerLeft: () => (
-              <TouchableOpacity onPress={() => router.back()}>
+              <TouchableOpacity
+                onPress={() => {
+                  router.back();
+                }}
+              >
                 <X size={24} color={colors.primary} />
               </TouchableOpacity>
             ),
