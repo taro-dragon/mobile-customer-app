@@ -7,9 +7,12 @@ import fullCarData from "@/constants/full_car_catalog.json";
 import { ChevronRight } from "lucide-react-native";
 import Divider from "@/components/common/Divider";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useRouter } from "expo-router";
+
 const SelectGrade = () => {
   const { colors, typography } = useTheme();
   const { watch, control } = useFormContext();
+  const router = useRouter();
   const maker = watch("maker");
   const model = watch("model");
   const year = watch("year");
@@ -56,6 +59,7 @@ const SelectGrade = () => {
             onPress={() => {
               onChange(item.gradeName);
               onChangeModelNumber(item.modelNumber);
+              router.push("/registrationCar/form");
             }}
           >
             <View style={{ flexDirection: "column", gap: 4, flex: 1 }}>
