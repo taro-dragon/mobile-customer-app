@@ -6,14 +6,12 @@ import AppraisalStatusTag from "../appraisal/AppraisalStatusTag";
 import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
 import CarInfoItem from "./CarInfoIten";
-import { useSharedValue } from "react-native-reanimated";
 import ImageCarousel from "../common/ImageCarousel";
 
 const CarDetailHeader = () => {
-  const { cars } = useStore();
-  const progress = useSharedValue<number>(0);
-  const { id } = useLocalSearchParams<{ id: string }>();
   const { colors, typography } = useTheme();
+  const { cars } = useStore();
+  const { id } = useLocalSearchParams<{ id: string }>();
   const car = cars.find((car) => car.id === id);
   const carData = transformCarData(car as Car);
   const carImages = Object.values(car?.images ?? {});

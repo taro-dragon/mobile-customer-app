@@ -3,6 +3,7 @@ import Button from "@/components/common/Button";
 import Card from "@/components/common/Card";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useStore } from "@/hooks/useStore";
+import { useRouter } from "expo-router";
 import { Car, CarIcon, List, User } from "lucide-react-native";
 import {
   ScrollView,
@@ -13,6 +14,7 @@ import {
 } from "react-native";
 
 const CustomerIndex = () => {
+  const router = useRouter();
   const { colors, typography } = useTheme();
   const { cars } = useStore();
   const currentAppraisalCar = cars.find(
@@ -57,7 +59,7 @@ const CustomerIndex = () => {
       <View style={{ gap: 8 }}>
         <TouchableOpacity
           onPress={() => {
-            console.log("test");
+            router.push("/registrationCar");
           }}
           style={styles.carRegistrationButton}
         >

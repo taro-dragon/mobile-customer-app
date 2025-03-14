@@ -53,6 +53,14 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
+        name="registrationCar"
+        options={{
+          headerShown: false,
+          animation: "slide_from_bottom",
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
         name="offers/[id]"
         options={{
           gestureDirection: "vertical",
