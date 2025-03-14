@@ -36,7 +36,6 @@ const Geocode: React.FC = () => {
 
       router.push("/(user)/registration/phoneAuth");
     } catch (error) {
-      console.log(error);
       Toast.show({
         type: "error",
         text1: "エラー",

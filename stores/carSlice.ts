@@ -30,7 +30,6 @@ export const createCarSlice: StateCreator<CarSlice, [], [], CarSlice> = (
                 ...doc.data(),
               } as Car;
             });
-            console.log("cars", cars);
             set((state) => ({
               ...state,
               cars: cars,

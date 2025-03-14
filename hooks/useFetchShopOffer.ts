@@ -31,7 +31,6 @@ const fetchShopOffers = async ([shopId, pageIndex, lastDoc]: [
 
   const buyOffers = buyOffersSnapshot.docs.map((doc) => {
     const data = doc.data();
-    console.log("data", data);
     return {
       ...data,
       id: doc.id,

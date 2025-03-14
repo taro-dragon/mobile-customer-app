@@ -49,7 +49,6 @@ const PhoneAuth: React.FC = () => {
           });
           navigation.getParent()?.goBack();
         } catch (err) {
-          console.log(err);
           Toast.show({
             type: "error",
             text1: "エラー",

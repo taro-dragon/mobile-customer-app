@@ -146,7 +146,7 @@ const Index = () => {
                 .onSnapshot((snapshot) => {
                   const firebaseUser = snapshot.data() as User;
                   firebaseUser.id = userId;
-                  console.log(firebaseUser);
+
                   setUser(firebaseUser);
                 });
             }}
