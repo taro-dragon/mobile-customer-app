@@ -22,7 +22,7 @@ const ListItem: React.FC<ListItemProps> = ({ label, onPress }) => {
         }}
         onPress={onPress}
       >
-        <Text style={{ ...typography.body2, color: colors.textPrimary }}>
+        <Text style={{ ...typography.heading3, color: colors.textPrimary }}>
           {label}
         </Text>
         <ChevronRight size={24} color={colors.primary} />
