@@ -10,9 +10,10 @@ import {
 type Props = TextInputProps & {
   label: string;
   name: string;
+  isRequired?: boolean;
 };
 
-const TextInput = ({ label, name, ...props }: Props) => {
+const TextInput = ({ label, name, isRequired = false, ...props }: Props) => {
   const { colors, typography } = useTheme();
   const { control } = useFormContext();
   const {
@@ -23,6 +24,7 @@ const TextInput = ({ label, name, ...props }: Props) => {
     <View style={{ gap: 8 }}>
       <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
         {label}
+        {isRequired && <Text style={{ color: colors.error }}>*</Text>}
       </Text>
       <RNTextInput
         {...props}

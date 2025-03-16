@@ -108,14 +108,6 @@ const TalkDetail = () => {
       </View>
     );
   }
-  const createInfoPath = () => {
-    if (talk.sourceType === "buyOffer") {
-      return `/offers/${talk.sourceId}`;
-    } else {
-      return `/bids/${talk.sourceId}`;
-    }
-  };
-
   if (loading) {
     return (
       <View style={styles.centerContainer}>

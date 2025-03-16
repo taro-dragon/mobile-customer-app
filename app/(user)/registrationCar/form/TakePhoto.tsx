@@ -26,7 +26,10 @@ const TakePhoto: React.FC<Props> = ({ name, label, isRequired = false }) => {
           gap: 8,
         }}
       >
-        <Plus size={32} color={colors.textSecondary} />
+        <Plus
+          size={32}
+          color={isRequired ? colors.primary : colors.textSecondary}
+        />
         {isRequired && (
           <Text style={{ color: colors.textSecondary }}>必須</Text>
         )}
