@@ -57,8 +57,9 @@ const SelectGrade = () => {
               gap: 8,
             }}
             onPress={() => {
+              const modelNumber = item.modelNumber?.trim().replace(/ /g, "");
               onChange(item.gradeName);
-              onChangeModelNumber(item.modelNumber);
+              onChangeModelNumber(modelNumber);
               router.push("/registrationCar/form");
             }}
           >
