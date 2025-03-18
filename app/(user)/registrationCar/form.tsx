@@ -6,14 +6,15 @@ import {
   Text,
   View,
 } from "react-native";
+
 import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
 import { useTheme } from "@/contexts/ThemeContext";
 import DisplaySelectItem from "./form/DisplaySelectItem";
-import { Plus } from "lucide-react-native";
 import TakePhoto from "./form/TakePhoto";
 import TextInput from "./form/TextInput";
 import ColorSelect from "./form/ColorSelect";
+import ModalPicker from "./form/ModalPicker";
 
 const RegistrationCarForm = () => {
   const { colors, typography } = useTheme();
@@ -26,6 +27,17 @@ const RegistrationCarForm = () => {
     maker,
   };
   const carData = transformCarData(formCar as Car);
+
+  console.log(watch());
+
+  // プログラミング言語の選択肢
+  const languageOptions = [
+    { label: "Java", value: "java" },
+    { label: "JavaScript", value: "js" },
+    { label: "Python", value: "python" },
+    { label: "C++", value: "cpp" },
+    { label: "Ruby", value: "ruby" },
+  ];
 
   return (
     <KeyboardAvoidingView
@@ -80,6 +92,15 @@ const RegistrationCarForm = () => {
           <TextInput label="型番" name="modelNumber" isRequired />
         </View>
         <ColorSelect />
+
+        <View style={{ paddingHorizontal: 16 }}>
+          <ModalPicker
+            name="language"
+            label="プログラミング言語"
+            options={languageOptions}
+            required={true}
+          />
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
