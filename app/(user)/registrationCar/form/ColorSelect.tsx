@@ -1,6 +1,5 @@
-import { useController, useFormContext } from "react-hook-form";
-import { StyleSheet, Text, View } from "react-native";
-import { ScrollView, TouchableOpacity } from "react-native";
+import { Text, View } from "react-native";
+import { ScrollView } from "react-native";
 import ColorItem from "./ColorItem";
 import { useTheme } from "@/contexts/ThemeContext";
 
@@ -16,6 +15,7 @@ const ColorSelect = () => {
         }}
       >
         車体色
+        <Text style={{ color: colors.error }}>*</Text>
       </Text>
       <ScrollView
         horizontal

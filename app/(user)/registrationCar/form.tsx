@@ -15,10 +15,17 @@ import TakePhoto from "./form/TakePhoto";
 import TextInput from "./form/TextInput";
 import ColorSelect from "./form/ColorSelect";
 import ModalPicker from "./form/ModalPicker";
+import Button from "@/components/common/Button";
+import SafeAreaBottom from "@/components/common/SafeAreaBottom";
+import {
+  mileageOptions,
+  repairStatusOptions,
+  sellTimeOptions,
+} from "@/constants/registrationCarOptions";
 
 const RegistrationCarForm = () => {
   const { colors, typography } = useTheme();
-  const { watch } = useFormContext();
+  const { watch, handleSubmit } = useFormContext();
   const { grade, model, year, maker } = watch();
   const formCar = {
     grade,
@@ -27,17 +34,9 @@ const RegistrationCarForm = () => {
     maker,
   };
   const carData = transformCarData(formCar as Car);
-
-  console.log(watch());
-
-  // プログラミング言語の選択肢
-  const languageOptions = [
-    { label: "Java", value: "java" },
-    { label: "JavaScript", value: "js" },
-    { label: "Python", value: "python" },
-    { label: "C++", value: "cpp" },
-    { label: "Ruby", value: "ruby" },
-  ];
+  const onSubmit = handleSubmit((data) => {
+    console.log(data);
+  });
 
   return (
     <KeyboardAvoidingView
@@ -95,12 +94,32 @@ const RegistrationCarForm = () => {
 
         <View style={{ paddingHorizontal: 16 }}>
           <ModalPicker
-            name="language"
-            label="プログラミング言語"
-            options={languageOptions}
+            name="repairStatus"
+            label="修復歴"
+            options={repairStatusOptions}
             required={true}
           />
         </View>
+        <View style={{ paddingHorizontal: 16 }}>
+          <ModalPicker
+            name="mileage"
+            label="走行距離"
+            options={mileageOptions}
+            required={true}
+          />
+        </View>
+        <View style={{ paddingHorizontal: 16 }}>
+          <ModalPicker
+            name="sellTime"
+            label="売却時期"
+            options={sellTimeOptions}
+            required={true}
+          />
+        </View>
+        <View style={{ paddingHorizontal: 16 }}>
+          <Button color={colors.primary} label="登録" onPress={onSubmit} />
+        </View>
+        <SafeAreaBottom />
       </ScrollView>
     </KeyboardAvoidingView>
   );
