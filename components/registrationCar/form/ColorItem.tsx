@@ -14,7 +14,7 @@ const ColorItem: React.FC<ColorItemProps> = ({ color, label, bgColor }) => {
   const { colors, typography } = useTheme();
   const {
     field: { value, onChange },
-  } = useController({ control, name: "bodyColor" });
+  } = useController({ control, name: "color" });
   const isSelected = value === color;
   return (
     <View style={{ gap: 4, alignItems: "center", justifyContent: "center" }}>

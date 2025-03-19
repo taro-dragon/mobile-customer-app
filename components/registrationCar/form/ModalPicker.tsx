@@ -24,7 +24,13 @@ const ModalPicker: React.FC<ModalPickerProps> = ({
   required = false,
 }) => {
   const { colors, typography } = useTheme();
-  const { control, setValue, watch } = useFormContext();
+  const {
+    control,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useFormContext();
+  const currentError = errors[name];
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedValue, setSelectedValue] = useState<string | undefined>();
@@ -76,6 +82,8 @@ const ModalPicker: React.FC<ModalPickerProps> = ({
           padding: 16,
           backgroundColor: colors.backgroundSecondary,
           borderRadius: 8,
+          borderWidth: 1,
+          borderColor: currentError ? colors.error : "transparent",
         }}
         onPress={() => setModalVisible(true)}
       >
@@ -83,6 +91,13 @@ const ModalPicker: React.FC<ModalPickerProps> = ({
           {getSelectedLabel() || "選択してください"}
         </Text>
       </TouchableOpacity>
+      {currentError && (
+        <Text
+          style={{ color: colors.error, ...typography.body2, marginTop: 4 }}
+        >
+          {currentError?.message as string}
+        </Text>
+      )}
 
       {/* モーダルピッカー */}
       <Modal

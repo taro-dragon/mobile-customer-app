@@ -2,9 +2,14 @@ import { Text, View } from "react-native";
 import { ScrollView } from "react-native";
 import ColorItem from "./ColorItem";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useFormContext } from "react-hook-form";
 
 const ColorSelect = () => {
   const { colors, typography } = useTheme();
+  const {
+    formState: { errors },
+  } = useFormContext();
+  const currentError = errors.color;
   return (
     <View style={{ gap: 8 }}>
       <Text
@@ -42,6 +47,18 @@ const ColorSelect = () => {
           bgColor={colors.backgroundPrimary}
         />
       </ScrollView>
+      {currentError && (
+        <Text
+          style={{
+            color: colors.error,
+            ...typography.body2,
+            marginTop: 4,
+            paddingHorizontal: 16,
+          }}
+        >
+          {currentError?.message as string}
+        </Text>
+      )}
     </View>
   );
 };

@@ -25,7 +25,11 @@ import {
 
 const RegistrationCarForm = () => {
   const { colors, typography } = useTheme();
-  const { watch, handleSubmit } = useFormContext();
+  const {
+    watch,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = useFormContext();
   const { grade, model, year, maker } = watch();
   const formCar = {
     grade,
@@ -37,6 +41,14 @@ const RegistrationCarForm = () => {
   const onSubmit = handleSubmit((data) => {
     console.log(data);
   });
+
+  const photoErrors = [
+    errors.front,
+    errors.back,
+    errors.left,
+    errors.right,
+    errors.interior,
+  ].filter(Boolean);
 
   return (
     <KeyboardAvoidingView
@@ -62,13 +74,35 @@ const RegistrationCarForm = () => {
         <View style={{ gap: 8, paddingVertical: 16 }}>
           <Text
             style={{
+              paddingHorizontal: 16,
               color: colors.textPrimary,
               ...typography.heading3,
-              paddingHorizontal: 16,
             }}
           >
             写真
           </Text>
+          {photoErrors.length > 0 && (
+            <View style={{ paddingHorizontal: 16, marginBottom: 16 }}>
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: colors.error,
+                  borderRadius: 8,
+                  padding: 8,
+                }}
+              >
+                {photoErrors.map((error, i) => {
+                  if (error) {
+                    return (
+                      <Text key={i} style={{ color: colors.error }}>
+                        - {error?.message as string}
+                      </Text>
+                    );
+                  }
+                })}
+              </View>
+            </View>
+          )}
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -117,7 +151,12 @@ const RegistrationCarForm = () => {
           />
         </View>
         <View style={{ paddingHorizontal: 16 }}>
-          <Button color={colors.primary} label="登録" onPress={onSubmit} />
+          <Button
+            isLoading={isSubmitting}
+            color={colors.primary}
+            label="登録"
+            onPress={onSubmit}
+          />
         </View>
         <SafeAreaBottom />
       </ScrollView>
