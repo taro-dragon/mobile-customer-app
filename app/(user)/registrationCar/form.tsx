@@ -10,11 +10,11 @@ import {
 import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
 import { useTheme } from "@/contexts/ThemeContext";
-import DisplaySelectItem from "./form/DisplaySelectItem";
-import TakePhoto from "./form/TakePhoto";
-import TextInput from "./form/TextInput";
-import ColorSelect from "./form/ColorSelect";
-import ModalPicker from "./form/ModalPicker";
+import DisplaySelectItem from "../../../components/registrationCar/form/DisplaySelectItem";
+import TakePhoto from "../../../components/registrationCar/form/TakePhoto";
+import TextInput from "../../../components/registrationCar/form/TextInput";
+import ColorSelect from "../../../components/registrationCar/form/ColorSelect";
+import ModalPicker from "../../../components/registrationCar/form/ModalPicker";
 import Button from "@/components/common/Button";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import {
