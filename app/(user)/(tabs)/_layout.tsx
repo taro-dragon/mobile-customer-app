@@ -2,7 +2,14 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 import { Tabs } from "expo-router";
-import { House, MessageSquare, Search, Store } from "lucide-react-native";
+import {
+  House,
+  MessageSquare,
+  Search,
+  Settings,
+  Store,
+  User,
+} from "lucide-react-native";
 import { FormProvider, useForm } from "react-hook-form";
 
 export default function TabLayout() {
@@ -51,6 +58,14 @@ export default function TabLayout() {
               title: "検索",
               headerShadowVisible: false,
               tabBarIcon: ({ color }) => <Search size={24} color={color} />,
+            }}
+          />
+          <Tabs.Screen
+            name="settings"
+            options={{
+              title: "設定",
+              headerShadowVisible: false,
+              tabBarIcon: ({ color }) => <Settings size={24} color={color} />,
             }}
           />
         </Tabs>
