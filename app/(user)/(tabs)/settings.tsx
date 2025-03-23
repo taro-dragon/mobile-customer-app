@@ -1,10 +1,14 @@
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ChevronRight } from "lucide-react-native";
+
 import { SettingItems } from "@/constants/Settings";
 import { useTheme } from "@/contexts/ThemeContext";
 import Divider from "@/components/common/Divider";
-import { ChevronRight } from "lucide-react-native";
+import { useRouter } from "expo-router";
+
 const MyPage = () => {
   const { colors, typography } = useTheme();
+  const router = useRouter();
   return (
     <ScrollView style={{ backgroundColor: colors.backgroundSecondary }}>
       {SettingItems.map((item) => (
@@ -30,6 +34,7 @@ const MyPage = () => {
                   alignItems: "center",
                   flexDirection: "row",
                 }}
+                onPress={() => router.push(content.route as any)}
               >
                 <Text
                   style={{ color: colors.textPrimary, ...typography.body2 }}
