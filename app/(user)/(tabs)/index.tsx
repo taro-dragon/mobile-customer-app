@@ -2,6 +2,7 @@ import CarInfoItem from "@/components/CarInfo/CarInfoItem";
 import Button from "@/components/common/Button";
 import Card from "@/components/common/Card";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useRegistrationGuard } from "@/hooks/useRegistrationGuard";
 import { useStore } from "@/hooks/useStore";
 import { useRouter } from "expo-router";
 import { Car, CarIcon, List, User } from "lucide-react-native";
@@ -15,6 +16,7 @@ import {
 
 const CustomerIndex = () => {
   const router = useRouter();
+  const guard = useRegistrationGuard();
   const { colors, typography } = useTheme();
   const { cars } = useStore();
   const currentAppraisalCar = cars.find(
@@ -58,9 +60,9 @@ const CustomerIndex = () => {
     >
       <View style={{ gap: 8 }}>
         <TouchableOpacity
-          onPress={() => {
+          onPress={guard(() => {
             router.push("/registrationCar");
-          }}
+          })}
           style={styles.carRegistrationButton}
         >
           <Car size={24} color={colors.primary} />
@@ -108,9 +110,9 @@ const CustomerIndex = () => {
               <Button
                 label="車両登録"
                 color={colors.primary}
-                onPress={() => {
-                  console.log("test");
-                }}
+                onPress={guard(() => {
+                  router.push("/registrationCar");
+                })}
               />
             </View>
           </Card>
