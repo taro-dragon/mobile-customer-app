@@ -7,7 +7,7 @@ import { X } from "lucide-react-native";
 
 type PickerOption = {
   label: string;
-  value: string;
+  value: string | number;
 };
 
 type ModalPickerProps = {

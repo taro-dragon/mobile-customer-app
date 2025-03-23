@@ -1,11 +1,15 @@
 import { useFormContext } from "react-hook-form";
 import {
+  ActivityIndicator,
   KeyboardAvoidingView,
+  Modal,
   Platform,
   ScrollView,
   Text,
   View,
 } from "react-native";
+import storage from "@react-native-firebase/storage";
+import firestore from "@react-native-firebase/firestore";
 
 import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
@@ -22,9 +26,14 @@ import {
   repairStatusOptions,
   sellTimeOptions,
 } from "@/constants/registrationCarOptions";
+import { useStore } from "@/hooks/useStore";
+import { useRouter } from "expo-router";
+import Toast from "react-native-toast-message";
 
 const RegistrationCarForm = () => {
+  const { user } = useStore();
   const { colors, typography } = useTheme();
+  const router = useRouter();
   const {
     watch,
     handleSubmit,
@@ -38,8 +47,63 @@ const RegistrationCarForm = () => {
     maker,
   };
   const carData = transformCarData(formCar as Car);
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      const carRef = firestore().collection("cars").doc();
+      const images: { [key: string]: string | null } = {
+        front: data.front,
+        back: data.back,
+        left: data.left,
+        right: data.right,
+        interior: data.interior,
+        other1: data.other1,
+        other2: data.other2,
+        other3: data.other3,
+        other4: data.other4,
+        other5: data.other5,
+        other6: data.other6,
+      };
+      const downloadURLs: { [key: string]: string } = {};
+      for (const [key, image] of Object.entries(images)) {
+        if (image) {
+          const imageRef = storage()
+            .ref()
+            .child(`cars/${carRef.id}/${key}.jpg`);
+          await imageRef.putFile(image);
+          const downloadURL = await imageRef.getDownloadURL();
+          downloadURLs[key] = downloadURL;
+        }
+      }
+      const carData = {
+        id: carRef.id,
+        ownerId: user?.id,
+        maker,
+        model,
+        year,
+        grade,
+        modelNumber: data.modelNumber,
+        repairStatus: data.repairStatus,
+        mileage: Number(data.mileage),
+        sellTime: data.sellTime,
+        images: downloadURLs,
+        createdAt: firestore.Timestamp.now(),
+        updatedAt: firestore.FieldValue.serverTimestamp(),
+      };
+      await carRef.set(carData);
+      Toast.show({
+        type: "success",
+        text1: "登録完了",
+        text2: "車両登録が完了しました",
+      });
+      router.dismissTo("/(user)/(tabs)");
+    } catch (error) {
+      console.error(error);
+      Toast.show({
+        type: "error",
+        text1: "エラー",
+        text2: "車両登録エラーが発生しました",
+      });
+    }
   });
 
   const photoErrors = [
@@ -150,6 +214,7 @@ const RegistrationCarForm = () => {
             required={true}
           />
         </View>
+
         <View style={{ paddingHorizontal: 16 }}>
           <Button
             isLoading={isSubmitting}
@@ -160,6 +225,22 @@ const RegistrationCarForm = () => {
         </View>
         <SafeAreaBottom />
       </ScrollView>
+      <Modal visible={isSubmitting} transparent animationType="slide">
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "#00000080",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 12,
+          }}
+        >
+          <ActivityIndicator size="large" color={colors.white} />
+          <Text style={{ color: colors.white, ...typography.title2 }}>
+            登録処理中...
+          </Text>
+        </View>
+      </Modal>
     </KeyboardAvoidingView>
   );
 };
