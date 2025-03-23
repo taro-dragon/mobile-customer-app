@@ -23,6 +23,7 @@ const registrationCarSchema = z.object({
   repairStatus: z.string().min(1, "修復歴を選択してください"),
   mileage: z.string().min(1, "走行距離を選択してください"),
   sellTime: z.string().min(1, "売却時期を選択してください"),
+  description: z.string().optional(),
   // オプションの写真はバリデーションに含めない
   other1: z.string().optional(),
   other2: z.string().optional(),
@@ -58,6 +59,7 @@ const RegistrationCarLayout = () => {
       repairStatus: "",
       mileage: "",
       sellTime: "",
+      description: "",
     },
   });
 

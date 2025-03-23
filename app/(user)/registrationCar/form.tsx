@@ -88,6 +88,8 @@ const RegistrationCarForm = () => {
         images: downloadURLs,
         createdAt: firestore.Timestamp.now(),
         updatedAt: firestore.FieldValue.serverTimestamp(),
+        ...(data.description ? { description: data.description } : {}),
+        color: data.color,
       };
       await carRef.set(carData);
       Toast.show({
@@ -213,6 +215,9 @@ const RegistrationCarForm = () => {
             options={sellTimeOptions}
             required={true}
           />
+        </View>
+        <View style={{ paddingHorizontal: 16 }}>
+          <TextInput label="備考" name="description" multiline />
         </View>
 
         <View style={{ paddingHorizontal: 16 }}>

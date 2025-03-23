@@ -11,9 +11,16 @@ type Props = TextInputProps & {
   label: string;
   name: string;
   isRequired?: boolean;
+  multiline?: boolean;
 };
 
-const TextInput = ({ label, name, isRequired = false, ...props }: Props) => {
+const TextInput = ({
+  label,
+  name,
+  isRequired = false,
+  multiline = false,
+  ...props
+}: Props) => {
   const { colors, typography } = useTheme();
   const { control } = useFormContext();
   const {
@@ -30,11 +37,13 @@ const TextInput = ({ label, name, isRequired = false, ...props }: Props) => {
         {...props}
         value={value}
         onChangeText={onChange}
+        multiline={multiline}
         style={{
           backgroundColor: colors.backgroundSecondary,
           borderRadius: 8,
           padding: 16,
           color: colors.textPrimary,
+          height: multiline ? 120 : undefined,
         }}
       />
     </View>
