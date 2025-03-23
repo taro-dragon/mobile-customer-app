@@ -6,4 +6,5 @@ export type CarSlice = {
   unsubscribe?: () => void;
   fetchCars: (ownerId: string) => void;
   setCarLoading: (carLoading: boolean) => void;
+  clearCars: () => void;
 };

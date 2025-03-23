@@ -7,4 +7,5 @@ export type TalkSlice = {
   fetchUserTalks: (userId: string) => void;
   deleteTalk: () => void;
   setTalkLoading: (talkLoading: boolean) => void;
+  clearTalks: () => void;
 };

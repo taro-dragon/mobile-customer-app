@@ -55,4 +55,10 @@ export const createCarSlice: StateCreator<CarSlice, [], [], CarSlice> = (
       ...state,
       carLoading: carLoading,
     })),
+  clearCars: () => {
+    if (get().unsubscribe) {
+      get().unsubscribe!();
+    }
+    set({ cars: [], unsubscribe: undefined });
+  },
 });
