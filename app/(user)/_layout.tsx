@@ -110,6 +110,13 @@ export default function Layout() {
           headerBackButtonDisplayMode: "minimal",
         }}
       />
+      <Stack.Screen
+        name="blockList"
+        options={{
+          title: "ブロックリスト",
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
     </Stack>
   );
 }

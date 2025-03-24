@@ -1,7 +1,7 @@
 import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 
 export type User = {
-  id: string; // Firebase Auth UID
+  id: string;
   familyName?: string;
   givenName?: string;
   postalCode?: string;
@@ -11,13 +11,14 @@ export type User = {
   lat?: number;
   lng?: number;
   phoneNumber?: string;
-  isAnonymous: boolean; // 匿名認証かどうか
+  isAnonymous: boolean;
   expoPushToken?: string;
   pushSettings: {
     isMessage: boolean;
     isBid: boolean;
     isBulkStatusChange: boolean;
   };
+  blockIdList: string[];
   createdAt: FirebaseFirestoreTypes.Timestamp;
   updatedAt: FirebaseFirestoreTypes.Timestamp;
 };
