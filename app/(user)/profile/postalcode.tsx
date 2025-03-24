@@ -28,16 +28,7 @@ const PostalCodeScreen = () => {
           .regex(/^(\d{3}-\d{4}|\d{7})$/, {
             message:
               "郵便番号の形式が正しくありません（例：123-4567または1234567）",
-          })
-          .refine(
-            async (val) => {
-              const zipCodeRes = await searchZipcode(val);
-              return zipCodeRes.results.length > 0;
-            },
-            {
-              message: "郵便番号が見つかりません",
-            }
-          ),
+          }),
       })
     ),
   });
@@ -98,6 +89,8 @@ const PostalCodeScreen = () => {
               }}
               value={field.value}
               onChangeText={field.onChange}
+              keyboardType="numeric"
+              maxLength={7}
             />
           )}
         />
