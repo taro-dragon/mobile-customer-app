@@ -8,7 +8,7 @@ export const SettingItems = [
       },
       {
         title: "通知設定",
-        route: "/(user)/notification",
+        route: "/(user)/notificationSetting",
       },
       {
         title: "ブロックリスト",

@@ -23,7 +23,10 @@ export default function Layout() {
         },
       }}
     >
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="(tabs)"
+        options={{ headerShown: false, title: "ホーム" }}
+      />
       <Stack.Screen
         name="cars/[id]"
         options={{
@@ -98,6 +101,13 @@ export default function Layout() {
           headerShown: false,
           animation: "slide_from_bottom",
           gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="notificationSetting"
+        options={{
+          title: "通知設定",
+          headerBackButtonDisplayMode: "minimal",
         }}
       />
     </Stack>
