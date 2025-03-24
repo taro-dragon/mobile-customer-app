@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "react";
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   Text,
   TouchableOpacity,
@@ -23,17 +24,24 @@ const BlockList = () => {
   const removeBlock = useCallback(
     async (shopId: string) => {
       if (!user) return;
-
-      try {
-        await firestore()
-          .collection("users")
-          .doc(user.id)
-          .update({
-            blockIdList: firestore.FieldValue.arrayRemove(shopId),
-          });
-      } catch (error) {
-        console.error("Error removing shop from block list:", error);
-      }
+      Alert.alert("ブロック解除", "ブロックを解除しますか？", [
+        { text: "キャンセル", style: "cancel" },
+        {
+          text: "OK",
+          onPress: async () => {
+            try {
+              await firestore()
+                .collection("users")
+                .doc(user.id)
+                .update({
+                  blockIdList: firestore.FieldValue.arrayRemove(shopId),
+                });
+            } catch (error) {
+              console.error("Error removing shop from block list:", error);
+            }
+          },
+        },
+      ]);
     },
     [user, mutate]
   );
