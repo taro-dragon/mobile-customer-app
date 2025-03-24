@@ -29,7 +29,9 @@ const MyPage = () => {
             <Button
               color={colors.primary}
               label="新規会員登録"
-              onPress={() => {}}
+              onPress={() => {
+                router.push("/registration");
+              }}
               isBorder
             />
           </View>
