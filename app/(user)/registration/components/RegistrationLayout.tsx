@@ -19,7 +19,7 @@ import Button from "@/components/common/Button";
 
 interface RegistrationLayoutProps {
   title: string;
-  description: string;
+  description?: string;
   children: ReactNode;
   buttonLabel?: string;
   onButtonPress: () => void;
@@ -69,7 +69,9 @@ const RegistrationLayout: React.FC<RegistrationLayoutProps> = ({
                 )}
               </View>
               <Text style={textStyles.title}>{title}</Text>
-              <Text style={textStyles.body}>{description}</Text>
+              {description && (
+                <Text style={textStyles.body}>{description}</Text>
+              )}
               {children}
             </View>
             <Divider />
