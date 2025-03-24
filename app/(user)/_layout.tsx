@@ -84,6 +84,12 @@ export default function Layout() {
           headerBackButtonDisplayMode: "minimal",
         }}
       />
+      <Stack.Screen
+        name="profile"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 }

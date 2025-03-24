@@ -77,7 +77,12 @@ const CustomerIndex = () => {
               車両一覧
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.secondaryButton}>
+          <TouchableOpacity
+            style={styles.secondaryButton}
+            onPress={guard(() => {
+              router.push("/(user)/profile");
+            })}
+          >
             <User size={24} color={colors.primary} />
             <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
               ユーザー情報更新
