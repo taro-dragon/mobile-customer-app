@@ -125,12 +125,6 @@ const Index = () => {
           <Button
             color={colors.primary}
             label="初めての方はこちら"
-            onPress={() => router.push("/(unauth)/onBoading")}
-            fullWidth
-          />
-          <Button
-            color={colors.primary}
-            label="デバッグよう機能"
             onPress={async () => {
               const user = await auth().signInAnonymously();
               const userId = user.user?.uid;
@@ -146,7 +140,6 @@ const Index = () => {
                 .onSnapshot((snapshot) => {
                   const firebaseUser = snapshot.data() as User;
                   firebaseUser.id = userId;
-
                   setUser(firebaseUser);
                 });
             }}

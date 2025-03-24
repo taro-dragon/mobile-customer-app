@@ -1,3 +1,4 @@
+import React from "react";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { ChevronRight } from "lucide-react-native";
 
@@ -32,7 +33,6 @@ const MyPage = () => {
               onPress={() => {
                 router.push("/registration");
               }}
-              isBorder
             />
           </View>
         </View>
@@ -101,22 +101,24 @@ const MyPage = () => {
           </Text>
           <ChevronRight size={16} color={colors.textError} />
         </TouchableOpacity>
-        <Divider />
         {!user?.isAnonymous && (
-          <TouchableOpacity
-            style={{
-              padding: 16,
-              backgroundColor: colors.backgroundPrimary,
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexDirection: "row",
-            }}
-          >
-            <Text style={{ color: colors.textError, ...typography.heading3 }}>
-              退会する
-            </Text>
-            <ChevronRight size={16} color={colors.textError} />
-          </TouchableOpacity>
+          <>
+            <Divider />
+            <TouchableOpacity
+              style={{
+                padding: 16,
+                backgroundColor: colors.backgroundPrimary,
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexDirection: "row",
+              }}
+            >
+              <Text style={{ color: colors.textError, ...typography.heading3 }}>
+                退会する
+              </Text>
+              <ChevronRight size={16} color={colors.textError} />
+            </TouchableOpacity>
+          </>
         )}
       </View>
     </ScrollView>
