@@ -1,5 +1,6 @@
 import { useTheme } from "@/contexts/ThemeContext";
 import useUserInfoData from "@/hooks/useUserInfoData";
+import useUserNotification from "@/hooks/useUserNotification";
 import { useRouter } from "expo-router";
 import { Stack } from "expo-router/stack";
 import { X } from "lucide-react-native";
@@ -7,6 +8,7 @@ import { TouchableOpacity } from "react-native";
 
 export default function Layout() {
   useUserInfoData();
+  useUserNotification();
   const { colors } = useTheme();
   const router = useRouter();
   return (
@@ -88,6 +90,14 @@ export default function Layout() {
         name="profile"
         options={{
           headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="notificationInitialize"
+        options={{
+          headerShown: false,
+          animation: "slide_from_bottom",
+          gestureEnabled: false,
         }}
       />
     </Stack>

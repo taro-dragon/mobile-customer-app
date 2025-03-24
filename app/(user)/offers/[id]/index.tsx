@@ -186,7 +186,6 @@ const OfferDetail = () => {
           </View>
         </View>
       </ScrollView>
-      <SafeAreaBottom />
     </View>
   );
 };

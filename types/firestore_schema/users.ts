@@ -12,6 +12,12 @@ export type User = {
   lng?: number;
   phoneNumber?: string;
   isAnonymous: boolean; // 匿名認証かどうか
+  expoPushToken?: string;
+  pushSettings: {
+    isMessage: boolean;
+    isBid: boolean;
+    isBulkStatusChange: boolean;
+  };
   createdAt: FirebaseFirestoreTypes.Timestamp;
   updatedAt: FirebaseFirestoreTypes.Timestamp;
 };
