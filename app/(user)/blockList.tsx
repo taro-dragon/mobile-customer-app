@@ -20,7 +20,6 @@ const BlockList = () => {
   const { colors, typography } = useTheme();
   const { user } = useStore();
 
-  // ブロック解除とUIの更新
   const removeBlock = useCallback(
     async (shopId: string) => {
       if (!user) return;
