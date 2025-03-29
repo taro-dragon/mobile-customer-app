@@ -1,4 +1,3 @@
-import { Heading5 } from "lucide-react-native";
 import { TextStyle } from "react-native";
 
 export const Typography = {

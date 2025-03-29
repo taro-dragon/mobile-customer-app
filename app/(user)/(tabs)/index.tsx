@@ -22,6 +22,7 @@ const CustomerIndex = () => {
   const currentAppraisalCar = cars.find(
     (car) => car.status === "appraising" || car.status === "company_selection"
   );
+  console.log("cars:", cars);
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -71,7 +72,12 @@ const CustomerIndex = () => {
           </Text>
         </TouchableOpacity>
         <View style={{ flexDirection: "row", gap: 8 }}>
-          <TouchableOpacity style={styles.secondaryButton}>
+          <TouchableOpacity
+            style={styles.secondaryButton}
+            onPress={guard(() => {
+              router.push("/(user)/carList");
+            })}
+          >
             <List size={24} color={colors.primary} />
             <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
               車両一覧

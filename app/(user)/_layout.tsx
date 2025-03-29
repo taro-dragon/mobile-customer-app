@@ -117,6 +117,14 @@ export default function Layout() {
           headerBackButtonDisplayMode: "minimal",
         }}
       />
+      <Stack.Screen
+        name="carList"
+        options={{
+          title: "車両一覧",
+          headerBackButtonDisplayMode: "minimal",
+          headerShadowVisible: false,
+        }}
+      />
     </Stack>
   );
 }

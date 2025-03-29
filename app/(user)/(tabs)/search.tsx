@@ -13,12 +13,10 @@ import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
 import firestore from "@react-native-firebase/firestore";
 import { AffiliateStore } from "@/types/firestore_schema/affiliateStores";
 import { InventoryItem } from "@/types/firestore_schema/inventory";
-import { Car, ChevronDown, Filter } from "lucide-react-native";
+import { Car, ChevronDown } from "lucide-react-native";
 import { Image } from "expo-image";
 import ShopItem from "@/components/shop/ShopItem";
 import ShopSearchTab from "@/components/Search/Shop/ShopSearchTab";
-import { FormProvider } from "react-hook-form";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 const PREFECTURES = [
   "全国",
