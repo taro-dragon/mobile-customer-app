@@ -1,7 +1,7 @@
-import { Car } from "@/types/models/Car";
 import React from "react";
-import { Text, View } from "react-native";
-import { Tabs } from "react-native-collapsible-tab-view";
+import { FlatList, Text, View } from "react-native";
+
+import { Car } from "@/types/models/Car";
 import CarInfoItem from "../CarInfo/CarInfoItem";
 
 type CarFlashListProps = {
@@ -10,7 +10,7 @@ type CarFlashListProps = {
 
 const CarFlashList: React.FC<CarFlashListProps> = ({ cars }) => {
   return (
-    <Tabs.FlatList
+    <FlatList
       data={cars}
       contentContainerStyle={{ padding: 16 }}
       ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
