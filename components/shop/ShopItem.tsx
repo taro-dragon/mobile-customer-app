@@ -1,10 +1,11 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { AffiliateStore } from "@/types/firestore_schema/affiliateStores";
-import { useTheme } from "@/contexts/ThemeContext";
 import { useRouter } from "expo-router";
 import { Image } from "expo-image";
 import { Calendar, Clock, MapPin } from "lucide-react-native";
+
+import { AffiliateStore } from "@/types/firestore_schema/affiliateStores";
+import { useTheme } from "@/contexts/ThemeContext";
 
 type ShopItemProps = {
   item: AffiliateStore;
@@ -37,7 +38,7 @@ const ShopItem: React.FC<ShopItemProps> = ({ item }) => {
             overflow: "hidden",
           }}
         >
-          {item.imageUrls.length > 0 ? (
+          {item.imageUrls?.length > 0 ? (
             <Image
               source={{ uri: item.imageUrls[0] }}
               style={{

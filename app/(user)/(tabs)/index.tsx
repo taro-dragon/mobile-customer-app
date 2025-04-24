@@ -22,7 +22,6 @@ const CustomerIndex = () => {
   const currentAppraisalCar = cars.find(
     (car) => car.status === "appraising" || car.status === "company_selection"
   );
-  console.log("cars:", cars);
   const styles = StyleSheet.create({
     container: {
       flex: 1,

@@ -1,6 +1,6 @@
 import { useTheme } from "@/contexts/ThemeContext";
-import { Clock, MapPin } from "lucide-react-native";
-import { Text, View } from "react-native";
+import { Clock, MapPin, Store } from "lucide-react-native";
+import { Dimensions, Text, View } from "react-native";
 import ShopInfoSection from "./ShopInfoTab";
 import { ShopWithManagementCompany } from "@/hooks/useFetchShop";
 import ImageCarousel from "../common/ImageCarousel";
@@ -11,9 +11,24 @@ type ShopHeaderProps = {
 
 const ShopHeader: React.FC<ShopHeaderProps> = ({ shop }) => {
   const { colors, typography } = useTheme();
+  const width = Dimensions.get("window").width;
   return (
     <View pointerEvents="box-none">
-      {shop.imageUrls && <ImageCarousel images={shop.imageUrls} />}
+      {shop.imageUrls ? (
+        <ImageCarousel images={shop.imageUrls} />
+      ) : (
+        <View
+          style={{
+            width: width,
+            height: width,
+            backgroundColor: colors.gray200,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Store size={48} color={colors.textSecondary} />
+        </View>
+      )}
 
       <View style={{ gap: 8, padding: 16 }} pointerEvents="none">
         <Text style={{ ...typography.title1, color: colors.textPrimary }}>
