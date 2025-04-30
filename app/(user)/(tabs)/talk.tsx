@@ -13,7 +13,7 @@ const Talk = () => {
         data={talks}
         renderItem={({ item }) => <TalkItem talk={item} />}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{ padding: 16, flex: 1 }}
+        contentContainerStyle={{ flex: 1 }}
         ListEmptyComponent={
           <View
             style={{
