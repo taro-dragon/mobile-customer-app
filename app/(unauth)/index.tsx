@@ -152,6 +152,13 @@ const Index = () => {
             fullWidth
             isBorder
           />
+          <Button
+            color={colors.primary}
+            label="加盟店ログイン"
+            onPress={() => router.push("/(unauth)/staffLogin")}
+            fullWidth
+            isBorder
+          />
         </View>
       </View>
     </View>

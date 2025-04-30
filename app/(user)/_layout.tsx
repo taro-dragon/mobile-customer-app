@@ -1,14 +1,10 @@
 import { useTheme } from "@/contexts/ThemeContext";
-import useUserInfoData from "@/hooks/useUserInfoData";
-import useUserNotification from "@/hooks/useUserNotification";
 import { useRouter } from "expo-router";
 import { Stack } from "expo-router/stack";
 import { X } from "lucide-react-native";
 import { TouchableOpacity } from "react-native";
 
 export default function Layout() {
-  useUserInfoData();
-  useUserNotification();
   const { colors } = useTheme();
   const router = useRouter();
   return (

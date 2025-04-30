@@ -6,6 +6,7 @@ const UnauthLayout = () => {
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="login" options={{ headerShown: false }} />
+      <Stack.Screen name="staffLogin" options={{ headerShown: false }} />
       <Stack.Screen
         name="onBoading"
         options={{

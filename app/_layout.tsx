@@ -19,13 +19,10 @@ export default function Layout() {
   const [initialRoute, setInitialRoute] = useState<string | null>(null);
   useAuthInitialization();
 
-  // グローバルエラーハンドラーの設定
   useEffect(() => {
     ErrorService.setupGlobalHandlers();
 
-    // カスタムエラーハンドラーの追加例（必要に応じて）
     const customHandler = (error: Error, isFatal?: boolean) => {
-      // 特定のエラーに対する追加処理をここに記述
       console.log(
         `Custom handler caught ${isFatal ? "fatal" : ""} error:`,
         error.message
@@ -35,7 +32,6 @@ export default function Layout() {
     ErrorService.addErrorHandler(customHandler);
 
     return () => {
-      // クリーンアップ
       ErrorService.removeErrorHandler(customHandler);
     };
   }, []);
@@ -45,14 +41,16 @@ export default function Layout() {
 
     const determineRoute = () => {
       if (user) return "/(user)/(tabs)";
-      if (staff) return "/(staff)/";
+      if (staff) {
+        if (staff.isFirstLogin) return "/(staff)/firstPasswordSetting";
+        return "/(staff)/(tabs)";
+      }
       return "/(unauth)";
     };
 
     setInitialRoute(determineRoute());
   }, [user, staff, isAppReady]);
 
-  // ルートリダイレクトとスプラッシュスクリーン制御
   useEffect(() => {
     if (!initialRoute) return;
 
@@ -65,7 +63,6 @@ export default function Layout() {
     };
 
     if (needsRedirect) {
-      // リダイレクトが必要な場合
       const redirectTimer = setTimeout(() => {
         router.replace(initialRoute as Href);
         setTimeout(hideSplashScreen, 150);
@@ -73,7 +70,6 @@ export default function Layout() {
 
       return () => clearTimeout(redirectTimer);
     } else {
-      // 現在のルートが正しい場合はスプラッシュスクリーンを非表示に
       setTimeout(hideSplashScreen, 150);
     }
   }, [initialRoute, segments, router]);

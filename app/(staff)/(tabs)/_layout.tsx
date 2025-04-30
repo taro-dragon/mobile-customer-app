@@ -1,22 +1,13 @@
 import { useTheme } from "@/contexts/ThemeContext";
-import useUserInfoData from "@/hooks/useUserInfoData";
-import useUserNotification from "@/hooks/useUserNotification";
+import useStaffNotification from "@/hooks/staff/useStaffNotification";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 import { Tabs } from "expo-router";
-import {
-  House,
-  MessageSquare,
-  Search,
-  Settings,
-  Store,
-  User,
-} from "lucide-react-native";
+import { House, MessageSquare, Search, Settings } from "lucide-react-native";
 import { FormProvider, useForm } from "react-hook-form";
 
 export default function TabLayout() {
-  useUserInfoData();
-  useUserNotification();
+  useStaffNotification();
   const { colors } = useTheme();
   const form = useForm();
   return (
@@ -45,31 +36,6 @@ export default function TabLayout() {
             options={{
               title: "ホーム",
               tabBarIcon: ({ color }) => <House size={24} color={color} />,
-            }}
-          />
-          <Tabs.Screen
-            name="talk"
-            options={{
-              title: "トーク",
-              tabBarIcon: ({ color }) => (
-                <MessageSquare size={24} color={color} />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="search"
-            options={{
-              title: "検索",
-              headerShadowVisible: false,
-              tabBarIcon: ({ color }) => <Search size={24} color={color} />,
-            }}
-          />
-          <Tabs.Screen
-            name="settings"
-            options={{
-              title: "設定",
-              headerShadowVisible: false,
-              tabBarIcon: ({ color }) => <Settings size={24} color={color} />,
             }}
           />
         </Tabs>
