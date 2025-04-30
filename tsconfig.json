@@ -5,8 +5,9 @@
     "paths": {
       "@/*": ["./*"]
     },
-    "moduleResolution": "node16",
-    "module": "node16"
+    "module": "es2022",
+    "target": "es2022",
+    "sourceMap": true
   },
   "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
 }

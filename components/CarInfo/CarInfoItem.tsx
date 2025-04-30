@@ -1,13 +1,13 @@
 import { Image } from "expo-image";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, View, Pressable } from "react-native";
 import { Car } from "@/types/models/Car";
 
 import { useTheme } from "@/contexts/ThemeContext";
-import ConditionTag from "./ConditionTag";
 import { transformCarData } from "@/libs/transformCarData";
 import { useRouter } from "expo-router";
 import Divider from "../common/Divider";
 import Tag from "../common/Tag";
+
 type CarInfoItemProps = {
   car: Car;
 };
@@ -17,9 +17,10 @@ const CarInfoItem: React.FC<CarInfoItemProps> = ({ car }) => {
   const carData = transformCarData(car);
   const router = useRouter();
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={() => router.push(`/cars/${car.id}`)}
-      style={{
+      android_ripple={{ color: colors.primary }}
+      style={({ pressed }) => ({
         flexDirection: "row",
         gap: 8,
         backgroundColor: colors.backgroundSecondary,
@@ -27,7 +28,8 @@ const CarInfoItem: React.FC<CarInfoItemProps> = ({ car }) => {
         borderRadius: 12,
         borderWidth: 1,
         borderColor: colors.borderPrimary,
-      }}
+        opacity: pressed ? 0.5 : 1,
+      })}
     >
       <View
         style={{
@@ -121,7 +123,7 @@ const CarInfoItem: React.FC<CarInfoItemProps> = ({ car }) => {
           </View>
         </View>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
