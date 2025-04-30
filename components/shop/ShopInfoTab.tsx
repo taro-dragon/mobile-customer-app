@@ -102,6 +102,7 @@ const ShopInfoTab: React.FC<ShopInfoTabProps> = ({ shop }) => {
             borderRadius: 12,
             overflow: "hidden",
           }}
+          pointerEvents="auto"
         >
           <MapView
             style={{ width: "100%", height: "100%" }}

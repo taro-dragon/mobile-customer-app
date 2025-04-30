@@ -37,6 +37,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
               borderWidth: 1,
               justifyContent: "center",
             }}
+            pointerEvents="auto"
           >
             <Image
               source={{ uri: images[index] }}

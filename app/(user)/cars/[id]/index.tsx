@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { View } from "react-native";
 
 import { useStore } from "@/hooks/useStore";
@@ -18,10 +18,32 @@ const CarDetail = () => {
     }
   }, [user?.id]);
 
+  const renderHeader = useCallback(() => <CarDetailHeader />, []);
+  const renderTabBar = useCallback(
+    (props: any) => (
+      <MaterialTabBar
+        {...props}
+        activeColor={colors.primary}
+        inactiveColor={colors.textSecondary}
+        indicatorStyle={{
+          backgroundColor: colors.primary,
+          height: 3,
+          borderRadius: 3,
+        }}
+        style={{
+          backgroundColor: colors.backgroundPrimary,
+        }}
+        labelStyle={typography.heading3}
+      />
+    ),
+    [colors, typography]
+  );
+
   return (
     <View style={{ flex: 1 }}>
       <Tabs.Container
-        renderHeader={() => <CarDetailHeader />}
+        revealHeaderOnScroll
+        renderHeader={renderHeader}
         headerContainerStyle={{
           backgroundColor: colors.backgroundPrimary,
           elevation: 0,
@@ -30,22 +52,11 @@ const CarDetail = () => {
           borderBottomWidth: 1,
           borderBottomColor: colors.gray200,
         }}
-        renderTabBar={(props) => (
-          <MaterialTabBar
-            {...props}
-            activeColor={colors.primary}
-            inactiveColor={colors.textSecondary}
-            indicatorStyle={{
-              backgroundColor: colors.primary,
-              height: 3,
-              borderRadius: 3,
-            }}
-            style={{
-              backgroundColor: colors.backgroundPrimary,
-            }}
-            labelStyle={typography.heading3}
-          />
-        )}
+        renderTabBar={renderTabBar}
+        lazy={true}
+        containerStyle={{
+          backgroundColor: colors.backgroundPrimary,
+        }}
       >
         <Tabs.Tab name="買取オファー">
           <CarDetailOfferTab />

@@ -31,7 +31,7 @@ const CarList = () => {
         onIndexChange={setIndex}
         initialLayout={{ width: layout.width }}
         swipeEnabled={true}
-        commonOptions={{ labelStyle: { ...typography.body3 } }}
+        commonOptions={{ labelStyle: { ...typography.heading4 } }}
         renderTabBar={(props) => (
           <TabBar
             {...props}
