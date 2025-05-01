@@ -1,0 +1,33 @@
+import { useTheme } from "@/contexts/ThemeContext";
+import { useRouter } from "expo-router";
+import { Stack } from "expo-router/stack";
+import { X } from "lucide-react-native";
+import { useCallback } from "react";
+import { TouchableOpacity } from "react-native";
+
+const RegistrationStockLayout = () => {
+  const router = useRouter();
+  const { colors } = useTheme();
+  const handleGoBack = useCallback(() => {
+    setTimeout(() => {
+      router.back();
+    }, 10);
+  }, [router]);
+  return (
+    <Stack>
+      <Stack.Screen
+        name="index"
+        options={{
+          title: "在庫登録",
+          headerLeft: () => (
+            <TouchableOpacity onPress={handleGoBack}>
+              <X size={24} color={colors.primary} />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+    </Stack>
+  );
+};
+
+export default RegistrationStockLayout;

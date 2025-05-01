@@ -1,6 +1,5 @@
 import { useTheme } from "@/contexts/ThemeContext";
 import useStaffInfoData from "@/hooks/staff/useStaffInfoData";
-import useStaffNotification from "@/hooks/staff/useStaffNotification";
 import { Stack } from "expo-router/stack";
 
 export default function Layout() {
@@ -24,6 +23,14 @@ export default function Layout() {
         options={{ headerShown: false, title: "ホーム" }}
       />
       <Stack.Screen
+        name="registrationStock"
+        options={{
+          headerShown: false,
+          animation: "slide_from_bottom",
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
         name="notificationInitialize"
         options={{
           headerShown: false,
@@ -37,6 +44,7 @@ export default function Layout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen name="shopSelect" />
     </Stack>
   );
 }

@@ -43,6 +43,7 @@ export default function Layout() {
       if (user) return "/(user)/(tabs)";
       if (staff) {
         if (staff.isFirstLogin) return "/(staff)/firstPasswordSetting";
+        if (staff.shops.length !== 1) return "/(staff)/shopSelect";
         return "/(staff)/(tabs)";
       }
       return "/(unauth)";
