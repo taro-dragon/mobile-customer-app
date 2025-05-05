@@ -1,4 +1,5 @@
 import { useTheme } from "@/contexts/ThemeContext";
+import useStaffInfoData from "@/hooks/staff/useStaffInfoData";
 import useStaffNotification from "@/hooks/staff/useStaffNotification";
 import { useStore } from "@/hooks/useStore";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
@@ -15,6 +16,7 @@ import { FormProvider, useForm } from "react-hook-form";
 
 export default function TabLayout() {
   useStaffNotification();
+  useStaffInfoData();
   const { staff } = useStore();
   const { colors } = useTheme();
   const form = useForm();

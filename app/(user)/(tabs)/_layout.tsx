@@ -4,14 +4,7 @@ import useUserNotification from "@/hooks/useUserNotification";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 import { Tabs } from "expo-router";
-import {
-  House,
-  MessageSquare,
-  Search,
-  Settings,
-  Store,
-  User,
-} from "lucide-react-native";
+import { House, MessageSquare, Search, Settings } from "lucide-react-native";
 import { FormProvider, useForm } from "react-hook-form";
 
 export default function TabLayout() {

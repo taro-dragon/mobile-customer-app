@@ -1,5 +1,15 @@
 import { TalkWithAffiliate } from "../extendType/TalkWithAffiliate";
 
+export type StaffTalkSlice = {
+  staffTalks: TalkWithAffiliate[];
+  staffTalkLoading: boolean;
+  staffUnsubscribe?: () => void;
+  fetchStaffTalks: (userId: string) => void;
+  deleteStaffTalk: () => void;
+  setStaffTalkLoading: (staffTalkLoading: boolean) => void;
+  clearStaffTalks: () => void;
+};
+
 export type TalkSlice = {
   talks: TalkWithAffiliate[];
   talkLoading: boolean;

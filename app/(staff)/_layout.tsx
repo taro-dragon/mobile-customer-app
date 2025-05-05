@@ -1,11 +1,8 @@
 import { useTheme } from "@/contexts/ThemeContext";
-import useStaffInfoData from "@/hooks/staff/useStaffInfoData";
 import { Stack } from "expo-router/stack";
 
 export default function Layout() {
-  useStaffInfoData();
   const { colors } = useTheme();
-
   return (
     <Stack
       screenOptions={{
