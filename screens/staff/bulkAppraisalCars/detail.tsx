@@ -2,6 +2,12 @@ import AppraisalStatusTag from "@/components/appraisal/AppraisalStatusTag";
 import CarInfoItem from "@/components/CarDetail/CarInfoIten";
 import BidItem from "@/components/CarInfo/BidItem";
 import ImageCarousel from "@/components/common/ImageCarousel";
+import Bid from "@/components/staff/bulkAppraisalCarDetail/Bid";
+import {
+  getMileageLabel,
+  getRepairStatusLabel,
+  getSellTimeLabel,
+} from "@/constants/registrationCarOptions";
 import { useTheme } from "@/contexts/ThemeContext";
 import { ExtendedBulkAppraisalCar } from "@/hooks/staff/useFetchBulkAppraisalCar";
 import { transformCarData } from "@/libs/transformCarData";
@@ -21,7 +27,9 @@ const BulkAppraisalCarDetailScreen: React.FC<
   const carData = transformCarData(car as Car);
   const carImages = Object.values(car?.images ?? {});
   const { bids } = car;
-  console.log("bids", bids);
+  const mileageLabel = getMileageLabel(car.mileage.toString());
+  const sellTimeLabel = getSellTimeLabel(car.sellTime);
+  const repairStatusLabel = getRepairStatusLabel(car.repairStatus);
   const CarHeader = useMemo(
     () => (
       <View pointerEvents="box-none">
@@ -51,6 +59,10 @@ const BulkAppraisalCarDetailScreen: React.FC<
             >
               <CarInfoItem label="年式" value={carData.year.year} />
               <CarInfoItem label="グレード" value={carData.grade.gradeName} />
+              <CarInfoItem label="型番" value={car.modelNumber} />
+              <CarInfoItem label="走行距離" value={mileageLabel || ""} />
+              <CarInfoItem label="修復歴" value={repairStatusLabel || ""} />
+              <CarInfoItem label="売却時期" value={sellTimeLabel || ""} />
             </View>
           </View>
         </View>
@@ -61,10 +73,11 @@ const BulkAppraisalCarDetailScreen: React.FC<
   return (
     <FlatList
       data={bids}
-      renderItem={({ item }) => <BidItem bid={item} />}
+      renderItem={({ item }) => <Bid bid={item} />}
       ListHeaderComponent={CarHeader}
       contentContainerStyle={{
         gap: 16,
+        paddingBottom: 32,
       }}
     />
   );

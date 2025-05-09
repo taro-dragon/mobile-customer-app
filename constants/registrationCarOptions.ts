@@ -47,3 +47,16 @@ export const mileageOptions = [
   { label: "〜200000km", value: "200000" },
   { label: "210000km以上", value: "210000" },
 ];
+
+// valueを渡してlabelを取得する
+export const getMileageLabel = (value: string) => {
+  return mileageOptions.find((option) => option.value === value)?.label;
+};
+
+export const getSellTimeLabel = (value: string) => {
+  return sellTimeOptions.find((option) => option.value === value)?.label;
+};
+
+export const getRepairStatusLabel = (value: string) => {
+  return repairStatusOptions.find((option) => option.value === value)?.label;
+};
