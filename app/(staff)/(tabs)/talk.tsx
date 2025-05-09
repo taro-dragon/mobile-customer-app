@@ -1,7 +1,7 @@
-import StaffIndexScreen from "@/screens/staff/tabs";
+import TalksScreen from "@/screens/staff/tabs/talks";
 
 const Talk = () => {
-  return <StaffIndexScreen />;
+  return <TalksScreen />;
 };
 
 export default Talk;

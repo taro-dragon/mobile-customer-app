@@ -41,6 +41,21 @@ export default function Layout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="talks/[talkId]"
+        options={{
+          headerShown: false,
+          animation: "slide_from_right",
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
+      <Stack.Screen
+        name="bulkAppraisalCars"
+        options={{
+          gestureDirection: "vertical",
+          headerShown: false,
+        }}
+      />
       <Stack.Screen name="shopSelect" />
     </Stack>
   );

@@ -2,8 +2,8 @@ import { StaffTalkSlice } from "@/types/slices/TalkSlice";
 import { TalkWithAffiliate } from "@/types/extendType/TalkWithAffiliate";
 import firestore from "@react-native-firebase/firestore";
 import { StateCreator } from "zustand";
-import { AffiliateStore } from "@/types/firestore_schema/affiliateStores";
 import { Car } from "@/types/models/Car";
+import { User } from "@/types/firestore_schema/users";
 
 export const createStaffTalkSlice: StateCreator<
   StaffTalkSlice,
@@ -38,7 +38,7 @@ export const createStaffTalkSlice: StateCreator<
             const talksWithAffiliateStores = await Promise.all(
               talks.map(async (talk) => {
                 try {
-                  const affiliateStore = await firestore()
+                  const user = await firestore()
                     .collection("users")
                     .doc(talk.userId)
                     .get();
@@ -46,9 +46,10 @@ export const createStaffTalkSlice: StateCreator<
                     .collection("cars")
                     .doc(talk.carId)
                     .get();
+
                   return {
                     ...talk,
-                    affiliateStore: affiliateStore.data() as AffiliateStore,
+                    user: user.data() as User,
                     car: car.data() as Car,
                   };
                 } catch (error) {
@@ -57,11 +58,10 @@ export const createStaffTalkSlice: StateCreator<
                 }
               })
             );
-
             set((state) => ({
               ...state,
-              talks: talksWithAffiliateStores,
-              talkLoading: false,
+              staffTalks: talksWithAffiliateStores,
+              staffTalkLoading: false,
             }));
           } catch (error) {
             console.error("Error processing talks:", error);
