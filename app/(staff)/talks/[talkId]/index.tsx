@@ -125,7 +125,7 @@ const TalkDetail = () => {
         }}
       >
         <TouchableOpacity
-          onPress={() => router.push(`/shops/${talk.affiliateStoreId}`)}
+          onPress={() => router.push(`/customer/${talk.userId}`)}
           style={[
             styles.headerMenu,
             { borderRightWidth: 1, borderColor: colors.borderPrimary },

@@ -36,7 +36,7 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, talk }) => {
     >
       {isUser && (
         <TouchableOpacity
-          onPress={() => router.push(`/shops/${talk.affiliateStoreId}`)}
+          onPress={() => router.push(`/bulkAppraisalCars/${talk.carId}`)}
         >
           <Image
             source={{

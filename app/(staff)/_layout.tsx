@@ -56,6 +56,13 @@ export default function Layout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="customer"
+        options={{
+          gestureDirection: "vertical",
+          headerShown: false,
+        }}
+      />
       <Stack.Screen name="shopSelect" />
     </Stack>
   );
