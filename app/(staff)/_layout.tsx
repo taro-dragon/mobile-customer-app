@@ -63,6 +63,13 @@ export default function Layout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="bids"
+        options={{
+          gestureDirection: "vertical",
+          headerShown: false,
+        }}
+      />
       <Stack.Screen name="shopSelect" />
     </Stack>
   );

@@ -126,28 +126,36 @@ const TalkDetail = () => {
       >
         <TouchableOpacity
           onPress={() => router.push(`/customer/${talk.userId}`)}
-          style={[
-            styles.headerMenu,
-            { borderRightWidth: 1, borderColor: colors.borderPrimary },
-          ]}
+          style={[styles.headerMenu]}
         >
           <User size={24} color={colors.textPrimary} />
           <Text style={{ ...typography.title5, color: colors.textPrimary }}>
             顧客情報
           </Text>
         </TouchableOpacity>
+        <View
+          style={{
+            width: 1,
+            height: "100%",
+            backgroundColor: colors.borderPrimary,
+          }}
+        />
         <TouchableOpacity
           onPress={() => router.push(`/bulkAppraisalCars/${talk.carId}`)}
-          style={[
-            styles.headerMenu,
-            { borderRightWidth: 1, borderColor: colors.borderPrimary },
-          ]}
+          style={[styles.headerMenu]}
         >
           <Car size={24} color={colors.textPrimary} />
           <Text style={{ ...typography.title5, color: colors.textPrimary }}>
             車両情報
           </Text>
         </TouchableOpacity>
+        <View
+          style={{
+            width: 1,
+            height: "100%",
+            backgroundColor: colors.borderPrimary,
+          }}
+        />
         <TouchableOpacity
           onPress={() =>
             router.push(
