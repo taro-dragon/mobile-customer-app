@@ -2,6 +2,7 @@ import firestore from "@react-native-firebase/firestore";
 import useSWR from "swr";
 import Toast from "react-native-toast-message";
 import { Bid } from "@/types/firestore_schema/bids";
+import { router } from "expo-router";
 
 const fetchBid = async (id: string) => {
   try {
@@ -15,12 +16,12 @@ const fetchBid = async (id: string) => {
       id: bidSnapshot.id,
     };
   } catch (error) {
-    console.error(error);
     Toast.show({
       type: "error",
       text1: "エラーが発生しました",
       text2: "車両情報の取得に失敗しました",
     });
+    router.back();
     return undefined;
   }
 };

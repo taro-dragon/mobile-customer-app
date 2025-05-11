@@ -1,11 +1,11 @@
-import useFetchBid from "@/hooks/staff/useBid";
+import useFetchBid from "@/hooks/staff/useFetchBid";
 import BidDetailScreen from "@/screens/staff/bids/detail";
 import { useLocalSearchParams } from "expo-router";
 import { View } from "react-native";
 
 const BidDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { bid, isLoading, isError } = useFetchBid(id);
+  const { bid, isLoading } = useFetchBid(id);
   if (isLoading || !bid) {
     return <View />;
   }

@@ -5,7 +5,7 @@ import { View } from "react-native";
 
 const Customer = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { customer, isLoading, isError } = useFetchCustomer(id);
+  const { customer, isLoading } = useFetchCustomer(id);
   if (isLoading || !customer) {
     return <View />;
   }

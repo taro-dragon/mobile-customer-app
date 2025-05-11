@@ -3,6 +3,7 @@ import firestore from "@react-native-firebase/firestore";
 import useSWR from "swr";
 import { ExtendedBid } from "../useFetchCarBids";
 import Toast from "react-native-toast-message";
+import { router } from "expo-router";
 
 export type ExtendedBulkAppraisalCar = Car & {
   bids: ExtendedBid[];
@@ -40,12 +41,12 @@ const fetchBulkAppraisalCar = async (id: string) => {
       bids: bidsStoreSnapShots,
     };
   } catch (error) {
-    console.error(error);
     Toast.show({
       type: "error",
       text1: "エラーが発生しました",
       text2: "車両情報の取得に失敗しました",
     });
+    router.back();
     return undefined;
   }
 };
