@@ -21,7 +21,6 @@ const StaffIndexScreen = () => {
       padding: 16,
       justifyContent: "center",
       alignItems: "center",
-
       gap: 8,
       borderWidth: 1,
       borderColor: colors.borderPrimary,
@@ -52,12 +51,12 @@ const StaffIndexScreen = () => {
         >
           <TouchableOpacity
             onPress={() => {
-              router.push("/registrationCar");
+              router.push("/registrationStock");
             }}
             style={styles.carRegistrationButton}
           >
             <Car size={24} color={colors.primary} />
-            <Text style={{ color: colors.textPrimary, ...typography.heading2 }}>
+            <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
               在庫車両登録
             </Text>
           </TouchableOpacity>
@@ -70,7 +69,7 @@ const StaffIndexScreen = () => {
             >
               <Gavel size={24} color={colors.primary} />
               <Text
-                style={{ color: colors.textPrimary, ...typography.heading2 }}
+                style={{ color: colors.textPrimary, ...typography.heading3 }}
               >
                 一括査定入札
               </Text>
@@ -83,7 +82,7 @@ const StaffIndexScreen = () => {
             >
               <Handshake size={24} color={colors.primary} />
               <Text
-                style={{ color: colors.textPrimary, ...typography.heading2 }}
+                style={{ color: colors.textPrimary, ...typography.heading3 }}
               >
                 買取オファー登録
               </Text>
