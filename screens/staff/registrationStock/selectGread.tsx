@@ -52,7 +52,7 @@ const RegistrationStockSelectGreadScreen: React.FC<
               const modelNumber = item.modelNumber?.trim().replace(/ /g, "");
               onChange(item.gradeName);
               onChangeModelNumber(modelNumber);
-              router.push("/registrationCar/form");
+              router.push("/registrationStock/form");
             }}
           >
             <View style={{ flexDirection: "column", gap: 4, flex: 1 }}>

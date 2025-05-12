@@ -67,6 +67,33 @@ const RegistrationStockLayout = () => {
             headerBackButtonDisplayMode: "minimal",
           }}
         />
+        <Stack.Screen
+          name="form"
+          options={{
+            title: "車両情報",
+            headerBackButtonDisplayMode: "minimal",
+          }}
+        />
+        <Stack.Screen
+          name="camera"
+          options={{
+            animation: "slide_from_bottom",
+            gestureEnabled: false,
+            headerStyle: {
+              backgroundColor: colors.gray600,
+            },
+            headerTintColor: colors.white,
+            headerLeft: () => (
+              <TouchableOpacity
+                onPress={() => {
+                  router.back();
+                }}
+              >
+                <X size={24} color={colors.white} />
+              </TouchableOpacity>
+            ),
+          }}
+        />
       </Stack>
     </FormProvider>
   );

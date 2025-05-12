@@ -7,9 +7,9 @@ import { Year } from "@/types/models/carData/year";
 import { Grade } from "@/types/models/carData/grade";
 
 type CarDetails = {
-  maker: Manufacture;
-  model: Model;
-  year: Year;
+  maker: Omit<Manufacture, "carModels">;
+  model: Omit<Model, "years">;
+  year: Omit<Year, "grades">;
   grade: Grade;
 };
 
@@ -21,10 +21,14 @@ export function transformCarData(car: Car): CarDetails {
   const yearData = modelData?.years.find((y) => y.yearId === car.year);
   const gradeData = yearData?.grades.find((g) => g.gradeName === car.grade);
 
+  const { carModels, ...formattedMaker } = makerData as Manufacture;
+  const { years, ...formattedModel } = modelData as Model;
+  const { grades, ...formattedYear } = yearData as Year;
+
   return {
-    maker: makerData as Manufacture,
-    model: modelData as Model,
-    year: yearData as Year,
+    maker: formattedMaker,
+    model: formattedModel,
+    year: formattedYear,
     grade: gradeData as Grade,
   };
 }
