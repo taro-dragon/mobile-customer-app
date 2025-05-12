@@ -155,7 +155,11 @@ const RegistrationStockFormScreen = () => {
               />
             </View>
             <View style={{ flex: 1 }}>
-              <Button color={colors.primary} label="登録" onPress={() => {}} />
+              <Button
+                color={colors.primary}
+                label="在庫登録"
+                onPress={() => {}}
+              />
             </View>
           </View>
           <SafeAreaBottom />

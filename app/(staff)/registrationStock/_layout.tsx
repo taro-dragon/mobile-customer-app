@@ -75,6 +75,20 @@ const RegistrationStockLayout = () => {
           }}
         />
         <Stack.Screen
+          name="searchTypeNumber"
+          options={{
+            title: "型番検索",
+            headerBackButtonDisplayMode: "minimal",
+          }}
+        />
+        <Stack.Screen
+          name="selectTargetType"
+          options={{
+            title: "登録方法",
+            headerBackButtonDisplayMode: "minimal",
+          }}
+        />
+        <Stack.Screen
           name="camera"
           options={{
             animation: "slide_from_bottom",

@@ -36,6 +36,7 @@ export default function TabLayout() {
             headerStyle: {
               backgroundColor: colors.backgroundPrimary,
             },
+            headerTintColor: colors.primary,
             headerTitleStyle: {
               color: colors.primary,
             },

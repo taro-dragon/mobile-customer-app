@@ -1,9 +1,9 @@
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useRouter } from "expo-router";
-import { FileEdit, PlusCircle } from "lucide-react-native";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { List, Search } from "lucide-react-native";
 
-const RegistrationStockIndexScreen: React.FC = () => {
+const SelectTargetTypeScreen = () => {
   const { colors, typography } = useTheme();
   const router = useRouter();
   return (
@@ -15,12 +15,12 @@ const RegistrationStockIndexScreen: React.FC = () => {
           borderColor: colors.borderPrimary,
         }}
         onPress={() => {
-          router.push("/registrationStock/selectTargetType");
+          router.push("/registrationStock/selectMaker");
         }}
       >
-        <PlusCircle size={24} color={colors.primary} />
+        <List size={24} color={colors.primary} />
         <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
-          新規登録
+          一覧から絞り込む
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -29,17 +29,20 @@ const RegistrationStockIndexScreen: React.FC = () => {
           backgroundColor: colors.backgroundSecondary,
           borderColor: colors.borderPrimary,
         }}
+        onPress={() => {
+          router.push("/registrationStock/searchTypeNumber");
+        }}
       >
-        <FileEdit size={24} color={colors.primary} />
+        <Search size={24} color={colors.primary} />
         <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
-          下書きから登録
+          型番から絞り込む
         </Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-export default RegistrationStockIndexScreen;
+export default SelectTargetTypeScreen;
 
 const styles = StyleSheet.create({
   container: {
