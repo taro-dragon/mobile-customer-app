@@ -12,11 +12,12 @@ import Divider from "@/components/common/Divider";
 import Button from "@/components/common/Button";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import RegistrationStockPriceFormScreen from "./form/price";
+import RegistrationStockGuaranteeFormScreen from "./form/guarantee";
 
 const renderScene = SceneMap({
   basic: RegistrationStockBasicFormScreen,
   price: RegistrationStockPriceFormScreen,
-  guarantee: RegistrationStockBasicFormScreen,
+  guarantee: RegistrationStockGuaranteeFormScreen,
   options: RegistrationStockBasicFormScreen,
 });
 
