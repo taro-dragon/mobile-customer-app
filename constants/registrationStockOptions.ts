@@ -21,25 +21,25 @@ export const legalRepairOptions = [
 ];
 
 export const guaranteeOptions = [
-  { label: "保証付", value: "guarantee" },
   { label: "保証無し", value: "none" },
+  { label: "保証付", value: "guarantee" },
 ];
 
 export const guaranteeCountOptions = [
-  { label: "有り", value: "limited" },
   { label: "無し", value: "unlimited" },
+  { label: "有り", value: "limited" },
 ];
 
 export const guaranteeExemptionOptions = [
-  { label: "有り", value: "limited" },
   { label: "無し", value: "unlimited" },
+  { label: "有り", value: "limited" },
 ];
 export const guaranteeRoadServiceOptions = [
-  { label: "有り", value: "limited" },
   { label: "無し", value: "unlimited" },
+  { label: "有り", value: "limited" },
 ];
 
 export const guaranteeLimitOptions = [
-  { label: "有（車両本体価格)", value: "limited" },
   { label: "限度額無制限", value: "unlimited" },
+  { label: "有（車両本体価格)", value: "limited" },
 ];

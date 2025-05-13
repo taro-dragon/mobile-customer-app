@@ -34,6 +34,7 @@ const ModalPicker: React.FC<ModalPickerProps> = ({
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedValue, setSelectedValue] = useState<string | undefined>();
+  console.log(selectedValue);
 
   // react-hook-formのコントローラーを使用
   const { field } = useController({
@@ -49,6 +50,9 @@ const ModalPicker: React.FC<ModalPickerProps> = ({
 
   // 選択を確定する関数
   const confirmSelection = () => {
+    if (selectedValue === undefined) {
+      return;
+    }
     setValue(name, selectedValue);
     setModalVisible(false);
   };
@@ -143,7 +147,10 @@ const ModalPicker: React.FC<ModalPickerProps> = ({
               >
                 {label}
               </Text>
-              <TouchableOpacity onPress={confirmSelection}>
+              <TouchableOpacity
+                onPress={confirmSelection}
+                disabled={selectedValue === ""}
+              >
                 <Text style={{ color: colors.primary }}>完了</Text>
               </TouchableOpacity>
             </View>
@@ -157,6 +164,7 @@ const ModalPicker: React.FC<ModalPickerProps> = ({
                 height: 200,
               }}
             >
+              <Picker.Item label="---" enabled={false} value={undefined} />
               {options.map((option) => (
                 <Picker.Item
                   key={option.value}
