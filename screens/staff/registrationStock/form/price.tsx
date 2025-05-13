@@ -1,13 +1,11 @@
 import ModalPicker from "@/components/registrationCar/form/ModalPicker";
 import TextInput from "@/components/registrationCar/form/TextInput";
-import { legalRepairOptions } from "@/constants/registrationStockOptions";
-import { useFormContext } from "react-hook-form";
 import {
-  Keyboard,
-  ScrollView,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+  industrySalesOptions,
+  legalRepairOptions,
+} from "@/constants/registrationStockOptions";
+import { useFormContext } from "react-hook-form";
+import { ScrollView, View } from "react-native";
 
 const RegistrationStockPriceFormScreen = () => {
   const { watch } = useFormContext();
@@ -45,6 +43,12 @@ const RegistrationStockPriceFormScreen = () => {
             multiline
           />
         )}
+        <ModalPicker
+          name="industrySales"
+          label="業販問い合わせ"
+          options={industrySalesOptions}
+          required={true}
+        />
       </View>
     </ScrollView>
   );

@@ -20,6 +20,11 @@ export const legalRepairOptions = [
   { label: "整備付", value: "repaired" },
 ];
 
+export const industrySalesOptions = [
+  { label: "受け付けない", value: "none" },
+  { label: "受け付ける", value: "industry_sales" },
+];
+
 export const guaranteeOptions = [
   { label: "保証無し", value: "none" },
   { label: "保証付", value: "guarantee" },
