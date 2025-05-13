@@ -11,10 +11,11 @@ import { useState } from "react";
 import Divider from "@/components/common/Divider";
 import Button from "@/components/common/Button";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
+import RegistrationStockPriceFormScreen from "./form/price";
 
 const renderScene = SceneMap({
   basic: RegistrationStockBasicFormScreen,
-  price: RegistrationStockBasicFormScreen,
+  price: RegistrationStockPriceFormScreen,
   guarantee: RegistrationStockBasicFormScreen,
   options: RegistrationStockBasicFormScreen,
 });

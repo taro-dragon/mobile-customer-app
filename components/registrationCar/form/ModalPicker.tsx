@@ -67,7 +67,7 @@ const ModalPicker: React.FC<ModalPickerProps> = ({
   };
 
   return (
-    <View style={{ marginBottom: 16 }}>
+    <View>
       <Text
         style={{
           color: colors.textPrimary,

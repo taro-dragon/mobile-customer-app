@@ -1,0 +1,45 @@
+import ModalPicker from "@/components/registrationCar/form/ModalPicker";
+import TextInput from "@/components/registrationCar/form/TextInput";
+import { legalRepairOptions } from "@/constants/registrationStockOptions";
+import {
+  Keyboard,
+  ScrollView,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+
+const RegistrationStockPriceFormScreen = () => {
+  return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ gap: 16, paddingBottom: 16 }}
+      >
+        <View style={{ padding: 16, gap: 16 }}>
+          <TextInput
+            label="車両本体価格"
+            name="bodyPrice"
+            keyboardType="numeric"
+            isRequired
+            unit="円"
+          />
+          <TextInput
+            label="支払い総額"
+            name="totalPayment"
+            keyboardType="numeric"
+            isRequired
+            unit="円"
+          />
+          <ModalPicker
+            name="legalRepair"
+            label="法定整備"
+            options={legalRepairOptions}
+            required={true}
+          />
+        </View>
+      </ScrollView>
+    </TouchableWithoutFeedback>
+  );
+};
+
+export default RegistrationStockPriceFormScreen;

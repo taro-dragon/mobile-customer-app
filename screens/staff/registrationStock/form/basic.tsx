@@ -16,10 +16,16 @@ import {
 import { Plus, X } from "lucide-react-native";
 import { useState } from "react";
 import ColorSelect from "@/components/registrationCar/form/ColorSelect";
+import ModalPicker from "@/components/registrationCar/form/ModalPicker";
+import {
+  inspectionOptions,
+  repairStatusOptions,
+  transmissionOptions,
+} from "@/constants/registrationStockOptions";
 
 const RegistrationStockBasicFormScreen = () => {
   const { watch, setValue } = useFormContext();
-  const { colors } = useTheme();
+  const { colors, typography } = useTheme();
   const { grade, model, year, maker } = watch();
   const [additionalPhotos, setAdditionalPhotos] = useState<number[]>([]);
   const formCar = {
@@ -64,6 +70,16 @@ const RegistrationStockBasicFormScreen = () => {
             value={carData.grade.modelNumber.replace(/[\s\u3000]/g, "")}
           />
         </View>
+        <Text
+          style={{
+            color: colors.textPrimary,
+            ...typography.heading3,
+            paddingHorizontal: 16,
+          }}
+        >
+          写真
+          <Text style={{ color: colors.error }}>*</Text>
+        </Text>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -114,7 +130,7 @@ const RegistrationStockBasicFormScreen = () => {
           </TouchableOpacity>
         </ScrollView>
         <ColorSelect />
-        <View style={{ paddingHorizontal: 16 }}>
+        <View style={{ paddingHorizontal: 16, gap: 16 }}>
           <TextInput
             label="走行距離"
             name="mileage"
@@ -123,8 +139,6 @@ const RegistrationStockBasicFormScreen = () => {
             isRequired
             unit="km"
           />
-        </View>
-        <View style={{ paddingHorizontal: 16 }}>
           <TextInput
             label="排気量"
             name="displacement"
@@ -132,6 +146,35 @@ const RegistrationStockBasicFormScreen = () => {
             placeholder="例: 1800"
             isRequired
             unit="cc"
+          />
+          <TextInput
+            label="ドア数"
+            name="doorNumber"
+            keyboardType="numeric"
+            placeholder="例: 4"
+          />
+          <TextInput
+            label="ガソリン種類"
+            name="fuelType"
+            placeholder="例: レギュラー"
+          />
+          <ModalPicker
+            name="transmission"
+            label="ミッション"
+            options={transmissionOptions}
+            required={true}
+          />
+          <ModalPicker
+            name="inspection"
+            label="車検"
+            options={inspectionOptions}
+            required={true}
+          />
+          <ModalPicker
+            name="repairStatus"
+            label="修復歴"
+            options={repairStatusOptions}
+            required={true}
           />
         </View>
       </ScrollView>
