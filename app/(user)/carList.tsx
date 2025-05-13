@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useWindowDimensions, View } from "react-native";
 import { SceneMap, TabBar, TabView } from "react-native-tab-view";
 
@@ -5,7 +6,6 @@ import BeforeBulkAppraisal from "@/components/CarList/BeforeBulkAppraisal";
 import CompletedBulkAppraisal from "@/components/CarList/CompletedBulkAppraisal";
 import ProgressBulkAppraisal from "@/components/CarList/ProgressBulkAppraisal";
 import { useTheme } from "@/contexts/ThemeContext";
-import { useState } from "react";
 
 const renderScene = SceneMap({
   beforeBulkAppraisal: BeforeBulkAppraisal,

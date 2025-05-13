@@ -10,7 +10,6 @@ import Toast from "react-native-toast-message";
 import dayjs from "dayjs";
 import Button from "@/components/common/Button";
 import useOffer from "@/hooks/useFetchOffer";
-import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import { useStore } from "@/hooks/useStore";
 import isTargetOffer from "@/libs/isTargetOffer";
 

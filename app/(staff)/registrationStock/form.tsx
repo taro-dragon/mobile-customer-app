@@ -1,4 +1,4 @@
-import RegistrationStockFormScreen from "@/screens/staff/registrationStock/form";
+import RegistrationStockFormScreen from "@/screens/staff/registrationStock/formTab";
 
 const RegistrationStockForm = () => {
   return <RegistrationStockFormScreen />;

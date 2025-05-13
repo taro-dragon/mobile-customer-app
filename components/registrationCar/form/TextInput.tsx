@@ -12,6 +12,7 @@ type Props = TextInputProps & {
   name: string;
   isRequired?: boolean;
   multiline?: boolean;
+  unit?: string;
 };
 
 const TextInput = ({
@@ -19,6 +20,7 @@ const TextInput = ({
   name,
   isRequired = false,
   multiline = false,
+  unit,
   ...props
 }: Props) => {
   const { colors, typography } = useTheme();
@@ -33,19 +35,33 @@ const TextInput = ({
         {label}
         {isRequired && <Text style={{ color: colors.error }}>*</Text>}
       </Text>
-      <RNTextInput
-        {...props}
-        value={value}
-        onChangeText={onChange}
-        multiline={multiline}
-        style={{
-          backgroundColor: colors.backgroundSecondary,
-          borderRadius: 8,
-          padding: 16,
-          color: colors.textPrimary,
-          height: multiline ? 120 : undefined,
-        }}
-      />
+      <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 8 }}>
+        <RNTextInput
+          {...props}
+          value={value}
+          onChangeText={onChange}
+          multiline={multiline}
+          style={{
+            backgroundColor: colors.backgroundSecondary,
+            borderRadius: 8,
+            padding: 16,
+            flex: 1,
+            color: colors.textPrimary,
+            height: multiline ? 120 : undefined,
+          }}
+        />
+        {unit && (
+          <Text
+            style={{
+              color: colors.textPrimary,
+              ...typography.body2,
+              paddingBottom: 8,
+            }}
+          >
+            {unit}
+          </Text>
+        )}
+      </View>
     </View>
   );
 };

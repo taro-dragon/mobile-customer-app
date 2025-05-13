@@ -82,11 +82,16 @@ const SearchTypeNumberScreen = () => {
   }, [typeNumber, handleSearch]);
 
   const handleItemPress = (targetCar: CarSearchResult) => {
+    const normalizedSearchModelNumber = targetCar.grade.modelNumber.replace(
+      /[\s\u3000]/g,
+      ""
+    );
     setValue("maker", targetCar.manufacturer.manufacturerId);
     setValue("model", targetCar.model.modelId);
     setValue("year", targetCar.year.yearId);
     setValue("grade", targetCar.grade.gradeName);
     setValue("modelNumber", targetCar.grade.modelNumber);
+
     router.push("/registrationStock/form");
   };
 
