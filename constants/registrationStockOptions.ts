@@ -48,3 +48,32 @@ export const guaranteeLimitOptions = [
   { label: "限度額無制限", value: "unlimited" },
   { label: "有（車両本体価格)", value: "limited" },
 ];
+
+export const cruiseControlOptions = [
+  { label: "なし", value: "none" },
+  { label: "オートクルーズコントロール", value: "auto" },
+  { label: "アダプティブクルーズコントロール", value: "adaptive" },
+];
+
+export const slideDoorOptions = [
+  { label: "なし", value: "none" },
+  { label: "両側スライドドア", value: "both_slide_door" },
+  { label: "電動スライドドア", value: "electric_slide_door" },
+  { label: "両側電動スライドドア", value: "both_electric_slide_door" },
+  { label: "両側スライド・片側電動", value: "one_slide_electric_door" },
+];
+
+export const carNaviOptions = [
+  { label: "なし", value: "none" },
+  { label: "CDナビ", value: "cd_navi" },
+  { label: "DVDナビ", value: "dvd_navi" },
+  { label: "HDDナビ", value: "hard_disk_navi" },
+  { label: "SDナビ", value: "sd_navi" },
+  { label: "メモリーナビ他", value: "memory_navi" },
+];
+
+export const tvMonitorOptions = [
+  { label: "なし", value: "none" },
+  { label: "TV(フルセグ)", value: "tv_full_seg" },
+  { label: "TV(ワンセグ)", value: "tv_one_seg" },
+];

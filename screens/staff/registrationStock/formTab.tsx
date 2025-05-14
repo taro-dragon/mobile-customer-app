@@ -13,12 +13,13 @@ import Button from "@/components/common/Button";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import RegistrationStockPriceFormScreen from "./form/price";
 import RegistrationStockGuaranteeFormScreen from "./form/guarantee";
+import RegistrationStockOptionsFormScreen from "./form/options";
 
 const renderScene = SceneMap({
   basic: RegistrationStockBasicFormScreen,
   price: RegistrationStockPriceFormScreen,
   guarantee: RegistrationStockGuaranteeFormScreen,
-  options: RegistrationStockBasicFormScreen,
+  options: RegistrationStockOptionsFormScreen,
 });
 
 const routes = [
