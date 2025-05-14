@@ -34,7 +34,6 @@ const ModalPicker: React.FC<ModalPickerProps> = ({
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedValue, setSelectedValue] = useState<string | undefined>();
-  console.log(selectedValue);
 
   // react-hook-formのコントローラーを使用
   const { field } = useController({

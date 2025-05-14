@@ -10,7 +10,6 @@ import {
 } from "@/constants/registrationStockOptions";
 
 const RegistrationStockOptionsFormScreen = () => {
-  const { colors, typography } = useTheme();
   return (
     <ScrollView contentContainerStyle={{ padding: 16, gap: 12 }}>
       <OptionItem name="airConditioner" label="エアコン" />

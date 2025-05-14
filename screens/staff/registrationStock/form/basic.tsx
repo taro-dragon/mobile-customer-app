@@ -91,7 +91,7 @@ const RegistrationStockBasicFormScreen = () => {
         <TakePhoto name="interior" isRequired label="内装" />
         {additionalPhotos.map((index) => (
           <View key={index} style={{ position: "relative" }}>
-            <TakePhoto name={`other${index}`} label={`その他${index}`} />
+            <TakePhoto name={`other${index}`} label="その他" />
             <TouchableOpacity
               onPress={() => removePhoto(index)}
               style={{
