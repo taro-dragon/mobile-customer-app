@@ -22,7 +22,12 @@ import Button from "@/components/common/Button";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import { useStore } from "@/hooks/useStore";
 import { useFormContext } from "react-hook-form";
-import { useNavigation, useRouter } from "expo-router";
+import { useNavigation } from "expo-router";
+import { Alert } from "react-native";
+import { registrationStockDraftSchema } from "@/constants/schemas/registrationStockSchema";
+import { uploadStockImages } from "@/libs/uploadStockImages";
+import Toast from "react-native-toast-message";
+import { removeUndefined } from "@/libs/removeUndefined";
 
 const renderScene = SceneMap({
   basic: RegistrationStockBasicFormScreen,
@@ -38,6 +43,15 @@ const routes = [
   { key: "options", title: "オプション" },
 ];
 
+const IMAGE_FIELDS = [
+  "front",
+  "back",
+  "left",
+  "right",
+  "interior",
+  ...Array.from({ length: 15 }, (_, i) => `otherPhoto${i + 1}`),
+];
+
 const RegistrationStockFormScreen = () => {
   const { colors, typography } = useTheme();
   const [isModalVisible, setModalVisible] = useState(false);
@@ -45,11 +59,39 @@ const RegistrationStockFormScreen = () => {
   const navigation = useNavigation();
   const [index, setIndex] = useState(0);
   const layout = useWindowDimensions();
-  const { watch } = useFormContext();
-  const onDraft = async () => {
-    setModalVisible(true);
-    const formData = watch();
+  const {
+    watch,
+    handleSubmit,
+    formState: { errors },
+  } = useFormContext();
+
+  // Handle draft saving (no validation, no images)
+  const onHandleDraft = async () => {
     try {
+      setModalVisible(true);
+      // Get all form data
+      const formData = watch();
+
+      // Create a copy without image fields to save storage costs
+      const draftData = { ...formData };
+      IMAGE_FIELDS.forEach((field) => {
+        if (field in draftData) {
+          delete draftData[field];
+        }
+      });
+
+      // Remove undefined values to prevent Firestore error
+      const cleanDraftData = removeUndefined(draftData);
+
+      // Validate with the draft schema (accepts all fields without validation)
+      const validationResult =
+        registrationStockDraftSchema.safeParse(cleanDraftData);
+      if (!validationResult.success) {
+        console.error("Draft validation failed:", validationResult.error);
+        return;
+      }
+
+      // Save to Firestore
       await firestore()
         .collection("shops")
         .doc(currentStore?.id)
@@ -57,15 +99,112 @@ const RegistrationStockFormScreen = () => {
         .add({
           createdAt: new Date(),
           updatedAt: new Date(),
-          ...formData,
+          ...cleanDraftData,
         });
+
+      // Navigate back
       navigation.getParent()?.goBack();
+      Toast.show({
+        type: "success",
+        text1: "下書き保存しました",
+      });
     } catch (error) {
-      console.log(error);
+      console.error("Draft saving error:", error);
+      Toast.show({
+        type: "error",
+        text1: "下書き保存に失敗しました",
+      });
     } finally {
       setModalVisible(false);
     }
   };
+
+  // Confirm draft saving
+  const onDraft = () => {
+    Alert.alert("下書き保存", "下書き保存では画像は保存されません。", [
+      {
+        text: "キャンセル",
+        onPress: () => {},
+        style: "destructive",
+      },
+      { text: "保存", onPress: onHandleDraft, style: "default" },
+    ]);
+  };
+
+  // Handle complete stock registration (with validation and images)
+  const onRegisterStock = handleSubmit(async (data) => {
+    if (!currentStore?.id) {
+      Toast.show({
+        type: "error",
+        text1: "店舗情報の取得に失敗しました",
+      });
+      return;
+    }
+
+    try {
+      setModalVisible(true);
+
+      // Create a new stock document with an auto-generated ID
+      const stockCarRef = firestore().collection("stockCars").doc();
+
+      // Collect all image fields
+      const imageFields: Record<string, string | undefined> = {};
+      IMAGE_FIELDS.forEach((field) => {
+        if (data[field]) {
+          imageFields[field] = data[field];
+        }
+      });
+
+      // Upload images to Firebase Storage and get download URLs
+      const imageUrls = await uploadStockImages(
+        stockCarRef.id,
+        currentStore.id,
+        imageFields
+      );
+
+      // Create stock data without image URIs (we'll add the download URLs instead)
+      const stockData = { ...data };
+      // Remove local image URIs
+      IMAGE_FIELDS.forEach((field) => {
+        if (field in stockData) {
+          delete stockData[field];
+        }
+      });
+
+      // Remove undefined values to prevent Firestore error
+      const cleanStockData = removeUndefined(stockData);
+
+      // Save to Firestore with metadata and image download URLs
+      await stockCarRef.set({
+        storeId: currentStore.id,
+        createdAt: firestore.FieldValue.serverTimestamp(),
+        updatedAt: firestore.FieldValue.serverTimestamp(),
+        images: imageUrls,
+        ...cleanStockData,
+        bodyPrice: Number(cleanStockData.bodyPrice),
+        totalPayment: Number(cleanStockData.totalPayment),
+        mileage: Number(cleanStockData.mileage),
+        displacement: Number(cleanStockData.displacement),
+        doorNumber: Number(cleanStockData.doorNumber),
+      });
+
+      // Navigate back
+      navigation.getParent()?.goBack();
+      Toast.show({
+        type: "success",
+        text1: "在庫登録が完了しました",
+      });
+    } catch (error) {
+      console.error("Stock registration error:", error);
+      Toast.show({
+        type: "error",
+        text1: "在庫登録に失敗しました",
+      });
+    } finally {
+      setModalVisible(false);
+    }
+  });
+
   return (
     <View style={{ flex: 1 }}>
       <KeyboardAvoidingView
@@ -113,7 +252,7 @@ const RegistrationStockFormScreen = () => {
               <Button
                 color={colors.primary}
                 label="在庫登録"
-                onPress={() => {}}
+                onPress={onRegisterStock}
               />
             </View>
           </View>

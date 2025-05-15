@@ -5,14 +5,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
 import { useFormContext } from "react-hook-form";
-import {
-  Keyboard,
-  ScrollView,
-  TouchableWithoutFeedback,
-  View,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import { ScrollView, View, Text, TouchableOpacity } from "react-native";
 import { Plus, X } from "lucide-react-native";
 import { useState } from "react";
 import ColorSelect from "@/components/registrationCar/form/ColorSelect";
@@ -24,9 +17,14 @@ import {
 } from "@/constants/registrationStockOptions";
 
 const RegistrationStockBasicFormScreen = () => {
-  const { watch, setValue } = useFormContext();
+  const {
+    watch,
+    setValue,
+    formState: { errors },
+  } = useFormContext();
   const { colors, typography } = useTheme();
   const { grade, model, year, maker } = watch();
+  const [nextPhotoId, setNextPhotoId] = useState<number>(1);
   const [additionalPhotos, setAdditionalPhotos] = useState<number[]>([]);
   const formCar = {
     grade,
@@ -36,16 +34,20 @@ const RegistrationStockBasicFormScreen = () => {
   };
   const carData = transformCarData(formCar as Car);
 
+  const FIXED_PHOTOS_COUNT = 5;
+  const MAX_PHOTOS = 20;
+  const MAX_ADDITIONAL_PHOTOS = MAX_PHOTOS - FIXED_PHOTOS_COUNT;
+
   const addPhoto = () => {
-    const newIndex = additionalPhotos.length + 1;
-    if (additionalPhotos.length + 6 < 20) {
-      setAdditionalPhotos([...additionalPhotos, newIndex]);
+    if (additionalPhotos.length < MAX_ADDITIONAL_PHOTOS) {
+      setAdditionalPhotos([...additionalPhotos, nextPhotoId]);
+      setNextPhotoId(nextPhotoId + 1);
     }
   };
 
   const removePhoto = (index: number) => {
     setAdditionalPhotos(additionalPhotos.filter((i) => i !== index));
-    setValue(`other${index}`, undefined);
+    setValue(`otherPhoto${index}`, undefined);
   };
 
   return (
@@ -71,7 +73,14 @@ const RegistrationStockBasicFormScreen = () => {
       </View>
       <Text
         style={{
-          color: colors.textPrimary,
+          color:
+            errors.front ||
+            errors.back ||
+            errors.left ||
+            errors.right ||
+            errors.interior
+              ? colors.error
+              : colors.textPrimary,
           ...typography.heading3,
           paddingHorizontal: 16,
         }}
@@ -91,7 +100,7 @@ const RegistrationStockBasicFormScreen = () => {
         <TakePhoto name="interior" isRequired label="内装" />
         {additionalPhotos.map((index) => (
           <View key={index} style={{ position: "relative" }}>
-            <TakePhoto name={`other${index}`} label="その他" />
+            <TakePhoto name={`otherPhoto${index}`} label="その他" />
             <TouchableOpacity
               onPress={() => removePhoto(index)}
               style={{
@@ -116,13 +125,13 @@ const RegistrationStockBasicFormScreen = () => {
             alignItems: "center",
             justifyContent: "center",
             gap: 8,
-            opacity: additionalPhotos.length + 6 >= 20 ? 0.5 : 1,
+            opacity: additionalPhotos.length >= MAX_ADDITIONAL_PHOTOS ? 0.5 : 1,
           }}
-          disabled={additionalPhotos.length + 6 >= 20}
+          disabled={additionalPhotos.length >= MAX_ADDITIONAL_PHOTOS}
         >
           <Plus size={32} color={colors.textSecondary} />
           <Text style={{ color: colors.textSecondary }}>
-            {additionalPhotos.length + 6 >= 20
+            {additionalPhotos.length >= MAX_ADDITIONAL_PHOTOS
               ? "最大枚数に達しました"
               : "写真を追加"}
           </Text>

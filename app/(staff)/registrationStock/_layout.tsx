@@ -5,10 +5,30 @@ import { X } from "lucide-react-native";
 import { useCallback } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { TouchableOpacity } from "react-native";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  RegistrationStockFormData,
+  registrationStockSchema,
+} from "@/constants/schemas/registrationStockSchema";
 
 const RegistrationStockLayout = () => {
   const router = useRouter();
-  const form = useForm();
+  const form = useForm<RegistrationStockFormData>({
+    resolver: zodResolver(registrationStockSchema),
+    defaultValues: {
+      // Basic initial values for select fields to avoid undefined values
+      guarantee: "",
+      transmission: "",
+      inspection: "",
+      repairStatus: "",
+      legalRepair: "",
+      industrySales: "",
+      cruiseControl: "",
+      slideDoor: "",
+      carNavi: "",
+      tvMonitor: "",
+    },
+  });
   const { colors } = useTheme();
   const handleGoBack = useCallback(() => {
     setTimeout(() => {

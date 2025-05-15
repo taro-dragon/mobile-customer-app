@@ -1,5 +1,5 @@
 import { Plus } from "lucide-react-native";
-import { useFormContext } from "react-hook-form";
+import { useController, useFormContext } from "react-hook-form";
 import { Linking, Text, TouchableOpacity, View } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
 import React, { useCallback } from "react";
@@ -15,10 +15,15 @@ type Props = {
 
 const TakePhoto: React.FC<Props> = ({ name, label, isRequired = false }) => {
   const { colors } = useTheme();
-  const { watch } = useFormContext();
-  const value = watch(name);
+  const {
+    formState: { errors },
+  } = useFormContext();
+  const { field } = useController({ name });
+
   const { requestPermission } = useCameraPermission();
   const router = useRouter();
+
+  // Handle camera press
   const onPress = useCallback(async () => {
     const permissionGranted = await requestPermission();
     if (permissionGranted) {
@@ -29,7 +34,11 @@ const TakePhoto: React.FC<Props> = ({ name, label, isRequired = false }) => {
     } else {
       await Linking.openSettings();
     }
-  }, [requestPermission, router]);
+  }, [requestPermission, router, name]);
+
+  // Check if this field has an error
+  const hasError = name in errors;
+
   return (
     <View style={{ gap: 8 }}>
       <TouchableOpacity
@@ -41,12 +50,14 @@ const TakePhoto: React.FC<Props> = ({ name, label, isRequired = false }) => {
           alignItems: "center",
           justifyContent: "center",
           gap: 8,
+          borderWidth: hasError ? 1 : 0,
+          borderColor: hasError ? colors.error : undefined,
         }}
         onPress={onPress}
       >
-        {value ? (
+        {field.value ? (
           <Image
-            source={{ uri: value }}
+            source={{ uri: field.value }}
             style={{ width: 120, height: 120, borderRadius: 12 }}
           />
         ) : (
@@ -61,7 +72,12 @@ const TakePhoto: React.FC<Props> = ({ name, label, isRequired = false }) => {
           </>
         )}
       </TouchableOpacity>
-      <Text style={{ color: colors.textPrimary, textAlign: "center" }}>
+      <Text
+        style={{
+          color: hasError ? colors.error : colors.textPrimary,
+          textAlign: "center",
+        }}
+      >
         {label}
       </Text>
     </View>

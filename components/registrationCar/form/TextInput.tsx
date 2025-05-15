@@ -24,7 +24,10 @@ const TextInput = ({
   ...props
 }: Props) => {
   const { colors, typography } = useTheme();
-  const { control } = useFormContext();
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
   const {
     field: { value, onChange },
   } = useController({ control, name });
@@ -48,6 +51,8 @@ const TextInput = ({
             flex: 1,
             color: colors.textPrimary,
             height: multiline ? 120 : undefined,
+            borderWidth: 1,
+            borderColor: errors[name] ? colors.error : colors.borderPrimary,
           }}
         />
         {unit && (
@@ -62,6 +67,11 @@ const TextInput = ({
           </Text>
         )}
       </View>
+      {errors[name] && (
+        <Text style={{ color: colors.error, ...typography.body2 }}>
+          {errors[name]?.message as string}
+        </Text>
+      )}
     </View>
   );
 };
