@@ -43,14 +43,11 @@ const routes = [
   { key: "options", title: "オプション" },
 ];
 
-const IMAGE_FIELDS = [
-  "front",
-  "back",
-  "left",
-  "right",
-  "interior",
-  ...Array.from({ length: 15 }, (_, i) => `otherPhoto${i + 1}`),
-];
+// 必須の画像フィールド
+const REQUIRED_IMAGE_FIELDS = ["front", "back", "left", "right", "interior"];
+
+// 追加可能な画像フィールドのベース名
+const ADDITIONAL_PHOTO_BASE = "otherPhoto";
 
 const RegistrationStockFormScreen = () => {
   const { colors, typography } = useTheme();
@@ -65,6 +62,29 @@ const RegistrationStockFormScreen = () => {
     formState: { errors },
   } = useFormContext();
 
+  // 全ての画像フィールドを収集する
+  const collectImageFields = (
+    data: Record<string, any>
+  ): Record<string, string> => {
+    const imageFields: Record<string, string> = {};
+
+    // 必須の画像を追加
+    REQUIRED_IMAGE_FIELDS.forEach((field) => {
+      if (data[field]) {
+        imageFields[field] = data[field];
+      }
+    });
+
+    // 追加画像を検索して追加
+    Object.keys(data).forEach((key) => {
+      if (key.startsWith(ADDITIONAL_PHOTO_BASE) && data[key]) {
+        imageFields[key] = data[key];
+      }
+    });
+
+    return imageFields;
+  };
+
   // Handle draft saving (no validation, no images)
   const onHandleDraft = async () => {
     try {
@@ -74,9 +94,14 @@ const RegistrationStockFormScreen = () => {
 
       // Create a copy without image fields to save storage costs
       const draftData = { ...formData };
-      IMAGE_FIELDS.forEach((field) => {
-        if (field in draftData) {
-          delete draftData[field];
+
+      // 画像フィールドを削除
+      Object.keys(draftData).forEach((key) => {
+        if (
+          REQUIRED_IMAGE_FIELDS.includes(key) ||
+          key.startsWith(ADDITIONAL_PHOTO_BASE)
+        ) {
+          delete draftData[key];
         }
       });
 
@@ -113,6 +138,7 @@ const RegistrationStockFormScreen = () => {
       Toast.show({
         type: "error",
         text1: "下書き保存に失敗しました",
+        text2: error instanceof Error ? error.message : "不明なエラー",
       });
     } finally {
       setModalVisible(false);
@@ -147,13 +173,10 @@ const RegistrationStockFormScreen = () => {
       // Create a new stock document with an auto-generated ID
       const stockCarRef = firestore().collection("stockCars").doc();
 
-      // Collect all image fields
-      const imageFields: Record<string, string | undefined> = {};
-      IMAGE_FIELDS.forEach((field) => {
-        if (data[field]) {
-          imageFields[field] = data[field];
-        }
-      });
+      // 全ての画像フィールドを収集
+      const imageFields = collectImageFields(data);
+
+      console.log("Uploading images:", Object.keys(imageFields));
 
       // Upload images to Firebase Storage and get download URLs
       const imageUrls = await uploadStockImages(
@@ -162,12 +185,18 @@ const RegistrationStockFormScreen = () => {
         imageFields
       );
 
+      console.log("Uploaded image URLs:", Object.keys(imageUrls));
+
       // Create stock data without image URIs (we'll add the download URLs instead)
       const stockData = { ...data };
-      // Remove local image URIs
-      IMAGE_FIELDS.forEach((field) => {
-        if (field in stockData) {
-          delete stockData[field];
+
+      // 画像フィールドを削除
+      Object.keys(stockData).forEach((key) => {
+        if (
+          REQUIRED_IMAGE_FIELDS.includes(key) ||
+          key.startsWith(ADDITIONAL_PHOTO_BASE)
+        ) {
+          delete stockData[key];
         }
       });
 
@@ -199,6 +228,7 @@ const RegistrationStockFormScreen = () => {
       Toast.show({
         type: "error",
         text1: "在庫登録に失敗しました",
+        text2: error instanceof Error ? error.message : "不明なエラー",
       });
     } finally {
       setModalVisible(false);
