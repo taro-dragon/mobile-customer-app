@@ -4,7 +4,7 @@ import { View } from "react-native";
 
 const SelectDraft = () => {
   const { data, error, mutate, isLoading } = useFetchStockDrafts();
-  return <SelectDraftScreen StockDraft={data} />;
+  return <SelectDraftScreen StockDraft={data} mutate={mutate} />;
 };
 
 export default SelectDraft;
