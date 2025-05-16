@@ -52,17 +52,16 @@ const ADDITIONAL_PHOTO_BASE = "otherPhoto";
 const RegistrationStockFormScreen = () => {
   const { colors, typography } = useTheme();
   const [isModalVisible, setModalVisible] = useState(false);
-  const { currentStore } = useStore();
+  const { currentStore, staff } = useStore();
   const navigation = useNavigation();
   const [index, setIndex] = useState(0);
   const layout = useWindowDimensions();
   const {
     watch,
     handleSubmit,
-    formState: { errors },
+    formState: { isSubmitting },
   } = useFormContext();
 
-  // 全ての画像フィールドを収集する
   const collectImageFields = (
     data: Record<string, any>
   ): Record<string, string> => {
@@ -124,6 +123,7 @@ const RegistrationStockFormScreen = () => {
         .add({
           createdAt: new Date(),
           updatedAt: new Date(),
+          createStaff: staff?.id,
           ...cleanDraftData,
         });
 
@@ -168,8 +168,6 @@ const RegistrationStockFormScreen = () => {
     }
 
     try {
-      setModalVisible(true);
-
       // Create a new stock document with an auto-generated ID
       const stockCarRef = firestore().collection("stockCars").doc();
 
@@ -230,8 +228,6 @@ const RegistrationStockFormScreen = () => {
         text1: "在庫登録に失敗しました",
         text2: error instanceof Error ? error.message : "不明なエラー",
       });
-    } finally {
-      setModalVisible(false);
     }
   });
 
@@ -276,6 +272,7 @@ const RegistrationStockFormScreen = () => {
                 color={colors.primary}
                 label="下書き保存"
                 onPress={onDraft}
+                disabled={isModalVisible || isSubmitting}
               />
             </View>
             <View style={{ flex: 1 }}>
@@ -283,6 +280,7 @@ const RegistrationStockFormScreen = () => {
                 color={colors.primary}
                 label="在庫登録"
                 onPress={onRegisterStock}
+                disabled={isModalVisible || isSubmitting}
               />
             </View>
           </View>
@@ -290,7 +288,7 @@ const RegistrationStockFormScreen = () => {
         </View>
       </KeyboardAvoidingView>
       <Modal
-        visible={isModalVisible}
+        visible={isModalVisible || isSubmitting}
         onRequestClose={() => setModalVisible(false)}
         transparent
         animationType="fade"

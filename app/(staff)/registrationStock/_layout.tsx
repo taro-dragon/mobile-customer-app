@@ -16,7 +16,6 @@ const RegistrationStockLayout = () => {
   const form = useForm<RegistrationStockFormData>({
     resolver: zodResolver(registrationStockSchema),
     defaultValues: {
-      // Basic initial values for select fields to avoid undefined values
       guarantee: "",
       transmission: "",
       inspection: "",
@@ -57,6 +56,13 @@ const RegistrationStockLayout = () => {
                 <X size={24} color={colors.primary} />
               </TouchableOpacity>
             ),
+          }}
+        />
+        <Stack.Screen
+          name="selectDraft"
+          options={{
+            title: "下書きから登録",
+            headerBackButtonDisplayMode: "minimal",
           }}
         />
         <Stack.Screen

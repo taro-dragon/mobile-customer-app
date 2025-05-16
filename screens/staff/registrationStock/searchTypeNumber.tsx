@@ -9,7 +9,6 @@ import React, { useState, useMemo, useCallback } from "react";
 import { useFormContext } from "react-hook-form";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 
-// 検索フォームを独立したコンポーネントとして切り出す
 interface SearchFormProps {
   typeNumber: string;
   setTypeNumber: (value: string) => void;
@@ -36,7 +35,10 @@ const SearchForm = React.memo(
                   borderRadius: 8,
                   padding: 16,
                   color: colors.textPrimary,
+                  borderWidth: 1,
+                  borderColor: colors.borderPrimary,
                 }}
+                placeholder="XXX-XXXXXX"
               />
             </View>
             <TouchableOpacity
@@ -99,7 +101,6 @@ const SearchTypeNumberScreen = () => {
     <View style={{ flex: 1 }}>
       <FlashList
         data={result}
-        style={{ flex: 1 }}
         keyboardShouldPersistTaps="handled"
         ListHeaderComponent={HeaderComponent}
         ItemSeparatorComponent={() => <Divider />}

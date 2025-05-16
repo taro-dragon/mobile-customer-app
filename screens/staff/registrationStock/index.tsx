@@ -29,6 +29,9 @@ const RegistrationStockIndexScreen: React.FC = () => {
           backgroundColor: colors.backgroundSecondary,
           borderColor: colors.borderPrimary,
         }}
+        onPress={() => {
+          router.push("/registrationStock/selectDraft");
+        }}
       >
         <FileEdit size={24} color={colors.primary} />
         <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
