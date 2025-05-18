@@ -62,9 +62,9 @@ const StaffIndexScreen = () => {
           </TouchableOpacity>
           <View style={{ flexDirection: "row", gap: 8 }}>
             <TouchableOpacity
-              // onPress={() => {
-              //   router.push("/registrationCar");
-              // }}
+              onPress={() => {
+                router.push("/bulkAppraisalBid");
+              }}
               style={styles.button}
             >
               <Gavel size={24} color={colors.primary} />
