@@ -43,24 +43,24 @@ const BulkAppraisalBidFilterScreen = () => {
         />
         <FilterIndexItem
           label="自動車名"
-          onPress={() => {}}
+          onPress={() => router.push("/bulkAppraisalBid/filter/model")}
           defaultValue="すべて"
           disabled={!maker}
-          value={model}
+          value={modelName}
         />
         <FilterIndexItem
           label="モデル"
           onPress={() => {}}
           defaultValue="すべて"
           disabled={!model}
-          value={year}
+          value={yearName}
         />
         <FilterIndexItem
           label="グレード"
           onPress={() => {}}
           defaultValue="すべて"
           disabled={!year}
-          value={grade}
+          value={gradeName}
         />
       </ScrollView>
       <Divider />

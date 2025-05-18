@@ -21,7 +21,7 @@ const BulkAppraisalBidFilterLayout = () => {
       <Stack.Screen
         name="index"
         options={{
-          title: "検索条件絞り込み",
+          title: "絞り込み",
           headerLeft: () => (
             <TouchableOpacity onPress={router.back}>
               <X size={24} color={colors.primary} />
@@ -33,6 +33,13 @@ const BulkAppraisalBidFilterLayout = () => {
         name="maker"
         options={{
           title: "メーカー",
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
+      <Stack.Screen
+        name="model"
+        options={{
+          title: "自動車名",
           headerBackButtonDisplayMode: "minimal",
         }}
       />
