@@ -1,7 +1,6 @@
 import FilterListItem from "@/components/filter/FilterListItem";
 import { Manufacture } from "@/types/models/carData/manufacturet";
 import { FlashList } from "@shopify/flash-list";
-import { View } from "react-native";
 
 type MakerFilterScreenProps = {
   manufacturers: Manufacture[];
