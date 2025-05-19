@@ -1,33 +1,34 @@
 import FilterListItem from "@/components/filter/FilterListItem";
-import { Model } from "@/types/models/carData/model";
+import { Grade } from "@/types/models/carData/grade";
 import { FlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
 import React from "react";
 
-type CarFilterProps = {
-  cars: Model[];
+type GradeFilterProps = {
+  grades?: Grade[];
 };
 
-const CarFilter: React.FC<CarFilterProps> = ({ cars }) => {
+const GradeFilterScreen: React.FC<GradeFilterProps> = ({ grades }) => {
   const router = useRouter();
   return (
     <FlashList
-      data={cars}
+      data={grades}
       contentContainerStyle={{
         paddingBottom: 24,
       }}
       renderItem={({ item }) => (
         <FilterListItem
-          label={item.name}
-          name="model"
-          value={item.modelId}
+          label={item.gradeName}
+          name="grade"
+          value={item.gradeName}
           onPressed={() => {
-            router.push("/bulkAppraisalBid/filter/year");
+            router.dismissAll();
           }}
+          subLabel={`型番：${item.modelNumber.replace(/[\s\u3000]/g, "")}`}
         />
       )}
     />
   );
 };
 
-export default CarFilter;
+export default GradeFilterScreen;

@@ -43,6 +43,20 @@ const BulkAppraisalBidFilterLayout = () => {
           headerBackButtonDisplayMode: "minimal",
         }}
       />
+      <Stack.Screen
+        name="year"
+        options={{
+          title: "モデル",
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
+      <Stack.Screen
+        name="grade"
+        options={{
+          title: "グレード",
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
     </Stack>
   );
 };

@@ -1,28 +1,27 @@
 import FilterListItem from "@/components/filter/FilterListItem";
-import { Model } from "@/types/models/carData/model";
+import { Year } from "@/types/models/carData/year";
 import { FlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
-import React from "react";
 
-type CarFilterProps = {
-  cars: Model[];
+type YearFilterProps = {
+  years: Year[];
 };
 
-const CarFilter: React.FC<CarFilterProps> = ({ cars }) => {
+const YearFilterScreen: React.FC<YearFilterProps> = ({ years }) => {
   const router = useRouter();
   return (
     <FlashList
-      data={cars}
+      data={years}
       contentContainerStyle={{
         paddingBottom: 24,
       }}
       renderItem={({ item }) => (
         <FilterListItem
-          label={item.name}
-          name="model"
-          value={item.modelId}
+          label={item.year}
+          name="year"
+          value={item.yearId}
           onPressed={() => {
-            router.push("/bulkAppraisalBid/filter/year");
+            router.push("/bulkAppraisalBid/filter/grade");
           }}
         />
       )}
@@ -30,4 +29,4 @@ const CarFilter: React.FC<CarFilterProps> = ({ cars }) => {
   );
 };
 
-export default CarFilter;
+export default YearFilterScreen;

@@ -25,11 +25,11 @@ const BulkAppraisalBidFilterScreen = () => {
   const yearName = manufacturers
     .find((m) => m.manufacturerId === maker)
     ?.carModels.find((m) => m.modelId === model)
-    ?.years.find((m) => m.year === year)?.year;
+    ?.years.find((m) => m.yearId === year)?.year;
   const gradeName = manufacturers
     .find((m) => m.manufacturerId === maker)
     ?.carModels.find((m) => m.modelId === model)
-    ?.years.find((m) => m.year === year)
+    ?.years.find((m) => m.yearId === year)
     ?.grades.find((m) => m.gradeName === grade)?.gradeName;
 
   return (
@@ -50,14 +50,14 @@ const BulkAppraisalBidFilterScreen = () => {
         />
         <FilterIndexItem
           label="モデル"
-          onPress={() => {}}
+          onPress={() => router.push("/bulkAppraisalBid/filter/year")}
           defaultValue="すべて"
           disabled={!model}
           value={yearName}
         />
         <FilterIndexItem
           label="グレード"
-          onPress={() => {}}
+          onPress={() => router.push("/bulkAppraisalBid/filter/grade")}
           defaultValue="すべて"
           disabled={!year}
           value={gradeName}

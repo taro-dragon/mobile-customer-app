@@ -10,6 +10,7 @@ type FilterListItemProps = {
   onPressed?: () => void;
   name: string;
   value: string;
+  subLabel?: string;
 };
 
 const FilterListItem: React.FC<FilterListItemProps> = ({
@@ -17,6 +18,7 @@ const FilterListItem: React.FC<FilterListItemProps> = ({
   onPressed,
   name,
   value,
+  subLabel,
 }) => {
   const { colors, typography } = useTheme();
   const { getValues, control } = useFormContext();
@@ -41,26 +43,32 @@ const FilterListItem: React.FC<FilterListItemProps> = ({
           onPressed?.();
         }}
       >
-        <Text
-          style={{
-            ...typography.heading3,
-            color: colors.textPrimary,
-            flex: 1,
-          }}
-        >
-          {label}
-        </Text>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 4,
-          }}
-        >
-          {value === filterValue && (
-            <Check strokeWidth={4} size={16} color={colors.primary} />
+        <View style={{ gap: 4 }}>
+          <Text
+            style={{
+              ...typography.heading3,
+              color: colors.textPrimary,
+              flex: 1,
+            }}
+          >
+            {label}
+          </Text>
+          {subLabel && (
+            <Text
+              style={{
+                ...typography.heading4,
+                color: colors.textSecondary,
+                flex: 1,
+              }}
+            >
+              {subLabel}
+            </Text>
           )}
         </View>
+
+        {value === filterValue && (
+          <Check strokeWidth={4} size={16} color={colors.primary} />
+        )}
       </TouchableOpacity>
       <Divider />
     </>
