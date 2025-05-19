@@ -8,6 +8,7 @@ import { useRouter } from "expo-router";
 import { useFormContext } from "react-hook-form";
 import { ScrollView, View } from "react-native";
 import fullCarData from "@/constants/full_car_catalog.json";
+import { sellTimeOptions } from "@/constants/registrationCarOptions";
 
 const BulkAppraisalBidFilterScreen = () => {
   const { colors } = useTheme();
@@ -74,7 +75,7 @@ const BulkAppraisalBidFilterScreen = () => {
           label="売却時期"
           onPress={() => router.push("/bulkAppraisalBid/filter/sellTime")}
           defaultValue="すべて"
-          value={sellTime}
+          value={sellTimeOptions.find((m) => m.value === sellTime)?.label}
         />
       </ScrollView>
       <Divider />
