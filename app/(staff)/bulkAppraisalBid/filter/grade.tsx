@@ -16,9 +16,21 @@ const GradeFilter = () => {
     return cars?.find((c) => c.modelId === model)?.years;
   }, [cars, model]);
   const grades = useMemo(() => {
-    return years?.find((y) => y.yearId === year)?.grades;
+    const allGrades = years?.find((y) => y.yearId === year)?.grades;
+    // 重複するgradeと型番を排除する
+    const uniqueGrades = allGrades
+      ? [
+          ...new Map(
+            allGrades.map((grade) => [
+              grade.gradeName + grade.modelNumber,
+              grade,
+            ])
+          ).values(),
+        ]
+      : [];
+    return uniqueGrades;
   }, [years, year]);
-  console.log(year);
+
   return <GradeFilterScreen grades={grades} />;
 };
 

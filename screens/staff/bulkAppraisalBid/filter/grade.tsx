@@ -11,7 +11,12 @@ type GradeFilterProps = {
 
 const GradeFilterScreen: React.FC<GradeFilterProps> = ({ grades }) => {
   const router = useRouter();
-  const { resetField } = useFormContext();
+  const { resetField, setValue } = useFormContext();
+  const { getValues } = useFormContext();
+  const grade = getValues("grade");
+  const modelNumber = getValues("modelNumber");
+  console.log(modelNumber);
+
   return (
     <FlashList
       data={grades}
@@ -24,8 +29,16 @@ const GradeFilterScreen: React.FC<GradeFilterProps> = ({ grades }) => {
           name="grade"
           value={item.gradeName}
           onPressed={() => {
+            setValue(
+              "modelNumber",
+              item.modelNumber.replace(/[\s\u3000]/g, "")
+            );
             router.dismissAll();
           }}
+          checked={
+            grade === item.gradeName &&
+            modelNumber === item.modelNumber.replace(/[\s\u3000]/g, "")
+          }
           subLabel={`型番：${item.modelNumber.replace(/[\s\u3000]/g, "")}`}
         />
       )}
@@ -34,8 +47,10 @@ const GradeFilterScreen: React.FC<GradeFilterProps> = ({ grades }) => {
           label="すべて"
           name="grade"
           value={undefined}
+          checked={!grade && !modelNumber}
           onPressed={() => {
             resetField("grade");
+            setValue("modelNumber", undefined);
             router.dismissAll();
           }}
         />

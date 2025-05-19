@@ -10,7 +10,8 @@ type YearFilterProps = {
 
 const YearFilterScreen: React.FC<YearFilterProps> = ({ years }) => {
   const router = useRouter();
-  const { resetField } = useFormContext();
+  const { resetField, setValue, getValues } = useFormContext();
+  const year = getValues("year");
   return (
     <FlashList
       data={years}
@@ -25,6 +26,7 @@ const YearFilterScreen: React.FC<YearFilterProps> = ({ years }) => {
           onPressed={() => {
             router.push("/bulkAppraisalBid/filter/grade");
           }}
+          checked={year === item.yearId}
         />
       )}
       ListHeaderComponent={
@@ -35,8 +37,10 @@ const YearFilterScreen: React.FC<YearFilterProps> = ({ years }) => {
           onPressed={() => {
             resetField("year");
             resetField("grade");
+            setValue("modelNumber", undefined);
             router.dismissAll();
           }}
+          checked={!year}
         />
       }
     />

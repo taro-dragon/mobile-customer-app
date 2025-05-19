@@ -12,7 +12,8 @@ const MakerFilterScreen: React.FC<MakerFilterScreenProps> = ({
   manufacturers,
 }) => {
   const router = useRouter();
-  const { resetField } = useFormContext();
+  const { resetField, setValue, getValues } = useFormContext();
+  const maker = getValues("maker");
   return (
     <FlashList
       data={manufacturers}
@@ -27,6 +28,7 @@ const MakerFilterScreen: React.FC<MakerFilterScreenProps> = ({
           onPressed={() => {
             router.push("/bulkAppraisalBid/filter/model");
           }}
+          checked={maker === item.manufacturerId}
         />
       )}
       ListHeaderComponent={
@@ -39,8 +41,10 @@ const MakerFilterScreen: React.FC<MakerFilterScreenProps> = ({
             resetField("model");
             resetField("year");
             resetField("grade");
+            setValue("modelNumber", undefined);
             router.dismissAll();
           }}
+          checked={!maker}
         />
       }
     />

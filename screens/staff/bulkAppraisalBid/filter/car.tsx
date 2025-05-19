@@ -11,7 +11,8 @@ type CarFilterProps = {
 
 const CarFilter: React.FC<CarFilterProps> = ({ cars }) => {
   const router = useRouter();
-  const { resetField } = useFormContext();
+  const { resetField, setValue, getValues } = useFormContext();
+  const model = getValues("model");
   return (
     <FlashList
       data={cars}
@@ -26,6 +27,7 @@ const CarFilter: React.FC<CarFilterProps> = ({ cars }) => {
           onPressed={() => {
             router.push("/bulkAppraisalBid/filter/year");
           }}
+          checked={model === item.modelId}
         />
       )}
       ListHeaderComponent={
@@ -37,8 +39,10 @@ const CarFilter: React.FC<CarFilterProps> = ({ cars }) => {
             resetField("model");
             resetField("year");
             resetField("grade");
+            setValue("modelNumber", undefined);
             router.dismissAll();
           }}
+          checked={!model}
         />
       }
     />

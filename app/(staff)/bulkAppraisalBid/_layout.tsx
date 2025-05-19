@@ -7,7 +7,15 @@ import { TouchableOpacity } from "react-native";
 const BulkAppraisalBidLayout = () => {
   const { colors } = useTheme();
   const router = useRouter();
-  const form = useForm();
+  const form = useForm({
+    defaultValues: {
+      maker: undefined,
+      model: undefined,
+      year: undefined,
+      grade: undefined,
+      modelNumber: undefined,
+    },
+  });
   return (
     <FormProvider {...form}>
       <Stack

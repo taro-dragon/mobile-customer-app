@@ -11,6 +11,7 @@ type FilterListItemProps = {
   name: string;
   value: string | undefined;
   subLabel?: string;
+  checked?: boolean;
 };
 
 const FilterListItem: React.FC<FilterListItemProps> = ({
@@ -19,10 +20,10 @@ const FilterListItem: React.FC<FilterListItemProps> = ({
   name,
   value,
   subLabel,
+  checked,
 }) => {
   const { colors, typography } = useTheme();
-  const { getValues, control } = useFormContext();
-  const filterValue = getValues(name);
+  const { control } = useFormContext();
   const {
     field: { onChange },
   } = useController({
@@ -66,9 +67,7 @@ const FilterListItem: React.FC<FilterListItemProps> = ({
           )}
         </View>
 
-        {value === filterValue && (
-          <Check strokeWidth={4} size={16} color={colors.primary} />
-        )}
+        {checked && <Check strokeWidth={4} size={16} color={colors.primary} />}
       </TouchableOpacity>
       <Divider />
     </>
