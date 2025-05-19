@@ -57,6 +57,13 @@ const BulkAppraisalBidFilterLayout = () => {
           headerBackButtonDisplayMode: "minimal",
         }}
       />
+      <Stack.Screen
+        name="prefecture"
+        options={{
+          title: "都道府県",
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
     </Stack>
   );
 };
