@@ -2,6 +2,7 @@ import FilterListItem from "@/components/filter/FilterListItem";
 import { Year } from "@/types/models/carData/year";
 import { FlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
+import { useFormContext } from "react-hook-form";
 
 type YearFilterProps = {
   years: Year[];
@@ -9,6 +10,7 @@ type YearFilterProps = {
 
 const YearFilterScreen: React.FC<YearFilterProps> = ({ years }) => {
   const router = useRouter();
+  const { resetField } = useFormContext();
   return (
     <FlashList
       data={years}
@@ -25,6 +27,18 @@ const YearFilterScreen: React.FC<YearFilterProps> = ({ years }) => {
           }}
         />
       )}
+      ListHeaderComponent={
+        <FilterListItem
+          label="すべて"
+          name="year"
+          value={undefined}
+          onPressed={() => {
+            resetField("year");
+            resetField("grade");
+            router.dismissAll();
+          }}
+        />
+      }
     />
   );
 };

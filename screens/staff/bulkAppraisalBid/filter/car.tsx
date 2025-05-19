@@ -3,6 +3,7 @@ import { Model } from "@/types/models/carData/model";
 import { FlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
 import React from "react";
+import { useFormContext } from "react-hook-form";
 
 type CarFilterProps = {
   cars: Model[];
@@ -10,6 +11,7 @@ type CarFilterProps = {
 
 const CarFilter: React.FC<CarFilterProps> = ({ cars }) => {
   const router = useRouter();
+  const { resetField } = useFormContext();
   return (
     <FlashList
       data={cars}
@@ -26,6 +28,19 @@ const CarFilter: React.FC<CarFilterProps> = ({ cars }) => {
           }}
         />
       )}
+      ListHeaderComponent={
+        <FilterListItem
+          label="すべて"
+          name="model"
+          value={undefined}
+          onPressed={() => {
+            resetField("model");
+            resetField("year");
+            resetField("grade");
+            router.dismissAll();
+          }}
+        />
+      }
     />
   );
 };

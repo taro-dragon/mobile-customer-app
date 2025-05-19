@@ -3,6 +3,7 @@ import { Grade } from "@/types/models/carData/grade";
 import { FlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
 import React from "react";
+import { useFormContext } from "react-hook-form";
 
 type GradeFilterProps = {
   grades?: Grade[];
@@ -10,6 +11,7 @@ type GradeFilterProps = {
 
 const GradeFilterScreen: React.FC<GradeFilterProps> = ({ grades }) => {
   const router = useRouter();
+  const { resetField } = useFormContext();
   return (
     <FlashList
       data={grades}
@@ -27,6 +29,17 @@ const GradeFilterScreen: React.FC<GradeFilterProps> = ({ grades }) => {
           subLabel={`型番：${item.modelNumber.replace(/[\s\u3000]/g, "")}`}
         />
       )}
+      ListHeaderComponent={
+        <FilterListItem
+          label="すべて"
+          name="grade"
+          value={undefined}
+          onPressed={() => {
+            resetField("grade");
+            router.dismissAll();
+          }}
+        />
+      }
     />
   );
 };

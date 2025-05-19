@@ -9,7 +9,7 @@ type FilterListItemProps = {
   label: string;
   onPressed?: () => void;
   name: string;
-  value: string;
+  value: string | undefined;
   subLabel?: string;
 };
 
