@@ -10,6 +10,7 @@ import { ScrollView, View } from "react-native";
 import fullCarData from "@/constants/full_car_catalog.json";
 import { sellTimeOptions } from "@/constants/registrationCarOptions";
 import { BidStatus } from "@/constants/bidStatus";
+import { useBulkAppraisalContext } from "@/contexts/staff/BulkAppraisalContext";
 
 const { manufacturers } = fullCarData as FullCarData;
 
@@ -34,7 +35,8 @@ const findCarData = {
 const BulkAppraisalBidFilterScreen = () => {
   const { colors } = useTheme();
   const router = useRouter();
-  const { getValues, reset } = useFormContext();
+  const { refresh } = useBulkAppraisalContext();
+  const { getValues, reset, handleSubmit } = useFormContext();
 
   const maker = getValues("maker");
   const model = getValues("model");
@@ -104,17 +106,12 @@ const BulkAppraisalBidFilterScreen = () => {
       </ScrollView>
       <Divider />
       <View style={{ padding: 16 }}>
-        <View style={{ flexDirection: "row", gap: 16 }}>
-          <Button
-            label="リセット"
-            onPress={handleReset}
-            color={colors.primary}
-            isBorder
-          />
-          <View style={{ flex: 1 }}>
-            <Button label="検索" onPress={() => {}} color={colors.primary} />
-          </View>
-        </View>
+        <Button
+          label="リセット"
+          onPress={handleReset}
+          color={colors.primary}
+          isBorder
+        />
         <SafeAreaBottom />
       </View>
     </View>

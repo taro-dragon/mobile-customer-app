@@ -1,3 +1,4 @@
+import { BulkAppraisalProvider } from "@/contexts/staff/BulkAppraisalContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Stack, useRouter } from "expo-router";
 import { SlidersHorizontal, X } from "lucide-react-native";
@@ -17,45 +18,48 @@ const BulkAppraisalBidLayout = () => {
       status: "in_progress",
     },
   });
+
   return (
     <FormProvider {...form}>
-      <Stack
-        screenOptions={{
-          contentStyle: {
-            backgroundColor: colors.backgroundPrimary,
-          },
-          headerTintColor: colors.primary,
-          headerStyle: {
-            backgroundColor: colors.backgroundPrimary,
-          },
-        }}
-      >
-        <Stack.Screen
-          name="index"
-          options={{
-            title: "一括査定入札",
-            headerLeft: () => (
-              <TouchableOpacity onPress={router.back}>
-                <X size={24} color={colors.primary} />
-              </TouchableOpacity>
-            ),
-            headerRight: () => (
-              <TouchableOpacity
-                onPress={() => router.push("/bulkAppraisalBid/filter")}
-              >
-                <SlidersHorizontal size={24} color={colors.primary} />
-              </TouchableOpacity>
-            ),
+      <BulkAppraisalProvider>
+        <Stack
+          screenOptions={{
+            contentStyle: {
+              backgroundColor: colors.backgroundPrimary,
+            },
+            headerTintColor: colors.primary,
+            headerStyle: {
+              backgroundColor: colors.backgroundPrimary,
+            },
           }}
-        />
-        <Stack.Screen
-          name="filter"
-          options={{
-            presentation: "modal",
-            headerShown: false,
-          }}
-        />
-      </Stack>
+        >
+          <Stack.Screen
+            name="index"
+            options={{
+              title: "一括査定入札",
+              headerLeft: () => (
+                <TouchableOpacity onPress={router.back}>
+                  <X size={24} color={colors.primary} />
+                </TouchableOpacity>
+              ),
+              headerRight: () => (
+                <TouchableOpacity
+                  onPress={() => router.push("/bulkAppraisalBid/filter")}
+                >
+                  <SlidersHorizontal size={24} color={colors.primary} />
+                </TouchableOpacity>
+              ),
+            }}
+          />
+          <Stack.Screen
+            name="filter"
+            options={{
+              presentation: "modal",
+              headerShown: false,
+            }}
+          />
+        </Stack>
+      </BulkAppraisalProvider>
     </FormProvider>
   );
 };
