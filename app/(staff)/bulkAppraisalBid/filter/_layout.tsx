@@ -71,6 +71,13 @@ const BulkAppraisalBidFilterLayout = () => {
           headerBackButtonDisplayMode: "minimal",
         }}
       />
+      <Stack.Screen
+        name="status"
+        options={{
+          title: "ステータス",
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
     </Stack>
   );
 };

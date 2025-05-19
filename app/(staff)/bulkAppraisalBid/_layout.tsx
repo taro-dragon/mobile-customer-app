@@ -1,6 +1,6 @@
 import { useTheme } from "@/contexts/ThemeContext";
 import { Stack, useRouter } from "expo-router";
-import { Filter, Search, X } from "lucide-react-native";
+import { SlidersHorizontal, X } from "lucide-react-native";
 import { FormProvider, useForm } from "react-hook-form";
 import { TouchableOpacity } from "react-native";
 
@@ -14,6 +14,7 @@ const BulkAppraisalBidLayout = () => {
       year: undefined,
       grade: undefined,
       modelNumber: undefined,
+      status: "in_progress",
     },
   });
   return (
@@ -42,7 +43,7 @@ const BulkAppraisalBidLayout = () => {
               <TouchableOpacity
                 onPress={() => router.push("/bulkAppraisalBid/filter")}
               >
-                <Search size={24} color={colors.primary} />
+                <SlidersHorizontal size={24} color={colors.primary} />
               </TouchableOpacity>
             ),
           }}

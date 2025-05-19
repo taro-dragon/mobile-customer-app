@@ -9,35 +9,59 @@ import { useFormContext } from "react-hook-form";
 import { ScrollView, View } from "react-native";
 import fullCarData from "@/constants/full_car_catalog.json";
 import { sellTimeOptions } from "@/constants/registrationCarOptions";
+import { BidStatus } from "@/constants/bidStatus";
+
+const { manufacturers } = fullCarData as FullCarData;
+
+const findCarData = {
+  maker: (makerId: string) =>
+    manufacturers.find((m) => m.manufacturerId === makerId),
+  model: (makerId: string, modelId: string) =>
+    findCarData.maker(makerId)?.carModels.find((m) => m.modelId === modelId),
+  year: (makerId: string, modelId: string, yearId: string) =>
+    findCarData.model(makerId, modelId)?.years.find((y) => y.yearId === yearId),
+  grade: (
+    makerId: string,
+    modelId: string,
+    yearId: string,
+    gradeName: string
+  ) =>
+    findCarData
+      .year(makerId, modelId, yearId)
+      ?.grades.find((g) => g.gradeName === gradeName),
+};
 
 const BulkAppraisalBidFilterScreen = () => {
   const { colors } = useTheme();
   const router = useRouter();
-  const { getValues } = useFormContext();
+  const { getValues, reset } = useFormContext();
+
   const maker = getValues("maker");
   const model = getValues("model");
   const year = getValues("year");
   const grade = getValues("grade");
   const prefecture = getValues("prefecture");
   const sellTime = getValues("sellTime");
-  const { manufacturers } = fullCarData as FullCarData;
-  const makerName = manufacturers.find((m) => m.manufacturerId === maker)?.name;
-  const modelName = manufacturers
-    .find((m) => m.manufacturerId === maker)
-    ?.carModels.find((m) => m.modelId === model)?.name;
-  const yearName = manufacturers
-    .find((m) => m.manufacturerId === maker)
-    ?.carModels.find((m) => m.modelId === model)
-    ?.years.find((m) => m.yearId === year)?.year;
-  const gradeName = manufacturers
-    .find((m) => m.manufacturerId === maker)
-    ?.carModels.find((m) => m.modelId === model)
-    ?.years.find((m) => m.yearId === year)
-    ?.grades.find((m) => m.gradeName === grade)?.gradeName;
+  const status = getValues("status");
+
+  const makerName = findCarData.maker(maker)?.name;
+  const modelName = findCarData.model(maker, model)?.name;
+  const yearName = findCarData.year(maker, model, year)?.year;
+  const gradeName = findCarData.grade(maker, model, year, grade)?.gradeName;
+  const handleReset = () => {
+    reset();
+    router.back();
+  };
 
   return (
     <View style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }}>
+        <FilterIndexItem
+          label="ステータス"
+          onPress={() => router.push("/bulkAppraisalBid/filter/status")}
+          defaultValue="すべて"
+          value={BidStatus.find((m) => m.value === status)?.label}
+        />
         <FilterIndexItem
           label="メーカー"
           onPress={() => router.push("/bulkAppraisalBid/filter/maker")}
@@ -80,7 +104,17 @@ const BulkAppraisalBidFilterScreen = () => {
       </ScrollView>
       <Divider />
       <View style={{ padding: 16 }}>
-        <Button label="絞り込み" onPress={() => {}} color={colors.primary} />
+        <View style={{ flexDirection: "row", gap: 16 }}>
+          <Button
+            label="リセット"
+            onPress={handleReset}
+            color={colors.primary}
+            isBorder
+          />
+          <View style={{ flex: 1 }}>
+            <Button label="検索" onPress={() => {}} color={colors.primary} />
+          </View>
+        </View>
         <SafeAreaBottom />
       </View>
     </View>
