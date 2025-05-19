@@ -15,7 +15,6 @@ const GradeFilterScreen: React.FC<GradeFilterProps> = ({ grades }) => {
   const { getValues } = useFormContext();
   const grade = getValues("grade");
   const modelNumber = getValues("modelNumber");
-  console.log(modelNumber);
 
   return (
     <FlashList

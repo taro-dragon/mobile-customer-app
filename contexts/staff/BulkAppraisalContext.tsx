@@ -48,6 +48,7 @@ const fetchBulkAppraisalRequests = async ([pageIndex, filters]: [
   }
   if (filters.grade) {
     query = query.where("grade", "==", filters.grade);
+    query = query.where("modelNumber", "==", filters.modelNumber);
   }
   if (filters.prefecture) {
     query = query.where("prefecture", "==", filters.prefecture);
@@ -115,6 +116,7 @@ export const BulkAppraisalProvider: React.FC<{ children: React.ReactNode }> = ({
   const refresh = () => {
     return mutate();
   };
+  console.log(error);
 
   const value = {
     requests,
