@@ -18,6 +18,7 @@ const BulkAppraisalBidFilterScreen = () => {
   const year = getValues("year");
   const grade = getValues("grade");
   const prefecture = getValues("prefecture");
+  const sellTime = getValues("sellTime");
   const { manufacturers } = fullCarData as FullCarData;
   const makerName = manufacturers.find((m) => m.manufacturerId === maker)?.name;
   const modelName = manufacturers
@@ -68,6 +69,12 @@ const BulkAppraisalBidFilterScreen = () => {
           onPress={() => router.push("/bulkAppraisalBid/filter/prefecture")}
           defaultValue="すべて"
           value={prefecture}
+        />
+        <FilterIndexItem
+          label="売却時期"
+          onPress={() => router.push("/bulkAppraisalBid/filter/sellTime")}
+          defaultValue="すべて"
+          value={sellTime}
         />
       </ScrollView>
       <Divider />

@@ -64,6 +64,13 @@ const BulkAppraisalBidFilterLayout = () => {
           headerBackButtonDisplayMode: "minimal",
         }}
       />
+      <Stack.Screen
+        name="sellTime"
+        options={{
+          title: "売却時期",
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
     </Stack>
   );
 };
