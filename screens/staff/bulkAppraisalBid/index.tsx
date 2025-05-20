@@ -1,13 +1,21 @@
+import { View } from "react-native";
+import { FlashList } from "@shopify/flash-list";
+
+import BulkApprisalBidItem from "@/components/staff/bulkAppraisalBid/BulkApprisalBidItem";
 import { useBulkAppraisalContext } from "@/contexts/staff/BulkAppraisalContext";
-import { Text, View } from "react-native";
 
 const BulkAppraisalBidScreen = () => {
   const { requests } = useBulkAppraisalContext();
-  console.log(requests);
   return (
-    <View>
-      <Text>一括査定入札</Text>
-    </View>
+    <FlashList
+      data={requests}
+      contentContainerStyle={{
+        padding: 16,
+      }}
+      ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
+      keyExtractor={(item, index) => `${item.id}-${index}`}
+      renderItem={({ item }) => <BulkApprisalBidItem item={item} />}
+    />
   );
 };
 

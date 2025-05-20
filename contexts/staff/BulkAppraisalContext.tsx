@@ -3,14 +3,20 @@ import { createContext, useContext } from "react";
 import { useFormContext } from "react-hook-form";
 import useSWRInfinite from "swr/infinite";
 import firestore from "@react-native-firebase/firestore";
+import { Car } from "@/types/models/Car";
 
 type BulkAppraisalContextType = {
-  requests: BulkAppraisalRequest[];
+  requests: BulkAppraisalRequestWithCar[];
   isLoading: boolean;
+  error: Error | null;
   isError: boolean;
   hasMore: boolean;
   loadMore: () => void;
   refresh: () => Promise<any>;
+};
+
+export type BulkAppraisalRequestWithCar = BulkAppraisalRequest & {
+  car: Car;
 };
 
 const BulkAppraisalContext = createContext<
@@ -68,10 +74,20 @@ const fetchBulkAppraisalRequests = async ([pageIndex, filters]: [
   }
 
   const snapshot = await query.get();
-  const requests = snapshot.docs.map((doc) => ({
-    ...doc.data(),
-    id: doc.id,
-  })) as BulkAppraisalRequest[];
+  const requests = await Promise.all(
+    snapshot.docs.map(async (doc) => {
+      const requestsData = doc.data();
+      const carData = await firestore()
+        .collection("cars")
+        .doc(requestsData.carId)
+        .get();
+      return {
+        ...doc.data(),
+        id: doc.id,
+        car: carData.data(),
+      } as BulkAppraisalRequestWithCar;
+    })
+  );
 
   return {
     requests,
@@ -100,7 +116,7 @@ export const BulkAppraisalProvider: React.FC<{ children: React.ReactNode }> = ({
   const requests = data
     ? data.reduce(
         (acc, page) => [...acc, ...page.requests],
-        [] as BulkAppraisalRequest[]
+        [] as BulkAppraisalRequestWithCar[]
       )
     : [];
 
@@ -116,11 +132,11 @@ export const BulkAppraisalProvider: React.FC<{ children: React.ReactNode }> = ({
   const refresh = () => {
     return mutate();
   };
-  console.log(error);
 
   const value = {
     requests,
     isLoading,
+    error,
     isError: !!error,
     hasMore,
     loadMore,
