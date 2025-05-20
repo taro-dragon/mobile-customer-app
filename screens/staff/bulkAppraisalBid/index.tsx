@@ -1,4 +1,4 @@
-import { Dimensions, Text, View } from "react-native";
+import { ActivityIndicator, Dimensions, Text, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 
 import BulkApprisalBidItem from "@/components/staff/bulkAppraisalBid/BulkApprisalBidItem";
@@ -8,9 +8,16 @@ import { useHeaderHeight } from "@react-navigation/elements";
 import { Inbox } from "lucide-react-native";
 
 const BulkAppraisalBidScreen = () => {
-  const { requests, loadMore } = useBulkAppraisalContext();
+  const { requests, loadMore, isLoading } = useBulkAppraisalContext();
   const { colors, typography } = useTheme();
   const headerHeight = useHeaderHeight();
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
   return (
     <FlashList
       data={requests}
