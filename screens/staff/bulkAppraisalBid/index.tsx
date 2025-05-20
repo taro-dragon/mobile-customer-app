@@ -8,7 +8,7 @@ import { useHeaderHeight } from "@react-navigation/elements";
 import { Inbox } from "lucide-react-native";
 
 const BulkAppraisalBidScreen = () => {
-  const { requests } = useBulkAppraisalContext();
+  const { requests, loadMore } = useBulkAppraisalContext();
   const { colors, typography } = useTheme();
   const headerHeight = useHeaderHeight();
   return (
@@ -17,9 +17,11 @@ const BulkAppraisalBidScreen = () => {
       contentContainerStyle={{
         padding: 16,
       }}
+      estimatedItemSize={126}
       ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
       keyExtractor={(item, index) => `${item.id}-${index}`}
       renderItem={({ item }) => <BulkApprisalBidItem item={item} />}
+      onEndReached={loadMore}
       ListEmptyComponent={() => (
         <View
           style={{

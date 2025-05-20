@@ -14,6 +14,7 @@ const PrefectureFilterScreen = () => {
       contentContainerStyle={{
         paddingBottom: 24,
       }}
+      estimatedItemSize={49}
       renderItem={({ item }) => (
         <FilterListItem
           label={item}

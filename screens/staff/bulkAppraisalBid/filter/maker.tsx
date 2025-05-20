@@ -17,6 +17,7 @@ const MakerFilterScreen: React.FC<MakerFilterScreenProps> = ({
   return (
     <FlashList
       data={manufacturers}
+      estimatedItemSize={49}
       contentContainerStyle={{
         paddingBottom: 24,
       }}

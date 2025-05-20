@@ -15,6 +15,7 @@ const StatusFilterScreen = () => {
       contentContainerStyle={{
         paddingBottom: 24,
       }}
+      estimatedItemSize={57}
       renderItem={({ item }) => (
         <FilterListItem
           label={item.label}

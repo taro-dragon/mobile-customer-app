@@ -22,6 +22,7 @@ const GradeFilterScreen: React.FC<GradeFilterProps> = ({ grades }) => {
       contentContainerStyle={{
         paddingBottom: 24,
       }}
+      estimatedItemSize={83}
       renderItem={({ item }) => (
         <FilterListItem
           label={item.gradeName}

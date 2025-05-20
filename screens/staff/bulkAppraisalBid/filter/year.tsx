@@ -18,6 +18,7 @@ const YearFilterScreen: React.FC<YearFilterProps> = ({ years }) => {
       contentContainerStyle={{
         paddingBottom: 24,
       }}
+      estimatedItemSize={49}
       renderItem={({ item }) => (
         <FilterListItem
           label={item.year}
