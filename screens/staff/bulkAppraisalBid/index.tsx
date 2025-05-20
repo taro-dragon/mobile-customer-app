@@ -23,7 +23,7 @@ const BulkAppraisalBidScreen = () => {
       ListEmptyComponent={() => (
         <View
           style={{
-            height: Dimensions.get("window").height - headerHeight,
+            height: Dimensions.get("window").height - headerHeight - 32,
           }}
         >
           <View
