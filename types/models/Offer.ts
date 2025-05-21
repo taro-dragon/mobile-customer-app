@@ -1,3 +1,5 @@
+import { BulkAppraisalStatus } from "@/constants/BulkAppraisalStatus";
+
 export type Offer = {
   clientId: string;
   maker: string;
@@ -13,7 +15,7 @@ export type Offer = {
       C: number;
     };
   };
-  status: "pending" | "accepted" | "rejected";
+  status: BulkAppraisalStatus;
   description: string;
   createdAt: string;
   updatedAt: string;

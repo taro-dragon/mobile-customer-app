@@ -1,9 +1,10 @@
 import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 import { AppraisalBid } from "./AppraisalBid";
+import { BulkAppraisalStatus } from "@/constants/BulkAppraisalStatus";
 
 export type Appraisal = {
   id: string;
-  status: "pending" | "active" | "completed" | "cancelled";
+  status: BulkAppraisalStatus;
   carId: string;
   maker: string;
   model: string;

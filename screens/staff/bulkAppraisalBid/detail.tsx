@@ -81,7 +81,7 @@ const BulkAppraisalBidDetailScreen: React.FC<
       >
         {CarHeader}
       </ScrollView>
-      {!currentStoreBid && (
+      {!currentStoreBid && car.status === "in_progress" && (
         <>
           <Divider />
           <View style={{ padding: 16 }}>

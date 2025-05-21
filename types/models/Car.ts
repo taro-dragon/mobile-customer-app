@@ -1,3 +1,4 @@
+import { BulkAppraisalStatus } from "@/constants/BulkAppraisalStatus";
 import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 
 export type Car = {
@@ -19,6 +20,6 @@ export type Car = {
   repairStatus: string;
   sellTime: string;
   color: string;
-  status: "appraising" | "company_selection" | "completed" | undefined;
+  status?: BulkAppraisalStatus;
   createdAt: FirebaseFirestoreTypes.Timestamp;
 };
