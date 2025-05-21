@@ -8,8 +8,9 @@ import { BulkAppraisalRequestWithCar } from "@/contexts/staff/BulkAppraisalConte
 import { useTheme } from "@/contexts/ThemeContext";
 import { transformCarData } from "@/libs/transformCarData";
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import { useMemo } from "react";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 type BulkApprisalBidItemProps = {
   item: BulkAppraisalRequestWithCar;
@@ -18,6 +19,7 @@ type BulkApprisalBidItemProps = {
 const BulkApprisalBidItem: React.FC<BulkApprisalBidItemProps> = ({ item }) => {
   const { colors, typography } = useTheme();
   const { car } = item;
+  const router = useRouter();
   const { mileage, repairStatus, sellTime } = car;
   const { maker, model, year, grade } = transformCarData(car);
   const targetMileage = useMemo(
@@ -33,7 +35,8 @@ const BulkApprisalBidItem: React.FC<BulkApprisalBidItemProps> = ({ item }) => {
     [sellTime]
   );
   return (
-    <View
+    <TouchableOpacity
+      onPress={() => router.push(`/bulkAppraisalBid/${item.id}`)}
       style={{
         backgroundColor: colors.backgroundSecondary,
         borderWidth: 1,
@@ -154,7 +157,7 @@ const BulkApprisalBidItem: React.FC<BulkApprisalBidItemProps> = ({ item }) => {
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

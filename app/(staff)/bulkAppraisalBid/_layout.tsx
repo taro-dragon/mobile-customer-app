@@ -58,6 +58,13 @@ const BulkAppraisalBidLayout = () => {
               headerShown: false,
             }}
           />
+          <Stack.Screen
+            name="[id]"
+            options={{
+              title: "一括査定依頼詳細",
+              headerBackButtonDisplayMode: "minimal",
+            }}
+          />
         </Stack>
       </BulkAppraisalProvider>
     </FormProvider>

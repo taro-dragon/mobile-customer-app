@@ -68,6 +68,7 @@ export default function Layout() {
         options={{
           gestureDirection: "vertical",
           headerShown: false,
+          gestureEnabled: false,
         }}
       />
       <Stack.Screen

@@ -1,30 +1,29 @@
 import AppraisalStatusTag from "@/components/appraisal/AppraisalStatusTag";
-import CarInfoItem from "@/components/CarDetail/CarInfoIten";
 import ImageCarousel from "@/components/common/ImageCarousel";
-import Bid from "@/components/staff/bulkAppraisalCarDetail/Bid";
 import {
   getMileageLabel,
   getRepairStatusLabel,
   getSellTimeLabel,
 } from "@/constants/registrationCarOptions";
+import { BulkAppraisalRequestWithCar } from "@/contexts/staff/BulkAppraisalContext";
 import { useTheme } from "@/contexts/ThemeContext";
-import { ExtendedBulkAppraisalCar } from "@/hooks/staff/useFetchBulkAppraisalCar";
 import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
-import React, { useMemo } from "react";
-import { FlatList, Text, View } from "react-native";
+import { useMemo } from "react";
+import { Text, View } from "react-native";
+import CarInfoItem from "@/components/CarDetail/CarInfoIten";
 
-type BulkAppraisalCarDetailScreenProps = {
-  car: ExtendedBulkAppraisalCar;
+type BulkAppraisalBidDetailScreenProps = {
+  data: BulkAppraisalRequestWithCar;
 };
 
-const BulkAppraisalCarDetailScreen: React.FC<
-  BulkAppraisalCarDetailScreenProps
-> = ({ car }) => {
+const BulkAppraisalBidDetailScreen: React.FC<
+  BulkAppraisalBidDetailScreenProps
+> = ({ data }) => {
+  const { car } = data;
   const { colors, typography } = useTheme();
   const carData = transformCarData(car as Car);
   const carImages = Object.values(car?.images ?? {});
-  const { bids } = car;
   const mileageLabel = getMileageLabel(car.mileage.toString());
   const sellTimeLabel = getSellTimeLabel(car.sellTime);
   const repairStatusLabel = getRepairStatusLabel(car.repairStatus);
@@ -69,16 +68,10 @@ const BulkAppraisalCarDetailScreen: React.FC<
     [carData, carImages]
   );
   return (
-    <FlatList
-      data={bids}
-      renderItem={({ item }) => <Bid bid={item} />}
-      ListHeaderComponent={CarHeader}
-      contentContainerStyle={{
-        gap: 16,
-        paddingBottom: 32,
-      }}
-    />
+    <View style={{ flex: 1, backgroundColor: colors.backgroundPrimary }}>
+      {CarHeader}
+    </View>
   );
 };
 
-export default BulkAppraisalCarDetailScreen;
+export default BulkAppraisalBidDetailScreen;
