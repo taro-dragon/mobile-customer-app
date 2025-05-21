@@ -13,41 +13,53 @@ export type BulkAppraisalBid = BulkAppraisalRequestWithCar & {
 
 const fetchBulkAppraisalBid = async (id: string) => {
   try {
-    const snapshot = await firestore()
-      .collection("bulkAppraisalRequests")
-      .doc(id)
-      .get();
-    const data = snapshot.data();
+    const [bulkAppraisalSnapshot, bidsSnapshot] = await Promise.all([
+      firestore().collection("bulkAppraisalRequests").doc(id).get(),
+      firestore()
+        .collection("bids")
+        .where("bulkAppraisalRequestId", "==", id)
+        .orderBy("minPrice", "desc")
+        .get(),
+    ]);
+
+    const data = bulkAppraisalSnapshot.data();
     if (!data) {
       throw new Error("査定情報が見つかりません");
     }
-    const carId = data.carId;
-    const carSnapshot = await firestore().collection("cars").doc(carId).get();
+
+    const bids = bidsSnapshot.docs.map((doc) => doc.data()) as Bid[];
+
+    const storeIds = [...new Set(bids.map((bid) => bid.affiliateStoreId))];
+
+    const [carSnapshot, storeSnapshots] = await Promise.all([
+      firestore().collection("cars").doc(data.carId).get(),
+      Promise.all(
+        storeIds.map((storeId) =>
+          firestore().collection("shops").doc(storeId).get()
+        )
+      ),
+    ]);
+
     const carData = carSnapshot.data();
     if (!carData) {
       throw new Error("車両情報が見つかりません");
     }
-    const bidsSnapShot = await firestore()
-      .collection("bids")
-      .where("bulkAppraisalRequestId", "==", id)
-      .orderBy("minPrice", "desc")
-      .get();
-    const bids = bidsSnapShot.docs.map((doc) => doc.data()) as Bid[];
-    const affiliateStoreSnapshot = bids.map(async (bid) => {
-      const affiliateStoreSnapShot = await firestore()
-        .collection("shops")
-        .doc(bid.affiliateStoreId)
-        .get();
-      return { ...affiliateStoreSnapShot.data(), id: bid.affiliateStoreId };
-    });
-    const affiliateStore = await Promise.all(affiliateStoreSnapshot);
-    const extendedBids = bids.map((bid, index) => ({
+
+    const storeMap = new Map(
+      storeSnapshots.map((snapshot) => [
+        snapshot.id,
+        { ...snapshot.data(), id: snapshot.id },
+      ])
+    );
+
+    const extendedBids = bids.map((bid) => ({
       ...bid,
-      affiliateStore: affiliateStore[index],
+      affiliateStore: storeMap.get(bid.affiliateStoreId),
     }));
+
     return {
       ...data,
-      id: snapshot.id,
+      id: bulkAppraisalSnapshot.id,
       car: carData,
       bids: extendedBids,
     };
