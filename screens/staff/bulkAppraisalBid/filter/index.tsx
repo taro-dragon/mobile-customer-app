@@ -35,8 +35,7 @@ const findCarData = {
 const BulkAppraisalBidFilterScreen = () => {
   const { colors } = useTheme();
   const router = useRouter();
-  const { refresh } = useBulkAppraisalContext();
-  const { getValues, reset, handleSubmit } = useFormContext();
+  const { getValues, reset } = useFormContext();
 
   const maker = getValues("maker");
   const model = getValues("model");
@@ -58,12 +57,6 @@ const BulkAppraisalBidFilterScreen = () => {
   return (
     <View style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }}>
-        <FilterIndexItem
-          label="ステータス"
-          onPress={() => router.push("/bulkAppraisalBid/filter/status")}
-          defaultValue="すべて"
-          value={BidStatus.find((m) => m.value === status)?.label}
-        />
         <FilterIndexItem
           label="メーカー"
           onPress={() => router.push("/bulkAppraisalBid/filter/maker")}
