@@ -9,20 +9,28 @@ import {
 import { useTheme } from "@/contexts/ThemeContext";
 import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
-import { FlatList, RefreshControl, ScrollView, Text, View } from "react-native";
+import { RefreshControl, ScrollView, Text, View } from "react-native";
 import CarInfoItem from "@/components/CarDetail/CarInfoIten";
+import Button from "@/components/common/Button";
+import SafeAreaBottom from "@/components/common/SafeAreaBottom";
+import Divider from "@/components/common/Divider";
 import { BulkAppraisalBid } from "@/hooks/staff/useFetchBulkAppraisalBid";
-import Bid from "@/components/staff/bulkAppraisalCarDetail/Bid";
+import { useStore } from "@/hooks/useStore";
 
 type BulkAppraisalBidDetailScreenProps = {
   data: BulkAppraisalBid;
   mutate: () => void;
 };
 
-const BulkAppraisalBidDetailScreen: React.FC<
+const BulkAppraisalBidProgressDetailScreen: React.FC<
   BulkAppraisalBidDetailScreenProps
 > = ({ data, mutate }) => {
   const { car, bids } = data;
+  const { currentStore } = useStore();
+  const currentStoreId = currentStore?.id;
+  const currentStoreBid = bids?.find(
+    (bid) => bid.affiliateStoreId === currentStoreId
+  );
   const { colors, typography } = useTheme();
   const carData = transformCarData(car as Car);
   const carImages = Object.values(car?.images ?? {});
@@ -70,19 +78,30 @@ const BulkAppraisalBidDetailScreen: React.FC<
     [carData, carImages]
   );
   return (
-    <FlatList
-      data={bids}
-      renderItem={({ item }) => {
-        console.log(item);
-        return <Bid bid={item} />;
-      }}
-      ListHeaderComponent={CarHeader}
-      contentContainerStyle={{
-        gap: 16,
-        paddingBottom: 32,
-      }}
-    />
+    <View style={{ flex: 1 }}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={false} onRefresh={() => mutate()} />
+        }
+        style={{ flex: 1, backgroundColor: colors.backgroundPrimary }}
+      >
+        {CarHeader}
+      </ScrollView>
+      {!currentStoreBid && (
+        <>
+          <Divider />
+          <View style={{ padding: 16 }}>
+            <Button
+              color={colors.primary}
+              label="入札する"
+              onPress={() => mutate()}
+            />
+            <SafeAreaBottom />
+          </View>
+        </>
+      )}
+    </View>
   );
 };
 
-export default BulkAppraisalBidDetailScreen;
+export default BulkAppraisalBidProgressDetailScreen;

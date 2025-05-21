@@ -1,6 +1,7 @@
 import ShopDetailSkeleton from "@/components/Skelton/SkeltonShopInfo";
 import { useFetchBulkAppraisalBid } from "@/hooks/staff/useFetchBulkAppraisalBid";
 import BulkAppraisalBidDetailScreen from "@/screens/staff/bulkAppraisalBid/detail";
+import BulkAppraisalBidProgressDetailScreen from "@/screens/staff/bulkAppraisalBid/progressDetail";
 import { useLocalSearchParams } from "expo-router";
 
 const BulkAppraisalBid = () => {
@@ -11,7 +12,11 @@ const BulkAppraisalBid = () => {
   if (isLoading || !data) {
     return <ShopDetailSkeleton />;
   }
-  return <BulkAppraisalBidDetailScreen data={data} mutate={mutate} />;
+  if (data.status === "in_progress") {
+    return <BulkAppraisalBidProgressDetailScreen data={data} mutate={mutate} />;
+  } else {
+    return <BulkAppraisalBidDetailScreen data={data} mutate={mutate} />;
+  }
 };
 
 export default BulkAppraisalBid;

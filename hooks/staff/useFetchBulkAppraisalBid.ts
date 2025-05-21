@@ -5,12 +5,13 @@ import Toast from "react-native-toast-message";
 import useSWR from "swr";
 import { useStore } from "../useStore";
 import { Bid } from "@/types/firestore_schema/bids";
+import { ExtendedBid } from "../useFetchCarBids";
 
 export type BulkAppraisalBid = BulkAppraisalRequestWithCar & {
-  currentStoreBid?: Bid;
+  bids?: ExtendedBid[];
 };
 
-const fetchBulkAppraisalBid = async (id: string, currentStoreId: string) => {
+const fetchBulkAppraisalBid = async (id: string) => {
   try {
     const snapshot = await firestore()
       .collection("bulkAppraisalRequests")
@@ -26,19 +27,29 @@ const fetchBulkAppraisalBid = async (id: string, currentStoreId: string) => {
     if (!carData) {
       throw new Error("車両情報が見つかりません");
     }
-    const currentStoreBidSnapShot = await firestore()
+    const bidsSnapShot = await firestore()
       .collection("bids")
-      .where("affiliateStoreId", "==", currentStoreId)
       .where("bulkAppraisalRequestId", "==", id)
+      .orderBy("minPrice", "desc")
       .get();
-    const currentStoreBid = currentStoreBidSnapShot.docs.map((doc) =>
-      doc.data()
-    ) as Bid[];
+    const bids = bidsSnapShot.docs.map((doc) => doc.data()) as Bid[];
+    const affiliateStoreSnapshot = bids.map(async (bid) => {
+      const affiliateStoreSnapShot = await firestore()
+        .collection("shops")
+        .doc(bid.affiliateStoreId)
+        .get();
+      return { ...affiliateStoreSnapShot.data(), id: bid.affiliateStoreId };
+    });
+    const affiliateStore = await Promise.all(affiliateStoreSnapshot);
+    const extendedBids = bids.map((bid, index) => ({
+      ...bid,
+      affiliateStore: affiliateStore[index],
+    }));
     return {
       ...data,
       id: snapshot.id,
       car: carData,
-      currentStoreBid: currentStoreBid[0],
+      bids: extendedBids,
     };
   } catch (error) {
     Toast.show({
@@ -52,14 +63,9 @@ const fetchBulkAppraisalBid = async (id: string, currentStoreId: string) => {
 };
 
 export const useFetchBulkAppraisalBid = (id: string) => {
-  const { currentStore } = useStore();
-  const currentStoreId = currentStore?.id;
   const { data, error, mutate, isLoading } = useSWR(
-    id && currentStoreId ? `bulkAppraisalBid-${id}-${currentStoreId}` : null,
-    () =>
-      id && currentStoreId
-        ? fetchBulkAppraisalBid(id, currentStoreId)
-        : undefined
+    id ? `bulkAppraisalBid-${id}` : null,
+    () => (id ? fetchBulkAppraisalBid(id) : undefined)
   );
   return {
     data: data as BulkAppraisalBid,
