@@ -11,7 +11,7 @@ const BulkAppraisalBid = () => {
   if (isLoading || !data) {
     return <ShopDetailSkeleton />;
   }
-  return <BulkAppraisalBidDetailScreen data={data} />;
+  return <BulkAppraisalBidDetailScreen data={data} mutate={mutate} />;
 };
 
 export default BulkAppraisalBid;

@@ -10,16 +10,17 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
 import { useMemo } from "react";
-import { Text, View } from "react-native";
+import { RefreshControl, ScrollView, Text, View } from "react-native";
 import CarInfoItem from "@/components/CarDetail/CarInfoIten";
 
 type BulkAppraisalBidDetailScreenProps = {
   data: BulkAppraisalRequestWithCar;
+  mutate: () => void;
 };
 
 const BulkAppraisalBidDetailScreen: React.FC<
   BulkAppraisalBidDetailScreenProps
-> = ({ data }) => {
+> = ({ data, mutate }) => {
   const { car } = data;
   const { colors, typography } = useTheme();
   const carData = transformCarData(car as Car);
@@ -68,9 +69,14 @@ const BulkAppraisalBidDetailScreen: React.FC<
     [carData, carImages]
   );
   return (
-    <View style={{ flex: 1, backgroundColor: colors.backgroundPrimary }}>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={false} onRefresh={() => mutate()} />
+      }
+      style={{ flex: 1, backgroundColor: colors.backgroundPrimary }}
+    >
       {CarHeader}
-    </View>
+    </ScrollView>
   );
 };
 
