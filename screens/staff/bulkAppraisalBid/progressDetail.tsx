@@ -16,6 +16,7 @@ import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import Divider from "@/components/common/Divider";
 import { BulkAppraisalBid } from "@/hooks/staff/useFetchBulkAppraisalBid";
 import { useStore } from "@/hooks/useStore";
+import { colorOptions } from "@/components/registrationCar/form/ColorSelect";
 
 type BulkAppraisalBidDetailScreenProps = {
   data: BulkAppraisalBid;
@@ -37,6 +38,9 @@ const BulkAppraisalBidProgressDetailScreen: React.FC<
   const mileageLabel = getMileageLabel(car.mileage.toString());
   const sellTimeLabel = getSellTimeLabel(car.sellTime);
   const repairStatusLabel = getRepairStatusLabel(car.repairStatus);
+  const colorValue = colorOptions.find(
+    (option) => option.color === car.color
+  )?.bgColor;
   const CarHeader = useMemo(
     () => (
       <View pointerEvents="box-none">
@@ -70,6 +74,32 @@ const BulkAppraisalBidProgressDetailScreen: React.FC<
               <CarInfoItem label="走行距離" value={mileageLabel || ""} />
               <CarInfoItem label="修復歴" value={repairStatusLabel || ""} />
               <CarInfoItem label="売却時期" value={sellTimeLabel || ""} />
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    ...typography.heading3,
+                    color: colors.textSecondary,
+                  }}
+                >
+                  車体色
+                </Text>
+                <View
+                  style={{
+                    width: 24,
+                    height: 24,
+                    backgroundColor: colorValue,
+                    borderRadius: 12,
+                    borderWidth: 1,
+                    borderColor: colors.borderPrimary,
+                  }}
+                />
+              </View>
             </View>
           </View>
         </View>
