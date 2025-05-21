@@ -18,6 +18,7 @@ export type Car = {
   mileage: number;
   repairStatus: string;
   sellTime: string;
+  color: string;
   status: "appraising" | "company_selection" | "completed" | undefined;
   createdAt: FirebaseFirestoreTypes.Timestamp;
 };
