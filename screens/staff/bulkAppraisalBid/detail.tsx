@@ -1,3 +1,4 @@
+import React, { useMemo } from "react";
 import AppraisalStatusTag from "@/components/appraisal/AppraisalStatusTag";
 import ImageCarousel from "@/components/common/ImageCarousel";
 import {
@@ -5,27 +6,25 @@ import {
   getRepairStatusLabel,
   getSellTimeLabel,
 } from "@/constants/registrationCarOptions";
-import { BulkAppraisalRequestWithCar } from "@/contexts/staff/BulkAppraisalContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
-import { useMemo } from "react";
 import { RefreshControl, ScrollView, Text, View } from "react-native";
 import CarInfoItem from "@/components/CarDetail/CarInfoIten";
 import Button from "@/components/common/Button";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import Divider from "@/components/common/Divider";
+import { BulkAppraisalBid } from "@/hooks/staff/useFetchBulkAppraisalBid";
 
 type BulkAppraisalBidDetailScreenProps = {
-  data: BulkAppraisalRequestWithCar;
+  data: BulkAppraisalBid;
   mutate: () => void;
 };
 
 const BulkAppraisalBidDetailScreen: React.FC<
   BulkAppraisalBidDetailScreenProps
 > = ({ data, mutate }) => {
-  const { car } = data;
-  console.log(car);
+  const { car, currentStoreBid } = data;
   const { colors, typography } = useTheme();
   const carData = transformCarData(car as Car);
   const carImages = Object.values(car?.images ?? {});
@@ -82,15 +81,19 @@ const BulkAppraisalBidDetailScreen: React.FC<
       >
         {CarHeader}
       </ScrollView>
-      <Divider />
-      <View style={{ padding: 16 }}>
-        <Button
-          color={colors.primary}
-          label="入札する"
-          onPress={() => mutate()}
-        />
-        <SafeAreaBottom />
-      </View>
+      {!currentStoreBid && (
+        <>
+          <Divider />
+          <View style={{ padding: 16 }}>
+            <Button
+              color={colors.primary}
+              label="入札する"
+              onPress={() => mutate()}
+            />
+            <SafeAreaBottom />
+          </View>
+        </>
+      )}
     </View>
   );
 };
