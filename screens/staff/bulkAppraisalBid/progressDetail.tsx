@@ -17,6 +17,7 @@ import Divider from "@/components/common/Divider";
 import { BulkAppraisalBid } from "@/hooks/staff/useFetchBulkAppraisalBid";
 import { useStore } from "@/hooks/useStore";
 import { colorOptions } from "@/components/registrationCar/form/ColorSelect";
+import { useRouter } from "expo-router";
 
 type BulkAppraisalBidDetailScreenProps = {
   data: BulkAppraisalBid;
@@ -28,6 +29,7 @@ const BulkAppraisalBidProgressDetailScreen: React.FC<
 > = ({ data, mutate }) => {
   const { car, bids } = data;
   const { currentStore } = useStore();
+  const router = useRouter();
   const currentStoreId = currentStore?.id;
   const currentStoreBid = bids?.find(
     (bid) => bid.affiliateStoreId === currentStoreId
@@ -124,7 +126,12 @@ const BulkAppraisalBidProgressDetailScreen: React.FC<
             <Button
               color={colors.primary}
               label="入札する"
-              onPress={() => mutate()}
+              onPress={() =>
+                router.push({
+                  pathname: "/bulkAppraisalBid/bid",
+                  params: { carId: car.id, bulkAppraisalRequestsId: data.id },
+                })
+              }
             />
             <SafeAreaBottom />
           </View>

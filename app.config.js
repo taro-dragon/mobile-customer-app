@@ -37,6 +37,8 @@ const commonConfig = {
       "expo-router",
       "expo-dev-client",
       "react-native-vision-camera",
+      "expo-font",
+      "expo-web-browser",
       [
         "expo-build-properties",
         {

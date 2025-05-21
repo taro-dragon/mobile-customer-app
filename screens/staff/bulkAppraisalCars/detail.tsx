@@ -1,6 +1,7 @@
 import AppraisalStatusTag from "@/components/appraisal/AppraisalStatusTag";
 import CarInfoItem from "@/components/CarDetail/CarInfoIten";
 import ImageCarousel from "@/components/common/ImageCarousel";
+import { colorOptions } from "@/components/registrationCar/form/ColorSelect";
 import Bid from "@/components/staff/bulkAppraisalCarDetail/Bid";
 import {
   getMileageLabel,
@@ -28,6 +29,9 @@ const BulkAppraisalCarDetailScreen: React.FC<
   const mileageLabel = getMileageLabel(car.mileage.toString());
   const sellTimeLabel = getSellTimeLabel(car.sellTime);
   const repairStatusLabel = getRepairStatusLabel(car.repairStatus);
+  const colorValue = colorOptions.find(
+    (option) => option.color === car.color
+  )?.bgColor;
   const CarHeader = useMemo(
     () => (
       <View pointerEvents="box-none">
@@ -61,6 +65,32 @@ const BulkAppraisalCarDetailScreen: React.FC<
               <CarInfoItem label="走行距離" value={mileageLabel || ""} />
               <CarInfoItem label="修復歴" value={repairStatusLabel || ""} />
               <CarInfoItem label="売却時期" value={sellTimeLabel || ""} />
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    ...typography.heading3,
+                    color: colors.textSecondary,
+                  }}
+                >
+                  車体色
+                </Text>
+                <View
+                  style={{
+                    width: 24,
+                    height: 24,
+                    backgroundColor: colorValue,
+                    borderRadius: 12,
+                    borderWidth: 1,
+                    borderColor: colors.borderPrimary,
+                  }}
+                />
+              </View>
             </View>
           </View>
         </View>

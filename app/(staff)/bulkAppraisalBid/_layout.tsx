@@ -65,6 +65,13 @@ const BulkAppraisalBidLayout = () => {
               headerBackButtonDisplayMode: "minimal",
             }}
           />
+          <Stack.Screen
+            name="bid"
+            options={{
+              title: "入札",
+              headerBackButtonDisplayMode: "minimal",
+            }}
+          />
         </Stack>
       </BulkAppraisalProvider>
     </FormProvider>
