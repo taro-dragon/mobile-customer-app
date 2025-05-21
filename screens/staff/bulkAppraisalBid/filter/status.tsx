@@ -1,5 +1,5 @@
 import FilterListItem from "@/components/filter/FilterListItem";
-import { BidStatus } from "@/constants/bidStatus";
+import { BulkAppraisalStatus } from "@/constants/BulkAppraisalStatus";
 
 import { FlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
@@ -11,7 +11,7 @@ const StatusFilterScreen = () => {
   const status = getValues("status");
   return (
     <FlashList
-      data={BidStatus}
+      data={BulkAppraisalStatus}
       contentContainerStyle={{
         paddingBottom: 24,
       }}

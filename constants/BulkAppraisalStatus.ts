@@ -1,4 +1,4 @@
-export const BidStatus = [
+export const BulkAppraisalStatus = [
   {
     label: "受付中",
     value: "in_progress",
@@ -13,9 +13,9 @@ export const BidStatus = [
   },
 ];
 
-export type BidStatus = "in_progress" | "deadline" | "completed";
+export type BulkAppraisalStatus = "in_progress" | "deadline" | "completed";
 
-export const BidStatusLabel: Record<BidStatus, string> = {
+export const BulkAppraisalStatusLabel: Record<BulkAppraisalStatus, string> = {
   in_progress: "受付中",
   deadline: "査定締切",
   completed: "査定完了",
