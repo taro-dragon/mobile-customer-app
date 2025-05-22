@@ -129,7 +129,15 @@ const BulkAppraisalBidProgressDetailScreen: React.FC<
               onPress={() =>
                 router.push({
                   pathname: "/bulkAppraisalBid/bid",
-                  params: { carId: car.id, bulkAppraisalRequestsId: data.id },
+                  params: {
+                    carId: car.id,
+                    bulkAppraisalRequestsId: data.id,
+                    maker: carData.maker.name,
+                    model: carData.model.name,
+                    year: carData.year.year,
+                    grade: carData.grade.gradeName,
+                    modelNumber: car.modelNumber,
+                  },
                 })
               }
             />

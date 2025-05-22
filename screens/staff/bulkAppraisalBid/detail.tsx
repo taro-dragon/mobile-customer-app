@@ -73,7 +73,6 @@ const BulkAppraisalBidDetailScreen: React.FC<
     <FlatList
       data={bids}
       renderItem={({ item }) => {
-        console.log(item);
         return <Bid bid={item} />;
       }}
       ListHeaderComponent={CarHeader}

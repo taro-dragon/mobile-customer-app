@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import * as Notifications from "expo-notifications";
+import * as Device from "expo-device";
+import Constants from "expo-constants";
 import { Platform } from "react-native";
 import firestore from "@react-native-firebase/firestore";
 import auth from "@react-native-firebase/auth";
@@ -14,18 +16,30 @@ const useStaffNotification = () => {
 
   const checkAndRequestPermissions = async () => {
     try {
+      if (!Device.isDevice) {
+        console.log(
+          "Push notifications are only supported on physical devices"
+        );
+        return;
+      }
+
       // Check current permission status
-      const { status } = await Notifications.getPermissionsAsync();
-      if (status === Notifications.PermissionStatus.GRANTED) {
-        // User has already granted permission, register for push token
+      const { status: existingStatus } =
+        await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+
+      if (existingStatus !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+
+      if (finalStatus === "granted") {
+        // User has granted permission, register for push token
         const token = await registerForPushNotificationsAsync();
-        if (token !== undefined) {
-          // Save token to Firestore
-          if (token) {
-            await savePushTokenToFirestore(token);
-          }
+        if (token) {
+          await savePushTokenToFirestore(token);
         }
-      } else if (status === Notifications.PermissionStatus.UNDETERMINED) {
+      } else if (finalStatus === "undetermined") {
         // Permission hasn't been asked yet, redirect to notification initialization
         router.push("/(staff)/notificationInitialize");
       }
@@ -50,16 +64,33 @@ const useStaffNotification = () => {
     }
 
     try {
-      const { status } = await Notifications.requestPermissionsAsync();
-      if (status !== Notifications.PermissionStatus.GRANTED) {
-        return null;
+      const projectId =
+        Constants?.expoConfig?.extra?.eas?.projectId ??
+        Constants?.easConfig?.projectId;
+      if (!projectId) {
+        throw new Error("Project ID not found");
       }
 
-      const { data } = await Notifications.getExpoPushTokenAsync();
-
-      token = data;
+      token = (
+        await Notifications.getExpoPushTokenAsync({
+          projectId,
+        })
+      ).data;
     } catch (error) {
+      // Handle iOS aps-environment entitlement error
+      console.warn(error);
+      if (
+        Platform.OS === "ios" &&
+        error instanceof Error &&
+        error.message.includes("aps-environment")
+      ) {
+        console.log(
+          "Push notifications are not configured for iOS. Please set up push notifications in your Apple Developer account and Xcode."
+        );
+        return null;
+      }
       console.error("Error registering for push notifications:", error);
+      return null;
     }
 
     return token;

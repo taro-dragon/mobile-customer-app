@@ -3,7 +3,6 @@ import firestore from "@react-native-firebase/firestore";
 import { router } from "expo-router";
 import Toast from "react-native-toast-message";
 import useSWR from "swr";
-import { useStore } from "../useStore";
 import { Bid } from "@/types/firestore_schema/bids";
 import { ExtendedBid } from "../useFetchCarBids";
 
@@ -77,7 +76,10 @@ const fetchBulkAppraisalBid = async (id: string) => {
 export const useFetchBulkAppraisalBid = (id: string) => {
   const { data, error, mutate, isLoading } = useSWR(
     id ? `bulkAppraisalBid-${id}` : null,
-    () => (id ? fetchBulkAppraisalBid(id) : undefined)
+    () => (id ? fetchBulkAppraisalBid(id) : undefined),
+    {
+      revalidateOnFocus: true,
+    }
   );
   return {
     data: data as BulkAppraisalBid,
