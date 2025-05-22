@@ -2,12 +2,18 @@ import ShopDetailSkeleton from "@/components/Skelton/SkeltonShopInfo";
 import { useFetchBulkAppraisalBid } from "@/hooks/staff/useFetchBulkAppraisalBid";
 import BulkAppraisalBidDetailScreen from "@/screens/staff/bulkAppraisalBid/detail";
 import BulkAppraisalBidProgressDetailScreen from "@/screens/staff/bulkAppraisalBid/progressDetail";
-import { useLocalSearchParams } from "expo-router";
+import { useFocusEffect, useLocalSearchParams } from "expo-router";
+import { useCallback } from "react";
 
 const BulkAppraisalBid = () => {
   const { id } = useLocalSearchParams();
   const { data, error, mutate, isLoading } = useFetchBulkAppraisalBid(
     id as string
+  );
+  useFocusEffect(
+    useCallback(() => {
+      mutate();
+    }, [mutate])
   );
   if (isLoading || !data) {
     return <ShopDetailSkeleton />;

@@ -141,10 +141,10 @@ const BulkAppraisalBidProgressDetailScreen: React.FC<
                 })
               }
             />
-            <SafeAreaBottom />
           </View>
         </>
       )}
+      <SafeAreaBottom />
     </View>
   );
 };
