@@ -18,6 +18,7 @@ import { BulkAppraisalBid } from "@/hooks/staff/useFetchBulkAppraisalBid";
 import { useStore } from "@/hooks/useStore";
 import { colorOptions } from "@/components/registrationCar/form/ColorSelect";
 import { useRouter } from "expo-router";
+import Bid from "@/components/staff/bulkAppraisalCarDetail/Bid";
 
 type BulkAppraisalBidDetailScreenProps = {
   data: BulkAppraisalBid;
@@ -34,6 +35,7 @@ const BulkAppraisalBidProgressDetailScreen: React.FC<
   const currentStoreBid = bids?.find(
     (bid) => bid.affiliateStoreId === currentStoreId
   );
+  console.log(currentStoreBid);
   const { colors, typography } = useTheme();
   const carData = transformCarData(car as Car);
   const carImages = Object.values(car?.images ?? {});
@@ -119,9 +121,9 @@ const BulkAppraisalBidProgressDetailScreen: React.FC<
       >
         {CarHeader}
       </ScrollView>
-      {!currentStoreBid && (
+      <Divider />
+      {!currentStoreBid ? (
         <>
-          <Divider />
           <View style={{ padding: 16 }}>
             <Button
               color={colors.primary}
@@ -142,9 +144,14 @@ const BulkAppraisalBidProgressDetailScreen: React.FC<
               }
             />
           </View>
+          <SafeAreaBottom />
         </>
+      ) : (
+        <View style={{ paddingVertical: 16 }}>
+          <Bid bid={currentStoreBid} />
+          <SafeAreaBottom />
+        </View>
       )}
-      <SafeAreaBottom />
     </View>
   );
 };
