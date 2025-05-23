@@ -6,9 +6,10 @@ import { useBulkAppraisalContext } from "@/contexts/staff/BulkAppraisalContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { Inbox } from "lucide-react-native";
+import { RefreshControl } from "react-native";
 
 const BulkAppraisalBidScreen = () => {
-  const { requests, loadMore, isLoading } = useBulkAppraisalContext();
+  const { requests, loadMore, isLoading, refresh } = useBulkAppraisalContext();
   const { colors, typography } = useTheme();
   const headerHeight = useHeaderHeight();
   if (isLoading) {
@@ -50,6 +51,9 @@ const BulkAppraisalBidScreen = () => {
           </View>
         </View>
       )}
+      refreshControl={
+        <RefreshControl refreshing={isLoading} onRefresh={refresh} />
+      }
     />
   );
 };
