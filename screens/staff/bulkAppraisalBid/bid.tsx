@@ -36,7 +36,7 @@ const BulkAppraisalBidBidScreen: React.FC = () => {
     control,
     formState: { isSubmitting, errors },
   } = useForm();
-  const { currentStore } = useStore();
+  const { currentStore, staff } = useStore();
   const router = useRouter();
   const { colors, typography } = useTheme();
   const {
@@ -61,6 +61,7 @@ const BulkAppraisalBidBidScreen: React.FC = () => {
           carId: carId as string,
           bulkAppraisalRequestId: bulkAppraisalRequestsId as string,
           affiliateStoreId: currentStore?.id,
+          staffId: staff?.id,
           isSelected: false,
           isArchived: false,
         });
