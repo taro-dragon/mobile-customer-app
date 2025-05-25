@@ -92,14 +92,18 @@ const BulkAppraisalBidBidScreen: React.FC = () => {
       });
     }
   };
-  const onConfirm = (data: RegistrationBulkAppraisalBidFormData) => {
+  const onConfirm = () => {
     RNAlert.alert("入札確認", "一度入札をすると取り消し、変更はできません。", [
       {
         text: "キャンセル",
         onPress: () => {},
         style: "destructive",
       },
-      { text: "入札する", onPress: () => onSubmit(data), style: "default" },
+      {
+        text: "入札する",
+        onPress: () => handleSubmit(onSubmit)(),
+        style: "default",
+      },
     ]);
   };
 
@@ -291,7 +295,7 @@ const BulkAppraisalBidBidScreen: React.FC = () => {
                 color={colors.primary}
                 label="確認する"
                 isLoading={isSubmitting}
-                onPress={handleSubmit(onConfirm)}
+                onPress={onConfirm}
               />
             </View>
             <SafeAreaBottom />
