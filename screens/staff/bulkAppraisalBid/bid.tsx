@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Alert as RNAlert,
 } from "react-native";
 import firestore from "@react-native-firebase/firestore";
 import { X } from "lucide-react-native";
@@ -20,6 +21,11 @@ import Button from "@/components/common/Button";
 import DisplaySelectItem from "@/components/registrationCar/form/DisplaySelectItem";
 import Alert from "@/components/common/Alert";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
+import {
+  RegistrationBulkAppraisalBidFormData,
+  registrationBulkAppraisalBidSchema,
+} from "@/constants/schemas/registrationBulkAppraisalBid";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const BulkAppraisalBidBidScreen: React.FC = () => {
   const {
@@ -35,26 +41,33 @@ const BulkAppraisalBidBidScreen: React.FC = () => {
     handleSubmit,
     control,
     formState: { isSubmitting, errors },
-  } = useForm();
+  } = useForm<RegistrationBulkAppraisalBidFormData>({
+    resolver: zodResolver(registrationBulkAppraisalBidSchema),
+    defaultValues: {
+      minBid: 0,
+      maxBid: 0,
+      comment: "",
+    },
+  });
   const { currentStore, staff } = useStore();
   const router = useRouter();
   const { colors, typography } = useTheme();
   const {
     field: { value: maxBid, onChange: setMaxBid },
-  } = useController({ control, name: "maxPrice" });
+  } = useController({ control, name: "maxBid" });
   const {
     field: { value: minBid, onChange: setMinBid },
-  } = useController({ control, name: "minPrice" });
+  } = useController({ control, name: "minBid" });
   const {
     field: { value: comment, onChange: setComment },
   } = useController({ control, name: "comment" });
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: RegistrationBulkAppraisalBidFormData) => {
     try {
       await firestore()
         .collection("bids")
         .add({
-          maxPrice: Number(data.maxPrice),
-          minPrice: Number(data.minPrice),
+          maxPrice: Number(data.maxBid),
+          minPrice: Number(data.minBid),
           comment: data.comment,
           createdAt: firestore.Timestamp.now(),
           updatedAt: firestore.Timestamp.now(),
@@ -79,6 +92,17 @@ const BulkAppraisalBidBidScreen: React.FC = () => {
       });
     }
   };
+  const onConfirm = (data: RegistrationBulkAppraisalBidFormData) => {
+    RNAlert.alert("入札確認", "一度入札をすると取り消し、変更はできません。", [
+      {
+        text: "キャンセル",
+        onPress: () => {},
+        style: "destructive",
+      },
+      { text: "入札する", onPress: () => onSubmit(data), style: "default" },
+    ]);
+  };
+
   return (
     <>
       <Stack.Screen
@@ -146,9 +170,9 @@ const BulkAppraisalBidBidScreen: React.FC = () => {
                   }}
                 >
                   <TextInput
-                    value={minBid}
+                    value={minBid.toString()}
                     keyboardType="numeric"
-                    onChangeText={setMinBid}
+                    onChangeText={(text) => setMinBid(Number(text))}
                     style={{
                       backgroundColor: colors.backgroundSecondary,
                       borderRadius: 8,
@@ -161,7 +185,6 @@ const BulkAppraisalBidBidScreen: React.FC = () => {
                         : colors.borderPrimary,
                     }}
                   />
-
                   <Text
                     style={{
                       color: colors.textPrimary,
@@ -193,9 +216,9 @@ const BulkAppraisalBidBidScreen: React.FC = () => {
                   }}
                 >
                   <TextInput
-                    value={maxBid}
+                    value={maxBid.toString()}
                     keyboardType="numeric"
-                    onChangeText={setMaxBid}
+                    onChangeText={(text) => setMaxBid(Number(text))}
                     style={{
                       backgroundColor: colors.backgroundSecondary,
                       borderRadius: 8,
@@ -250,7 +273,7 @@ const BulkAppraisalBidBidScreen: React.FC = () => {
                       color: colors.textPrimary,
                       height: 120,
                       borderWidth: 1,
-                      borderColor: errors.maxBid
+                      borderColor: errors.comment
                         ? colors.error
                         : colors.borderPrimary,
                     }}
@@ -258,9 +281,9 @@ const BulkAppraisalBidBidScreen: React.FC = () => {
                     scrollEnabled={false}
                   />
                 </View>
-                {errors.maxBid && (
+                {errors.comment && (
                   <Text style={{ color: colors.error, ...typography.body2 }}>
-                    {errors.maxBid?.message as string}
+                    {errors.comment?.message as string}
                   </Text>
                 )}
               </View>
@@ -268,7 +291,7 @@ const BulkAppraisalBidBidScreen: React.FC = () => {
                 color={colors.primary}
                 label="確認する"
                 isLoading={isSubmitting}
-                onPress={handleSubmit(onSubmit)}
+                onPress={handleSubmit(onConfirm)}
               />
             </View>
             <SafeAreaBottom />

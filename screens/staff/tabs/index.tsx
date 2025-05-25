@@ -76,7 +76,7 @@ const StaffIndexScreen = () => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                router.push("/registrationStock");
+                router.push("/registrationBuyOffer");
               }}
               style={styles.button}
             >

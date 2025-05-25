@@ -1,9 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useRouter } from "expo-router";
 import { List, Search } from "lucide-react-native";
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const SelectTargetTypeScreen = () => {
+const RegistrationBuyOfferIndexScreen: React.FC = () => {
   const { colors, typography } = useTheme();
   const router = useRouter();
   return (
@@ -30,7 +31,7 @@ const SelectTargetTypeScreen = () => {
           borderColor: colors.borderPrimary,
         }}
         onPress={() => {
-          router.push("/registrationStock/searchTypeNumber");
+          router.push("/registrationBuyOffer/searchTypeNumber");
         }}
       >
         <Search size={24} color={colors.primary} />
@@ -42,7 +43,7 @@ const SelectTargetTypeScreen = () => {
   );
 };
 
-export default SelectTargetTypeScreen;
+export default RegistrationBuyOfferIndexScreen;
 
 const styles = StyleSheet.create({
   container: {
