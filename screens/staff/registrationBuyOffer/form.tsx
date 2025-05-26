@@ -1,15 +1,5 @@
-import { useState } from "react";
 import { useController, useFormContext, UseFormReturn } from "react-hook-form";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import DatePicker from "react-native-date-picker";
+import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 
 import Button from "@/components/common/Button";
 import DisplaySelectItem from "@/components/registrationCar/form/DisplaySelectItem";
@@ -20,6 +10,7 @@ import { Car } from "@/types/models/Car";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import UnControlTextInput from "@/components/formComponents/UnControl/TextInput";
 import UnControlDatePicker from "@/components/formComponents/UnControl/DatePicker";
+import UnControlModalPicker from "@/components/formComponents/UnControl/ModalPicker";
 
 interface RegistrationBuyOfferFormScreenProps {
   confirmButton: () => void;
@@ -34,6 +25,7 @@ const RegistrationBuyOfferFormScreen: React.FC<
   const { grade, model, year, maker } = getValues();
   const {
     control,
+    getValues: getFormValues,
     formState: { errors, isSubmitting },
   } = form;
   const {
@@ -45,6 +37,12 @@ const RegistrationBuyOfferFormScreen: React.FC<
   const {
     field: { value: comment, onChange: setComment },
   } = useController({ control, name: "comment" });
+  const {
+    field: { value: maxContact, onChange: setMaxContact },
+  } = useController({ control, name: "maxContact" });
+  const {
+    field: { value: maxContactCount, onChange: setMaxContactCount },
+  } = useController({ control, name: "maxContactCount" });
   const formCar = {
     grade,
     model,
@@ -107,6 +105,35 @@ const RegistrationBuyOfferFormScreen: React.FC<
             isRequired
             control={control}
           />
+          <UnControlModalPicker
+            label="査定依頼上限"
+            name="maxContact"
+            required
+            errors={errors}
+            value={maxContact}
+            onChange={setMaxContact}
+            options={[
+              {
+                label: "あり",
+                value: "limited",
+              },
+              {
+                label: "無制限",
+                value: "unlimited",
+              },
+            ]}
+          />
+          {maxContact === "limited" && (
+            <UnControlTextInput
+              label="査定依頼上限回数"
+              name="maxContactCount"
+              value={maxContactCount?.toString() ?? ""}
+              onChangeText={(text) => setMaxContactCount(Number(text))}
+              errors={errors}
+              keyboardType="numeric"
+              isRequired
+            />
+          )}
           <UnControlTextInput
             label="加盟店コメント"
             name="comment"
@@ -122,7 +149,6 @@ const RegistrationBuyOfferFormScreen: React.FC<
             disabled={isSubmitting}
           />
         </View>
-
         <SafeAreaBottom />
       </ScrollView>
     </KeyboardAvoidingView>

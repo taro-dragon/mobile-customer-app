@@ -15,6 +15,8 @@ const RegistrationBuyOfferForm = () => {
       maxPrice: undefined,
       comment: undefined,
       expiresAt: new Date(),
+      maxContact: "unlimited",
+      maxContactCount: undefined,
     },
   });
   const { handleSubmit } = form;

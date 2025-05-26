@@ -13,33 +13,26 @@ type PickerOption = {
 type ModalPickerProps = {
   name: string;
   label: string;
+  value: string;
+  onChange: (value: string) => void;
   options: PickerOption[];
   required?: boolean;
   errors: FieldErrors<any>;
-  control: Control<any>;
 };
 
 const UnControlModalPicker: React.FC<ModalPickerProps> = ({
   name,
   label,
+  value,
+  onChange,
   options,
-  control,
+  errors,
   required = false,
 }) => {
   const { colors, typography } = useTheme();
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedValue, setSelectedValue] = useState<string | undefined>();
-
-  // react-hook-formのコントローラーを使用
-  const {
-    field: { value, onChange },
-    formState: { errors },
-  } = useController({
-    name,
-    control,
-    defaultValue: "",
-  });
 
   // フォームの値が変更されたときに選択値を更新
   useEffect(() => {
