@@ -1,29 +1,38 @@
-import DisplaySelectItem from "@/components/registrationCar/form/DisplaySelectItem";
+import { useState } from "react";
+import { useController, useFormContext, UseFormReturn } from "react-hook-form";
 import {
-  RegistrationBuyOfferFormData,
-  registrationBuyOfferSchema,
-} from "@/constants/schemas/registrationBuyOfferSchema";
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import DatePicker from "react-native-date-picker";
+
+import Button from "@/components/common/Button";
+import DisplaySelectItem from "@/components/registrationCar/form/DisplaySelectItem";
+import { RegistrationBuyOfferFormData } from "@/constants/schemas/registrationBuyOfferSchema";
 import { useTheme } from "@/contexts/ThemeContext";
 import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useController, useForm, useFormContext } from "react-hook-form";
-import { ScrollView, Text, TextInput, View } from "react-native";
+import SafeAreaBottom from "@/components/common/SafeAreaBottom";
+import UnControlTextInput from "@/components/formComponents/UnControl/TextInput";
+import UnControlDatePicker from "@/components/formComponents/UnControl/DatePicker";
 
-const RegistrationBuyOfferFormScreen = () => {
+interface RegistrationBuyOfferFormScreenProps {
+  confirmButton: () => void;
+  form: UseFormReturn<RegistrationBuyOfferFormData>;
+}
+
+const RegistrationBuyOfferFormScreen: React.FC<
+  RegistrationBuyOfferFormScreenProps
+> = ({ confirmButton, form }) => {
   const { getValues } = useFormContext();
-  const { colors, typography } = useTheme();
+  const { colors } = useTheme();
   const { grade, model, year, maker } = getValues();
-  const form = useForm<RegistrationBuyOfferFormData>({
-    resolver: zodResolver(registrationBuyOfferSchema),
-    defaultValues: {
-      minPrice: 0,
-      maxPrice: 0,
-      comment: "",
-    },
-  });
   const {
-    handleSubmit,
     control,
     formState: { errors, isSubmitting },
   } = form;
@@ -44,155 +53,79 @@ const RegistrationBuyOfferFormScreen = () => {
   };
   const carData = transformCarData(formCar as Car);
   return (
-    <ScrollView
-      style={{ flex: 1 }}
-      contentContainerStyle={{ gap: 16, paddingBottom: 16 }}
+    <KeyboardAvoidingView
+      style={{
+        flex: 1,
+      }}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 110 : 0}
     >
-      <View
-        style={{
-          padding: 16,
-          backgroundColor: colors.backgroundSecondary,
-          gap: 8,
-        }}
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ gap: 16, paddingBottom: 16 }}
       >
-        <DisplaySelectItem label="メーカー" value={carData.maker.name} />
-        <DisplaySelectItem label="車種" value={carData.model.name} />
-        <DisplaySelectItem label="モデル" value={carData.year.year} />
-        <DisplaySelectItem label="グレード" value={carData.grade.gradeName} />
-        <DisplaySelectItem
-          label="型番"
-          value={carData.grade.modelNumber.replace(/[\s\u3000]/g, "")}
-        />
-      </View>
-      <View style={{ paddingHorizontal: 16, gap: 16 }}>
-        <View style={{ gap: 8 }}>
-          <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
-            最低入札額
-            <Text style={{ color: colors.error }}>*</Text>
-          </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "flex-end",
-              gap: 8,
-            }}
-          >
-            <TextInput
-              value={minPrice.toString()}
-              keyboardType="numeric"
-              onChangeText={(text) => setMinPrice(Number(text))}
-              style={{
-                backgroundColor: colors.backgroundSecondary,
-                borderRadius: 8,
-                padding: 16,
-                flex: 1,
-                color: colors.textPrimary,
-                borderWidth: 1,
-                borderColor: errors.minPrice
-                  ? colors.error
-                  : colors.borderPrimary,
-              }}
-            />
-            <Text
-              style={{
-                color: colors.textPrimary,
-                ...typography.body2,
-                paddingBottom: 8,
-              }}
-            >
-              円
-            </Text>
-          </View>
-          {errors.minPrice && (
-            <Text style={{ color: colors.error, ...typography.body2 }}>
-              {errors.minPrice?.message as string}
-            </Text>
-          )}
+        <View
+          style={{
+            padding: 16,
+            backgroundColor: colors.backgroundSecondary,
+            gap: 8,
+          }}
+        >
+          <DisplaySelectItem label="メーカー" value={carData.maker.name} />
+          <DisplaySelectItem label="車種" value={carData.model.name} />
+          <DisplaySelectItem label="モデル" value={carData.year.year} />
+          <DisplaySelectItem label="グレード" value={carData.grade.gradeName} />
+          <DisplaySelectItem
+            label="型番"
+            value={carData.grade.modelNumber.replace(/[\s\u3000]/g, "")}
+          />
         </View>
-        <View style={{ gap: 8 }}>
-          <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
-            最高入札額
-            <Text style={{ color: colors.error }}>*</Text>
-          </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "flex-end",
-              gap: 8,
-            }}
-          >
-            <TextInput
-              value={maxPrice.toString()}
-              keyboardType="numeric"
-              onChangeText={(text) => setMaxPrice(Number(text))}
-              style={{
-                backgroundColor: colors.backgroundSecondary,
-                borderRadius: 8,
-                padding: 16,
-                flex: 1,
-                color: colors.textPrimary,
-                borderWidth: 1,
-                borderColor: errors.maxPrice
-                  ? colors.error
-                  : colors.borderPrimary,
-              }}
-            />
+        <View style={{ paddingHorizontal: 16, gap: 16 }}>
+          <UnControlTextInput
+            label="最低入札額"
+            name="minPrice"
+            isRequired
+            value={minPrice?.toString()}
+            onChangeText={(text) => setMinPrice(Number(text))}
+            errors={errors}
+            unit="円"
+            keyboardType="numeric"
+          />
+          <UnControlTextInput
+            label="最高入札額"
+            name="maxPrice"
+            isRequired
+            value={maxPrice?.toString()}
+            onChangeText={(text) => setMaxPrice(Number(text))}
+            errors={errors}
+            unit="円"
+            keyboardType="numeric"
+          />
+          <UnControlDatePicker
+            label="有効期限"
+            name="expiresAt"
+            isRequired
+            control={control}
+          />
+          <UnControlTextInput
+            label="加盟店コメント"
+            name="comment"
+            value={comment ?? ""}
+            onChangeText={setComment}
+            errors={errors}
+            multiline
+          />
+          <Button
+            label="買取オファーを登録する"
+            onPress={confirmButton}
+            color={colors.primary}
+            disabled={isSubmitting}
+          />
+        </View>
 
-            <Text
-              style={{
-                color: colors.textPrimary,
-                ...typography.body2,
-                paddingBottom: 8,
-              }}
-            >
-              円
-            </Text>
-          </View>
-          {errors.maxPrice && (
-            <Text style={{ color: colors.error, ...typography.body2 }}>
-              {errors.maxPrice?.message as string}
-            </Text>
-          )}
-        </View>
-        <View style={{ gap: 8 }}>
-          <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
-            加盟店コメント
-            <Text style={{ color: colors.error }}>*</Text>
-          </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "flex-end",
-              gap: 8,
-            }}
-          >
-            <TextInput
-              value={comment}
-              onChangeText={setComment}
-              style={{
-                backgroundColor: colors.backgroundSecondary,
-                borderRadius: 8,
-                padding: 16,
-                flex: 1,
-                color: colors.textPrimary,
-                height: 120,
-                borderWidth: 1,
-                borderColor: errors.comment
-                  ? colors.error
-                  : colors.borderPrimary,
-              }}
-              multiline
-              scrollEnabled={false}
-            />
-          </View>
-          {errors.comment && (
-            <Text style={{ color: colors.error, ...typography.body2 }}>
-              {errors.comment?.message as string}
-            </Text>
-          )}
-        </View>
-      </View>
-    </ScrollView>
+        <SafeAreaBottom />
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

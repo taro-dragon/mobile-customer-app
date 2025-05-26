@@ -4,7 +4,10 @@ export const registrationBuyOfferSchema = z
   .object({
     minPrice: z.number().min(1, "最低買取金額は必須です"),
     maxPrice: z.number().min(1, "最高買取金額は必須です"),
-    comment: z.string(),
+    comment: z.string().optional(),
+    expiresAt: z
+      .date()
+      .min(new Date(), "有効期限は今日以降の日付でなければなりません"),
   })
   .refine((data) => data.maxPrice > data.minPrice, {
     message: "最高買取金額は最低買取金額より大きい必要があります",

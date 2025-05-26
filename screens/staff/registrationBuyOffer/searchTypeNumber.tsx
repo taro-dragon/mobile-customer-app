@@ -7,7 +7,13 @@ import { useRouter } from "expo-router";
 import { Search } from "lucide-react-native";
 import React, { useState, useMemo, useCallback } from "react";
 import { useFormContext } from "react-hook-form";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  Keyboard,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 interface SearchFormProps {
   typeNumber: string;
@@ -69,6 +75,7 @@ const SearchTypeNumberScreen = () => {
     const result = searchByModelNumber(typeNumber);
     if (result) {
       setResult(result);
+      Keyboard.dismiss();
     }
   }, [typeNumber]);
 
