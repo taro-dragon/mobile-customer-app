@@ -43,7 +43,6 @@ const BulkAppraisalBidFilterScreen = () => {
   const grade = getValues("grade");
   const prefecture = getValues("prefecture");
   const sellTime = getValues("sellTime");
-  const status = getValues("status");
 
   const makerName = findCarData.maker(maker)?.name;
   const modelName = findCarData.model(maker, model)?.name;

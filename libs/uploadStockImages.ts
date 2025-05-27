@@ -3,13 +3,11 @@ import storage from "@react-native-firebase/storage";
 /**
  * Uploads stock images to Firebase Storage
  * @param stockId - ID of the stock to associate images with
- * @param storeId - ID of the store the stock belongs to
  * @param images - Object containing images to upload keyed by their type/position
  * @returns Object containing download URLs for each uploaded image
  */
 export async function uploadStockImages(
   stockId: string,
-  storeId: string,
   images: Record<string, string | undefined>
 ): Promise<Record<string, string>> {
   const downloadURLs: Record<string, string> = {};

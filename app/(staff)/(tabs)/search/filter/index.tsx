@@ -1,7 +1,7 @@
-import { View } from "react-native";
+import SearchFilterScreen from "@/screens/staff/tabs/search/filter";
 
 const Filter = () => {
-  return <View></View>;
+  return <SearchFilterScreen />;
 };
 
 export default Filter;

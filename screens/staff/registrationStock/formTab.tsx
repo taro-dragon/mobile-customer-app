@@ -174,16 +174,8 @@ const RegistrationStockFormScreen = () => {
       // 全ての画像フィールドを収集
       const imageFields = collectImageFields(data);
 
-      console.log("Uploading images:", Object.keys(imageFields));
-
       // Upload images to Firebase Storage and get download URLs
-      const imageUrls = await uploadStockImages(
-        stockCarRef.id,
-        currentStore.id,
-        imageFields
-      );
-
-      console.log("Uploaded image URLs:", Object.keys(imageUrls));
+      const imageUrls = await uploadStockImages(stockCarRef.id, imageFields);
 
       // Create stock data without image URIs (we'll add the download URLs instead)
       const stockData = { ...data };
@@ -213,6 +205,7 @@ const RegistrationStockFormScreen = () => {
         mileage: Number(cleanStockData.mileage),
         displacement: Number(cleanStockData.displacement),
         doorNumber: Number(cleanStockData.doorNumber),
+        prefecture: currentStore.address1,
       });
 
       // Navigate back
