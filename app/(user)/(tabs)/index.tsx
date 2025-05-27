@@ -19,9 +19,7 @@ const CustomerIndex = () => {
   const guard = useRegistrationGuard();
   const { colors, typography } = useTheme();
   const { cars } = useStore();
-  const currentAppraisalCar = cars.find(
-    (car) => car.status === "appraising" || car.status === "company_selection"
-  );
+  const currentAppraisalCar = cars.find((car) => car.status === "deadline");
   const styles = StyleSheet.create({
     container: {
       flex: 1,

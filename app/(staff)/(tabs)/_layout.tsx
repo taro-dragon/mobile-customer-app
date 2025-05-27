@@ -62,6 +62,7 @@ export default function TabLayout() {
           options={{
             title: "検索",
             tabBarIcon: ({ color }) => <Search size={24} color={color} />,
+            headerShown: false,
           }}
         />
         {staff?.isOwner && (
