@@ -16,7 +16,7 @@ const RegistrationBuyOfferIndexScreen: React.FC = () => {
           borderColor: colors.borderPrimary,
         }}
         onPress={() => {
-          router.push("/registrationStock/selectMaker");
+          router.push("/registrationBuyOffer/selectMaker");
         }}
       >
         <List size={24} color={colors.primary} />

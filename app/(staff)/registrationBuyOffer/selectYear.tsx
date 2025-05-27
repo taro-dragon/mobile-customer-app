@@ -3,9 +3,9 @@ import fullCarData from "@/constants/full_car_catalog.json";
 import { useFormContext } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { Year } from "@/types/models/carData/year";
-import RegistrationStockSelectYearScreen from "@/screens/staff/registrationStock/selectYear";
+import RegistrationBuyOfferSelectYearScreen from "@/screens/staff/registrationBuyOffer/selectYear";
 
-const RegistrationStockSelectCar = () => {
+const RegistrationBuyOfferSelectYear = () => {
   const { watch } = useFormContext();
   const maker = watch("maker");
   const model = watch("model");
@@ -22,7 +22,7 @@ const RegistrationStockSelectCar = () => {
     const selectedYears = selectYears();
     setYears(selectedYears || []);
   }, [maker, manufacturers, model]);
-  return <RegistrationStockSelectYearScreen years={years} />;
+  return <RegistrationBuyOfferSelectYearScreen years={years} />;
 };
 
-export default RegistrationStockSelectCar;
+export default RegistrationBuyOfferSelectYear;

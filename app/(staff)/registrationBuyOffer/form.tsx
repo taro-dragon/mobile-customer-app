@@ -1,30 +1,87 @@
+import { Alert } from "react-native";
+import { useForm, useFormContext } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import firestore from "@react-native-firebase/firestore";
 import {
   RegistrationBuyOfferFormData,
   registrationBuyOfferSchema,
 } from "@/constants/schemas/registrationBuyOfferSchema";
 import RegistrationBuyOfferFormScreen from "@/screens/staff/registrationBuyOffer/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Alert } from "react-native";
+import { useStore } from "@/hooks/useStore";
+import Toast from "react-native-toast-message";
+import { useRouter } from "expo-router";
 
 const RegistrationBuyOfferForm = () => {
+  const { getValues } = useFormContext();
+  const { currentStore, staff } = useStore();
+  const router = useRouter();
   const form = useForm<RegistrationBuyOfferFormData>({
     resolver: zodResolver(registrationBuyOfferSchema),
     defaultValues: {
       minPrice: undefined,
       maxPrice: undefined,
-      comment: undefined,
+      description: undefined,
       expiresAt: new Date(),
       maxContact: "unlimited",
       maxContactCount: undefined,
     },
   });
   const { handleSubmit } = form;
-  const onSubmit = (data: RegistrationBuyOfferFormData) => {
-    console.log(data);
+  const { modelNumber } = getValues();
+  const onSubmit = async (data: RegistrationBuyOfferFormData) => {
+    const filteredData = Object.fromEntries(
+      Object.entries(data).filter(([key, value]) => {
+        if (value === undefined) return false;
+        if (key === "maxContactCount" && data.maxContact === "unlimited")
+          return false;
+        return true;
+      })
+    );
+    const normalizedSearchModelNumber = modelNumber.replace(/[\s\u3000]/g, "");
+    try {
+      const existingOffers = await firestore()
+        .collection("buyOffers")
+        .where("grade", "==", getValues("grade"))
+        .where("model", "==", getValues("model"))
+        .where("year", "==", getValues("year"))
+        .where("maker", "==", getValues("maker"))
+        .where("modelNumber", "==", normalizedSearchModelNumber)
+        .where("affiliateStoreId", "==", currentStore?.id)
+        .where("expiresAt", ">", new Date())
+        .get();
+
+      if (!existingOffers.empty) {
+        throw new Error("同じ条件の買取オファーが既に登録されています。");
+      }
+      const submitData = {
+        ...filteredData,
+        staffId: staff?.id,
+        affiliateStoreId: currentStore?.id,
+        createdAt: firestore.FieldValue.serverTimestamp(),
+        updatedAt: firestore.FieldValue.serverTimestamp(),
+        grade: getValues("grade"),
+        model: getValues("model"),
+        year: getValues("year"),
+        maker: getValues("maker"),
+        modelNumber: normalizedSearchModelNumber,
+      };
+      await firestore().collection("buyOffers").add(submitData);
+      Toast.show({
+        type: "success",
+        text1: "買取オファーの登録に成功しました",
+      });
+      router.dismissAll();
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "買取オファーの登録に失敗しました",
+        text2:
+          error instanceof Error ? error.message : "不明なエラーが発生しました",
+      });
+    }
   };
   const confirmButton = () => {
-    Alert.alert("買取オファーを登録する", "買取オファーを登録しますか？", [
+    Alert.alert("確認", "買取オファーの登録をしてもよろしいですか？", [
       {
         text: "キャンセル",
         style: "cancel",

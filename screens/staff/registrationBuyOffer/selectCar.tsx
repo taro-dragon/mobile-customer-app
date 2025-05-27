@@ -1,47 +1,47 @@
 import ListItem from "@/components/registrationCar/ListItem";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Year } from "@/types/models/carData/year";
+import { Model } from "@/types/models/carData/model";
 import { FlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
 import React, { useCallback } from "react";
 import { useController, useFormContext } from "react-hook-form";
 import { ActivityIndicator, View } from "react-native";
 
-type RegistrationStockSelectYearProps = {
-  years: Year[];
+type RegistrationBuyOfferSelectCarProps = {
+  cars: Model[];
 };
 
-const RegistrationStockSelectYearScreen: React.FC<
-  RegistrationStockSelectYearProps
-> = ({ years }) => {
+const RegistrationBuyOfferSelectCarScreen: React.FC<
+  RegistrationBuyOfferSelectCarProps
+> = ({ cars }) => {
   const { colors } = useTheme();
   const router = useRouter();
   const { control } = useFormContext();
   const {
     field: { onChange },
   } = useController({
-    name: "year",
+    name: "model",
     control,
   });
-  const handleYearSelect = useCallback(
-    (yearId: string) => {
-      onChange(yearId);
+  const handleCarSelect = useCallback(
+    (modelId: string) => {
+      onChange(modelId);
       setTimeout(() => {
-        router.push("/registrationStock/selectGrade");
+        router.push("/registrationBuyOffer/selectYear");
       }, 50);
     },
     [onChange, router]
   );
   return (
     <FlashList
-      data={years}
+      data={cars}
       contentContainerStyle={{
         paddingBottom: 24,
       }}
       renderItem={({ item }) => (
         <ListItem
-          label={item.year}
-          onPress={() => handleYearSelect(item.yearId)}
+          label={item.name}
+          onPress={() => handleCarSelect(item.modelId)}
         />
       )}
       ListEmptyComponent={
@@ -55,4 +55,4 @@ const RegistrationStockSelectYearScreen: React.FC<
   );
 };
 
-export default RegistrationStockSelectYearScreen;
+export default RegistrationBuyOfferSelectCarScreen;

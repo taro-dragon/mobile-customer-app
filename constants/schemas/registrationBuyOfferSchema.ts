@@ -4,7 +4,7 @@ export const registrationBuyOfferSchema = z
   .object({
     minPrice: z.number().min(1, "最低買取金額は必須です"),
     maxPrice: z.number().min(1, "最高買取金額は必須です"),
-    comment: z.string().optional(),
+    description: z.string().optional(),
     maxContact: z.enum(["limited", "unlimited"]),
     maxContactCount: z.number().optional(),
     expiresAt: z

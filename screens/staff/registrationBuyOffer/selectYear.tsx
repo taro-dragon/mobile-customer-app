@@ -7,12 +7,12 @@ import React, { useCallback } from "react";
 import { useController, useFormContext } from "react-hook-form";
 import { ActivityIndicator, View } from "react-native";
 
-type RegistrationStockSelectYearProps = {
+type RegistrationBuyOfferSelectYearProps = {
   years: Year[];
 };
 
-const RegistrationStockSelectYearScreen: React.FC<
-  RegistrationStockSelectYearProps
+const RegistrationBuyOfferSelectYearScreen: React.FC<
+  RegistrationBuyOfferSelectYearProps
 > = ({ years }) => {
   const { colors } = useTheme();
   const router = useRouter();
@@ -27,7 +27,7 @@ const RegistrationStockSelectYearScreen: React.FC<
     (yearId: string) => {
       onChange(yearId);
       setTimeout(() => {
-        router.push("/registrationStock/selectGrade");
+        router.push("/registrationBuyOffer/selectGrade");
       }, 50);
     },
     [onChange, router]
@@ -55,4 +55,4 @@ const RegistrationStockSelectYearScreen: React.FC<
   );
 };
 
-export default RegistrationStockSelectYearScreen;
+export default RegistrationBuyOfferSelectYearScreen;

@@ -2,7 +2,7 @@ import { FullCarData } from "@/types/models/carData/fullCarData";
 import fullCarData from "@/constants/full_car_catalog.json";
 import { useFormContext } from "react-hook-form";
 import { useMemo } from "react";
-import RegistrationStockSelectGreadScreen from "@/screens/staff/registrationStock/selectGread";
+import RegistrationStockSelectGradeScreen from "@/screens/staff/registrationStock/selectGrade";
 
 const RegistrationStockSelectCar = () => {
   const { watch } = useFormContext();
@@ -16,11 +16,26 @@ const RegistrationStockSelectCar = () => {
   const years = useMemo(() => {
     return cars?.find((c) => c.modelId === model)?.years;
   }, [cars, model]);
+
   const grades = useMemo(() => {
-    return years?.find((y) => y.yearId === year)?.grades;
+    const allGrades = () => {
+      return years?.find((y) => y.yearId === year)?.grades;
+    };
+    // 重複するgradeと型番を排除する
+    const uniqueGrades = allGrades
+      ? [
+          ...new Map(
+            allGrades()?.map((grade) => [
+              grade.gradeName + grade.modelNumber,
+              grade,
+            ])
+          ).values(),
+        ]
+      : [];
+    return uniqueGrades;
   }, [years, year]);
 
-  return <RegistrationStockSelectGreadScreen grades={grades} />;
+  return <RegistrationStockSelectGradeScreen grades={grades} />;
 };
 
 export default RegistrationStockSelectCar;

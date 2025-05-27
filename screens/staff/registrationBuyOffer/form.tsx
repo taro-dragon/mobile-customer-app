@@ -11,6 +11,7 @@ import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import UnControlTextInput from "@/components/formComponents/UnControl/TextInput";
 import UnControlDatePicker from "@/components/formComponents/UnControl/DatePicker";
 import UnControlModalPicker from "@/components/formComponents/UnControl/ModalPicker";
+import Alert from "@/components/common/Alert";
 
 interface RegistrationBuyOfferFormScreenProps {
   confirmButton: () => void;
@@ -25,7 +26,6 @@ const RegistrationBuyOfferFormScreen: React.FC<
   const { grade, model, year, maker } = getValues();
   const {
     control,
-    getValues: getFormValues,
     formState: { errors, isSubmitting },
   } = form;
   const {
@@ -35,8 +35,8 @@ const RegistrationBuyOfferFormScreen: React.FC<
     field: { value: maxPrice, onChange: setMaxPrice },
   } = useController({ control, name: "maxPrice" });
   const {
-    field: { value: comment, onChange: setComment },
-  } = useController({ control, name: "comment" });
+    field: { value: description, onChange: setDescription },
+  } = useController({ control, name: "description" });
   const {
     field: { value: maxContact, onChange: setMaxContact },
   } = useController({ control, name: "maxContact" });
@@ -79,8 +79,13 @@ const RegistrationBuyOfferFormScreen: React.FC<
           />
         </View>
         <View style={{ paddingHorizontal: 16, gap: 16 }}>
+          <Alert
+            title="注意"
+            message={`・オーナー様には最低買取金額の高い順に表示されます。\n・最低買取金額は事故歴、修復歴を隠蔽していたなどの例外がない限り、絶対に下回ることのない金額を提示してください。\n・また他にも買取の条件がある場合はトラブル防止のため加盟店コメントへの記載をお願いいたします。`}
+            type="warning"
+          />
           <UnControlTextInput
-            label="最低入札額"
+            label="最低買取金額"
             name="minPrice"
             isRequired
             value={minPrice?.toString()}
@@ -90,7 +95,7 @@ const RegistrationBuyOfferFormScreen: React.FC<
             keyboardType="numeric"
           />
           <UnControlTextInput
-            label="最高入札額"
+            label="最高買取金額"
             name="maxPrice"
             isRequired
             value={maxPrice?.toString()}
@@ -137,13 +142,13 @@ const RegistrationBuyOfferFormScreen: React.FC<
           <UnControlTextInput
             label="加盟店コメント"
             name="comment"
-            value={comment ?? ""}
-            onChangeText={setComment}
+            value={description ?? ""}
+            onChangeText={setDescription}
             errors={errors}
             multiline
           />
           <Button
-            label="買取オファーを登録する"
+            label="確認する"
             onPress={confirmButton}
             color={colors.primary}
             disabled={isSubmitting}

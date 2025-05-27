@@ -43,6 +43,34 @@ const RegistrationBuyOfferLayout = () => {
           }}
         />
         <Stack.Screen
+          name="selectMaker"
+          options={{
+            title: "メーカー選択",
+            headerBackButtonDisplayMode: "minimal",
+          }}
+        />
+        <Stack.Screen
+          name="selectCar"
+          options={{
+            title: "車種選択",
+            headerBackButtonDisplayMode: "minimal",
+          }}
+        />
+        <Stack.Screen
+          name="selectYear"
+          options={{
+            title: "モデル選択",
+            headerBackButtonDisplayMode: "minimal",
+          }}
+        />
+        <Stack.Screen
+          name="selectGrade"
+          options={{
+            title: "グレード選択",
+            headerBackButtonDisplayMode: "minimal",
+          }}
+        />
+        <Stack.Screen
           name="form"
           options={{
             title: "買取オファー登録",

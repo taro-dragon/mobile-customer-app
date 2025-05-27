@@ -1,47 +1,48 @@
 import ListItem from "@/components/registrationCar/ListItem";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Year } from "@/types/models/carData/year";
+import { Manufacture } from "@/types/models/carData/manufacturet";
 import { FlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import { useController, useFormContext } from "react-hook-form";
 import { ActivityIndicator, View } from "react-native";
 
-type RegistrationStockSelectYearProps = {
-  years: Year[];
+type RegistrationBuyOfferSelectMakerScreenProps = {
+  manufacturers: Manufacture[];
 };
 
-const RegistrationStockSelectYearScreen: React.FC<
-  RegistrationStockSelectYearProps
-> = ({ years }) => {
+const RegistrationBuyOfferSelectMakerScreen: React.FC<
+  RegistrationBuyOfferSelectMakerScreenProps
+> = ({ manufacturers }) => {
   const { colors } = useTheme();
-  const router = useRouter();
   const { control } = useFormContext();
   const {
     field: { onChange },
   } = useController({
-    name: "year",
+    name: "maker",
     control,
   });
-  const handleYearSelect = useCallback(
-    (yearId: string) => {
-      onChange(yearId);
+  const router = useRouter();
+
+  const handleMakerSelect = useCallback(
+    (manufacturerId: string) => {
+      onChange(manufacturerId);
       setTimeout(() => {
-        router.push("/registrationStock/selectGrade");
+        router.push("/registrationBuyOffer/selectCar");
       }, 50);
     },
     [onChange, router]
   );
   return (
     <FlashList
-      data={years}
+      data={manufacturers}
       contentContainerStyle={{
         paddingBottom: 24,
       }}
       renderItem={({ item }) => (
         <ListItem
-          label={item.year}
-          onPress={() => handleYearSelect(item.yearId)}
+          label={item.name}
+          onPress={() => handleMakerSelect(item.manufacturerId)}
         />
       )}
       ListEmptyComponent={
@@ -55,4 +56,4 @@ const RegistrationStockSelectYearScreen: React.FC<
   );
 };
 
-export default RegistrationStockSelectYearScreen;
+export default RegistrationBuyOfferSelectMakerScreen;

@@ -87,7 +87,7 @@ const RegistrationStockLayout = () => {
           }}
         />
         <Stack.Screen
-          name="selectGread"
+          name="selectGrade"
           options={{
             title: "グレード選択",
             headerBackButtonDisplayMode: "minimal",

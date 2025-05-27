@@ -92,7 +92,7 @@ const SearchTypeNumberScreen = () => {
     setValue("model", targetCar.model.modelId);
     setValue("year", targetCar.year.yearId);
     setValue("grade", targetCar.grade.gradeName);
-    setValue("modelNumber", targetCar.grade.modelNumber);
+    setValue("modelNumber", normalizedSearchModelNumber);
 
     router.push("/registrationStock/form");
   };

@@ -9,12 +9,12 @@ import React, { useCallback } from "react";
 import { useController, useFormContext } from "react-hook-form";
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 
-type RegistrationStockSelectGreadProps = {
+type RegistrationBuyOfferSelectGradeProps = {
   grades?: Grade[];
 };
 
-const RegistrationStockSelectGreadScreen: React.FC<
-  RegistrationStockSelectGreadProps
+const RegistrationBuyOfferSelectGradeScreen: React.FC<
+  RegistrationBuyOfferSelectGradeProps
 > = ({ grades }) => {
   const { colors, typography } = useTheme();
   const router = useRouter();
@@ -52,7 +52,7 @@ const RegistrationStockSelectGreadScreen: React.FC<
               const modelNumber = item.modelNumber?.trim().replace(/ /g, "");
               onChange(item.gradeName);
               onChangeModelNumber(modelNumber);
-              router.push("/registrationStock/form");
+              router.push("/registrationBuyOffer/form");
             }}
           >
             <View style={{ flexDirection: "column", gap: 4, flex: 1 }}>
@@ -83,4 +83,4 @@ const RegistrationStockSelectGreadScreen: React.FC<
   );
 };
 
-export default RegistrationStockSelectGreadScreen;
+export default RegistrationBuyOfferSelectGradeScreen;
