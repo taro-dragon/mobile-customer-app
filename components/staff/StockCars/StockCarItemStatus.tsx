@@ -12,11 +12,12 @@ const StockCarItemStatusPanel = ({
 }: StockCarItemStatusPanelProps) => {
   const { colors, typography } = useTheme();
   return (
-    <View style={{ flexDirection: "row", gap: 4, alignItems: "center" }}>
+    <View style={{ flexDirection: "row", gap: 2, alignItems: "center" }}>
       <View
         style={{
           backgroundColor: colors.backgroundTertiary,
-          padding: 2,
+          paddingVertical: 2,
+          paddingHorizontal: 4,
           borderRadius: 4,
           borderWidth: 1,
           borderColor: colors.borderPrimary,
