@@ -19,7 +19,7 @@ type StockCarItemProps = {
 };
 
 const StockCarItem: React.FC<StockCarItemProps> = ({ car }) => {
-  const { maker, model, year, grade } = transformCarData(car as unknown as Car);
+  const { maker, model } = transformCarData(car as unknown as Car);
   const { colors, typography } = useTheme();
   const router = useRouter();
   const repairStatusValue = useMemo(
