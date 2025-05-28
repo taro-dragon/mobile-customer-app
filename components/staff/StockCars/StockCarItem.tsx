@@ -8,6 +8,7 @@ import { useRouter } from "expo-router";
 import { Text, TouchableOpacity, View } from "react-native";
 import {
   guaranteeOptions,
+  inspectionOptions,
   repairStatusOptions,
 } from "@/constants/registrationStockOptions";
 import { useMemo } from "react";
@@ -31,6 +32,12 @@ const StockCarItem: React.FC<StockCarItemProps> = ({ car }) => {
     () =>
       guaranteeOptions.find((option) => option.value === car.guarantee)?.label,
     [car.repairStatus]
+  );
+  const inspectionValue = useMemo(
+    () =>
+      inspectionOptions.find((option) => option.value === car.inspection)
+        ?.label,
+    [car.inspection]
   );
   return (
     <TouchableOpacity
@@ -131,15 +138,34 @@ const StockCarItem: React.FC<StockCarItemProps> = ({ car }) => {
               </Text>
             </View>
           </View>
-          <StockCarItemStatusPanel
-            label="走行"
-            value={`${car.mileage.toLocaleString()}km`}
-          />
-          <StockCarItemStatusPanel
-            label="修復歴"
-            value={repairStatusValue || ""}
-          />
-          <StockCarItemStatusPanel label="保証" value={guaranteeValue || ""} />
+          <View style={{ flexDirection: "row", gap: 8 }}>
+            <View style={{ flex: 1, gap: 4 }}>
+              <StockCarItemStatusPanel
+                label="走行"
+                value={`${car.mileage.toLocaleString()}km`}
+              />
+            </View>
+            <View style={{ flex: 1, gap: 4 }}>
+              <StockCarItemStatusPanel
+                label="修復歴"
+                value={repairStatusValue || ""}
+              />
+            </View>
+          </View>
+          <View style={{ flexDirection: "row", gap: 8 }}>
+            <View style={{ flex: 1, gap: 4 }}>
+              <StockCarItemStatusPanel
+                label="保証"
+                value={guaranteeValue || ""}
+              />
+            </View>
+            <View style={{ flex: 1, gap: 4 }}>
+              <StockCarItemStatusPanel
+                label="車検"
+                value={inspectionValue || ""}
+              />
+            </View>
+          </View>
         </View>
       </View>
       <Divider />
