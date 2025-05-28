@@ -7,17 +7,14 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { Inbox } from "lucide-react-native";
 import { RefreshControl } from "react-native";
+import Loader from "@/components/common/Loader";
 
 const BulkAppraisalBidScreen = () => {
   const { requests, loadMore, isLoading, refresh } = useBulkAppraisalContext();
   const { colors, typography } = useTheme();
   const headerHeight = useHeaderHeight();
   if (isLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-    );
+    return <Loader />;
   }
   return (
     <FlashList
