@@ -36,6 +36,34 @@ const FilterLayout = () => {
           headerBackButtonDisplayMode: "minimal",
         }}
       />
+      <Stack.Screen
+        name="model"
+        options={{
+          title: "自動車名",
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
+      <Stack.Screen
+        name="year"
+        options={{
+          title: "モデル",
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
+      <Stack.Screen
+        name="grade"
+        options={{
+          title: "グレード",
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
+      <Stack.Screen
+        name="prefecture"
+        options={{
+          title: "都道府県",
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
     </Stack>
   );
 };

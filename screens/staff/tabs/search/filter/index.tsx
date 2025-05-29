@@ -39,28 +39,28 @@ const SearchFilterScreen = () => {
         />
         <FilterIndexItem
           label="自動車名"
-          onPress={() => router.push("/bulkAppraisalBid/filter/model")}
+          onPress={() => router.push("/search/filter/model")}
           defaultValue="すべて"
           disabled={!maker}
           value={modelName}
         />
         <FilterIndexItem
           label="モデル"
-          onPress={() => router.push("/bulkAppraisalBid/filter/year")}
+          onPress={() => router.push("/search/filter/year")}
           defaultValue="すべて"
           disabled={!model}
           value={yearName}
         />
         <FilterIndexItem
           label="グレード"
-          onPress={() => router.push("/bulkAppraisalBid/filter/grade")}
+          onPress={() => router.push("/search/filter/grade")}
           defaultValue="すべて"
           disabled={!year}
           value={gradeName}
         />
         <FilterIndexItem
           label="都道府県"
-          onPress={() => router.push("/bulkAppraisalBid/filter/prefecture")}
+          onPress={() => router.push("/search/filter/prefecture")}
           defaultValue="すべて"
           value={prefecture}
         />
