@@ -29,6 +29,13 @@ const FilterLayout = () => {
           title: "絞り込み",
         }}
       />
+      <Stack.Screen
+        name="maker"
+        options={{
+          title: "メーカー",
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
     </Stack>
   );
 };

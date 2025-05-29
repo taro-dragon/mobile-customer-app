@@ -7,6 +7,7 @@ export const registrationStockSchema = z.object({
   model: z.string(),
   year: z.string(),
   grade: z.string(),
+  modelNumber: z.string(),
   front: z.string().min(1, "正面写真は必須です"),
   back: z.string().min(1, "背面写真は必須です"),
   left: z.string().min(1, "左側写真は必須です"),
