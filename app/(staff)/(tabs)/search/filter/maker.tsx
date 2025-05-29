@@ -1,7 +1,10 @@
-import { View } from "react-native";
+import MakerFilterScreen from "@/screens/staff/tabs/search/filter/maker";
+import { FullCarData } from "@/types/models/carData/fullCarData";
+import fullCarData from "@/constants/full_car_catalog.json";
 
 const MakerFilter = () => {
-  return <View></View>;
+  const { manufacturers } = fullCarData as FullCarData;
+  return <MakerFilterScreen manufacturers={manufacturers} />;
 };
 
 export default MakerFilter;

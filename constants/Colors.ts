@@ -58,7 +58,7 @@ export const SemanticColors = {
     subTextPrimary: "#7B7B7B",
     characteristicNotificationBackground: "#FF334B",
 
-    primary: "#F15A24",
+    primary: "#5DA0E7",
     error: "#FF334B",
     white: "#FFFFFF",
     gray100: "#FCFCFC",
@@ -147,7 +147,7 @@ export const SemanticColors = {
     subTextPrimary: "#94979E",
     characteristicNotificationBackground: "#FF6B75",
 
-    primary: "#F15A24",
+    primary: "#5DA0E7",
     error: "#FF334B",
     white: "#FFFFFF",
     gray900: "#FCFCFC",
