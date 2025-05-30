@@ -1,7 +1,7 @@
-import { View } from "react-native";
+import PrefectureFilterScreen from "@/screens/staff/tabs/search/filter/preficture";
 
 const PrefectureFilter = () => {
-  return <View></View>;
+  return <PrefectureFilterScreen />;
 };
 
 export default PrefectureFilter;

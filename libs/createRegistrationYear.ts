@@ -19,7 +19,7 @@ const getJapaneseEra = (year: number): string => {
 const createRegistrationYear = () => {
   const currentYear = dayjs().year();
   const registrationYear = [];
-  for (let year = 1980; year <= currentYear; year++) {
+  for (let year = currentYear; year >= 1980; year--) {
     registrationYear.push({
       label: `${year}年(${getJapaneseEra(year)})`,
       value: year,
