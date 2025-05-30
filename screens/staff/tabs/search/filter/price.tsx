@@ -10,20 +10,10 @@ const PriceFilterScreen = () => {
     <View style={{ padding: 16, gap: 12 }}>
       <View style={{ flexDirection: "row", gap: 16 }}>
         <View style={{ flex: 1 }}>
-          <ModalPicker
-            name="minPrice"
-            label="下限"
-            options={priceOptions}
-            required={true}
-          />
+          <ModalPicker name="minPrice" label="下限" options={priceOptions} />
         </View>
         <View style={{ flex: 1 }}>
-          <ModalPicker
-            name="maxPrice"
-            label="上限"
-            options={priceOptions}
-            required={true}
-          />
+          <ModalPicker name="maxPrice" label="上限" options={priceOptions} />
         </View>
       </View>
       <OptionItem name="isTotalPayment" label="支払総額を対象にする" />

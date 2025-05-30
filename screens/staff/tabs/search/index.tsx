@@ -59,7 +59,7 @@ const SearchScreen: React.FC<SearchScreenProps> = ({
               <Text
                 style={{ color: colors.textSecondary, ...typography.body2 }}
               >
-                対象の査定依頼がありません
+                対象の車両がありません
               </Text>
             </View>
           </View>

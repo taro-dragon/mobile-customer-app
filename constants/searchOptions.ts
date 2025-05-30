@@ -46,3 +46,22 @@ export const priceOptions = [
   { label: "950万円", value: "9500000" },
   { label: "1000万円", value: "10000000" },
 ];
+
+export const mileageOptions = [
+  { label: "5000km", value: "5000" },
+  { label: "1万km", value: "10000" },
+  { label: "2万km", value: "20000" },
+  { label: "3万km", value: "30000" },
+  { label: "4万km", value: "40000" },
+  { label: "5万km", value: "50000" },
+  { label: "6万km", value: "60000" },
+  { label: "7万km", value: "70000" },
+  { label: "8万km", value: "80000" },
+  { label: "9万km", value: "90000" },
+  { label: "10万km", value: "100000" },
+  { label: "11万km", value: "110000" },
+  { label: "12万km", value: "120000" },
+  { label: "13万km", value: "130000" },
+  { label: "14万km", value: "140000" },
+  { label: "15万km", value: "150000" },
+];

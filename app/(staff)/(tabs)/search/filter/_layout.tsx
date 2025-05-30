@@ -71,6 +71,20 @@ const FilterLayout = () => {
           headerBackButtonDisplayMode: "minimal",
         }}
       />
+      <Stack.Screen
+        name="mileage"
+        options={{
+          title: "走行距離",
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
+      <Stack.Screen
+        name="registrationYear"
+        options={{
+          title: "初年度登録",
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
     </Stack>
   );
 };
