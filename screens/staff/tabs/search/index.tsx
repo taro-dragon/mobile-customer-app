@@ -1,9 +1,12 @@
 import StockCarItem from "@/components/staff/StockCars/StockCarItem";
 import { ExtendedCar } from "@/contexts/staff/CarSearchContext";
 import { useTheme } from "@/contexts/ThemeContext";
+import { Slider } from "@miblanchard/react-native-slider";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { FlashList } from "@shopify/flash-list";
 import { CarIcon } from "lucide-react-native";
+import { useCallback, useState } from "react";
+import { useFormContext } from "react-hook-form";
 import { Dimensions, RefreshControl, Text, View } from "react-native";
 
 type SearchScreenProps = {
@@ -21,6 +24,7 @@ const SearchScreen: React.FC<SearchScreenProps> = ({
 }) => {
   const { colors, typography } = useTheme();
   const headerHeight = useHeaderHeight();
+
   return (
     <View style={{ flex: 1 }}>
       <FlashList
