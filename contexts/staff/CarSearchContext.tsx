@@ -82,15 +82,31 @@ const fetchStockCars = async ([pageIndex, filters, sort]: [
   if (filters.prefecture) {
     query = query.where("prefecture", "==", filters.prefecture);
   }
-  if (filters.sellTime) {
-    query = query.where("sellTime", "==", filters.sellTime);
+  // Price filtering based on isTotalPayment flag
+  const priceField = filters.isTotalPayment ? "totalPayment" : "bodyPrice";
+  if (filters.minPrice) {
+    query = query.where(priceField, ">=", filters.minPrice);
   }
-  if (filters.highPrice) {
-    query = query.where("totalPayment", ">=", filters.highPrice);
+  if (filters.maxPrice) {
+    query = query.where(priceField, "<=", filters.maxPrice);
   }
-  if (filters.lowPrice) {
-    query = query.where("totalPayment", "<=", filters.lowPrice);
+
+  // Mileage filtering
+  if (filters.minMileage) {
+    query = query.where("mileage", ">=", filters.minMileage);
   }
+  if (filters.maxMileage) {
+    query = query.where("mileage", "<=", filters.maxMileage);
+  }
+
+  // Registration year filtering
+  if (filters.minRegistrationYear) {
+    query = query.where("registrationYear", ">=", filters.minRegistrationYear);
+  }
+  if (filters.maxRegistrationYear) {
+    query = query.where("registrationYear", "<=", filters.maxRegistrationYear);
+  }
+
   if (filters.repairStatus) {
     query = query.where("repairStatus", "==", filters.repairStatus);
   }
