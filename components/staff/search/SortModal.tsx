@@ -1,3 +1,4 @@
+import Divider from "@/components/common/Divider";
 import { sortOptions } from "@/constants/searchOptions";
 import { useTheme } from "@/contexts/ThemeContext";
 import { SortOption } from "@/contexts/staff/CarSearchContext";
@@ -6,11 +7,12 @@ import {
   BottomSheetBackdropProps,
   BottomSheetModal,
   BottomSheetScrollView,
+  BottomSheetView,
   TouchableOpacity,
 } from "@gorhom/bottom-sheet";
-import { Check } from "lucide-react-native";
+import { Check, X } from "lucide-react-native";
 import React, { useCallback, useRef } from "react";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 
 type SortModalProps = {
   handleDismissModalPress: () => void;
@@ -25,7 +27,7 @@ const SortModal: React.FC<SortModalProps> = ({
   currentSort,
   bottomSheetModalRef,
 }) => {
-  const { colors } = useTheme();
+  const { colors, typography } = useTheme();
   const renderBackdrop = useCallback(
     (props: BottomSheetBackdropProps) => (
       <BottomSheetBackdrop
@@ -60,15 +62,28 @@ const SortModal: React.FC<SortModalProps> = ({
       backdropComponent={renderBackdrop}
       snapPoints={["70%"]}
       enableDynamicSizing={false}
-      handleIndicatorStyle={{
-        backgroundColor: colors.textSecondary,
-      }}
-      handleStyle={{
-        backgroundColor: colors.backgroundPrimary,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-      }}
+      handleComponent={null}
     >
+      <BottomSheetView
+        style={{
+          backgroundColor: colors.backgroundPrimary,
+          paddingVertical: 16,
+          paddingHorizontal: 12,
+          borderTopRightRadius: 10,
+          borderTopLeftRadius: 10,
+        }}
+      >
+        <Text
+          style={{
+            color: colors.primary,
+            textAlign: "center",
+            ...typography.heading2,
+          }}
+        >
+          並び替え
+        </Text>
+      </BottomSheetView>
+      <Divider />
       <BottomSheetScrollView
         style={{
           backgroundColor: colors.backgroundPrimary,
@@ -79,27 +94,30 @@ const SortModal: React.FC<SortModalProps> = ({
             currentSort.target === option.target &&
             currentSort.value === option.value;
           return (
-            <TouchableOpacity
-              key={index}
-              style={{
-                padding: 16,
-                width: "100%",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-              onPress={() => handleSortOptionPress(option)}
-            >
-              <Text
+            <View>
+              <TouchableOpacity
+                key={index}
                 style={{
-                  color: isSelected ? colors.primary : colors.textPrimary,
-                  fontWeight: isSelected ? "bold" : "normal",
+                  padding: 16,
+                  width: "100%",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
                 }}
+                onPress={() => handleSortOptionPress(option)}
               >
-                {option.label}
-              </Text>
-              {isSelected && <Check size={16} color={colors.primary} />}
-            </TouchableOpacity>
+                <Text
+                  style={{
+                    color: isSelected ? colors.primary : colors.textPrimary,
+                    fontWeight: isSelected ? "bold" : "normal",
+                  }}
+                >
+                  {option.label}
+                </Text>
+                {isSelected && <Check size={16} color={colors.primary} />}
+              </TouchableOpacity>
+              <Divider />
+            </View>
           );
         })}
       </BottomSheetScrollView>
