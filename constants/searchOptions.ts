@@ -68,7 +68,6 @@ export const mileageOptions = [
 
 export const sortOptions = [
   { label: "新着順", target: "createdAt", value: "desc" },
-  { label: "古い順", target: "createdAt", value: "asc" },
   { label: "支払い総額が安い順", target: "totalPayment", value: "asc" },
   { label: "支払い総額が高い順", target: "totalPayment", value: "desc" },
   { label: "本体価格が安い順", target: "bodyPrice", value: "asc" },
