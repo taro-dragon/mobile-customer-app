@@ -1,9 +1,21 @@
-import { createContext, useContext } from "react";
+import React, { createContext, useCallback, useContext, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import useSWRInfinite from "swr/infinite";
 import firestore from "@react-native-firebase/firestore";
 import { Shop } from "@/types/models/Shop";
 import { Stock } from "@/types/firestore_schema/stock";
+import {
+  BottomSheetBackdrop,
+  BottomSheetBackdropProps,
+  BottomSheetModal,
+  BottomSheetScrollView,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Divider from "@/components/common/Divider";
+import { sortOptions } from "@/constants/searchOptions";
+import { useTheme } from "../ThemeContext";
+import SortModal from "@/components/staff/search/SortModal";
 
 export type ExtendedCar = Stock & {
   shop: Shop;
@@ -15,6 +27,8 @@ type StockCarContextType = {
   error: Error | null;
   isError: boolean;
   hasMore: boolean;
+  handlePresentModalPress: () => void;
+  handleDismissModalPress: () => void;
   loadMore: () => void;
   refresh: () => Promise<any>;
 };
@@ -108,7 +122,16 @@ export const StockCarsProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { getValues } = useFormContext();
+
   const filters = getValues();
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  const handleDismissModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.dismiss();
+  }, []);
 
   const { data, error, size, setSize, isLoading, isValidating, mutate } =
     useSWRInfinite(
@@ -141,7 +164,6 @@ export const StockCarsProvider: React.FC<{ children: React.ReactNode }> = ({
   const refresh = () => {
     return mutate();
   };
-
   const value = {
     cars,
     isLoading,
@@ -150,12 +172,20 @@ export const StockCarsProvider: React.FC<{ children: React.ReactNode }> = ({
     hasMore,
     loadMore,
     refresh,
+    handlePresentModalPress,
+    handleDismissModalPress,
   };
 
   return (
-    <StockCarsContext.Provider value={value}>
-      {children}
-    </StockCarsContext.Provider>
+    <>
+      <StockCarsContext.Provider value={value}>
+        {children}
+      </StockCarsContext.Provider>
+      <SortModal
+        handleDismissModalPress={handleDismissModalPress}
+        bottomSheetModalRef={bottomSheetModalRef}
+      />
+    </>
   );
 };
 

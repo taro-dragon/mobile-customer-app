@@ -65,3 +65,16 @@ export const mileageOptions = [
   { label: "14万km", value: "140000" },
   { label: "15万km", value: "150000" },
 ];
+
+export const sortOptions = [
+  { label: "新着順", target: "createdAt", value: "desc" },
+  { label: "古い順", target: "createdAt", value: "asc" },
+  { label: "支払い総額が安い順", target: "totalPayment", value: "asc" },
+  { label: "支払い総額が高い順", target: "totalPayment", value: "desc" },
+  { label: "本体価格が安い順", target: "bodyPrice", value: "asc" },
+  { label: "本体価格が高い順", target: "bodyPrice", value: "desc" },
+  { label: "走行距離が少ない順", target: "mileage", value: "asc" },
+  { label: "走行距離が多い順", target: "mileage", value: "desc" },
+  { label: "初年度登録が新しい順", target: "registrationYear", value: "asc" },
+  { label: "初年度登録が古い順", target: "registrationYear", value: "desc" },
+];

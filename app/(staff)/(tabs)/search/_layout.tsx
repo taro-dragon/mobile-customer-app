@@ -1,7 +1,8 @@
 import { StockCarsProvider } from "@/contexts/staff/CarSearchContext";
 import { useTheme } from "@/contexts/ThemeContext";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Stack, useRouter } from "expo-router";
-import { SlidersHorizontal, X } from "lucide-react-native";
+import { SlidersHorizontal, SortAsc, SortDesc, X } from "lucide-react-native";
 import { FormProvider, useForm } from "react-hook-form";
 import { TouchableOpacity } from "react-native";
 
@@ -40,6 +41,13 @@ const SearchLayout = () => {
               title: "検索",
               presentation: "modal",
               headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="sort"
+            options={{
+              title: "並び替え",
+              presentation: "modal",
             }}
           />
         </Stack>
