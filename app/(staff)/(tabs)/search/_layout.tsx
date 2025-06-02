@@ -1,8 +1,7 @@
 import { StockCarsProvider } from "@/contexts/staff/CarSearchContext";
 import { useTheme } from "@/contexts/ThemeContext";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Stack, useRouter } from "expo-router";
-import { SlidersHorizontal, SortAsc, SortDesc, X } from "lucide-react-native";
+import { SlidersHorizontal } from "lucide-react-native";
 import { FormProvider, useForm } from "react-hook-form";
 import { TouchableOpacity } from "react-native";
 

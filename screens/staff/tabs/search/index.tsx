@@ -35,8 +35,7 @@ const SearchScreen: React.FC<SearchScreenProps> = ({
 }) => {
   const { colors, typography } = useTheme();
   const headerHeight = useHeaderHeight();
-  const { handlePresentModalPress, handleDismissModalPress } =
-    useStockCarsContext();
+  const { handlePresentModalPress } = useStockCarsContext();
   return (
     <>
       <Stack.Screen
