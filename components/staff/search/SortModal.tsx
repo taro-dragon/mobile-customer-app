@@ -1,5 +1,6 @@
 import { sortOptions } from "@/constants/searchOptions";
 import { useTheme } from "@/contexts/ThemeContext";
+import { SortOption } from "@/contexts/staff/CarSearchContext";
 import {
   BottomSheetBackdrop,
   BottomSheetBackdropProps,
@@ -7,16 +8,21 @@ import {
   BottomSheetScrollView,
   TouchableOpacity,
 } from "@gorhom/bottom-sheet";
+import { Check } from "lucide-react-native";
 import React, { useCallback, useRef } from "react";
 import { Text } from "react-native";
 
 type SortModalProps = {
   handleDismissModalPress: () => void;
+  handleSortChange: (sortOption: SortOption) => void;
+  currentSort: SortOption;
   bottomSheetModalRef: React.RefObject<BottomSheetModal | null>;
 };
 
 const SortModal: React.FC<SortModalProps> = ({
   handleDismissModalPress,
+  handleSortChange,
+  currentSort,
   bottomSheetModalRef,
 }) => {
   const { colors } = useTheme();
@@ -33,6 +39,20 @@ const SortModal: React.FC<SortModalProps> = ({
     ),
     []
   );
+
+  const handleSortOptionPress = (option: {
+    target: string;
+    value: string;
+    label: string;
+  }) => {
+    if (option.value === "asc" || option.value === "desc") {
+      handleSortChange({
+        target: option.target,
+        value: option.value,
+      });
+    }
+  };
+
   return (
     <BottomSheetModal
       ref={bottomSheetModalRef}
@@ -54,20 +74,34 @@ const SortModal: React.FC<SortModalProps> = ({
           backgroundColor: colors.backgroundPrimary,
         }}
       >
-        {sortOptions.map((option, index) => (
-          <TouchableOpacity
-            key={index}
-            style={{
-              padding: 16,
-              width: "100%",
-            }}
-            onPress={() => {
-              handleDismissModalPress();
-            }}
-          >
-            <Text style={{ color: colors.textPrimary }}>{option.label}</Text>
-          </TouchableOpacity>
-        ))}
+        {sortOptions.map((option, index) => {
+          const isSelected =
+            currentSort.target === option.target &&
+            currentSort.value === option.value;
+          return (
+            <TouchableOpacity
+              key={index}
+              style={{
+                padding: 16,
+                width: "100%",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+              onPress={() => handleSortOptionPress(option)}
+            >
+              <Text
+                style={{
+                  color: isSelected ? colors.primary : colors.textPrimary,
+                  fontWeight: isSelected ? "bold" : "normal",
+                }}
+              >
+                {option.label}
+              </Text>
+              {isSelected && <Check size={16} color={colors.primary} />}
+            </TouchableOpacity>
+          );
+        })}
       </BottomSheetScrollView>
     </BottomSheetModal>
   );

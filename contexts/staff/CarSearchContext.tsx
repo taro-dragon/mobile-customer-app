@@ -1,24 +1,25 @@
-import React, { createContext, useCallback, useContext, useRef } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useRef,
+  useState,
+} from "react";
 import { useFormContext } from "react-hook-form";
 import useSWRInfinite from "swr/infinite";
 import firestore from "@react-native-firebase/firestore";
 import { Shop } from "@/types/models/Shop";
 import { Stock } from "@/types/firestore_schema/stock";
-import {
-  BottomSheetBackdrop,
-  BottomSheetBackdropProps,
-  BottomSheetModal,
-  BottomSheetScrollView,
-  BottomSheetView,
-} from "@gorhom/bottom-sheet";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Divider from "@/components/common/Divider";
-import { sortOptions } from "@/constants/searchOptions";
-import { useTheme } from "../ThemeContext";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import SortModal from "@/components/staff/search/SortModal";
 
 export type ExtendedCar = Stock & {
   shop: Shop;
+};
+
+export type SortOption = {
+  target: string;
+  value: "asc" | "desc";
 };
 
 type StockCarContextType = {
@@ -27,8 +28,10 @@ type StockCarContextType = {
   error: Error | null;
   isError: boolean;
   hasMore: boolean;
+  currentSort: SortOption;
   handlePresentModalPress: () => void;
   handleDismissModalPress: () => void;
+  handleSortChange: (sortOption: SortOption) => void;
   loadMore: () => void;
   refresh: () => Promise<any>;
 };
@@ -39,15 +42,24 @@ const StockCarsContext = createContext<StockCarContextType | undefined>(
 
 const LIMIT = 10;
 
-const getKey = (pageIndex: number, previousPageData: any, filters: any) => {
+const getKey = (
+  pageIndex: number,
+  previousPageData: any,
+  filters: any,
+  sort: SortOption
+) => {
   if (previousPageData && !previousPageData.requests.length) return null;
-  return [pageIndex, filters];
+  return [pageIndex, filters, sort];
 };
 
-const fetchStockCars = async ([pageIndex, filters]: [number, any]) => {
+const fetchStockCars = async ([pageIndex, filters, sort]: [
+  number,
+  any,
+  SortOption
+]) => {
   let query = firestore()
     .collection("stockCars")
-    .orderBy("createdAt", "desc")
+    .orderBy(sort.target, sort.value)
     .limit(LIMIT);
 
   // Apply filters from form values
@@ -89,7 +101,7 @@ const fetchStockCars = async ([pageIndex, filters]: [number, any]) => {
   if (pageIndex > 0) {
     const lastDoc = await firestore()
       .collection("stockCars")
-      .orderBy("createdAt", "desc")
+      .orderBy(sort.target, sort.value)
       .limit(LIMIT * pageIndex)
       .get();
     const lastVisible = lastDoc.docs[lastDoc.docs.length - 1];
@@ -122,9 +134,14 @@ export const StockCarsProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { getValues } = useFormContext();
+  const [currentSort, setCurrentSort] = useState<SortOption>({
+    target: "createdAt",
+    value: "desc",
+  });
 
   const filters = getValues();
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
   }, []);
@@ -133,10 +150,18 @@ export const StockCarsProvider: React.FC<{ children: React.ReactNode }> = ({
     bottomSheetModalRef.current?.dismiss();
   }, []);
 
+  const handleSortChange = useCallback(
+    (sortOption: SortOption) => {
+      setCurrentSort(sortOption);
+      handleDismissModalPress();
+    },
+    [handleDismissModalPress]
+  );
+
   const { data, error, size, setSize, isLoading, isValidating, mutate } =
     useSWRInfinite(
       (pageIndex, previousPageData) =>
-        getKey(pageIndex, previousPageData, filters),
+        getKey(pageIndex, previousPageData, filters, currentSort),
       fetchStockCars,
       {
         revalidateFirstPage: true,
@@ -164,16 +189,19 @@ export const StockCarsProvider: React.FC<{ children: React.ReactNode }> = ({
   const refresh = () => {
     return mutate();
   };
+
   const value = {
     cars,
     isLoading,
     error,
     isError: !!error,
     hasMore,
+    currentSort,
     loadMore,
     refresh,
     handlePresentModalPress,
     handleDismissModalPress,
+    handleSortChange,
   };
 
   return (
@@ -183,6 +211,8 @@ export const StockCarsProvider: React.FC<{ children: React.ReactNode }> = ({
       </StockCarsContext.Provider>
       <SortModal
         handleDismissModalPress={handleDismissModalPress}
+        handleSortChange={handleSortChange}
+        currentSort={currentSort}
         bottomSheetModalRef={bottomSheetModalRef}
       />
     </>
