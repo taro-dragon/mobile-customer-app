@@ -1,38 +1,23 @@
 import React from "react";
 import StockCarItem from "@/components/staff/StockCars/StockCarItem";
 import {
-  ExtendedCar,
+  StockHit,
   useStockCarsContext,
 } from "@/contexts/staff/CarSearchContext";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Slider } from "@miblanchard/react-native-slider";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { FlashList } from "@shopify/flash-list";
 import { CarIcon, SortDesc } from "lucide-react-native";
-import { useCallback, useState } from "react";
-import { useFormContext } from "react-hook-form";
-import {
-  Dimensions,
-  RefreshControl,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+
+import { Dimensions, Text, TouchableOpacity, View } from "react-native";
 import { Stack } from "expo-router";
 
 type SearchScreenProps = {
-  cars: ExtendedCar[];
-  loadMore: () => void;
-  isLoading: boolean;
-  refresh: () => void;
+  cars: StockHit[];
+  showMore: () => void;
 };
 
-const SearchScreen: React.FC<SearchScreenProps> = ({
-  cars,
-  loadMore,
-  refresh,
-  isLoading,
-}) => {
+const SearchScreen: React.FC<SearchScreenProps> = ({ cars, showMore }) => {
   const { colors, typography } = useTheme();
   const headerHeight = useHeaderHeight();
   const { handlePresentModalPress } = useStockCarsContext();
@@ -57,7 +42,7 @@ const SearchScreen: React.FC<SearchScreenProps> = ({
           ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
           keyExtractor={(item, index) => `${item.id}-${index}`}
           renderItem={({ item }) => <StockCarItem car={item} />}
-          onEndReached={loadMore}
+          onEndReached={showMore}
           ListEmptyComponent={() => (
             <View
               style={{
@@ -85,9 +70,6 @@ const SearchScreen: React.FC<SearchScreenProps> = ({
               </View>
             </View>
           )}
-          refreshControl={
-            <RefreshControl refreshing={isLoading} onRefresh={refresh} />
-          }
         />
       </View>
     </>

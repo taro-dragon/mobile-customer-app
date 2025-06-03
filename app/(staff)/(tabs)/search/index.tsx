@@ -3,18 +3,11 @@ import { useStockCarsContext } from "@/contexts/staff/CarSearchContext";
 import SearchScreen from "@/screens/staff/tabs/search";
 
 const Search = () => {
-  const { cars, loadMore, isLoading, refresh } = useStockCarsContext();
+  const { cars, showMore, isLoading } = useStockCarsContext();
   if (isLoading) {
     return <Loader />;
   }
-  return (
-    <SearchScreen
-      cars={cars}
-      loadMore={loadMore}
-      isLoading={isLoading}
-      refresh={refresh}
-    />
-  );
+  return <SearchScreen cars={cars} showMore={showMore} />;
 };
 
 export default Search;

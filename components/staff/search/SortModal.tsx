@@ -94,7 +94,7 @@ const SortModal: React.FC<SortModalProps> = ({
             currentSort.target === option.target &&
             currentSort.value === option.value;
           return (
-            <View>
+            <View key={index}>
               <TouchableOpacity
                 key={index}
                 style={{

@@ -1,5 +1,5 @@
 import Divider from "@/components/common/Divider";
-import { ExtendedCar } from "@/contexts/staff/CarSearchContext";
+import { ExtendedCar, StockHit } from "@/contexts/staff/CarSearchContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
@@ -15,7 +15,7 @@ import { useMemo } from "react";
 import StockCarItemStatusPanel from "./StockCarItemStatus";
 
 type StockCarItemProps = {
-  car: ExtendedCar;
+  car: StockHit;
 };
 
 const StockCarItem: React.FC<StockCarItemProps> = ({ car }) => {
@@ -168,7 +168,7 @@ const StockCarItem: React.FC<StockCarItemProps> = ({ car }) => {
           </View>
         </View>
       </View>
-      <Divider />
+      {/* <Divider />
       <View style={{ flexDirection: "row", gap: 8, alignItems: "flex-end" }}>
         <View style={{ gap: 4, flex: 1 }}>
           <Text style={{ ...typography.body3, color: colors.textSecondary }}>
@@ -178,7 +178,7 @@ const StockCarItem: React.FC<StockCarItemProps> = ({ car }) => {
             {car.shop.shopName}
           </Text>
         </View>
-      </View>
+      </View> */}
     </TouchableOpacity>
   );
 };
