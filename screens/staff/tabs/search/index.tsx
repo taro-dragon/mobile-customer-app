@@ -15,9 +15,14 @@ import { Stack } from "expo-router";
 type SearchScreenProps = {
   cars: StockHit[];
   showMore: () => void;
+  isLastPage: boolean;
 };
 
-const SearchScreen: React.FC<SearchScreenProps> = ({ cars, showMore }) => {
+const SearchScreen: React.FC<SearchScreenProps> = ({
+  cars,
+  showMore,
+  isLastPage,
+}) => {
   const { colors, typography } = useTheme();
   const headerHeight = useHeaderHeight();
   const { handlePresentModalPress } = useStockCarsContext();
@@ -42,7 +47,11 @@ const SearchScreen: React.FC<SearchScreenProps> = ({ cars, showMore }) => {
           ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
           keyExtractor={(item, index) => `${item.id}-${index}`}
           renderItem={({ item }) => <StockCarItem car={item} />}
-          onEndReached={showMore}
+          onEndReached={() => {
+            if (!isLastPage) {
+              showMore();
+            }
+          }}
           ListEmptyComponent={() => (
             <View
               style={{

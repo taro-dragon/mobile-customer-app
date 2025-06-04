@@ -11,7 +11,7 @@ import { useFormContext } from "react-hook-form";
 import { Shop } from "@/types/models/Shop";
 import { Stock } from "@/types/firestore_schema/stock";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import { useInfiniteHits, useInstantSearch } from "react-instantsearch-core";
+import { useInfiniteHits, useConfigure } from "react-instantsearch-core";
 import SortModal from "@/components/staff/search/SortModal";
 import type { Hit as AlgoliaHit } from "instantsearch.js";
 
@@ -33,37 +33,106 @@ type StockCarContextType = {
   handleDismissModalPress: () => void;
   handleSortChange: (sortOption: SortOption) => void;
   showMore: () => void;
-  isLoading: boolean;
+  isLastPage: boolean;
 };
 
 const StockCarsContext = createContext<StockCarContextType | undefined>(
   undefined
 );
 
-export const StockCarsProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const { getValues } = useFormContext();
+export const StockCarsProvider: React.FC<{
+  children: React.ReactNode;
+  currentSort: SortOption;
+  setCurrentSort: (sort: SortOption) => void;
+}> = ({ children, currentSort, setCurrentSort }) => {
+  const { watch } = useFormContext();
 
-  const { status } = useInstantSearch();
-  const [isLoading, setIsLoading] = useState(true);
+  const formValues = watch();
 
-  useEffect(() => {
-    if (status !== "loading") {
-      setIsLoading(false);
+  const buildAlgoliaFilters = useCallback(() => {
+    const filters: string[] = [];
+
+    if (formValues.maker) {
+      filters.push(`maker:${formValues.maker}`);
     }
-  }, [status]);
 
-  const { items, showMore } = useInfiniteHits<StockHit>({
+    if (formValues.model) {
+      filters.push(`model:${formValues.model}`);
+    }
+
+    if (formValues.year) {
+      filters.push(`year:${formValues.year}`);
+    }
+
+    if (formValues.grade) {
+      filters.push(`grade:${formValues.grade}`);
+    }
+
+    if (formValues.prefecture) {
+      filters.push(`prefecture:${formValues.prefecture}`);
+    }
+
+    if (formValues.minPrice || formValues.maxPrice) {
+      const priceFilter = [];
+      if (formValues.minPrice) {
+        const priceValue = formValues.isTotalPayment
+          ? "totalPayment"
+          : "bodyPrice";
+        priceFilter.push(`${priceValue} >= ${formValues.minPrice}`);
+      }
+      if (formValues.maxPrice) {
+        const priceValue = formValues.isTotalPayment
+          ? "totalPayment"
+          : "bodyPrice";
+        priceFilter.push(`${priceValue} <= ${formValues.maxPrice}`);
+      }
+      if (priceFilter.length > 0) {
+        filters.push(priceFilter.join(" AND "));
+      }
+    }
+
+    if (formValues.minMileage || formValues.maxMileage) {
+      const mileageFilter = [];
+      if (formValues.minMileage) {
+        mileageFilter.push(`mileage >= ${formValues.minMileage}`);
+      }
+      if (formValues.maxMileage) {
+        mileageFilter.push(`mileage <= ${formValues.maxMileage}`);
+      }
+      if (mileageFilter.length > 0) {
+        filters.push(mileageFilter.join(" AND "));
+      }
+    }
+
+    if (formValues.minRegistrationYear || formValues.maxRegistrationYear) {
+      const registrationFilter = [];
+      if (formValues.minRegistrationYear) {
+        registrationFilter.push(
+          `registrationYear >= ${formValues.minRegistrationYear}`
+        );
+      }
+      if (formValues.maxRegistrationYear) {
+        registrationFilter.push(
+          `registrationYear <= ${formValues.maxRegistrationYear}`
+        );
+      }
+      if (registrationFilter.length > 0) {
+        filters.push(registrationFilter.join(" AND "));
+      }
+    }
+
+    return filters.join(" AND ");
+  }, [formValues]);
+
+  // Algoliaの設定を適用
+  useConfigure({
+    filters: buildAlgoliaFilters(),
+    hitsPerPage: 20,
+  });
+
+  const { items, showMore, isLastPage } = useInfiniteHits<StockHit>({
     escapeHTML: false,
   });
-
-  const [currentSort, setCurrentSort] = useState<SortOption>({
-    target: "createdAt",
-    value: "desc",
-  });
-
-  const filters = getValues();
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
   const handlePresentModalPress = useCallback(() => {
@@ -79,13 +148,13 @@ export const StockCarsProvider: React.FC<{ children: React.ReactNode }> = ({
       setCurrentSort(sortOption);
       handleDismissModalPress();
     },
-    [handleDismissModalPress]
+    [setCurrentSort, handleDismissModalPress]
   );
 
   const value = {
     cars: items,
-    isLoading,
     showMore,
+    isLastPage,
     currentSort,
     handlePresentModalPress,
     handleDismissModalPress,
