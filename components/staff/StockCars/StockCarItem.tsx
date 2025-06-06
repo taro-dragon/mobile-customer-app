@@ -41,7 +41,9 @@ const StockCarItem: React.FC<StockCarItemProps> = ({ car }) => {
   );
   return (
     <TouchableOpacity
-      onPress={() => {}}
+      onPress={() => {
+        router.push(`/stockCar/${car.objectID}`);
+      }}
       style={{
         backgroundColor: colors.backgroundSecondary,
         borderWidth: 1,
