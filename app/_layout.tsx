@@ -10,6 +10,8 @@ import * as SplashScreen from "expo-splash-screen";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import ErrorService from "@/libs/ErrorService";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 
 SplashScreen.preventAutoHideAsync();
 export default function Layout() {
@@ -84,7 +86,11 @@ export default function Layout() {
       <SafeAreaProvider>
         <ThemeProvider>
           <GestureHandlerRootView style={{ flex: 1 }}>
-            <Slot />
+            <ActionSheetProvider>
+              <BottomSheetModalProvider>
+                <Slot />
+              </BottomSheetModalProvider>
+            </ActionSheetProvider>
           </GestureHandlerRootView>
           <Toast config={ToastConfig} />
         </ThemeProvider>

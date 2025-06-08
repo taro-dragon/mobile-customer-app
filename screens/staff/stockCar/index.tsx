@@ -1,8 +1,7 @@
 import React, { useCallback, useMemo } from "react";
-import { Text, useWindowDimensions, View } from "react-native";
+import { Text, View } from "react-native";
 import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
 
-import CarInfoItem from "@/components/CarDetail/CarInfoIten";
 import ImageCarousel from "@/components/common/ImageCarousel";
 import { colorOptions } from "@/components/registrationCar/form/ColorSelect";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -10,6 +9,7 @@ import { StockCar } from "@/hooks/staff/useFetchStockCar";
 import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
 import StoreTab from "@/components/StockCar/StoreTab";
+import InfoTab from "@/components/StockCar/InfoTab";
 
 type StockCarProps = {
   stockCar: StockCar;
@@ -17,12 +17,8 @@ type StockCarProps = {
 
 const StockCarScreen: React.FC<StockCarProps> = ({ stockCar }) => {
   const { colors, typography } = useTheme();
-  const windowHeight = useWindowDimensions().height;
   const carData = transformCarData(stockCar as unknown as Car);
   const carImages = Object.values(stockCar?.images ?? {});
-  const colorValue = colorOptions.find(
-    (option) => option.color === stockCar.color
-  )?.bgColor;
   const renderTabBar = useCallback(
     (props: any) => (
       <MaterialTabBar
@@ -131,56 +127,6 @@ const StockCarScreen: React.FC<StockCarProps> = ({ stockCar }) => {
               </Text>
             </View>
           </View>
-          <View style={{ gap: 8 }}>
-            <Text style={{ ...typography.heading3, color: colors.textPrimary }}>
-              車両情報
-            </Text>
-            <View
-              style={{
-                gap: 8,
-                borderWidth: 1,
-                borderColor: colors.borderPrimary,
-                padding: 12,
-                borderRadius: 12,
-              }}
-            >
-              <CarInfoItem label="年式" value={carData.year.year} />
-              <CarInfoItem label="グレード" value={carData.grade.gradeName} />
-              {stockCar?.modelNumber && (
-                <CarInfoItem label="型番" value={stockCar.modelNumber} />
-              )}
-              <CarInfoItem
-                label="走行距離"
-                value={`${stockCar.mileage.toLocaleString()}km`}
-              />
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Text
-                  style={{
-                    ...typography.heading3,
-                    color: colors.textSecondary,
-                  }}
-                >
-                  車体色
-                </Text>
-                <View
-                  style={{
-                    width: 24,
-                    height: 24,
-                    backgroundColor: colorValue,
-                    borderRadius: 12,
-                    borderWidth: 1,
-                    borderColor: colors.borderPrimary,
-                  }}
-                />
-              </View>
-            </View>
-          </View>
         </View>
       </View>
     ),
@@ -206,11 +152,7 @@ const StockCarScreen: React.FC<StockCarProps> = ({ stockCar }) => {
         }}
       >
         <Tabs.Tab name="車両情報">
-          <Tabs.ScrollView>
-            <View>
-              <Text>車両情報</Text>
-            </View>
-          </Tabs.ScrollView>
+          <InfoTab stockCar={stockCar} />
         </Tabs.Tab>
         <Tabs.Tab name="オプション">
           <Tabs.ScrollView>

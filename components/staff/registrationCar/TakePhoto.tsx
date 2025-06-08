@@ -6,6 +6,8 @@ import React, { useCallback } from "react";
 import { useCameraPermission } from "react-native-vision-camera";
 import { useRouter } from "expo-router";
 import { Image } from "expo-image";
+import { useActionSheet } from "@expo/react-native-action-sheet";
+import * as ImagePicker from "expo-image-picker";
 
 type Props = {
   name: string;
@@ -15,8 +17,10 @@ type Props = {
 
 const TakePhoto: React.FC<Props> = ({ name, label, isRequired = false }) => {
   const { colors } = useTheme();
+  const { showActionSheetWithOptions } = useActionSheet();
   const {
     formState: { errors },
+    setValue,
   } = useFormContext();
   const { field } = useController({ name });
 
@@ -36,8 +40,41 @@ const TakePhoto: React.FC<Props> = ({ name, label, isRequired = false }) => {
     }
   }, [requestPermission, router, name]);
 
-  // Check if this field has an error
+  const pickImageAsync = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      quality: 1,
+    });
+    if (result.assets) {
+      setValue(name, result.assets[0].uri);
+    }
+  };
+
   const hasError = name in errors;
+
+  const options = ["写真を撮る", "画像から選択する", "キャンセル"];
+  const cancelButtonIndex = 2;
+
+  const handlePress = useCallback(() => {
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+      },
+      (selectedIndex?: number) => {
+        switch (selectedIndex) {
+          case 0:
+            onPress();
+            break;
+          case 1:
+            pickImageAsync();
+            break;
+          case cancelButtonIndex:
+            break;
+        }
+      }
+    );
+  }, []);
 
   return (
     <View style={{ gap: 8 }}>
@@ -53,7 +90,7 @@ const TakePhoto: React.FC<Props> = ({ name, label, isRequired = false }) => {
           borderWidth: hasError ? 1 : 0,
           borderColor: hasError ? colors.error : undefined,
         }}
-        onPress={onPress}
+        onPress={handlePress}
       >
         {field.value ? (
           <Image
