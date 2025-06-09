@@ -43,12 +43,6 @@ const RegistrationStockPriceFormScreen = () => {
             multiline
           />
         )}
-        <ModalPicker
-          name="industrySales"
-          label="業販問い合わせ"
-          options={industrySalesOptions}
-          required={true}
-        />
       </View>
     </ScrollView>
   );

@@ -28,7 +28,6 @@ export const registrationStockSchema = z.object({
   totalPayment: z.string().min(1, "支払い総額を入力してください"),
   legalRepair: z.string().min(1, "法定整備を選択してください"),
   legalRepairDescription: z.string().optional(),
-  industrySales: z.string().min(1, "業販問い合わせを選択してください"),
 
   // Guarantee fields
   guarantee: z.string().min(1, "保証有無を選択してください"),

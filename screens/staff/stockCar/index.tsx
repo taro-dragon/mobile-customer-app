@@ -9,6 +9,7 @@ import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
 import StoreTab from "@/components/StockCar/StoreTab";
 import InfoTab from "@/components/StockCar/InfoTab";
+import OptionTab from "@/components/StockCar/OptionTab";
 
 type StockCarProps = {
   stockCar: StockCar;
@@ -134,7 +135,6 @@ const StockCarScreen: React.FC<StockCarProps> = ({ stockCar }) => {
   return (
     <View style={{ flex: 1 }}>
       <Tabs.Container
-        revealHeaderOnScroll
         renderHeader={() => CarHeader}
         headerContainerStyle={{
           backgroundColor: colors.backgroundPrimary,
@@ -153,12 +153,8 @@ const StockCarScreen: React.FC<StockCarProps> = ({ stockCar }) => {
         <Tabs.Tab name="車両情報">
           <InfoTab stockCar={stockCar} />
         </Tabs.Tab>
-        <Tabs.Tab name="オプション">
-          <Tabs.ScrollView>
-            <View>
-              <Text>車両情報</Text>
-            </View>
-          </Tabs.ScrollView>
+        <Tabs.Tab name="装備情報">
+          <OptionTab stockCar={stockCar} />
         </Tabs.Tab>
         <Tabs.Tab name="店舗情報">
           <StoreTab store={stockCar.store} />

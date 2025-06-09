@@ -21,7 +21,6 @@ const RegistrationStockLayout = () => {
       inspection: "",
       repairStatus: "",
       legalRepair: "",
-      industrySales: "",
       cruiseControl: "",
       slideDoor: "",
       carNavi: "",
