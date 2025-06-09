@@ -17,6 +17,9 @@ const commonConfig = {
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
       },
+      entitlements: {
+        "aps-environment": "development",
+      },
     },
     android: {
       package: "com.mobile_car_app.ai_car_price",

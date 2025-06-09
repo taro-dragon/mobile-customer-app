@@ -35,11 +35,6 @@ const InfoTab: React.FC<InfoTabProps> = ({ stockCar }) => {
               borderRadius: 12,
             }}
           >
-            <CarInfoItem label="年式" value={carData.year.year} />
-            <CarInfoItem label="グレード" value={carData.grade.gradeName} />
-            {stockCar?.modelNumber && (
-              <CarInfoItem label="型番" value={stockCar.modelNumber} />
-            )}
             <CarInfoItem
               label="走行距離"
               value={`${stockCar.mileage.toLocaleString()}km`}
@@ -70,6 +65,11 @@ const InfoTab: React.FC<InfoTabProps> = ({ stockCar }) => {
                 }}
               />
             </View>
+            <CarInfoItem label="モデル" value={carData.year.year} />
+            <CarInfoItem label="グレード" value={carData.grade.gradeName} />
+            {stockCar?.modelNumber && (
+              <CarInfoItem label="型番" value={stockCar.modelNumber} />
+            )}
           </View>
         </View>
       </View>

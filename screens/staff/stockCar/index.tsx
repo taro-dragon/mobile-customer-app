@@ -3,7 +3,6 @@ import { Text, View } from "react-native";
 import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
 
 import ImageCarousel from "@/components/common/ImageCarousel";
-import { colorOptions } from "@/components/registrationCar/form/ColorSelect";
 import { useTheme } from "@/contexts/ThemeContext";
 import { StockCar } from "@/hooks/staff/useFetchStockCar";
 import { transformCarData } from "@/libs/transformCarData";
