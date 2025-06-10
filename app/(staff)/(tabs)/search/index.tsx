@@ -5,12 +5,17 @@ import { useInstantSearch } from "react-instantsearch-core";
 
 const Search = () => {
   const { cars, showMore, isLastPage } = useStockCarsContext();
-  const { status } = useInstantSearch();
-  if (status === "loading" || status === "stalled") {
+  const { status, refresh } = useInstantSearch();
+  if (cars.length === 0 && (status === "loading" || status === "stalled")) {
     return <Loader />;
   }
   return (
-    <SearchScreen cars={cars} showMore={showMore} isLastPage={isLastPage} />
+    <SearchScreen
+      cars={cars}
+      showMore={showMore}
+      isLastPage={isLastPage}
+      refresh={refresh}
+    />
   );
 };
 

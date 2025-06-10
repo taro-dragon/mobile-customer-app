@@ -5,16 +5,23 @@ import React from "react";
 type CarInfoItemProps = {
   label: string;
   value: string;
+  multiline?: boolean;
 };
 
-const CarInfoItem: React.FC<CarInfoItemProps> = ({ label, value }) => {
+const CarInfoItem: React.FC<CarInfoItemProps> = ({
+  label,
+  value,
+  multiline = false,
+}) => {
   const { colors, typography } = useTheme();
   return (
     <View
       style={{
-        flexDirection: "row",
+        flexDirection: multiline ? "column" : "row",
         justifyContent: "space-between",
-        alignItems: "center",
+        alignItems: multiline ? "flex-start" : "center",
+        gap: 8,
+        width: multiline ? "100%" : "auto",
       }}
     >
       <Text style={{ ...typography.heading3, color: colors.textSecondary }}>

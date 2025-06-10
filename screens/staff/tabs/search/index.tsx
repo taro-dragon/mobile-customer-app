@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import StockCarItem from "@/components/staff/StockCars/StockCarItem";
 import {
   StockHit,
@@ -11,20 +11,29 @@ import { CarIcon, SortDesc } from "lucide-react-native";
 
 import { Dimensions, Text, TouchableOpacity, View } from "react-native";
 import { Stack } from "expo-router";
+import { RefreshControl } from "react-native-gesture-handler";
 
 type SearchScreenProps = {
   cars: StockHit[];
   showMore: () => void;
   isLastPage: boolean;
+  refresh: () => void;
 };
 
 const SearchScreen: React.FC<SearchScreenProps> = ({
   cars,
   showMore,
   isLastPage,
+  refresh,
 }) => {
   const { colors, typography } = useTheme();
   const headerHeight = useHeaderHeight();
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refresh();
+    setRefreshing(false);
+  };
   const { handlePresentModalPress } = useStockCarsContext();
   return (
     <>
@@ -52,6 +61,9 @@ const SearchScreen: React.FC<SearchScreenProps> = ({
               showMore();
             }
           }}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           ListEmptyComponent={() => (
             <View
               style={{
