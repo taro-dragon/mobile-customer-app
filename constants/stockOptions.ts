@@ -6,59 +6,48 @@ import {
 } from "./registrationStockOptions";
 
 export const categoryLabels = {
-  basic: "基本装備",
-  safety: "安全装備",
-  carInfo: "車両情報",
-  features: "機能",
-  exterior: "外装",
-  performance: "性能",
-  interior: "内装",
-  entertainment: "エンターテイメント",
-  cameras: "カメラ",
+  safety: "安全・セキュリティ装備",
+  comfort: "快適・利便装備",
+  exterior: "外装・エクステリア",
+  interior: "内装・インテリア",
+  performance: "駆動・パフォーマンス",
+  entertainment: "エンターテイメント・AV",
+  camera: "カメラ・映像装備",
+  condition: "車両状態・履歴",
 };
 
 export const options = {
-  basic: [
-    { name: "airConditioner", label: "エアコン" },
-    { name: "powerSteering", label: "パワーステアリング" },
-    { name: "powerWindow", label: "パワーウィンドウ" },
+  // 安全・セキュリティ装備
+  safety: [
     { name: "driverAirbag", label: "運転席エアバッグ" },
     { name: "passengerAirbag", label: "助手席エアバッグ" },
     { name: "sideAirbag", label: "サイドエアバッグ" },
     { name: "abs", label: "ABS" },
     { name: "esc", label: "ESC" },
-  ],
-  safety: [
-    { name: "etc", label: "ETC" },
-    { name: "theftPreventionSystem", label: "盗難防止システム" },
     { name: "collisionSafetyBody", label: "衝突安全ボディ" },
     { name: "collisionDamageReductionSystem", label: "衝突被害軽減システム" },
+    { name: "laneAssist", label: "レーンアシスト" },
+    { name: "theftPreventionSystem", label: "盗難防止システム" },
+    { name: "neckImpactReductionHeadrest", label: "頸部衝撃緩和ヘッドレスト" },
+  ],
+
+  // 快適・利便装備
+  comfort: [
+    { name: "airConditioner", label: "エアコン" },
+    { name: "powerSteering", label: "パワーステアリング" },
+    { name: "powerWindow", label: "パワーウィンドウ" },
     { name: "keylessEntry", label: "キーレスエントリー" },
     { name: "smartKey", label: "スマートキー" },
-    { name: "fourWheelDrive", label: "4WD" },
-    { name: "idlingStop", label: "アイドリングストップ" },
-  ],
-  carInfo: [
-    { name: "recordBook", label: "記録簿" },
-    { name: "nonSmokingCar", label: "禁煙車" },
-    { name: "registeredUsedCar", label: "登録済み未使用車" },
-    { name: "rentalCar", label: "レンタカーアップ" },
-    { name: "exhibitionTestDriveCar", label: "展示・試乗車" },
-    { name: "ecoCarTaxCar", label: "エコカー減税対象車" },
-    { name: "oneOwnerCar", label: "ワンオーナー" },
-    { name: "campingCar", label: "キャンピングカー" },
-    { name: "welfareCar", label: "福祉車両" },
-  ],
-  features: [
+    { name: "etc", label: "ETC" },
     { name: "electricRearGate", label: "電動リアゲート" },
     { name: "electricMirror", label: "電動格納ミラー" },
-    { name: "laneAssist", label: "レーンアシスト" },
     { name: "parkingAssist", label: "パークアシスト" },
     { name: "autoParking", label: "自動駐車システム" },
     { name: "clearanceSonar", label: "クリアランスソナー" },
-    { name: "neckImpactReductionHeadrest", label: "頸部衝撃緩和ヘッドレスト" },
-    { name: "downhillAssistControl", label: "ダウンヒルアシストコントロール" },
+    { name: "idlingStop", label: "アイドリングストップ" },
   ],
+
+  // 外装・エクステリア
   exterior: [
     { name: "ledHeadlamp", label: "LEDヘッドランプ" },
     { name: "hid", label: "HID" },
@@ -69,17 +58,8 @@ export const options = {
     { name: "aero", label: "エアロ" },
     { name: "roofRails", label: "ルーフレール" },
   ],
-  performance: [
-    { name: "coldAreaSpecification", label: "寒冷地仕様" },
-    { name: "runFlatTire", label: "ランフラットタイヤ" },
-    { name: "airSuspension", label: "エアサスペンション" },
-    { name: "centerDifferentialLock", label: "センターデフロック" },
-    { name: "turbo", label: "ターボ" },
-    { name: "superCharger", label: "スーパーチャージャー" },
-    { name: "lowDown", label: "ローダウン" },
-    { name: "liftUp", label: "リフトアップ" },
-    { name: "100v", label: "100V電源" },
-  ],
+
+  // 内装・インテリア
   interior: [
     { name: "leatherSeat", label: "革シート" },
     { name: "halfLeatherSeat", label: "ハーフレザーシート" },
@@ -94,6 +74,23 @@ export const options = {
     { name: "seatHeater", label: "シートヒーター" },
     { name: "seatAirConditioner", label: "シートエアコン" },
   ],
+
+  // 駆動・パフォーマンス
+  performance: [
+    { name: "fourWheelDrive", label: "4WD" },
+    { name: "turbo", label: "ターボ" },
+    { name: "superCharger", label: "スーパーチャージャー" },
+    { name: "airSuspension", label: "エアサスペンション" },
+    { name: "centerDifferentialLock", label: "センターデフロック" },
+    { name: "downhillAssistControl", label: "ダウンヒルアシストコントロール" },
+    { name: "coldAreaSpecification", label: "寒冷地仕様" },
+    { name: "runFlatTire", label: "ランフラットタイヤ" },
+    { name: "lowDown", label: "ローダウン" },
+    { name: "liftUp", label: "リフトアップ" },
+    { name: "100v", label: "100V電源" },
+  ],
+
+  // エンターテイメント・AV
   entertainment: [
     { name: "cd", label: "CD" },
     { name: "dvd", label: "DVD再生" },
@@ -104,14 +101,29 @@ export const options = {
     { name: "musicPlayer", label: "ミュージックプレイヤー接続可" },
     { name: "usb", label: "USB入力端子" },
     { name: "bluetooth", label: "Bluetooth接続" },
+    { name: "backSeatMonitor", label: "後席モニタ" },
   ],
-  cameras: [
+
+  // カメラ・映像装備
+  camera: [
     { name: "driveRecorder", label: "ドライブレコーダー" },
     { name: "frontCamera", label: "フロントカメラ" },
     { name: "sideCamera", label: "サイドカメラ" },
     { name: "backCamera", label: "バックカメラ" },
     { name: "allAroundCamera", label: "全周囲カメラ" },
-    { name: "backSeatMonitor", label: "後席モニタ" },
+  ],
+
+  // 車両状態・履歴
+  condition: [
+    { name: "recordBook", label: "記録簿" },
+    { name: "nonSmokingCar", label: "禁煙車" },
+    { name: "registeredUsedCar", label: "登録済み未使用車" },
+    { name: "rentalCar", label: "レンタカーアップ" },
+    { name: "exhibitionTestDriveCar", label: "展示・試乗車" },
+    { name: "ecoCarTaxCar", label: "エコカー減税対象車" },
+    { name: "oneOwnerCar", label: "ワンオーナー" },
+    { name: "campingCar", label: "キャンピングカー" },
+    { name: "welfareCar", label: "福祉車両" },
   ],
 };
 
