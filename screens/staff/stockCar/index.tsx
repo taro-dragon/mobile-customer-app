@@ -166,7 +166,14 @@ const StockCarScreen: React.FC<StockCarProps> = ({ stockCar }) => {
         </Tabs.Container>
       </View>
       <Divider />
-      <View style={{ padding: 16, flexDirection: "row", gap: 16 }}>
+      <View
+        style={{
+          paddingHorizontal: 16,
+          paddingTop: 16,
+          flexDirection: "row",
+          gap: 16,
+        }}
+      >
         <View style={{ gap: 4 }}>
           <View
             style={{
