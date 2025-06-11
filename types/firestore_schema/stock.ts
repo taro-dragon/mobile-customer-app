@@ -8,6 +8,7 @@ export type Stock = {
   year: string;
   grade: string;
   modelNumber: string;
+  description: string;
   images: {
     front: string;
     back: string;

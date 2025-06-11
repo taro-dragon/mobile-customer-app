@@ -15,6 +15,7 @@ import {
   guaranteeRoadServiceOptions,
   repairStatusOptions,
 } from "@/constants/registrationStockOptions";
+import Alert from "../common/Alert";
 
 type InfoTabProps = {
   stockCar: StockCar;
@@ -66,6 +67,11 @@ const InfoTab: React.FC<InfoTabProps> = ({ stockCar }) => {
   return (
     <Tabs.ScrollView>
       <View style={{ padding: 16, gap: 16 }}>
+        <Alert
+          title="販売店からの車両説明"
+          message={stockCar.description}
+          type="info"
+        />
         <View style={{ gap: 8 }}>
           <Text style={{ ...typography.heading3, color: colors.textPrimary }}>
             車両情報

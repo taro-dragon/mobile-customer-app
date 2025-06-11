@@ -14,6 +14,7 @@ export const registrationStockSchema = z.object({
   right: z.string().min(1, "右側写真は必須です"),
   interior: z.string().min(1, "内装写真は必須です"),
   // Other photos are optional
+  description: z.string().min(1, "車両説明は必須です"),
   mileage: z.string().min(1, "走行距離を入力してください"),
   displacement: z.string().min(1, "排気量を入力してください"),
   doorNumber: z.string().optional(),

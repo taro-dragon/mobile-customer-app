@@ -16,12 +16,36 @@ import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 
 type StockCarProps = {
   stockCar: StockCar;
+  isCurrentStore: boolean;
 };
 
-const StockCarScreen: React.FC<StockCarProps> = ({ stockCar }) => {
+const StockCarScreen: React.FC<StockCarProps> = ({
+  stockCar,
+  isCurrentStore,
+}) => {
   const { colors, typography } = useTheme();
   const carData = transformCarData(stockCar as unknown as Car);
-  const carImages = Object.values(stockCar?.images ?? {});
+  console.log(stockCar.images);
+  // 写真を指定した順序で配列にする
+  const imageOrder = ["front", "back", "left", "right", "interior"] as const;
+  const basicImages = imageOrder
+    .map((key) => stockCar?.images?.[key])
+    .filter((url): url is string => Boolean(url));
+
+  // 追加写真（otherPhoto）を取得
+  const additionalImages = Object.keys(stockCar?.images ?? {})
+    .filter((key) => key.startsWith("otherPhoto"))
+    .sort((a, b) => {
+      // otherPhoto1, otherPhoto2, ... の順序でソート
+      const aNum = parseInt(a.replace("otherPhoto", ""));
+      const bNum = parseInt(b.replace("otherPhoto", ""));
+      return aNum - bNum;
+    })
+    .map((key) => stockCar?.images?.[key as keyof typeof stockCar.images])
+    .filter((url): url is string => Boolean(url));
+
+  // 基本写真と追加写真を結合
+  const carImages = [...basicImages, ...additionalImages];
   const renderTabBar = useCallback(
     (props: any) => (
       <MaterialTabBar
@@ -165,61 +189,65 @@ const StockCarScreen: React.FC<StockCarProps> = ({ stockCar }) => {
           </Tabs.Tab>
         </Tabs.Container>
       </View>
-      <Divider />
-      <View
-        style={{
-          paddingHorizontal: 16,
-          paddingTop: 16,
-          flexDirection: "row",
-          gap: 16,
-        }}
-      >
-        <View style={{ gap: 4 }}>
+      {isCurrentStore && (
+        <>
+          <Divider />
           <View
             style={{
-              backgroundColor: colors.primary,
-              borderRadius: 4,
-              padding: 2,
-              borderWidth: 1,
-              borderColor: colors.primary,
+              paddingHorizontal: 16,
+              paddingTop: 16,
+              flexDirection: "row",
+              gap: 16,
             }}
           >
-            <Text
-              style={{
-                ...typography.heading4,
-                color: colors.white,
-                textAlign: "center",
-              }}
-            >
-              支払総額
-              <Text style={{ ...typography.body4, color: colors.white }}>
-                （税込）
+            <View style={{ gap: 4 }}>
+              <View
+                style={{
+                  backgroundColor: colors.primary,
+                  borderRadius: 4,
+                  padding: 2,
+                  borderWidth: 1,
+                  borderColor: colors.primary,
+                }}
+              >
+                <Text
+                  style={{
+                    ...typography.heading4,
+                    color: colors.white,
+                    textAlign: "center",
+                  }}
+                >
+                  支払総額
+                  <Text style={{ ...typography.body4, color: colors.white }}>
+                    （税込）
+                  </Text>
+                </Text>
+              </View>
+              <Text style={{ ...typography.title1, color: colors.primary }}>
+                {(Number(stockCar.totalPayment) / 10000).toFixed(1)}
+                <Text
+                  style={{
+                    ...typography.heading5,
+                    color: colors.textSecondary,
+                  }}
+                >
+                  万円
+                </Text>
               </Text>
-            </Text>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Button
+                onPress={() => {
+                  console.log("pressed");
+                }}
+                label="問い合わせる"
+                color={colors.primary}
+              />
+            </View>
           </View>
-          <Text style={{ ...typography.title1, color: colors.primary }}>
-            {(Number(stockCar.totalPayment) / 10000).toFixed(1)}
-            <Text
-              style={{
-                ...typography.heading5,
-                color: colors.textSecondary,
-              }}
-            >
-              万円
-            </Text>
-          </Text>
-        </View>
-        <View style={{ flex: 1 }}>
-          <Button
-            onPress={() => {
-              console.log("pressed");
-            }}
-            label="問い合わせる"
-            color={colors.primary}
-          />
-        </View>
-      </View>
-      <SafeAreaBottom />
+          <SafeAreaBottom />
+        </>
+      )}
     </View>
   );
 };

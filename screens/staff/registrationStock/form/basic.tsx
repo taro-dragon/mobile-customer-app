@@ -35,7 +35,7 @@ const RegistrationStockBasicFormScreen = () => {
   const carData = transformCarData(formCar as Car);
 
   const FIXED_PHOTOS_COUNT = 5;
-  const MAX_PHOTOS = 20;
+  const MAX_PHOTOS = 50;
   const MAX_ADDITIONAL_PHOTOS = MAX_PHOTOS - FIXED_PHOTOS_COUNT;
 
   const addPhoto = () => {
@@ -139,6 +139,13 @@ const RegistrationStockBasicFormScreen = () => {
       </ScrollView>
       <ColorSelect />
       <View style={{ paddingHorizontal: 16, gap: 16 }}>
+        <TextInput
+          label="車両説明"
+          name="description"
+          isRequired
+          multiline
+          numberOfLines={4}
+        />
         <TextInput
           label="走行距離"
           name="mileage"
