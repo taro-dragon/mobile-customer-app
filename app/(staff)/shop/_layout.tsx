@@ -3,7 +3,7 @@ import { Stack, useRouter } from "expo-router";
 import { X } from "lucide-react-native";
 import { TouchableOpacity } from "react-native";
 
-const StockCarLayout = () => {
+const ShopLayout = () => {
   const { colors } = useTheme();
   const router = useRouter();
   return (
@@ -21,7 +21,7 @@ const StockCarLayout = () => {
       <Stack.Screen
         name="[id]"
         options={{
-          title: "在庫情報",
+          title: "店舗情報",
           headerRight: () => (
             <TouchableOpacity onPress={() => router.back()}>
               <X size={24} color={colors.primary} />
@@ -32,4 +32,4 @@ const StockCarLayout = () => {
     </Stack>
   );
 };
-export default StockCarLayout;
+export default ShopLayout;

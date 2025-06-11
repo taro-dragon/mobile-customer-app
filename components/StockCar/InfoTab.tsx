@@ -128,6 +128,12 @@ const InfoTab: React.FC<InfoTabProps> = ({ stockCar }) => {
             {stockCar?.modelNumber && (
               <CarInfoItem label="型番" value={stockCar.modelNumber} />
             )}
+            {stockCar.displacement && (
+              <CarInfoItem
+                label="排気量"
+                value={`${Number(stockCar.displacement).toLocaleString()}cc`}
+              />
+            )}
             <CarInfoItem label="修復歴" value={repairStatusValue} />
             {stockCar.doorNumber && (
               <CarInfoItem label="ドア数" value={stockCar.doorNumber} />

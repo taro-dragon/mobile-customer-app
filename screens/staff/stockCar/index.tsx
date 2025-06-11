@@ -25,7 +25,6 @@ const StockCarScreen: React.FC<StockCarProps> = ({
 }) => {
   const { colors, typography } = useTheme();
   const carData = transformCarData(stockCar as unknown as Car);
-  console.log(stockCar.images);
   // 写真を指定した順序で配列にする
   const imageOrder = ["front", "back", "left", "right", "interior"] as const;
   const basicImages = imageOrder
@@ -173,7 +172,6 @@ const StockCarScreen: React.FC<StockCarProps> = ({
             borderBottomColor: colors.gray200,
           }}
           renderTabBar={renderTabBar}
-          lazy={true}
           containerStyle={{
             backgroundColor: colors.backgroundPrimary,
           }}
@@ -189,7 +187,7 @@ const StockCarScreen: React.FC<StockCarProps> = ({
           </Tabs.Tab>
         </Tabs.Container>
       </View>
-      {isCurrentStore && (
+      {!isCurrentStore && (
         <>
           <Divider />
           <View

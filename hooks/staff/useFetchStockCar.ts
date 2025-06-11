@@ -1,7 +1,6 @@
 import firestore from "@react-native-firebase/firestore";
 import useSWR from "swr";
 import Toast from "react-native-toast-message";
-import { User } from "@/types/firestore_schema/users";
 import { router } from "expo-router";
 import { Shop } from "@/types/models/Shop";
 import { Stock } from "@/types/firestore_schema/stock";

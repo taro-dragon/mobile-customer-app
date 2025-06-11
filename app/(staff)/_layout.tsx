@@ -81,6 +81,14 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
+        name="shop"
+        options={{
+          gestureDirection: "vertical",
+          headerShown: false,
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
         name="bulkAppraisalBid"
         options={{
           gestureDirection: "vertical",

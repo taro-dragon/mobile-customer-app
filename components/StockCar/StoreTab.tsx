@@ -8,6 +8,7 @@ import CarInfoItem from "../CarDetail/CarInfoIten";
 import MapView, { Marker } from "react-native-maps";
 import { openMapWithLatlng } from "@/libs/openMapWithLatlng";
 import Button from "../common/Button";
+import { useRouter } from "expo-router";
 
 type StoreTabProps = {
   store: Shop;
@@ -15,6 +16,7 @@ type StoreTabProps = {
 
 const StoreTab: React.FC<StoreTabProps> = ({ store }) => {
   const { colors, typography } = useTheme();
+  const router = useRouter();
   return (
     <Tabs.ScrollView>
       <View style={{ padding: 16, gap: 16 }}>
@@ -46,7 +48,7 @@ const StoreTab: React.FC<StoreTabProps> = ({ store }) => {
         <Button
           label="店舗詳細"
           isBorder
-          onPress={() => {}}
+          onPress={() => router.push(`/shop/${store.id}`)}
           color={colors.primary}
         />
         <View style={{ gap: 8 }}>
