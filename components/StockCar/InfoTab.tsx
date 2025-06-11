@@ -14,6 +14,7 @@ import {
   guaranteeOptions,
   guaranteeRoadServiceOptions,
   repairStatusOptions,
+  transmissionOptions,
 } from "@/constants/registrationStockOptions";
 import Alert from "../common/Alert";
 
@@ -64,6 +65,13 @@ const InfoTab: React.FC<InfoTabProps> = ({ stockCar }) => {
       )?.label || ""
     );
   }, [stockCar.guaranteeLimitSelect]);
+  const transmissionOptionsValue = useMemo(() => {
+    return (
+      transmissionOptions.find(
+        (option) => option.value === stockCar.transmission
+      )?.label || ""
+    );
+  }, [stockCar.transmission]);
   return (
     <Tabs.ScrollView>
       <View style={{ padding: 16, gap: 16 }}>
@@ -121,6 +129,18 @@ const InfoTab: React.FC<InfoTabProps> = ({ stockCar }) => {
               <CarInfoItem label="型番" value={stockCar.modelNumber} />
             )}
             <CarInfoItem label="修復歴" value={repairStatusValue} />
+            {stockCar.doorNumber && (
+              <CarInfoItem label="ドア数" value={stockCar.doorNumber} />
+            )}
+            {stockCar.fuelType && (
+              <CarInfoItem label="ガソリン" value={stockCar.fuelType} />
+            )}
+            {stockCar.transmission && (
+              <CarInfoItem
+                label="ミッション"
+                value={transmissionOptionsValue}
+              />
+            )}
           </View>
         </View>
         <View style={{ gap: 8 }}>
