@@ -9,10 +9,13 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { ShopWithManagementCompany } from "@/hooks/useFetchShop";
 import StockCarItem from "@/components/staff/shops/StockCarItem";
 import { Stock } from "@/types/firestore_schema/stock";
+import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 
 type ShopScreenProps = {
   shop: ShopWithManagementCompany;
   stockCars: Stock[];
+  isStockCarLastPage: boolean;
+  loadMoreStockCar: () => void;
 };
 
 type headerProps = {
@@ -51,7 +54,12 @@ const ShopHeader: React.FC<headerProps> = ({ shop }) => {
   );
 };
 
-const ShopScreen: React.FC<ShopScreenProps> = ({ shop, stockCars }) => {
+const ShopScreen: React.FC<ShopScreenProps> = ({
+  shop,
+  stockCars,
+  isStockCarLastPage,
+  loadMoreStockCar,
+}) => {
   const { colors, typography } = useTheme();
   const renderTabBar = useCallback(
     (props: any) => (
@@ -85,13 +93,35 @@ const ShopScreen: React.FC<ShopScreenProps> = ({ shop, stockCars }) => {
       <Tabs.Tab name="在庫情報">
         <Tabs.FlashList
           data={stockCars}
-          renderItem={({ item }) => <StockCarItem car={item} />}
+          renderItem={({ item }) => (
+            <View style={{ paddingHorizontal: 16 }}>
+              <StockCarItem car={item} />
+            </View>
+          )}
+          ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
+          ListFooterComponent={() => <SafeAreaBottom />}
+          overrideProps={{
+            contentContainerStyle: {
+              flexGrow: 1,
+              paddingTop: 16,
+            },
+          }}
+          onEndReached={() => {
+            if (!isStockCarLastPage) {
+              loadMoreStockCar();
+            }
+          }}
         />
       </Tabs.Tab>
       <Tabs.Tab name="オファー情報">
         <Tabs.FlashList
-          data={stockCars}
+          data={[...stockCars, ...stockCars, ...stockCars, ...stockCars]}
           renderItem={({ item }) => <StockCarItem car={item} />}
+          overrideProps={{
+            contentContainerStyle: {
+              flexGrow: 1,
+            },
+          }}
         />
       </Tabs.Tab>
     </Tabs.Container>
