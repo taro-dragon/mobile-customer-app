@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
-import { Text, View } from "react-native";
-import { Clock, MapPin } from "lucide-react-native";
+import { Dimensions, Text, View } from "react-native";
+import { Book, CarIcon, Clock, MapPin } from "lucide-react-native";
 import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
 
 import ImageCarousel from "@/components/common/ImageCarousel";
@@ -12,6 +12,7 @@ import { Stock } from "@/types/firestore_schema/stock";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import { BuyOffer } from "@/types/firestore_schema/buyOffers";
 import CarOfferItem from "@/components/staff/shops/CarOfferItem";
+import { useHeaderHeight } from "@react-navigation/elements";
 
 type ShopScreenProps = {
   shop: ShopWithManagementCompany;
@@ -72,7 +73,7 @@ const ShopScreen: React.FC<ShopScreenProps> = ({
   isOfferLoading,
   loadMoreOffer,
 }) => {
-  console.log("offers", offers);
+  const headerHeight = useHeaderHeight();
   const { colors, typography } = useTheme();
   const renderTabBar = useCallback(
     (props: any) => (
@@ -124,6 +125,33 @@ const ShopScreen: React.FC<ShopScreenProps> = ({
               loadMoreStockCar();
             }
           }}
+          ListEmptyComponent={() => (
+            <View
+              style={{
+                height: Dimensions.get("window").height - headerHeight - 32,
+              }}
+            >
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 16,
+                }}
+              >
+                <CarIcon
+                  size={48}
+                  color={colors.iconSecondary}
+                  strokeWidth={1.5}
+                />
+                <Text
+                  style={{ color: colors.textSecondary, ...typography.body2 }}
+                >
+                  在庫車両がありません
+                </Text>
+              </View>
+            </View>
+          )}
         />
       </Tabs.Tab>
       <Tabs.Tab name="オファー情報">
@@ -147,6 +175,33 @@ const ShopScreen: React.FC<ShopScreenProps> = ({
               loadMoreOffer();
             }
           }}
+          ListEmptyComponent={() => (
+            <View
+              style={{
+                height: Dimensions.get("window").height - headerHeight - 32,
+              }}
+            >
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 16,
+                }}
+              >
+                <Book
+                  size={48}
+                  color={colors.iconSecondary}
+                  strokeWidth={1.5}
+                />
+                <Text
+                  style={{ color: colors.textSecondary, ...typography.body2 }}
+                >
+                  オファー情報がありません
+                </Text>
+              </View>
+            </View>
+          )}
         />
       </Tabs.Tab>
     </Tabs.Container>
