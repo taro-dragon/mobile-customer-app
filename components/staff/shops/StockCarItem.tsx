@@ -1,4 +1,3 @@
-import { StockHit } from "@/contexts/staff/CarSearchContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
@@ -11,10 +10,11 @@ import {
   repairStatusOptions,
 } from "@/constants/registrationStockOptions";
 import { useMemo } from "react";
-import StockCarItemStatusPanel from "./StockCarItemStatus";
+import StockCarItemStatusPanel from "../StockCars/StockCarItemStatus";
+import { Stock } from "@/types/firestore_schema/stock";
 
 type StockCarItemProps = {
-  car: StockHit;
+  car: Stock;
 };
 
 const StockCarItem: React.FC<StockCarItemProps> = ({ car }) => {
@@ -41,7 +41,7 @@ const StockCarItem: React.FC<StockCarItemProps> = ({ car }) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        router.push(`/stockCar/${car.objectID}`);
+        router.push(`/stockCar/${car.id}`);
       }}
       style={{
         backgroundColor: colors.backgroundSecondary,
