@@ -8,10 +8,13 @@ import {
 import { useTheme } from "@/contexts/ThemeContext";
 import { Car, Gavel, Handshake } from "lucide-react-native";
 import { useRouter } from "expo-router";
+import Button from "@/components/common/Button";
+import { useLogout } from "@/hooks/staff/useLogout";
 
 const StaffIndexScreen = () => {
   const { colors, typography } = useTheme();
   const router = useRouter();
+  const { logout } = useLogout();
   const styles = StyleSheet.create({
     button: {
       flex: 1,
@@ -90,6 +93,11 @@ const StaffIndexScreen = () => {
           </View>
         </View>
       </View>
+      <Button
+        label="ログアウト"
+        onPress={() => logout()}
+        color={colors.primary}
+      />
     </ScrollView>
   );
 };

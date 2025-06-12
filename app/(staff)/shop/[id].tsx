@@ -1,24 +1,19 @@
 import ShopDetailSkeleton from "@/components/Skelton/SkeltonShopInfo";
-import useFetchStockCar from "@/hooks/staff/useFetchStockCar";
-import useFetchStore from "@/hooks/staff/useFetchStore";
-import { useStore } from "@/hooks/useStore";
-import StockCarScreen from "@/screens/staff/stockCar";
-import { useLocalSearchParams } from "expo-router";
-import { useMemo } from "react";
-import { Text, View } from "react-native";
 
-const StockCar = () => {
+import useFetchStore from "@/hooks/staff/useFetchStore";
+
+import ShopScreen from "@/screens/staff/shop";
+
+import { useLocalSearchParams } from "expo-router";
+
+const Shop = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { store, isLoading } = useFetchStore(id);
 
   if (isLoading || !store) {
     return <ShopDetailSkeleton />;
   }
-  return (
-    <View>
-      <Text>{store.shopName}</Text>
-    </View>
-  );
+  return <ShopScreen shop={store} />;
 };
 
-export default StockCar;
+export default Shop;

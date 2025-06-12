@@ -3,11 +3,13 @@ import { useStore } from "../useStore";
 import Toast from "react-native-toast-message";
 
 export const useLogout = () => {
-  const { deleteStaff } = useStore();
+  const { deleteStaff, clearCurrentStore, clearStaffTalks } = useStore();
   const logout = async () => {
     try {
       await auth().signOut();
       deleteStaff();
+      clearCurrentStore();
+      clearStaffTalks();
       Toast.show({
         type: "success",
         text1: "ログアウトしました",
