@@ -1,11 +1,12 @@
 import ShopDetailSkeleton from "@/components/Skelton/SkeltonShopInfo";
 
 import useShop from "@/hooks/useFetchShop";
-import { useFetchShopStockCar } from "@/hooks/useFetchShopStockCar";
+import { useFetchShopStockCar } from "@/hooks/common/shop/useFetchShopStockCar";
 
 import ShopScreen from "@/screens/staff/shop";
 
 import { useLocalSearchParams } from "expo-router";
+import { useFetchShopOffer } from "@/hooks/common/shop/useFetchShopOffer";
 
 const Shop = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -16,6 +17,12 @@ const Shop = () => {
     hasMore: isStockCarLastPage,
     loadMore: loadMoreStockCar,
   } = useFetchShopStockCar(id);
+  const {
+    offers,
+    isLoading: isOfferLoading,
+    hasMore: isOfferLastPage,
+    loadMore: loadMoreOffer,
+  } = useFetchShopOffer(id);
 
   if (isLoading || !shop) {
     return <ShopDetailSkeleton />;
@@ -26,6 +33,11 @@ const Shop = () => {
       stockCars={stockCars}
       isStockCarLastPage={isStockCarLastPage}
       loadMoreStockCar={loadMoreStockCar}
+      offers={offers}
+      isOfferLastPage={isOfferLastPage}
+      loadMoreOffer={loadMoreOffer}
+      isOfferLoading={isOfferLoading}
+      isStockCarLoading={isStockCarLoading}
     />
   );
 };

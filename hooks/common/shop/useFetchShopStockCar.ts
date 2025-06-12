@@ -41,7 +41,7 @@ const fetchShopStockCar = async (
 };
 
 export const useFetchShopStockCar = (shopId: string) => {
-  const { data, error, mutate, size, setSize, isValidating, isLoading } =
+  const { data, error, size, setSize, isValidating, isLoading } =
     useSWRInfinite(
       (pageIndex, previousPageData) => {
         const key =
@@ -74,10 +74,6 @@ export const useFetchShopStockCar = (shopId: string) => {
     }
   };
 
-  const refresh = async () => {
-    await mutate();
-  };
-
   return {
     stockCars,
     error,
@@ -85,7 +81,5 @@ export const useFetchShopStockCar = (shopId: string) => {
     isValidating,
     hasMore,
     loadMore,
-    mutate,
-    refresh,
   };
 };

@@ -10,12 +10,19 @@ import { ShopWithManagementCompany } from "@/hooks/useFetchShop";
 import StockCarItem from "@/components/staff/shops/StockCarItem";
 import { Stock } from "@/types/firestore_schema/stock";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
+import { BuyOffer } from "@/types/firestore_schema/buyOffers";
+import CarOfferItem from "@/components/staff/shops/CarOfferItem";
 
 type ShopScreenProps = {
   shop: ShopWithManagementCompany;
   stockCars: Stock[];
   isStockCarLastPage: boolean;
+  isStockCarLoading: boolean;
   loadMoreStockCar: () => void;
+  offers: BuyOffer[];
+  isOfferLastPage: boolean;
+  loadMoreOffer: () => void;
+  isOfferLoading: boolean;
 };
 
 type headerProps = {
@@ -58,8 +65,14 @@ const ShopScreen: React.FC<ShopScreenProps> = ({
   shop,
   stockCars,
   isStockCarLastPage,
+  isStockCarLoading,
   loadMoreStockCar,
+  offers,
+  isOfferLastPage,
+  isOfferLoading,
+  loadMoreOffer,
 }) => {
+  console.log("offers", offers);
   const { colors, typography } = useTheme();
   const renderTabBar = useCallback(
     (props: any) => (
@@ -115,12 +128,24 @@ const ShopScreen: React.FC<ShopScreenProps> = ({
       </Tabs.Tab>
       <Tabs.Tab name="オファー情報">
         <Tabs.FlashList
-          data={[...stockCars, ...stockCars, ...stockCars, ...stockCars]}
-          renderItem={({ item }) => <StockCarItem car={item} />}
+          data={offers}
+          renderItem={({ item }) => (
+            <View style={{ paddingHorizontal: 16 }}>
+              <CarOfferItem offer={item} />
+            </View>
+          )}
           overrideProps={{
             contentContainerStyle: {
               flexGrow: 1,
+              paddingTop: 16,
             },
+          }}
+          ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
+          ListFooterComponent={() => <SafeAreaBottom />}
+          onEndReached={() => {
+            if (!isOfferLastPage) {
+              loadMoreOffer();
+            }
           }}
         />
       </Tabs.Tab>
