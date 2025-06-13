@@ -81,12 +81,11 @@ const ShopInfoTab: React.FC<ShopInfoTabProps> = ({ shop }) => {
                   value={shop.managementCompany.antiqueDealerLicenseNumber}
                 />
               )}
-              {/* <CarInfoItem label="営業時間" value={client.businessHours} /> */}
             </View>
           </Card>
         </View>
       </View>
-      <View style={{ gap: 8 }} pointerEvents="box-none">
+      <View style={{ gap: 8 }} pointerEvents="auto">
         <Text
           style={{
             ...typography.heading3,
