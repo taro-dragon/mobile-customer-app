@@ -4,14 +4,8 @@ import { AsyncStorageKey } from "@/constants/AsyncStorageKey";
 import { loadAsyncStorage, saveAsyncStorage } from "@/libs/asyncStorage";
 
 const useStaffInfoData = () => {
-  const {
-    staff,
-    stores,
-    fetchStores,
-    currentStore,
-    fetchCurrentStore,
-    fetchStaffTalks,
-  } = useStore();
+  const { staff, stores, fetchStores, fetchCurrentStore, fetchStaffTalks } =
+    useStore();
   useEffect(() => {
     if (staff) {
       const shopIds = staff.shops;

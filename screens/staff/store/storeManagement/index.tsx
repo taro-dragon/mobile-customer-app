@@ -29,7 +29,7 @@ const StoreManagementScreen = () => {
         <ManageStorePanel
           title="スタッフ管理"
           icon={<Users size={32} color={colors.primary} />}
-          onPress={() => {}}
+          onPress={() => router.push("/store/staffList")}
         />
         <ManageStorePanel
           title="在庫管理"
