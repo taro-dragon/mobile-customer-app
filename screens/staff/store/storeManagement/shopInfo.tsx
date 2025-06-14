@@ -26,7 +26,10 @@ const ShopInfoScreen: React.FC<ShopInfoScreenProps> = ({ store, isOwner }) => {
         pointerEvents="box-none"
       >
         <ImageCarousel images={store.imageUrls ?? []} />
-        <View style={{ gap: 8, padding: 16 }} pointerEvents="none">
+        <View
+          style={{ gap: 8, paddingHorizontal: 16, paddingBottom: 16 }}
+          pointerEvents="none"
+        >
           <Text style={{ ...typography.title1, color: colors.textPrimary }}>
             {store.shopName}
           </Text>
