@@ -38,8 +38,9 @@ const StoreTab: React.FC<StoreTabProps> = ({ store }) => {
               label="住所"
               value={`${store.address1} ${store.address2} ${store.address3}`}
             />
-            <CarInfoItem label="電話番号" value={store.phoneNumber} />
-            <CarInfoItem label="営業時間" value={store.businessHours} />
+            {store.businessHours && (
+              <CarInfoItem label="営業時間" value={store.businessHours} />
+            )}
             {store.holiday && (
               <CarInfoItem label="定休日" value={store.holiday} />
             )}

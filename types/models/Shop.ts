@@ -17,12 +17,14 @@ export type Shop = {
   address1: string;
   address2: string;
   address3: string;
+  building?: string;
   lat: number;
   lng: number;
   phoneNumber: string;
   email: string;
-  businessHours: string;
+  businessHours?: string;
   description?: string;
+  shopCatchCopy?: string;
   holiday?: string;
   imageUrls?: string[];
 };

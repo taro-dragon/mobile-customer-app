@@ -7,6 +7,7 @@ import Carousel, {
   ICarouselInstance,
   Pagination,
 } from "react-native-reanimated-carousel";
+import Logo from "./Logo";
 
 type ImageCarouselProps = {
   images: string[];
@@ -45,53 +46,69 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
 
   return (
     <>
-      <Carousel
-        loop={false}
-        ref={ref}
-        width={width}
-        height={width}
-        data={images}
-        onProgressChange={progress}
-        renderItem={({ index }) => (
-          <View
-            style={{
-              flex: 1,
-              borderWidth: 1,
-              justifyContent: "center",
-              position: "relative",
-            }}
-            pointerEvents="auto"
-          >
-            <Image
-              source={{ uri: images[index] }}
+      {images.length > 0 ? (
+        <Carousel
+          loop={false}
+          ref={ref}
+          width={width}
+          height={width}
+          data={images}
+          onProgressChange={progress}
+          renderItem={({ index }) => (
+            <View
               style={{
-                width: width,
-                height: width,
+                flex: 1,
+                justifyContent: "center",
+                position: "relative",
               }}
-              contentFit="cover"
-              pointerEvents="none"
-              onLoadStart={() => handleImageLoadStart(index)}
-              onLoad={() => handleImageLoad(index)}
-            />
-            {loadingStates[index] && (
-              <View
+              pointerEvents="auto"
+            >
+              <Image
+                source={{ uri: images[index] }}
                 style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: colors.backgroundPrimary || "#f5f5f5",
+                  width: width,
+                  height: width,
                 }}
-              >
-                <ActivityIndicator size="large" color={colors.primary} />
-              </View>
-            )}
-          </View>
-        )}
-      />
+                contentFit="cover"
+                pointerEvents="none"
+                onLoadStart={() => handleImageLoadStart(index)}
+                onLoad={() => handleImageLoad(index)}
+              />
+              {loadingStates[index] && (
+                <View
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: colors.backgroundPrimary || "#f5f5f5",
+                  }}
+                >
+                  <ActivityIndicator size="large" color={colors.primary} />
+                </View>
+              )}
+            </View>
+          )}
+        />
+      ) : (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            position: "relative",
+            width: width,
+            aspectRatio: 1,
+            backgroundColor: colors.backgroundSecondary,
+          }}
+          pointerEvents="auto"
+        >
+          <Logo width={width * 0.4} color={colors.textSecondary} />
+        </View>
+      )}
       {showPaginationEnabled && (
         <Pagination.Custom
           progress={progress}

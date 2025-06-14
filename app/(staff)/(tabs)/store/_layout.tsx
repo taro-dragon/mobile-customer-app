@@ -19,12 +19,25 @@ const StoreLayout = () => {
         headerTitleStyle: {
           color: colors.primary,
         },
+        headerBackButtonDisplayMode: "minimal",
       }}
     >
       <Stack.Screen
         name="index"
         options={{
           title: "店舗管理",
+        }}
+      />
+      <Stack.Screen
+        name="shopInfo"
+        options={{
+          title: "店舗情報",
+        }}
+      />
+      <Stack.Screen
+        name="editShopInfo"
+        options={{
+          title: "店舗情報編集",
         }}
       />
     </Stack>

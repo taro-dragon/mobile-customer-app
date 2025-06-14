@@ -1,10 +1,12 @@
 import ManageStorePanel from "@/components/staff/manageStore/Panel";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useRouter } from "expo-router";
 import { Car, Gavel, Handshake, Store, Users } from "lucide-react-native";
 import { Text, TouchableOpacity, View } from "react-native";
 
 const StoreManagementScreen = () => {
-  const { colors, typography } = useTheme();
+  const { colors } = useTheme();
+  const router = useRouter();
   return (
     <View
       style={{
@@ -22,7 +24,7 @@ const StoreManagementScreen = () => {
         <ManageStorePanel
           title="店舗情報管理"
           icon={<Store size={32} color={colors.primary} />}
-          onPress={() => {}}
+          onPress={() => router.push("/store/shopInfo")}
         />
         <ManageStorePanel
           title="スタッフ管理"

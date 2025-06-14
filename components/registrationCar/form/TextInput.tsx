@@ -21,6 +21,7 @@ const TextInput = ({
   isRequired = false,
   multiline = false,
   unit,
+  editable = true,
   ...props
 }: Props) => {
   const { colors, typography } = useTheme();
@@ -44,12 +45,15 @@ const TextInput = ({
           value={value}
           onChangeText={onChange}
           multiline={multiline}
+          editable={editable}
           style={{
-            backgroundColor: colors.backgroundSecondary,
+            backgroundColor: editable
+              ? colors.backgroundSecondary
+              : colors.backgroundPrimary,
             borderRadius: 8,
             padding: 16,
             flex: 1,
-            color: colors.textPrimary,
+            color: editable ? colors.textPrimary : colors.textSecondary,
             height: multiline ? 120 : undefined,
             borderWidth: 1,
             borderColor: errors[name] ? colors.error : colors.borderPrimary,

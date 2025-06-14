@@ -63,7 +63,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="store"
         options={{
-          title: "店舗管理",
+          title: staff?.isOwner ? "店舗管理" : "店舗情報",
           tabBarIcon: ({ color }) => <StoreIcon size={24} color={color} />,
           headerShown: false,
         }}
