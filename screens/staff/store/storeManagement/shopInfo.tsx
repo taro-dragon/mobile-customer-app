@@ -1,7 +1,7 @@
 import React from "react";
 import { Stack, useRouter } from "expo-router";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { Clock, Edit, MapPin } from "lucide-react-native";
+import { CalendarOff, Clock, Edit, MapPin } from "lucide-react-native";
 import Button from "@/components/common/Button";
 import Divider from "@/components/common/Divider";
 import ImageCarousel from "@/components/common/ImageCarousel";
@@ -48,6 +48,18 @@ const ShopInfoScreen: React.FC<ShopInfoScreenProps> = ({ store, isOwner }) => {
                 style={{ ...typography.body2, color: colors.textSecondary }}
               >
                 {store.businessHours}
+              </Text>
+            </View>
+          )}
+          {store.holiday && (
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 8 }}
+            >
+              <CalendarOff size={16} color={colors.textSecondary} />
+              <Text
+                style={{ ...typography.body2, color: colors.textSecondary }}
+              >
+                {store.holiday}
               </Text>
             </View>
           )}

@@ -36,6 +36,10 @@ const EditShopInfo = () => {
         .collection("shops")
         .doc(currentStore?.id)
         .update(dataToUpdate);
+      Toast.show({
+        type: "success",
+        text1: "店舗情報を更新しました",
+      });
       router.back();
     } catch (error) {
       console.log(error);

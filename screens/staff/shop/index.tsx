@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { Dimensions, Text, View } from "react-native";
-import { Book, CarIcon, Clock, MapPin } from "lucide-react-native";
+import { Book, CalendarOff, CarIcon, Clock, MapPin } from "lucide-react-native";
 import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
 
 import ImageCarousel from "@/components/common/ImageCarousel";
@@ -50,12 +50,22 @@ const ShopHeader: React.FC<headerProps> = ({ shop }) => {
             {shop.address3}
           </Text>
         </View>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-          <Clock size={16} color={colors.textSecondary} />
-          <Text style={{ ...typography.body2, color: colors.textSecondary }}>
-            {shop.businessHours}
-          </Text>
-        </View>
+        {shop.businessHours && (
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <Clock size={16} color={colors.textSecondary} />
+            <Text style={{ ...typography.body2, color: colors.textSecondary }}>
+              {shop.businessHours}
+            </Text>
+          </View>
+        )}
+        {shop.holiday && (
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <CalendarOff size={16} color={colors.textSecondary} />
+            <Text style={{ ...typography.body2, color: colors.textSecondary }}>
+              {shop.holiday}
+            </Text>
+          </View>
+        )}
       </View>
       <ShopInfoTab shop={shop} />
     </View>

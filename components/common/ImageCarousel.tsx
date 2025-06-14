@@ -1,7 +1,7 @@
 import { useTheme } from "@/contexts/ThemeContext";
 import { Image } from "expo-image";
 import React, { useRef, useState } from "react";
-import { ActivityIndicator, Dimensions, View } from "react-native";
+import { ActivityIndicator, Dimensions, Text, View } from "react-native";
 import { interpolate, useSharedValue } from "react-native-reanimated";
 import Carousel, {
   ICarouselInstance,
@@ -20,7 +20,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
 }) => {
   const ref = useRef<ICarouselInstance>(null);
   const progress = useSharedValue<number>(0);
-  const { colors } = useTheme();
+  const { colors, typography } = useTheme();
   const width = Dimensions.get("window").width;
 
   // 各画像のローディング状態を管理
@@ -102,11 +102,21 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
             position: "relative",
             width: width,
             aspectRatio: 1,
+            gap: 12,
             backgroundColor: colors.backgroundSecondary,
           }}
           pointerEvents="auto"
         >
-          <Logo width={width * 0.4} color={colors.textSecondary} />
+          <Logo width={width * 0.3} color={colors.textSecondary} />
+          <Text
+            style={{
+              ...typography.heading2,
+              color: colors.textSecondary,
+              textAlign: "center",
+            }}
+          >
+            No Image
+          </Text>
         </View>
       )}
       {showPaginationEnabled && (
