@@ -50,6 +50,12 @@ const StoreLayout = () => {
           title: isOwner ? "スタッフ管理" : "スタッフ一覧",
         }}
       />
+      <Stack.Screen
+        name="createStaff"
+        options={{
+          title: "スタッフ登録",
+        }}
+      />
     </Stack>
   );
 };

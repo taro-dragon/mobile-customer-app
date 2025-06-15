@@ -23,7 +23,9 @@ const StaffListScreen: React.FC<Props> = ({ staffList, isOwner }) => {
         <Stack.Screen
           options={{
             headerRight: () => (
-              <TouchableOpacity onPress={() => console.log("add staff")}>
+              <TouchableOpacity
+                onPress={() => router.push("/store/createStaff")}
+              >
                 <UserPlus size={24} color={colors.primary} />
               </TouchableOpacity>
             ),
