@@ -62,7 +62,7 @@ const StaffListScreen: React.FC<Props> = ({ staffList }) => {
                     <User size={24} color={colors.textSecondary} />
                   </View>
                 )}
-                <View>
+                <View style={{ gap: 4 }}>
                   <Text
                     style={{
                       color: colors.textPrimary,
