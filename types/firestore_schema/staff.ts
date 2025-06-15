@@ -15,4 +15,5 @@ export type Staff = {
   createdAt: FirebaseFirestoreTypes.Timestamp;
   updatedAt: FirebaseFirestoreTypes.Timestamp;
   expoPushToken?: string;
+  employeeId?: string;
 };

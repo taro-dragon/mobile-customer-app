@@ -7,12 +7,12 @@ import { View } from "react-native";
 
 const StaffList = () => {
   const { staff, currentStore } = useStore();
-  const isOwner = useMemo(() => staff?.isOwner, [staff]);
+  const isOwner = useMemo(() => !!staff?.isOwner, [staff]);
   const { staffList, isLoading } = useFetchStaffList(currentStore?.id || "");
   if (isLoading || !staffList) {
     return <Loader />;
   }
-  return <StaffListScreen staffList={staffList} />;
+  return <StaffListScreen staffList={staffList} isOwner={isOwner} />;
 };
 
 export default StaffList;
