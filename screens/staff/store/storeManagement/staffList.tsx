@@ -114,7 +114,7 @@ const StaffListScreen: React.FC<Props> = ({ staffList, isOwner }) => {
             </View>
           </View>
         )}
-        ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
+        ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
       />
     </>
   );

@@ -9,6 +9,7 @@ const fetchStaffList = async (id: string) => {
     const staffListSnapshot = await firestore()
       .collection("staffs")
       .where("shops", "array-contains", id)
+      .orderBy("createdAt", "asc")
       .get();
     const staffList = staffListSnapshot.docs.map((doc) => {
       return {
@@ -18,6 +19,7 @@ const fetchStaffList = async (id: string) => {
     }) as Staff[];
     return staffList;
   } catch (error) {
+    console.log(error);
     Toast.show({
       type: "error",
       text1: "エラーが発生しました",

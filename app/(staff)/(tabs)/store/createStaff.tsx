@@ -5,18 +5,24 @@ import functions from "@react-native-firebase/functions";
 import { Alert } from "react-native";
 import Toast from "react-native-toast-message";
 import { useRouter } from "expo-router";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-type CreateStaffForm = {
-  name: string;
-  furigana: string;
-  email: string;
-  phoneNumber: string;
-  position?: string;
-  employeeId?: string;
-  isOwner: boolean;
-  clientId: string;
-  shops: string[];
-};
+export const createStaffFormSchema = z.object({
+  name: z.string().min(1, "名前を入力してください"),
+  furigana: z
+    .string()
+    .min(1, "フリガナを入力してください")
+    .regex(/^[ァ-ヶー]+$/, "カタカナのみを入力してください"),
+  email: z.string().email("有効なメールアドレスを入力してください"),
+  position: z.string().optional(),
+  employeeId: z.string().optional(),
+  isOwner: z.boolean(),
+  clientId: z.string().min(1, "クライアントIDは必須です"),
+  shops: z.array(z.string()).min(1, "店舗IDは必須です"),
+});
+
+export type CreateStaffForm = z.infer<typeof createStaffFormSchema>;
 
 const CreateStaff = () => {
   const { currentStore } = useStore();
@@ -27,6 +33,7 @@ const CreateStaff = () => {
       clientId: currentStore?.clientId || "",
       shops: [currentStore?.id],
     },
+    resolver: zodResolver(createStaffFormSchema),
   });
   const { handleSubmit } = form;
   const submit = async (data: CreateStaffForm) => {
