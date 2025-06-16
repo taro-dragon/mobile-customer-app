@@ -2,8 +2,16 @@ import Tag from "@/components/common/Tag";
 import StaffDetailItem from "@/components/staff/staff/StaffDetailItem";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Staff } from "@/types/firestore_schema/staff";
+import dayjs from "dayjs";
 import { Image } from "expo-image";
-import { Gavel, Handshake, IdCard, Mail, User } from "lucide-react-native";
+import {
+  Calendar,
+  Gavel,
+  Handshake,
+  IdCard,
+  Mail,
+  User,
+} from "lucide-react-native";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 type StaffDetailScreenProps = {
@@ -142,6 +150,11 @@ const StaffDetailScreen: React.FC<StaffDetailScreenProps> = ({ staff }) => {
               value={staff.employeeId}
             />
           )}
+          <StaffDetailItem
+            icon={<Calendar size={20} color={colors.primary} />}
+            title="登録日時"
+            value={dayjs(staff.createdAt.toDate()).format("YYYY/MM/DD HH:mm")}
+          />
         </View>
       </View>
     </ScrollView>
