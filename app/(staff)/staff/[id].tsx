@@ -1,7 +1,7 @@
 import Loader from "@/components/common/Loader";
 import useFetchStaff from "@/hooks/staff/useFetchStaff";
+import StaffDetailScreen from "@/screens/staff/staff/StaffDetail";
 import { useLocalSearchParams } from "expo-router";
-import { Text, View } from "react-native";
 
 const StaffDetail = () => {
   const { id } = useLocalSearchParams();
@@ -9,11 +9,7 @@ const StaffDetail = () => {
   if (isLoading || !staff) {
     return <Loader />;
   }
-  return (
-    <View>
-      <Text>{staff?.name}</Text>
-    </View>
-  );
+  return <StaffDetailScreen staff={staff} />;
 };
 
 export default StaffDetail;

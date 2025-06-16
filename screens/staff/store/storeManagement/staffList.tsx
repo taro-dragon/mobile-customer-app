@@ -102,7 +102,7 @@ const StaffListScreen: React.FC<Props> = ({ staffList, isOwner }) => {
                     )}
                   </View>
                 </View>
-                {item.isOwner && <Tag label="オーナー" color="info" />}
+                {item.isOwner && <Tag label="管理者" color="info" />}
               </View>
               <View>
                 <Text

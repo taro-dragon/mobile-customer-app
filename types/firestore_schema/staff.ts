@@ -3,6 +3,7 @@ import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 export type Staff = {
   id: string;
   name: string;
+  furigana: string;
   email: string;
   position?: string;
   phoneNumber?: string;

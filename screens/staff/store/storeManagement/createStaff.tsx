@@ -42,7 +42,7 @@ const CreateStaffScreen: React.FC<Props> = ({ onConfirm }) => {
             <TextInput name="email" label="メールアドレス" isRequired />
             <TextInput name="phoneNumber" label="電話番号" />
             <TextInput name="position" label="役職" />
-            <TextInput name="employeeId" label="従業員ID" />
+            <TextInput name="employeeId" label="社員番号" />
             <View
               style={{
                 flexDirection: "row",
@@ -53,7 +53,7 @@ const CreateStaffScreen: React.FC<Props> = ({ onConfirm }) => {
               <Text
                 style={{ color: colors.textPrimary, ...typography.heading3 }}
               >
-                オーナー権限
+                管理者権限
               </Text>
               <Controller
                 control={control}
