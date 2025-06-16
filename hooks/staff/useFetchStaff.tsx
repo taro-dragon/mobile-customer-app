@@ -7,12 +7,20 @@ import { Staff } from "@/types/firestore_schema/staff";
 const fetchStaff = async (id: string) => {
   try {
     const staffSnapshot = await firestore().collection("staffs").doc(id).get();
+    const staffPrivateSnapshot = await firestore()
+      .collection("staffs")
+      .doc(id)
+      .collection("privateData")
+      .doc(id)
+      .get();
     const staffData = staffSnapshot.data();
+    const staffPrivateData = staffPrivateSnapshot.data();
     if (!staffData) {
       throw new Error("スタッフ情報が見つかりません");
     }
     return {
       ...staffData,
+      ...staffPrivateData,
       id: staffSnapshot.id,
     };
   } catch (error) {

@@ -16,6 +16,7 @@ export const createStaffFormSchema = z.object({
     .regex(/^[ァ-ヶー]+$/, "カタカナのみを入力してください"),
   email: z.string().email("有効なメールアドレスを入力してください"),
   position: z.string().optional(),
+  phoneNumber: z.string().optional(),
   employeeId: z.string().optional(),
   isOwner: z.boolean(),
   clientId: z.string().min(1, "クライアントIDは必須です"),

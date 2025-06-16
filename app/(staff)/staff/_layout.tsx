@@ -1,6 +1,6 @@
 import { useTheme } from "@/contexts/ThemeContext";
 import { Stack, useRouter } from "expo-router";
-import { Pencil, X } from "lucide-react-native";
+import { X } from "lucide-react-native";
 import { TouchableOpacity } from "react-native";
 
 const StaffLayout = () => {
@@ -32,14 +32,8 @@ const StaffLayout = () => {
       <Stack.Screen
         name="edit"
         options={{
-          title: "スタッフ編集",
-          headerRight: () => (
-            <TouchableOpacity onPress={() => router.back()}>
-              <X size={24} color={colors.primary} />
-            </TouchableOpacity>
-          ),
-          gestureDirection: "vertical",
-          headerShown: false,
+          title: "スタッフ情報編集",
+          headerBackButtonDisplayMode: "minimal",
         }}
       />
     </Stack>
