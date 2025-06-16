@@ -42,6 +42,7 @@ const CreateStaff = () => {
       Toast.show({
         type: "error",
         text1: "スタッフの登録に失敗しました",
+        text2: error instanceof Error ? error.message : "不明なエラー",
       });
     }
   };
