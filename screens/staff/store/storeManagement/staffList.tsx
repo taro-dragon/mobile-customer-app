@@ -42,7 +42,8 @@ const StaffListScreen: React.FC<Props> = ({ staffList, isOwner }) => {
         }}
         renderItem={({ item }) => (
           <View style={{ paddingHorizontal: 16 }}>
-            <View
+            <TouchableOpacity
+              onPress={() => router.push(`/staff/${item.id}`)}
               style={{
                 borderWidth: 1,
                 padding: 16,
@@ -84,7 +85,7 @@ const StaffListScreen: React.FC<Props> = ({ staffList, isOwner }) => {
                     <Text
                       style={{
                         color: colors.textPrimary,
-                        ...typography.heading2,
+                        ...typography.heading3,
                       }}
                     >
                       {item.name}
@@ -111,7 +112,7 @@ const StaffListScreen: React.FC<Props> = ({ staffList, isOwner }) => {
                   {dayjs(item.createdAt.toDate()).format("YYYY/MM/DD HH:mm")}
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           </View>
         )}
         ItemSeparatorComponent={() => <View style={{ height: 8 }} />}

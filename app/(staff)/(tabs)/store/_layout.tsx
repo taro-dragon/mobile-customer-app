@@ -1,15 +1,12 @@
 import { useTheme } from "@/contexts/ThemeContext";
 import { useStore } from "@/hooks/useStore";
-import { Stack, useRouter } from "expo-router";
-import { X } from "lucide-react-native";
+import { Stack } from "expo-router";
 import { useMemo } from "react";
-import { TouchableOpacity } from "react-native";
 
 const StoreLayout = () => {
   const { colors } = useTheme();
   const { staff } = useStore();
   const isOwner = useMemo(() => staff?.isOwner, [staff]);
-  const router = useRouter();
   return (
     <Stack
       screenOptions={{
