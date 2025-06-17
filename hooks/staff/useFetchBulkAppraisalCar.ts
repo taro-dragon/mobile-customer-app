@@ -1,49 +1,71 @@
+import { Car } from "@/types/models/Car";
 import firestore from "@react-native-firebase/firestore";
 import useSWR from "swr";
+import { ExtendedBid } from "../useFetchCarBids";
 import Toast from "react-native-toast-message";
 import { router } from "expo-router";
-import { Staff } from "@/types/firestore_schema/staff";
 
-const fetchStaffList = async (id: string) => {
+export type ExtendedBulkAppraisalCar = Car & {
+  bids: ExtendedBid[];
+};
+
+const fetchBulkAppraisalCar = async (id: string) => {
   try {
-    const staffListSnapshot = await firestore()
-      .collection("staffs")
-      .where("shops", "array-contains", id)
-      .orderBy("createdAt", "asc")
+    const shopSnapshot = await firestore().collection("cars").doc(id).get();
+    const bidsSnapshot = await firestore()
+      .collection("bids")
+      .where("carId", "==", id)
+      .orderBy("minPrice", "desc")
       .get();
-    const staffList = staffListSnapshot.docs.map((doc) => {
-      return {
-        ...doc.data(),
-        id: doc.id,
-      };
-    }) as Staff[];
-    return staffList;
+    const shopData = shopSnapshot.data();
+    if (!shopData) {
+      return undefined;
+    }
+    const bids = bidsSnapshot.docs.map((doc) => doc.data());
+    const bidsStoreSnapShots = await Promise.all(
+      bids.map(async (bid) => {
+        const bidStoreSnapshot = await firestore()
+          .collection("shops")
+          .doc(bid.affiliateStoreId)
+          .get();
+        return {
+          ...bid,
+          affiliateStore: bidStoreSnapshot.data(),
+        };
+      })
+    );
+
+    return {
+      ...shopData,
+      id: shopSnapshot.id,
+      bids: bidsStoreSnapShots,
+    };
   } catch (error) {
-    console.log(error);
     Toast.show({
       type: "error",
       text1: "エラーが発生しました",
-      text2: "スタッフ情報の取得に失敗しました",
+      text2: "車両情報の取得に失敗しました",
     });
     router.back();
+    return undefined;
   }
 };
 
-const useFetchStaffList = (id: string) => {
+const useFetchBulkAppraisalCar = (id: string) => {
   const { data, error, mutate, isLoading } = useSWR(
-    id ? `staffList-${id}` : null,
-    () => fetchStaffList(id),
+    id ? `bulkAppraisalCar-${id}` : null,
+    () => fetchBulkAppraisalCar(id),
     {
       revalidateOnFocus: true,
     }
   );
 
   return {
-    staffList: data as Staff[] | undefined,
+    bulkAppraisalCar: data as ExtendedBulkAppraisalCar | undefined,
     isLoading,
     isError: !!error,
     mutate,
   };
 };
 
-export default useFetchStaffList;
+export default useFetchBulkAppraisalCar;
