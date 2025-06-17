@@ -1,10 +1,10 @@
-import { useStore } from "@/hooks/useStore";
 import EditStaffScreen from "@/screens/staff/staff/editStaff";
 import { FormProvider, useForm } from "react-hook-form";
 import firestore from "@react-native-firebase/firestore";
 import storage from "@react-native-firebase/storage";
 import Toast from "react-native-toast-message";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import useFetchStaff from "@/hooks/staff/useFetchStaff";
 
 type InitialValues = {
   name: string;
@@ -19,7 +19,8 @@ type InitialValues = {
 };
 
 const StaffEdit = () => {
-  const { staff: currentStaff } = useStore();
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const { staff: currentStaff } = useFetchStaff(id);
   const router = useRouter();
   const form = useForm<InitialValues>({
     defaultValues: {

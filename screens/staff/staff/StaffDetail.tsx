@@ -36,7 +36,14 @@ const StaffDetailScreen: React.FC<StaffDetailScreenProps> = ({
         <Stack.Screen
           options={{
             headerRight: () => (
-              <TouchableOpacity onPress={() => router.push("/staff/edit")}>
+              <TouchableOpacity
+                onPress={() => {
+                  router.push({
+                    pathname: "/staff/edit",
+                    params: { id: staff.id },
+                  });
+                }}
+              >
                 <Pencil size={20} color={colors.primary} />
               </TouchableOpacity>
             ),
