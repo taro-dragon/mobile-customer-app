@@ -102,11 +102,11 @@ const StaffEdit = () => {
         await privateDataRef.set(privateData, { merge: true });
       }
 
+      router.back();
       Toast.show({
         type: "success",
         text1: "スタッフを更新しました",
       });
-      router.back();
     } catch (error) {
       console.error("スタッフ更新エラー:", error);
       Toast.show({
