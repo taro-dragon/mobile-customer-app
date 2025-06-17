@@ -21,18 +21,18 @@ import { Staff } from "@/types/firestore_schema/staff";
 
 type StaffDetailScreenProps = {
   staff: Staff;
-  isCurrentStaff: boolean;
+  isCanEditStaff: boolean;
 };
 
 const StaffDetailScreen: React.FC<StaffDetailScreenProps> = ({
   staff,
-  isCurrentStaff,
+  isCanEditStaff,
 }) => {
   const { colors, typography } = useTheme();
   const router = useRouter();
   return (
     <>
-      {isCurrentStaff && (
+      {isCanEditStaff && (
         <Stack.Screen
           options={{
             headerRight: () => (

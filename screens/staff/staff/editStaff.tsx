@@ -19,13 +19,25 @@ import {
   View,
 } from "react-native";
 
-const EditStaffScreen: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
+type EditStaffScreenProps = {
+  onSubmit: () => void;
+  isOwner: boolean;
+  isCurrentStaff: boolean;
+};
+
+const EditStaffScreen: React.FC<EditStaffScreenProps> = ({
+  onSubmit,
+  isOwner,
+  isCurrentStaff,
+}) => {
   const { colors, typography } = useTheme();
   const {
     formState: { isSubmitting },
     watch,
     setValue,
   } = useFormContext();
+  console.log("isCurrentStaff", isCurrentStaff);
+  console.log("isOwner", isOwner);
   const pickImageAsync = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
@@ -63,6 +75,7 @@ const EditStaffScreen: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
                     overflow: "hidden",
                   }}
                   onPress={pickImageAsync}
+                  disabled={!isCurrentStaff}
                 >
                   <Image
                     source={{ uri: profileImageUrl }}
@@ -81,23 +94,42 @@ const EditStaffScreen: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
                     justifyContent: "center",
                   }}
                   onPress={pickImageAsync}
+                  disabled={!isCurrentStaff}
                 >
                   <User size={24} color={colors.textSecondary} />
                 </TouchableOpacity>
               )}
             </View>
             <View style={{ gap: 12, padding: 16 }}>
-              <TextInput name="name" label="名前" isRequired />
-              <TextInput name="furigana" label="フリガナ" isRequired />
+              <TextInput
+                name="name"
+                label="名前"
+                isRequired
+                editable={isCurrentStaff}
+              />
+              <TextInput
+                name="furigana"
+                label="フリガナ"
+                isRequired
+                editable={isCurrentStaff}
+              />
               <TextInput
                 name="email"
                 label="メールアドレス"
                 isRequired
                 editable={false}
               />
-              <TextInput name="phoneNumber" label="電話番号" />
-              <TextInput name="position" label="役職" />
-              <TextInput name="employeeId" label="社員番号" />
+              <TextInput
+                name="phoneNumber"
+                label="電話番号"
+                editable={isOwner}
+              />
+              <TextInput name="position" label="役職" editable={isOwner} />
+              <TextInput
+                name="employeeId"
+                label="社員番号"
+                editable={isOwner}
+              />
             </View>
           </ScrollView>
           <Divider />

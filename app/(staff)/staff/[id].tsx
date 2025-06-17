@@ -10,8 +10,8 @@ const StaffDetail = () => {
   const { id } = useLocalSearchParams();
   const { staff, isLoading, mutate } = useFetchStaff(id as string);
   const { staff: currentStaff } = useStore();
-  const isCurrentStaff = useMemo(
-    () => currentStaff?.id === id,
+  const isCanEditStaff = useMemo(
+    () => currentStaff?.id === id || currentStaff?.isOwner,
     [currentStaff, id]
   );
   useFocusEffect(
@@ -22,7 +22,7 @@ const StaffDetail = () => {
   if (isLoading || !staff) {
     return <Loader />;
   }
-  return <StaffDetailScreen staff={staff} isCurrentStaff={isCurrentStaff} />;
+  return <StaffDetailScreen staff={staff} isCanEditStaff={!!isCanEditStaff} />;
 };
 
 export default StaffDetail;
