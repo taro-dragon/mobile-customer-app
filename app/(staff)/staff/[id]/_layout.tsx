@@ -3,7 +3,7 @@ import { Stack, useRouter } from "expo-router";
 import { X } from "lucide-react-native";
 import { TouchableOpacity } from "react-native";
 
-const StaffLayout = () => {
+const StaffDetailLayout = () => {
   const { colors } = useTheme();
   const router = useRouter();
   return (
@@ -19,13 +19,25 @@ const StaffLayout = () => {
       }}
     >
       <Stack.Screen
-        name="[id]"
+        name="index"
         options={{
-          headerShown: false,
+          title: "スタッフ情報",
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <X size={24} color={colors.primary} />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="edit"
+        options={{
+          title: "スタッフ情報編集",
+          headerBackButtonDisplayMode: "minimal",
         }}
       />
     </Stack>
   );
 };
 
-export default StaffLayout;
+export default StaffDetailLayout;
