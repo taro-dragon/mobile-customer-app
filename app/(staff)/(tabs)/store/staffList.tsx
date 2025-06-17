@@ -1,5 +1,5 @@
 import Loader from "@/components/common/Loader";
-import useFetchStaffList from "@/hooks/staff/useFetchBulkAppraisalCar";
+import useFetchStaffList from "@/hooks/staff/useFetchStafflist";
 import { useStore } from "@/hooks/useStore";
 import StaffListScreen from "@/screens/staff/store/storeManagement/staffList";
 import { useFocusEffect } from "expo-router";
