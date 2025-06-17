@@ -40,6 +40,7 @@ const StaffListScreen: React.FC<Props> = ({ staffList, isOwner }) => {
             paddingTop: 16,
           },
         }}
+        estimatedItemSize={103}
         renderItem={({ item }) => (
           <View style={{ paddingHorizontal: 16 }}>
             <TouchableOpacity

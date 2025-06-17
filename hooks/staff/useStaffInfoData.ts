@@ -9,7 +9,9 @@ const useStaffInfoData = () => {
   useEffect(() => {
     if (staff) {
       const shopIds = staff.shops;
-      fetchStores(shopIds);
+      if (shopIds) {
+        fetchStores(shopIds);
+      }
     }
   }, [staff]);
   useEffect(() => {

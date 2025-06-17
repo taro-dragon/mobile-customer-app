@@ -17,10 +17,24 @@ export default function useAuthInitialization() {
               await firestore()
                 .collection("staffs")
                 .doc(user.uid)
-                .onSnapshot((snapshot) => {
-                  if (snapshot.exists) {
+                .onSnapshot(async (snapshot) => {
+                  if (snapshot.exists()) {
                     const staff = snapshot.data() as Staff;
                     staff.id = user.uid;
+                    try {
+                      const privateDataSnapshot = await firestore()
+                        .collection("staffs")
+                        .doc(user.uid)
+                        .collection("privateData")
+                        .doc(user.uid)
+                        .get();
+                      if (privateDataSnapshot.exists()) {
+                        const privateData = privateDataSnapshot.data();
+                        Object.assign(staff, privateData);
+                      }
+                    } catch (error) {
+                      console.error("Error fetching privateData:", error);
+                    }
                     setStaff(staff);
                   }
                 });
@@ -29,7 +43,7 @@ export default function useAuthInitialization() {
                 .collection("users")
                 .doc(user.uid)
                 .onSnapshot((snapshot) => {
-                  if (snapshot.exists) {
+                  if (snapshot.exists()) {
                     const firebaseUser = snapshot.data() as User;
                     firebaseUser.id = user.uid;
                     firebaseUser.isAnonymous = false;
@@ -44,7 +58,7 @@ export default function useAuthInitialization() {
               .collection("users")
               .doc(user.uid)
               .onSnapshot((snapshot) => {
-                if (snapshot.exists) {
+                if (snapshot.exists()) {
                   const firebaseUser = snapshot.data() as User;
                   firebaseUser.id = user.uid;
                   setUser(firebaseUser);
