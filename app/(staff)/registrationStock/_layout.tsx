@@ -25,6 +25,7 @@ const RegistrationStockLayout = () => {
       slideDoor: "",
       carNavi: "",
       tvMonitor: "",
+      managerStaffs: [],
     },
   });
   const { colors } = useTheme();

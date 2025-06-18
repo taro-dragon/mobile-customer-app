@@ -13,6 +13,10 @@ export const registrationStockSchema = z.object({
   left: z.string().min(1, "左側写真は必須です"),
   right: z.string().min(1, "右側写真は必須です"),
   interior: z.string().min(1, "内装写真は必須です"),
+  firstRegistrationYear: z.union([
+    z.string().min(1, "初年度登録年を選択してください"),
+    z.number().min(1, "初年度登録年を選択してください"),
+  ]),
   // Other photos are optional
   description: z.string().min(1, "車両説明は必須です"),
   mileage: z.string().min(1, "走行距離を入力してください"),
@@ -141,6 +145,16 @@ export const registrationStockSchema = z.object({
   backCamera: z.boolean().optional(),
   allAroundCamera: z.boolean().optional(),
   backSeatMonitor: z.boolean().optional(),
+
+  // Manager fields
+  managerStaffs: z
+    .array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+      })
+    )
+    .optional(),
 });
 
 // Simplified schema for draft saving (no required fields validation)

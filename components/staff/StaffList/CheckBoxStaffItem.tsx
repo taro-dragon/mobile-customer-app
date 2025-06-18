@@ -19,9 +19,8 @@ const CheckBoxStaffItem: React.FC<CheckBoxStaffItemProps> = ({
   const { colors, typography } = useTheme();
   const { setValue, watch } = useFormContext();
   const currentSelectedStaff = watch(formName) || [];
-  const isSelected = useMemo(
-    () => currentSelectedStaff.some((staff: Staff) => staff.id === item.id),
-    [currentSelectedStaff, item.id]
+  const isSelected = currentSelectedStaff.some(
+    (staff: Staff) => staff.id === item.id
   );
   return (
     <TouchableOpacity
@@ -34,9 +33,9 @@ const CheckBoxStaffItem: React.FC<CheckBoxStaffItemProps> = ({
           const updatedStaff = currentSelectedStaff.filter(
             (staff: Staff) => staff.id !== item.id
           );
-          setValue("selectedStaff", updatedStaff);
+          setValue(formName, updatedStaff);
         } else {
-          setValue("selectedStaff", [...currentSelectedStaff, item]);
+          setValue(formName, [...currentSelectedStaff, item]);
         }
       }}
       style={{

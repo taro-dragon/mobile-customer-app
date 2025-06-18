@@ -7,7 +7,7 @@ import { Car } from "@/types/models/Car";
 import { useFormContext } from "react-hook-form";
 import { ScrollView, View, Text, TouchableOpacity } from "react-native";
 import { Plus, X } from "lucide-react-native";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ColorSelect from "@/components/registrationCar/form/ColorSelect";
 import ModalPicker from "@/components/registrationCar/form/ModalPicker";
 import {
@@ -15,6 +15,7 @@ import {
   repairStatusOptions,
   transmissionOptions,
 } from "@/constants/registrationStockOptions";
+import createRegistrationYear from "@/libs/createRegistrationYear";
 
 const RegistrationStockBasicFormScreen = () => {
   const {
@@ -49,6 +50,17 @@ const RegistrationStockBasicFormScreen = () => {
     setAdditionalPhotos(additionalPhotos.filter((i) => i !== index));
     setValue(`otherPhoto${index}`, undefined);
   };
+
+  const registrationYearOptions = useMemo(
+    () => [
+      {
+        label: "不明",
+        value: "not_specified",
+      },
+      ...createRegistrationYear(),
+    ],
+    [year]
+  );
 
   return (
     <ScrollView
@@ -190,6 +202,12 @@ const RegistrationStockBasicFormScreen = () => {
           label="修復歴"
           options={repairStatusOptions}
           required={true}
+        />
+        <ModalPicker
+          name="firstRegistrationYear"
+          label="初年度登録年"
+          options={registrationYearOptions}
+          required
         />
       </View>
     </ScrollView>

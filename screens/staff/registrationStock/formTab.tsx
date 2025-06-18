@@ -31,14 +31,6 @@ import { removeUndefined } from "@/libs/removeUndefined";
 import RegistrationStockManagerFormScreen from "./form/manager";
 import { Staff } from "@/types/firestore_schema/staff";
 
-const renderScene = SceneMap({
-  basic: RegistrationStockBasicFormScreen,
-  price: RegistrationStockPriceFormScreen,
-  guarantee: RegistrationStockGuaranteeFormScreen,
-  options: RegistrationStockOptionsFormScreen,
-  manager: RegistrationStockManagerFormScreen,
-});
-
 const routes = [
   { key: "basic", title: "基本" },
   { key: "price", title: "販売" },
