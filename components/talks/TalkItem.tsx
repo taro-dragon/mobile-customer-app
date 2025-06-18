@@ -9,6 +9,8 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ja";
 import Divider from "../common/Divider";
 import Tag from "../common/Tag";
+import { StoreIcon } from "lucide-react-native";
+import Logo from "../common/Logo";
 
 // dayjsの設定
 dayjs.extend(relativeTime);
@@ -29,12 +31,28 @@ const TalkItem: React.FC<TalkItemProps> = ({ talk }) => {
   return (
     <>
       <TouchableOpacity style={styles.container} onPress={handlePress}>
-        <Image
-          source={{
-            uri: talk.affiliateStore?.imageUrls[0],
-          }}
-          style={styles.avatar}
-        />
+        {talk.affiliateStore?.imageUrls ? (
+          <Image
+            source={{
+              uri: talk.affiliateStore?.imageUrls[0],
+            }}
+            style={styles.avatar}
+          />
+        ) : (
+          <View
+            style={{
+              width: 50,
+              height: 50,
+              borderRadius: 8,
+              marginRight: 12,
+              backgroundColor: colors.backgroundSecondary,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Logo width={24} color={colors.textSecondary} />
+          </View>
+        )}
         <View style={styles.content}>
           <View style={styles.header}>
             <Text

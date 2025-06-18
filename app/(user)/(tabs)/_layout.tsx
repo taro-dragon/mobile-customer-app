@@ -53,6 +53,7 @@ export default function TabLayout() {
             name="search"
             options={{
               title: "検索",
+              headerShown: false,
               headerShadowVisible: false,
               tabBarIcon: ({ color }) => <Search size={24} color={color} />,
             }}

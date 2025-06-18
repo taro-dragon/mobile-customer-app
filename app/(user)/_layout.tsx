@@ -121,6 +121,14 @@ export default function Layout() {
           headerShadowVisible: false,
         }}
       />
+      <Stack.Screen
+        name="stockCar"
+        options={{
+          gestureDirection: "vertical",
+          headerShown: false,
+          gestureEnabled: false,
+        }}
+      />
     </Stack>
   );
 }
