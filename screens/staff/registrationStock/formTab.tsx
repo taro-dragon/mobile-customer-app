@@ -28,12 +28,15 @@ import { registrationStockDraftSchema } from "@/constants/schemas/registrationSt
 import { uploadStockImages } from "@/libs/uploadStockImages";
 import Toast from "react-native-toast-message";
 import { removeUndefined } from "@/libs/removeUndefined";
+import RegistrationStockManagerFormScreen from "./form/manager";
+import { Staff } from "@/types/firestore_schema/staff";
 
 const renderScene = SceneMap({
   basic: RegistrationStockBasicFormScreen,
   price: RegistrationStockPriceFormScreen,
   guarantee: RegistrationStockGuaranteeFormScreen,
   options: RegistrationStockOptionsFormScreen,
+  manager: RegistrationStockManagerFormScreen,
 });
 
 const routes = [
@@ -41,6 +44,7 @@ const routes = [
   { key: "price", title: "販売" },
   { key: "guarantee", title: "保証" },
   { key: "options", title: "オプション" },
+  { key: "manager", title: "担当者" },
 ];
 
 // 必須の画像フィールド
@@ -49,7 +53,15 @@ const REQUIRED_IMAGE_FIELDS = ["front", "back", "left", "right", "interior"];
 // 追加可能な画像フィールドのベース名
 const ADDITIONAL_PHOTO_BASE = "otherPhoto";
 
-const RegistrationStockFormScreen = () => {
+type RegistrationStockFormScreenProps = {
+  staffList?: Staff[];
+  isLoading: boolean;
+  mutate: () => void;
+};
+
+const RegistrationStockFormScreen: React.FC<
+  RegistrationStockFormScreenProps
+> = ({ staffList, isLoading, mutate }) => {
   const { colors, typography } = useTheme();
   const [isModalVisible, setModalVisible] = useState(false);
   const { currentStore, staff } = useStore();
@@ -236,7 +248,19 @@ const RegistrationStockFormScreen = () => {
         <View style={{ flex: 1 }}>
           <TabView
             navigationState={{ index, routes }}
-            renderScene={renderScene}
+            renderScene={SceneMap({
+              basic: RegistrationStockBasicFormScreen,
+              price: RegistrationStockPriceFormScreen,
+              guarantee: RegistrationStockGuaranteeFormScreen,
+              options: RegistrationStockOptionsFormScreen,
+              manager: () => (
+                <RegistrationStockManagerFormScreen
+                  staffList={staffList}
+                  isLoading={isLoading}
+                  mutate={mutate}
+                />
+              ),
+            })}
             onIndexChange={setIndex}
             initialLayout={{ width: layout.width }}
             swipeEnabled={true}
@@ -250,6 +274,11 @@ const RegistrationStockFormScreen = () => {
                   borderBottomColor: colors.borderPrimary,
                   borderBottomWidth: 1,
                 }}
+                tabStyle={{
+                  width: "auto",
+                  paddingHorizontal: 20,
+                }}
+                scrollEnabled={true}
                 activeColor={colors.primary}
                 inactiveColor={colors.textSecondary}
               />

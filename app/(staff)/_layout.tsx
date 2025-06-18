@@ -1,5 +1,4 @@
 import { useTheme } from "@/contexts/ThemeContext";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Stack } from "expo-router/stack";
 
 export default function Layout() {

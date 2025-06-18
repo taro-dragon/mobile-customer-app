@@ -16,6 +16,7 @@ const StockCar = () => {
   if (isLoading || !stockCar) {
     return <ShopDetailSkeleton />;
   }
+  const onInquire = async () => {};
   return <StockCarScreen stockCar={stockCar} isCurrentStore={isCurrentStore} />;
 };
 
