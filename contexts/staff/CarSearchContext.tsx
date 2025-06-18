@@ -108,12 +108,12 @@ export const StockCarsProvider: React.FC<{
       const registrationFilter = [];
       if (formValues.minRegistrationYear) {
         registrationFilter.push(
-          `registrationYear >= ${formValues.minRegistrationYear}`
+          `firstRegistrationYear >= ${formValues.minRegistrationYear}`
         );
       }
       if (formValues.maxRegistrationYear) {
         registrationFilter.push(
-          `registrationYear <= ${formValues.maxRegistrationYear}`
+          `firstRegistrationYear <= ${formValues.maxRegistrationYear}`
         );
       }
       if (registrationFilter.length > 0) {

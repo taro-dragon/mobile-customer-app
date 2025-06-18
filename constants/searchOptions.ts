@@ -74,6 +74,10 @@ export const sortOptions = [
   { label: "本体価格が高い順", target: "bodyPrice", value: "desc" },
   { label: "走行距離が少ない順", target: "mileage", value: "asc" },
   { label: "走行距離が多い順", target: "mileage", value: "desc" },
-  { label: "初年度登録が新しい順", target: "registrationYear", value: "asc" },
-  { label: "初年度登録が古い順", target: "registrationYear", value: "desc" },
+  {
+    label: "初年度登録が新しい順",
+    target: "firstRegistration",
+    value: "asc",
+  },
+  { label: "初年度登録が古い順", target: "firstRegistration", value: "desc" },
 ];
