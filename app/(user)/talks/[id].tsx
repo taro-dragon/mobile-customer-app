@@ -118,6 +118,17 @@ const TalkDetail = () => {
 
   return (
     <View style={{ flex: 1 }}>
+      <Stack.Screen
+        options={{
+          title: talk.affiliateStore?.shopName || "チャット",
+          headerTitleStyle: styles.headerTitle,
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <ChevronLeft size={24} color={colors.primary} />
+            </TouchableOpacity>
+          ),
+        }}
+      />
       <View
         style={{
           flexDirection: "row",
@@ -172,17 +183,6 @@ const TalkDetail = () => {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
       >
-        <Stack.Screen
-          options={{
-            title: talk.affiliateStore?.shopName || "チャット",
-            headerTitleStyle: styles.headerTitle,
-            headerLeft: () => (
-              <TouchableOpacity onPress={() => router.back()}>
-                <ChevronLeft size={24} color={colors.primary} />
-              </TouchableOpacity>
-            ),
-          }}
-        />
         <FlatList
           ref={flatListRef}
           data={messages}

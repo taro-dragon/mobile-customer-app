@@ -5,7 +5,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Image } from "expo-image";
 import dayjs from "dayjs";
 import { TalkWithAffiliate } from "@/types/extendType/TalkWithAffiliate";
-import { Check } from "lucide-react-native";
+import { Check, User } from "lucide-react-native";
 import { useRouter } from "expo-router";
 
 type MessageItemProps = {
@@ -37,12 +37,23 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, talk }) => {
         <TouchableOpacity
           onPress={() => router.push(`/shops/${talk.affiliateStoreId}`)}
         >
-          <Image
-            source={{
-              uri: talk.affiliateStore?.imageUrls[0],
-            }}
-            style={styles.avatar}
-          />
+          {talk.affiliateStore?.imageUrls?.[0] ? (
+            <Image
+              source={{
+                uri: talk.affiliateStore?.imageUrls[0],
+              }}
+              style={styles.avatar}
+            />
+          ) : (
+            <View
+              style={{
+                ...styles.avatar,
+                backgroundColor: colors.backgroundSecondary,
+              }}
+            >
+              <User size={16} color={colors.textPrimary} />
+            </View>
+          )}
         </TouchableOpacity>
       )}
       <View
@@ -97,6 +108,8 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 15,
     marginRight: 8,
+    justifyContent: "center",
+    alignItems: "center",
   },
   messageBubble: {
     maxWidth: "85%",
