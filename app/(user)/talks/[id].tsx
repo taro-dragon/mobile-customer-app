@@ -22,9 +22,9 @@ import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import Divider from "@/components/common/Divider";
 
 const TalkDetail = () => {
-  const { talkId } = useLocalSearchParams<{ talkId: string }>();
+  const { id } = useLocalSearchParams<{ id: string }>();
   const { talks, user } = useStore();
-  const talk = talks.find((talk) => talk.id === talkId);
+  const talk = talks.find((talk) => talk.id === id);
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [text, setText] = useState("");
@@ -34,11 +34,11 @@ const TalkDetail = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!talkId) return;
+    if (!id) return;
     const changeReadMessages = async () => {
       const messagesRef = await firestore()
         .collection("talks")
-        .doc(talkId)
+        .doc(id)
         .collection("messages")
         .where("read", "==", false)
         .where("senderType", "==", "staff")
@@ -50,7 +50,7 @@ const TalkDetail = () => {
     changeReadMessages();
     const unsubscribe = firestore()
       .collection("talks")
-      .doc(talkId)
+      .doc(id)
       .collection("messages")
       .orderBy("createdAt", "desc")
       .onSnapshot((snapshot) => {
@@ -63,15 +63,15 @@ const TalkDetail = () => {
       });
 
     return () => unsubscribe();
-  }, [talkId]);
+  }, [id]);
 
   const sendMessage = async () => {
-    if (!text.trim() || !user || !talkId) return;
+    if (!text.trim() || !user || !id) return;
 
     setSending(true);
     try {
       const messageData: Omit<Message, "id"> = {
-        talkId,
+        talkId: id,
         senderId: user.id,
         senderType: "user",
         text: text.trim(),
@@ -82,10 +82,10 @@ const TalkDetail = () => {
       await firestore().runTransaction(async (transaction) => {
         const messageRef = await firestore()
           .collection("talks")
-          .doc(talkId)
+          .doc(id)
           .collection("messages")
           .doc();
-        const talkRef = await firestore().collection("talks").doc(talkId);
+        const talkRef = await firestore().collection("talks").doc(id);
         await transaction.set(messageRef, messageData);
         await transaction.update(talkRef, {
           lastMessage: text.trim(),

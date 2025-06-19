@@ -44,7 +44,7 @@ export default function Layout() {
     const determineRoute = () => {
       if (staff) {
         if (staff.isFirstLogin) return "/(staff)/firstPasswordSetting";
-        if (staff.shops.length !== 1) return "/(staff)/shopSelect";
+        if (staff.shops?.length !== 1) return "/(staff)/shopSelect";
         return "/(staff)/(tabs)";
       }
       if (user) return "/(user)/(tabs)";
