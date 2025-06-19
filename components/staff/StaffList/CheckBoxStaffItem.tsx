@@ -3,7 +3,7 @@ import { Staff } from "@/types/firestore_schema/staff";
 import Checkbox from "expo-checkbox";
 import { Image } from "expo-image";
 import { User } from "lucide-react-native";
-import React, { useMemo } from "react";
+import React from "react";
 import { useFormContext } from "react-hook-form";
 import { Text, TouchableOpacity, View } from "react-native";
 
@@ -20,22 +20,22 @@ const CheckBoxStaffItem: React.FC<CheckBoxStaffItemProps> = ({
   const { setValue, watch } = useFormContext();
   const currentSelectedStaff = watch(formName) || [];
   const isSelected = currentSelectedStaff.some(
-    (staff: Staff) => staff.id === item.id
+    (staffId: string) => staffId === item.id
   );
   return (
     <TouchableOpacity
       onPress={() => {
         const isSelected = currentSelectedStaff.some(
-          (staff: Staff) => staff.id === item.id
+          (staffId: string) => staffId === item.id
         );
 
         if (isSelected) {
-          const updatedStaff = currentSelectedStaff.filter(
-            (staff: Staff) => staff.id !== item.id
+          const updatedStaffIds = currentSelectedStaff.filter(
+            (staffId: string) => staffId !== item.id
           );
-          setValue(formName, updatedStaff);
+          setValue(formName, updatedStaffIds);
         } else {
-          setValue(formName, [...currentSelectedStaff, item]);
+          setValue(formName, [...currentSelectedStaff, item.id]);
         }
       }}
       style={{

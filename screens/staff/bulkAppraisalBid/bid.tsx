@@ -73,6 +73,7 @@ const BulkAppraisalBidBidScreen: React.FC<BulkAppraisalBidBidScreenProps> = ({
           bulkAppraisalRequestId: bulkAppraisalRequestsId as string,
           affiliateStoreId: currentStore?.id,
           staffId: staff?.id,
+          managerStaffIds: data.managerStaffs,
           isSelected: false,
           isArchived: false,
         });
@@ -106,7 +107,6 @@ const BulkAppraisalBidBidScreen: React.FC<BulkAppraisalBidBidScreenProps> = ({
   };
 
   const managerStaffs = watch("managerStaffs");
-  console.log(managerStaffs);
 
   return (
     <>
@@ -319,7 +319,28 @@ const BulkAppraisalBidBidScreen: React.FC<BulkAppraisalBidBidScreenProps> = ({
                         ? colors.error
                         : colors.borderPrimary,
                     }}
-                  ></TouchableOpacity>
+                  >
+                    <Text
+                      style={{
+                        color:
+                          managerStaffs && managerStaffs.length > 0
+                            ? colors.textPrimary
+                            : colors.textSecondary,
+                        ...typography.body2,
+                      }}
+                    >
+                      {managerStaffs && managerStaffs.length > 0
+                        ? managerStaffs
+                            .map((staff) => {
+                              const staffData = staffList.find(
+                                (s) => s.id === staff
+                              );
+                              return staffData?.name;
+                            })
+                            .join(", ")
+                        : "担当者が選択されていません"}
+                    </Text>
+                  </TouchableOpacity>
                 </View>
                 {errors.managerStaffs && (
                   <Text style={{ color: colors.error, ...typography.body2 }}>
