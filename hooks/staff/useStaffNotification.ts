@@ -6,13 +6,17 @@ import { Platform } from "react-native";
 import firestore from "@react-native-firebase/firestore";
 import auth from "@react-native-firebase/auth";
 import { useRouter } from "expo-router";
+import { useStore } from "../useStore";
 
 const useStaffNotification = () => {
   const router = useRouter();
+  const { staff } = useStore();
 
   useEffect(() => {
-    checkAndRequestPermissions();
-  }, []);
+    if (staff) {
+      checkAndRequestPermissions();
+    }
+  }, [staff]);
 
   const checkAndRequestPermissions = async () => {
     try {

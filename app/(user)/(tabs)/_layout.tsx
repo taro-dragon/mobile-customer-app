@@ -7,7 +7,6 @@ import { Tabs } from "expo-router";
 import {
   House,
   MessageSquare,
-  Search,
   Settings,
   ShoppingCart,
   Tag,

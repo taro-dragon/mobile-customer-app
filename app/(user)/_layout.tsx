@@ -6,7 +6,6 @@ import { TouchableOpacity } from "react-native";
 
 export default function Layout() {
   const { colors } = useTheme();
-  const router = useRouter();
   return (
     <Stack
       screenOptions={{
