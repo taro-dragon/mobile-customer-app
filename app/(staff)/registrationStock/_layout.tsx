@@ -10,6 +10,7 @@ import {
   RegistrationStockFormData,
   registrationStockSchema,
 } from "@/constants/schemas/registrationStockSchema";
+import StaffListProvider from "@/contexts/staff/StaffList";
 
 const RegistrationStockLayout = () => {
   const router = useRouter();
@@ -36,105 +37,107 @@ const RegistrationStockLayout = () => {
   }, [router]);
   return (
     <FormProvider {...form}>
-      <Stack
-        screenOptions={{
-          contentStyle: {
-            backgroundColor: colors.backgroundPrimary,
-          },
-          headerTintColor: colors.primary,
-          headerStyle: {
-            backgroundColor: colors.backgroundPrimary,
-          },
-        }}
-      >
-        <Stack.Screen
-          name="index"
-          options={{
-            title: "在庫登録",
-            headerLeft: () => (
-              <TouchableOpacity onPress={handleGoBack}>
-                <X size={24} color={colors.primary} />
-              </TouchableOpacity>
-            ),
-          }}
-        />
-        <Stack.Screen
-          name="selectDraft"
-          options={{
-            title: "下書きから登録",
-            headerBackButtonDisplayMode: "minimal",
-          }}
-        />
-        <Stack.Screen
-          name="selectMaker"
-          options={{
-            title: "メーカー選択",
-            headerBackButtonDisplayMode: "minimal",
-          }}
-        />
-        <Stack.Screen
-          name="selectCar"
-          options={{
-            title: "車種選択",
-            headerBackButtonDisplayMode: "minimal",
-          }}
-        />
-        <Stack.Screen
-          name="selectYear"
-          options={{
-            title: "モデル選択",
-            headerBackButtonDisplayMode: "minimal",
-          }}
-        />
-        <Stack.Screen
-          name="selectGrade"
-          options={{
-            title: "グレード選択",
-            headerBackButtonDisplayMode: "minimal",
-          }}
-        />
-        <Stack.Screen
-          name="form"
-          options={{
-            title: "車両情報",
-            headerBackButtonDisplayMode: "minimal",
-          }}
-        />
-        <Stack.Screen
-          name="searchTypeNumber"
-          options={{
-            title: "型番検索",
-            headerBackButtonDisplayMode: "minimal",
-          }}
-        />
-        <Stack.Screen
-          name="selectTargetType"
-          options={{
-            title: "登録方法",
-            headerBackButtonDisplayMode: "minimal",
-          }}
-        />
-        <Stack.Screen
-          name="camera"
-          options={{
-            animation: "slide_from_bottom",
-            gestureEnabled: false,
-            headerStyle: {
-              backgroundColor: colors.gray600,
+      <StaffListProvider>
+        <Stack
+          screenOptions={{
+            contentStyle: {
+              backgroundColor: colors.backgroundPrimary,
             },
-            headerTintColor: colors.white,
-            headerLeft: () => (
-              <TouchableOpacity
-                onPress={() => {
-                  router.back();
-                }}
-              >
-                <X size={24} color={colors.white} />
-              </TouchableOpacity>
-            ),
+            headerTintColor: colors.primary,
+            headerStyle: {
+              backgroundColor: colors.backgroundPrimary,
+            },
           }}
-        />
-      </Stack>
+        >
+          <Stack.Screen
+            name="index"
+            options={{
+              title: "在庫登録",
+              headerLeft: () => (
+                <TouchableOpacity onPress={handleGoBack}>
+                  <X size={24} color={colors.primary} />
+                </TouchableOpacity>
+              ),
+            }}
+          />
+          <Stack.Screen
+            name="selectDraft"
+            options={{
+              title: "下書きから登録",
+              headerBackButtonDisplayMode: "minimal",
+            }}
+          />
+          <Stack.Screen
+            name="selectMaker"
+            options={{
+              title: "メーカー選択",
+              headerBackButtonDisplayMode: "minimal",
+            }}
+          />
+          <Stack.Screen
+            name="selectCar"
+            options={{
+              title: "車種選択",
+              headerBackButtonDisplayMode: "minimal",
+            }}
+          />
+          <Stack.Screen
+            name="selectYear"
+            options={{
+              title: "モデル選択",
+              headerBackButtonDisplayMode: "minimal",
+            }}
+          />
+          <Stack.Screen
+            name="selectGrade"
+            options={{
+              title: "グレード選択",
+              headerBackButtonDisplayMode: "minimal",
+            }}
+          />
+          <Stack.Screen
+            name="form"
+            options={{
+              title: "車両情報",
+              headerBackButtonDisplayMode: "minimal",
+            }}
+          />
+          <Stack.Screen
+            name="searchTypeNumber"
+            options={{
+              title: "型番検索",
+              headerBackButtonDisplayMode: "minimal",
+            }}
+          />
+          <Stack.Screen
+            name="selectTargetType"
+            options={{
+              title: "登録方法",
+              headerBackButtonDisplayMode: "minimal",
+            }}
+          />
+          <Stack.Screen
+            name="camera"
+            options={{
+              animation: "slide_from_bottom",
+              gestureEnabled: false,
+              headerStyle: {
+                backgroundColor: colors.gray600,
+              },
+              headerTintColor: colors.white,
+              headerLeft: () => (
+                <TouchableOpacity
+                  onPress={() => {
+                    router.back();
+                  }}
+                >
+                  <X size={24} color={colors.white} />
+                </TouchableOpacity>
+              ),
+            }}
+          />
+        </Stack>
+      </StaffListProvider>
     </FormProvider>
   );
 };

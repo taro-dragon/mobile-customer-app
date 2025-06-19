@@ -1,17 +1,10 @@
 import Loader from "@/components/common/Loader";
 import CheckBoxStaffItem from "@/components/staff/StaffList/CheckBoxStaffItem";
-import { Staff } from "@/types/firestore_schema/staff";
+import { useStaffListContext } from "@/contexts/staff/StaffList";
 import { FlatList, View } from "react-native";
 
-type RegistrationStockManagerFormScreenProps = {
-  staffList?: Staff[];
-  isLoading: boolean;
-  mutate: () => void;
-};
-
-const RegistrationStockManagerFormScreen: React.FC<
-  RegistrationStockManagerFormScreenProps
-> = ({ staffList, isLoading }) => {
+const RegistrationStockManagerFormScreen: React.FC = () => {
+  const { staffList, isLoading } = useStaffListContext();
   if (isLoading || !staffList) {
     return <Loader />;
   }

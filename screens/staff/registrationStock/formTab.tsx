@@ -29,7 +29,6 @@ import { uploadStockImages } from "@/libs/uploadStockImages";
 import Toast from "react-native-toast-message";
 import { removeUndefined } from "@/libs/removeUndefined";
 import RegistrationStockManagerFormScreen from "./form/manager";
-import { Staff } from "@/types/firestore_schema/staff";
 
 const routes = [
   { key: "basic", title: "基本" },
@@ -39,21 +38,21 @@ const routes = [
   { key: "manager", title: "担当者" },
 ];
 
+const renderScene = SceneMap({
+  basic: RegistrationStockBasicFormScreen,
+  price: RegistrationStockPriceFormScreen,
+  guarantee: RegistrationStockGuaranteeFormScreen,
+  options: RegistrationStockOptionsFormScreen,
+  manager: RegistrationStockManagerFormScreen,
+});
+
 // 必須の画像フィールド
 const REQUIRED_IMAGE_FIELDS = ["front", "back", "left", "right", "interior"];
 
 // 追加可能な画像フィールドのベース名
 const ADDITIONAL_PHOTO_BASE = "otherPhoto";
 
-type RegistrationStockFormScreenProps = {
-  staffList?: Staff[];
-  isLoading: boolean;
-  mutate: () => void;
-};
-
-const RegistrationStockFormScreen: React.FC<
-  RegistrationStockFormScreenProps
-> = ({ staffList, isLoading, mutate }) => {
+const RegistrationStockFormScreen: React.FC = () => {
   const { colors, typography } = useTheme();
   const [isModalVisible, setModalVisible] = useState(false);
   const { currentStore, staff } = useStore();
@@ -240,19 +239,7 @@ const RegistrationStockFormScreen: React.FC<
         <View style={{ flex: 1 }}>
           <TabView
             navigationState={{ index, routes }}
-            renderScene={SceneMap({
-              basic: RegistrationStockBasicFormScreen,
-              price: RegistrationStockPriceFormScreen,
-              guarantee: RegistrationStockGuaranteeFormScreen,
-              options: RegistrationStockOptionsFormScreen,
-              manager: () => (
-                <RegistrationStockManagerFormScreen
-                  staffList={staffList}
-                  isLoading={isLoading}
-                  mutate={mutate}
-                />
-              ),
-            })}
+            renderScene={renderScene}
             onIndexChange={setIndex}
             initialLayout={{ width: layout.width }}
             swipeEnabled={true}
