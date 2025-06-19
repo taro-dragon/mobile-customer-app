@@ -5,7 +5,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { useRegistrationGuard } from "@/hooks/useRegistrationGuard";
 import { useStore } from "@/hooks/useStore";
 import { useRouter } from "expo-router";
-import { Car, CarIcon, List, User } from "lucide-react-native";
+import { CarIcon, ShoppingCart, Tag } from "lucide-react-native";
 import {
   ScrollView,
   StyleSheet,
@@ -57,38 +57,27 @@ const CustomerIndex = () => {
       contentContainerStyle={{ padding: 16, gap: 24 }}
     >
       <View style={{ gap: 8 }}>
-        <TouchableOpacity
-          onPress={guard(() => {
-            router.push("/registrationCar");
-          })}
-          style={styles.carRegistrationButton}
-        >
-          <Car size={24} color={colors.primary} />
-          <Text style={{ color: colors.textPrimary, ...typography.heading2 }}>
-            車両登録
-          </Text>
-        </TouchableOpacity>
         <View style={{ flexDirection: "row", gap: 8 }}>
           <TouchableOpacity
             style={styles.secondaryButton}
             onPress={guard(() => {
-              router.push("/(user)/carList");
+              router.push("/(user)/(tabs)/buy");
             })}
           >
-            <List size={24} color={colors.primary} />
+            <Tag size={24} color={colors.primary} />
             <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
-              車両一覧
+              クルマを売る
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.secondaryButton}
             onPress={guard(() => {
-              router.push("/(user)/profile");
+              router.push("/(user)/(tabs)/search");
             })}
           >
-            <User size={24} color={colors.primary} />
+            <ShoppingCart size={24} color={colors.primary} />
             <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
-              ユーザー情報更新
+              クルマを買う
             </Text>
           </TouchableOpacity>
         </View>

@@ -57,7 +57,7 @@ const SearchLayout = () => {
             <Stack.Screen
               name="index"
               options={{
-                title: "検索",
+                title: "買う",
                 headerRight: () => (
                   <TouchableOpacity
                     onPress={() => router.push("/search/filter")}

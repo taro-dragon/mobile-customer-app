@@ -24,17 +24,11 @@ export default function Layout() {
         options={{ headerShown: false, title: "ホーム" }}
       />
       <Stack.Screen
-        name="cars/[id]"
+        name="cars"
         options={{
           animation: "slide_from_bottom",
           gestureDirection: "vertical",
           headerShown: false,
-          title: "車両詳細",
-          headerRight: () => (
-            <TouchableOpacity onPress={() => router.back()}>
-              <X size={24} color={colors.primary} />
-            </TouchableOpacity>
-          ),
         }}
       />
       <Stack.Screen
@@ -113,14 +107,7 @@ export default function Layout() {
           headerBackButtonDisplayMode: "minimal",
         }}
       />
-      <Stack.Screen
-        name="carList"
-        options={{
-          title: "車両一覧",
-          headerBackButtonDisplayMode: "minimal",
-          headerShadowVisible: false,
-        }}
-      />
+
       <Stack.Screen
         name="stockCar"
         options={{

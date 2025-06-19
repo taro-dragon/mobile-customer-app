@@ -4,7 +4,14 @@ import useUserNotification from "@/hooks/useUserNotification";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 import { Tabs } from "expo-router";
-import { House, MessageSquare, Search, Settings } from "lucide-react-native";
+import {
+  House,
+  MessageSquare,
+  Search,
+  Settings,
+  ShoppingCart,
+  Tag,
+} from "lucide-react-native";
 import { FormProvider, useForm } from "react-hook-form";
 
 export default function TabLayout() {
@@ -41,21 +48,30 @@ export default function TabLayout() {
             }}
           />
           <Tabs.Screen
+            name="buy"
+            options={{
+              title: "売る",
+              tabBarIcon: ({ color }) => <Tag size={24} color={color} />,
+            }}
+          />
+          <Tabs.Screen
+            name="search"
+            options={{
+              title: "買う",
+              headerShown: false,
+              headerShadowVisible: false,
+              tabBarIcon: ({ color }) => (
+                <ShoppingCart size={24} color={color} />
+              ),
+            }}
+          />
+          <Tabs.Screen
             name="talk"
             options={{
               title: "トーク",
               tabBarIcon: ({ color }) => (
                 <MessageSquare size={24} color={color} />
               ),
-            }}
-          />
-          <Tabs.Screen
-            name="search"
-            options={{
-              title: "検索",
-              headerShown: false,
-              headerShadowVisible: false,
-              tabBarIcon: ({ color }) => <Search size={24} color={color} />,
             }}
           />
           <Tabs.Screen

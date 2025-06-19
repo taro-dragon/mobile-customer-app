@@ -1,11 +1,10 @@
-import { useState } from "react";
-import { useWindowDimensions, View } from "react-native";
-import { SceneMap, TabBar, TabView } from "react-native-tab-view";
-
 import BeforeBulkAppraisal from "@/components/CarList/BeforeBulkAppraisal";
 import CompletedBulkAppraisal from "@/components/CarList/CompletedBulkAppraisal";
 import ProgressBulkAppraisal from "@/components/CarList/ProgressBulkAppraisal";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useState } from "react";
+import { Text, useWindowDimensions, View } from "react-native";
+import { SceneMap, TabBar, TabView } from "react-native-tab-view";
 
 const renderScene = SceneMap({
   beforeBulkAppraisal: BeforeBulkAppraisal,
@@ -19,8 +18,8 @@ const routes = [
   { key: "completedBulkAppraisal", title: "一括査定依頼完了" },
 ];
 
-const CarList = () => {
-  const { colors, typography } = useTheme();
+const BuyIndexScreen = () => {
+  const { typography, colors } = useTheme();
   const [index, setIndex] = useState(0);
   const layout = useWindowDimensions();
   return (
@@ -50,4 +49,4 @@ const CarList = () => {
   );
 };
 
-export default CarList;
+export default BuyIndexScreen;
