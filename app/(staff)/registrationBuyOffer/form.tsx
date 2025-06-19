@@ -10,9 +10,12 @@ import RegistrationBuyOfferFormScreen from "@/screens/staff/registrationBuyOffer
 import { useStore } from "@/hooks/useStore";
 import Toast from "react-native-toast-message";
 import { useRouter } from "expo-router";
+import { useStaffListContext } from "@/contexts/staff/StaffList";
+import Loader from "@/components/common/Loader";
 
 const RegistrationBuyOfferForm = () => {
   const { getValues } = useFormContext();
+  const { staffList, isLoading } = useStaffListContext();
   const { currentStore, staff } = useStore();
   const router = useRouter();
   const form = useForm<RegistrationBuyOfferFormData>({
@@ -92,10 +95,14 @@ const RegistrationBuyOfferForm = () => {
       },
     ]);
   };
+  if (isLoading || !staffList) {
+    return <Loader />;
+  }
   return (
     <RegistrationBuyOfferFormScreen
       confirmButton={handleSubmit(confirmButton)}
       form={form}
+      staffList={staffList}
     />
   );
 };

@@ -10,6 +10,11 @@ export const registrationBuyOfferSchema = z
     expiresAt: z
       .date()
       .min(new Date(), "有効期限は今日以降の日付でなければなりません"),
+    managerStaffs: z.array(z.string()).optional(),
+    grade: z.string().optional(),
+    model: z.string().optional(),
+    year: z.string().optional(),
+    maker: z.string().optional(),
   })
   .refine((data) => data.maxPrice > data.minPrice, {
     message: "最高買取金額は最低買取金額より大きい必要があります",

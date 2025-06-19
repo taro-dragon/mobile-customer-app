@@ -1,5 +1,12 @@
 import { useController, useFormContext, UseFormReturn } from "react-hook-form";
-import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 import Button from "@/components/common/Button";
 import DisplaySelectItem from "@/components/registrationCar/form/DisplaySelectItem";
@@ -12,17 +19,21 @@ import UnControlTextInput from "@/components/formComponents/UnControl/TextInput"
 import UnControlDatePicker from "@/components/formComponents/UnControl/DatePicker";
 import UnControlModalPicker from "@/components/formComponents/UnControl/ModalPicker";
 import Alert from "@/components/common/Alert";
+import { useRouter } from "expo-router";
+import { Staff } from "@/types/firestore_schema/staff";
 
 interface RegistrationBuyOfferFormScreenProps {
+  staffList: Staff[];
   confirmButton: () => void;
   form: UseFormReturn<RegistrationBuyOfferFormData>;
 }
 
 const RegistrationBuyOfferFormScreen: React.FC<
   RegistrationBuyOfferFormScreenProps
-> = ({ confirmButton, form }) => {
-  const { getValues } = useFormContext();
-  const { colors } = useTheme();
+> = ({ confirmButton, form, staffList }) => {
+  const router = useRouter();
+  const { getValues, watch } = useFormContext<RegistrationBuyOfferFormData>();
+  const { colors, typography } = useTheme();
   const { grade, model, year, maker } = getValues();
   const {
     control,
@@ -50,6 +61,7 @@ const RegistrationBuyOfferFormScreen: React.FC<
     maker,
   };
   const carData = transformCarData(formCar as Car);
+  const managerStaffs = watch("managerStaffs");
   return (
     <KeyboardAvoidingView
       style={{
@@ -147,6 +159,51 @@ const RegistrationBuyOfferFormScreen: React.FC<
             errors={errors}
             multiline
           />
+          <View style={{ gap: 8 }}>
+            <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
+              担当者
+            </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "flex-end",
+                gap: 8,
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => router.push("/registrationBuyOffer/selectStaff")}
+                style={{
+                  backgroundColor: colors.backgroundSecondary,
+                  borderRadius: 8,
+                  padding: 16,
+                  flex: 1,
+                  borderWidth: 1,
+                  borderColor: colors.borderPrimary,
+                }}
+              >
+                <Text
+                  style={{
+                    color:
+                      managerStaffs && managerStaffs.length > 0
+                        ? colors.textPrimary
+                        : colors.textSecondary,
+                    ...typography.body2,
+                  }}
+                >
+                  {managerStaffs && managerStaffs.length > 0
+                    ? managerStaffs
+                        .map((staff) => {
+                          const staffData = staffList.find(
+                            (s) => s.id === staff
+                          );
+                          return staffData?.name;
+                        })
+                        .join(", ")
+                    : "担当者が選択されていません"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
           <Button
             label="確認する"
             onPress={confirmButton}
