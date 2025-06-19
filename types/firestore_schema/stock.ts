@@ -1,4 +1,5 @@
 import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
+import { Staff } from "./staff";
 
 export type Stock = {
   id: string;
@@ -25,6 +26,7 @@ export type Stock = {
   inspectionLimit: FirebaseFirestoreTypes.Timestamp;
   repairStatus: string;
   color?: string;
+  firstRegistrationYear?: string | number;
 
   // Price fields
   bodyPrice: string;
@@ -149,6 +151,9 @@ export type Stock = {
   updatedBy: string;
   storeId: string;
   status: "draft" | "published" | "archived";
+
+  // 店舗情報
+  managerStaffs: Staff[];
 };
 
 // 新規作成時のデータ型（Firestoreの自動フィールドを除く）

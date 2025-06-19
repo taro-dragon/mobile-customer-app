@@ -17,6 +17,7 @@ import {
   transmissionOptions,
 } from "@/constants/registrationStockOptions";
 import Alert from "../common/Alert";
+import createRegistrationYear from "@/libs/createRegistrationYear";
 
 type InfoTabProps = {
   stockCar: StockCar;
@@ -72,6 +73,20 @@ const InfoTab: React.FC<InfoTabProps> = ({ stockCar }) => {
       )?.label || ""
     );
   }, [stockCar.transmission]);
+  const firstRegistrationYearValue = useMemo(() => {
+    const firstRegistrationYearOptions = [
+      {
+        label: "不明",
+        value: "not_specified",
+      },
+      ...createRegistrationYear(),
+    ];
+    return (
+      firstRegistrationYearOptions.find(
+        (option) => option.value === stockCar.firstRegistrationYear
+      )?.label || ""
+    );
+  }, [stockCar.firstRegistrationYear]);
   return (
     <Tabs.ScrollView>
       <View style={{ padding: 16, gap: 16 }}>
@@ -93,6 +108,12 @@ const InfoTab: React.FC<InfoTabProps> = ({ stockCar }) => {
               borderRadius: 12,
             }}
           >
+            {stockCar.firstRegistrationYear && (
+              <CarInfoItem
+                label="初年度登録年"
+                value={firstRegistrationYearValue}
+              />
+            )}
             <CarInfoItem
               label="走行距離"
               value={`${stockCar.mileage.toLocaleString()}km`}
