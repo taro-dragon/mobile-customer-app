@@ -6,7 +6,7 @@ import {
   View,
 } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Car, Gavel, Handshake } from "lucide-react-native";
+import { Car, FolderOpen, Gavel, Handshake } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import Button from "@/components/common/Button";
 import { useLogout } from "@/hooks/staff/useLogout";
@@ -21,7 +21,6 @@ const StaffIndexScreen = () => {
       backgroundColor: colors.backgroundSecondary,
       height: 88,
       borderRadius: 8,
-      padding: 16,
       justifyContent: "center",
       alignItems: "center",
       gap: 8,
@@ -53,17 +52,28 @@ const StaffIndexScreen = () => {
           }}
         >
           <TouchableOpacity
-            onPress={() => {
-              router.push("/registrationStock");
-            }}
+            onPress={() => {}}
             style={styles.carRegistrationButton}
           >
-            <Car size={24} color={colors.primary} />
+            <FolderOpen size={24} color={colors.primary} />
             <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
-              在庫車両登録
+              案件管理
             </Text>
           </TouchableOpacity>
           <View style={{ flexDirection: "row", gap: 8 }}>
+            <TouchableOpacity
+              onPress={() => {
+                router.push("/registrationStock");
+              }}
+              style={styles.button}
+            >
+              <Car size={24} color={colors.primary} />
+              <Text
+                style={{ color: colors.textPrimary, ...typography.heading3 }}
+              >
+                在庫車両登録
+              </Text>
+            </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
                 router.push("/bulkAppraisalBid");
@@ -72,7 +82,7 @@ const StaffIndexScreen = () => {
             >
               <Gavel size={24} color={colors.primary} />
               <Text
-                style={{ color: colors.textPrimary, ...typography.heading3 }}
+                style={{ color: colors.textPrimary, ...typography.heading4 }}
               >
                 一括査定入札
               </Text>
@@ -85,7 +95,7 @@ const StaffIndexScreen = () => {
             >
               <Handshake size={24} color={colors.primary} />
               <Text
-                style={{ color: colors.textPrimary, ...typography.heading3 }}
+                style={{ color: colors.textPrimary, ...typography.heading4 }}
               >
                 買取オファー登録
               </Text>
