@@ -7,7 +7,6 @@ import { FlatList, Text, View } from "react-native";
 const Talk = () => {
   const { talks } = useStore();
   const { colors, typography } = useTheme();
-  console.log(talks);
   return (
     <View style={{ flex: 1 }}>
       <FlatList

@@ -35,7 +35,6 @@ const BulkAppraisalBidProgressDetailScreen: React.FC<
   const currentStoreBid = bids?.find(
     (bid) => bid.affiliateStoreId === currentStoreId
   );
-  console.log(currentStoreBid);
   const { colors, typography } = useTheme();
   const carData = transformCarData(car as Car);
   const carImages = Object.values(car?.images ?? {});

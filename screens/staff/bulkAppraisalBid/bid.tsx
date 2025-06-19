@@ -12,7 +12,7 @@ import {
 import firestore from "@react-native-firebase/firestore";
 import { X } from "lucide-react-native";
 import Toast from "react-native-toast-message";
-import { useController, useForm } from "react-hook-form";
+import { useController, useFormContext } from "react-hook-form";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 
 import { useTheme } from "@/contexts/ThemeContext";
@@ -21,13 +21,16 @@ import Button from "@/components/common/Button";
 import DisplaySelectItem from "@/components/registrationCar/form/DisplaySelectItem";
 import Alert from "@/components/common/Alert";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
-import {
-  RegistrationBulkAppraisalBidFormData,
-  registrationBulkAppraisalBidSchema,
-} from "@/constants/schemas/registrationBulkAppraisalBid";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { RegistrationBulkAppraisalBidFormData } from "@/constants/schemas/registrationBulkAppraisalBid";
+import { Staff } from "@/types/firestore_schema/staff";
 
-const BulkAppraisalBidBidScreen: React.FC = () => {
+type BulkAppraisalBidBidScreenProps = {
+  staffList: Staff[];
+};
+
+const BulkAppraisalBidBidScreen: React.FC<BulkAppraisalBidBidScreenProps> = ({
+  staffList,
+}) => {
   const {
     carId,
     bulkAppraisalRequestsId,
@@ -37,18 +40,13 @@ const BulkAppraisalBidBidScreen: React.FC = () => {
     grade,
     modelNumber,
   } = useLocalSearchParams();
+  const form = useFormContext<RegistrationBulkAppraisalBidFormData>();
   const {
     handleSubmit,
     control,
+    watch,
     formState: { isSubmitting, errors },
-  } = useForm<RegistrationBulkAppraisalBidFormData>({
-    resolver: zodResolver(registrationBulkAppraisalBidSchema),
-    defaultValues: {
-      minBid: 0,
-      maxBid: 0,
-      comment: "",
-    },
-  });
+  } = form;
   const { currentStore, staff } = useStore();
   const router = useRouter();
   const { colors, typography } = useTheme();
@@ -106,6 +104,9 @@ const BulkAppraisalBidBidScreen: React.FC = () => {
       },
     ]);
   };
+
+  const managerStaffs = watch("managerStaffs");
+  console.log(managerStaffs);
 
   return (
     <>
@@ -286,6 +287,41 @@ const BulkAppraisalBidBidScreen: React.FC = () => {
                   />
                 </View>
                 {errors.comment && (
+                  <Text style={{ color: colors.error, ...typography.body2 }}>
+                    {errors.comment?.message as string}
+                  </Text>
+                )}
+              </View>
+              <View style={{ gap: 8 }}>
+                <Text
+                  style={{ color: colors.textPrimary, ...typography.heading3 }}
+                >
+                  担当者
+                </Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "flex-end",
+                    gap: 8,
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={() =>
+                      router.push("/bulkAppraisalBid/bid/staffSelect")
+                    }
+                    style={{
+                      backgroundColor: colors.backgroundSecondary,
+                      borderRadius: 8,
+                      padding: 16,
+                      flex: 1,
+                      borderWidth: 1,
+                      borderColor: errors.managerStaffs
+                        ? colors.error
+                        : colors.borderPrimary,
+                    }}
+                  ></TouchableOpacity>
+                </View>
+                {errors.managerStaffs && (
                   <Text style={{ color: colors.error, ...typography.body2 }}>
                     {errors.comment?.message as string}
                   </Text>

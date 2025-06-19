@@ -69,7 +69,7 @@ const BulkAppraisalBidLayout = () => {
             name="bid"
             options={{
               title: "入札",
-              headerBackButtonDisplayMode: "minimal",
+              headerShown: false,
               presentation: "modal",
             }}
           />

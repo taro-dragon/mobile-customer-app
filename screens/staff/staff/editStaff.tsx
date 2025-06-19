@@ -36,8 +36,6 @@ const EditStaffScreen: React.FC<EditStaffScreenProps> = ({
     watch,
     setValue,
   } = useFormContext();
-  console.log("isCurrentStaff", isCurrentStaff);
-  console.log("isOwner", isOwner);
   const pickImageAsync = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,

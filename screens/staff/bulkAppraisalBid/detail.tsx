@@ -21,7 +21,7 @@ type BulkAppraisalBidDetailScreenProps = {
 
 const BulkAppraisalBidDetailScreen: React.FC<
   BulkAppraisalBidDetailScreenProps
-> = ({ data, mutate }) => {
+> = ({ data }) => {
   const { car, bids } = data;
   const { colors, typography } = useTheme();
   const carData = transformCarData(car as Car);
