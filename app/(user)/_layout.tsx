@@ -32,7 +32,7 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
-        name="shops/[id]"
+        name="shops"
         options={{
           animation: "slide_from_bottom",
           gestureDirection: "vertical",
@@ -56,7 +56,7 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
-        name="offers/[id]"
+        name="offers"
         options={{
           gestureDirection: "vertical",
           headerShown: false,

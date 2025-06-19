@@ -7,7 +7,6 @@ import { TouchableOpacity } from "react-native";
 const ShopDetailLayout = () => {
   const { colors } = useTheme();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const router = useRouter();
   return (
     <ShopProvider shopId={id}>
       <Stack
@@ -22,7 +21,7 @@ const ShopDetailLayout = () => {
           },
         }}
       >
-        <Stack.Screen name="index" options={{ title: "店舗詳細" }} />
+        <Stack.Screen name="[id]" options={{ title: "店舗詳細" }} />
       </Stack>
     </ShopProvider>
   );

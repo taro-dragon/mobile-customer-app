@@ -4,7 +4,6 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Image } from "expo-image";
 import dayjs from "dayjs";
-import { TalkWithAffiliate } from "@/types/extendType/TalkWithAffiliate";
 import { Check } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import { TalkWithUser } from "@/types/extendType/TalkWithUser";

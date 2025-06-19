@@ -36,8 +36,8 @@ const OfferDetail = () => {
     year: offer?.year,
     grade: offer?.grade,
   };
-  const carData = transformCarData(car as unknown as Car);
   if (!offer) return null;
+  const carData = transformCarData(car as unknown as Car);
 
   const isCurrentTargetOffer = isTargetOffer(cars, offer);
   return (

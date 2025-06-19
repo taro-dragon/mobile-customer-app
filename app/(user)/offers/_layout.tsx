@@ -15,7 +15,7 @@ const OfferDetailLayout = () => {
       }}
     >
       <Stack.Screen
-        name="index"
+        name="[id]"
         options={{
           title: "買取オファー詳細",
           headerShadowVisible: false,
