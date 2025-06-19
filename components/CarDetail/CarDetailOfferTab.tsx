@@ -36,11 +36,6 @@ const CarDetailOfferTab = () => {
         >
           買取オファーがありません
         </Text>
-        <Button
-          label="一括査定を依頼する"
-          onPress={() => {}}
-          color={colors.primary}
-        />
       </View>
     ),
     [colors, typography]
