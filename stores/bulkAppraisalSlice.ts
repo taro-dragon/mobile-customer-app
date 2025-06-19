@@ -72,6 +72,12 @@ export const createBulkAppraisalSlice: StateCreator<
       const newRequest: Omit<BulkAppraisalRequest, "id"> = {
         userId,
         carId,
+        maker: "",
+        model: "",
+        year: "",
+        grade: "",
+        modelNumber: "",
+        prefecture: "",
         status: "in_progress",
         deadline: firestore.Timestamp.fromDate(deadline),
         createdAt: now,

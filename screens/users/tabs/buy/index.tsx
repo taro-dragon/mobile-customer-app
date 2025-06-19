@@ -3,7 +3,7 @@ import CompletedBulkAppraisal from "@/components/CarList/CompletedBulkAppraisal"
 import ProgressBulkAppraisal from "@/components/CarList/ProgressBulkAppraisal";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useState } from "react";
-import { Text, useWindowDimensions, View } from "react-native";
+import { useWindowDimensions, View } from "react-native";
 import { SceneMap, TabBar, TabView } from "react-native-tab-view";
 
 const renderScene = SceneMap({

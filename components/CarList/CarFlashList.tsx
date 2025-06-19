@@ -5,7 +5,7 @@ import { Car } from "@/types/models/Car";
 import CarInfoItem from "../CarInfo/CarInfoItem";
 import { useTheme } from "@/contexts/ThemeContext";
 import { CarIcon } from "lucide-react-native";
-import { FlashList } from "@shopify/flash-list";
+
 type CarFlashListProps = {
   cars: Car[];
 };
@@ -13,9 +13,9 @@ type CarFlashListProps = {
 const CarFlashList: React.FC<CarFlashListProps> = ({ cars }) => {
   const { colors, typography } = useTheme();
   return (
-    <FlashList
+    <FlatList
       data={cars}
-      contentContainerStyle={{ padding: 16 }}
+      contentContainerStyle={{ padding: 16, flexGrow: 1 }}
       ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
       renderItem={({ item }: { item: Car }) => <CarInfoItem car={item} />}
       ListEmptyComponent={
