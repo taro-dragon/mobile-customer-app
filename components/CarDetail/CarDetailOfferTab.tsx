@@ -7,9 +7,10 @@ import { useTheme } from "@/contexts/ThemeContext";
 import Button from "../common/Button";
 import { useCallback } from "react";
 import { CarBuyOffer } from "@/hooks/useFetchCarOffer";
+import Loader from "../common/Loader";
 
 const CarDetailOfferTab = () => {
-  const { offers, hasMore, loadMore } = useCarOfferContext();
+  const { offers, hasMore, loadMore, isLoading } = useCarOfferContext();
   const { colors, typography } = useTheme();
 
   const renderItem = useCallback(
@@ -40,6 +41,19 @@ const CarDetailOfferTab = () => {
     ),
     [colors, typography]
   );
+  if (isLoading) {
+    return (
+      <Tabs.ScrollView
+        contentContainerStyle={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Loader />
+      </Tabs.ScrollView>
+    );
+  }
 
   return (
     <Tabs.FlatList

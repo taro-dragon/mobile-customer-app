@@ -9,9 +9,10 @@ import { ExtendedBid } from "@/hooks/useFetchCarBids";
 import { useTheme } from "@/contexts/ThemeContext";
 import Button from "../common/Button";
 import { Book, Gavel } from "lucide-react-native";
+import Loader from "../common/Loader";
 
 const CarDetailBulkAppraisalRequestsTab = () => {
-  const { bids, hasMore, loadMore } = useCarBidsContext();
+  const { bids, isLoading, hasMore, loadMore } = useCarBidsContext();
   const { cars } = useStore();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { colors, typography } = useTheme();
@@ -51,6 +52,20 @@ const CarDetailBulkAppraisalRequestsTab = () => {
     ),
     [colors, typography]
   );
+
+  if (isLoading) {
+    return (
+      <Tabs.ScrollView
+        contentContainerStyle={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Loader />
+      </Tabs.ScrollView>
+    );
+  }
 
   return (
     <Tabs.FlatList
