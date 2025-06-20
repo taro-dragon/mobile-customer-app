@@ -51,6 +51,7 @@ export default function TabLayout() {
             options={{
               title: "売る",
               tabBarIcon: ({ color }) => <Tag size={24} color={color} />,
+              headerShadowVisible: false,
             }}
           />
           <Tabs.Screen
