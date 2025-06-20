@@ -18,7 +18,7 @@ const routes = [
   { key: "completedBulkAppraisal", title: "一括査定依頼完了" },
 ];
 
-const BuyIndexScreen = () => {
+const SellIndexScreen = () => {
   const { typography, colors } = useTheme();
   const [index, setIndex] = useState(0);
   const layout = useWindowDimensions();
@@ -49,4 +49,4 @@ const BuyIndexScreen = () => {
   );
 };
 
-export default BuyIndexScreen;
+export default SellIndexScreen;

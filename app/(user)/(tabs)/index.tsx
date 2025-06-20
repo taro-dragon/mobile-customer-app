@@ -61,7 +61,7 @@ const CustomerIndex = () => {
           <TouchableOpacity
             style={styles.secondaryButton}
             onPress={guard(() => {
-              router.push("/(user)/(tabs)/buy");
+              router.push("/(user)/(tabs)/sell");
             })}
           >
             <Tag size={24} color={colors.primary} />

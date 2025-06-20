@@ -47,7 +47,7 @@ export default function TabLayout() {
             }}
           />
           <Tabs.Screen
-            name="buy"
+            name="sell"
             options={{
               title: "売る",
               tabBarIcon: ({ color }) => <Tag size={24} color={color} />,
