@@ -1,10 +1,16 @@
 import { useBulkAppraisal } from "@/hooks/useBulkAppraisal";
 import Tag from "../common/Tag";
+import { BulkAppraisalRequest } from "@/types/firestore_schema/bulkAppraisalRequests";
 
-const AppraisalStatusTag = () => {
-  const { currentRequest } = useBulkAppraisal();
-  if (!currentRequest?.status) return null;
-  const { status } = currentRequest;
+type AppraisalStatusTagProps = {
+  bulkAppraisalRequest?: BulkAppraisalRequest;
+};
+
+const AppraisalStatusTag: React.FC<AppraisalStatusTagProps> = ({
+  bulkAppraisalRequest,
+}) => {
+  if (!bulkAppraisalRequest?.status) return null;
+  const { status } = bulkAppraisalRequest;
   const label = {
     in_progress: "査定中",
     deadline: "査定締切",

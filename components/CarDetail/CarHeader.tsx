@@ -7,8 +7,15 @@ import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
 import CarInfoItem from "./CarInfoIten";
 import ImageCarousel from "../common/ImageCarousel";
+import { BulkAppraisalRequest } from "@/types/firestore_schema/bulkAppraisalRequests";
 
-const CarDetailHeader = () => {
+type CarDetailHeaderProps = {
+  bulkAppraisalRequest?: BulkAppraisalRequest;
+};
+
+const CarDetailHeader: React.FC<CarDetailHeaderProps> = ({
+  bulkAppraisalRequest,
+}) => {
   const { colors, typography } = useTheme();
   const { cars } = useStore();
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -27,7 +34,7 @@ const CarDetailHeader = () => {
           <Text style={{ ...typography.title1, color: colors.textPrimary }}>
             {carData.model.name}
           </Text>
-          <AppraisalStatusTag />
+          <AppraisalStatusTag bulkAppraisalRequest={bulkAppraisalRequest} />
         </View>
         <View style={{ gap: 8 }}>
           <Text style={{ ...typography.heading3, color: colors.textPrimary }}>

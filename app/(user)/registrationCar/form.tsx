@@ -82,9 +82,6 @@ const RegistrationCarForm = () => {
         year,
         grade,
         modelNumber: data.modelNumber,
-        repairStatus: data.repairStatus,
-        mileage: Number(data.mileage),
-        sellTime: data.sellTime,
         images: downloadURLs,
         createdAt: firestore.Timestamp.now(),
         updatedAt: firestore.FieldValue.serverTimestamp(),
@@ -192,7 +189,7 @@ const RegistrationCarForm = () => {
         </View>
         <ColorSelect />
 
-        <View style={{ paddingHorizontal: 16 }}>
+        {/* <View style={{ paddingHorizontal: 16 }}>
           <ModalPicker
             name="repairStatus"
             label="修復歴"
@@ -215,7 +212,7 @@ const RegistrationCarForm = () => {
             options={sellTimeOptions}
             required={true}
           />
-        </View>
+        </View> */}
         <View style={{ paddingHorizontal: 16 }}>
           <TextInput label="備考" name="description" multiline />
         </View>

@@ -18,7 +18,7 @@ const fetchBulkAppraisalRequest = async (id: string) => {
     if (!bulkAppraisalRequestSnapshotData) {
       return undefined;
     }
-    return bulkAppraisalRequestSnapshotData;
+    return bulkAppraisalRequestSnapshotData[0];
   } catch (error) {
     Toast.show({
       type: "error",
