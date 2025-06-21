@@ -94,16 +94,16 @@ const CarInfoItem: React.FC<CarInfoItemProps> = ({ car }) => {
             {car.status && (
               <Tag
                 label={
-                  car.status === "appraising"
+                  car.status === "in_progress"
                     ? "査定中"
-                    : car.status === "company_selection"
+                    : car.status === "deadline"
                     ? "選定中"
                     : "完了"
                 }
                 color={
-                  car.status === "appraising"
+                  car.status === "in_progress"
                     ? "info"
-                    : car.status === "company_selection"
+                    : car.status === "deadline"
                     ? "success"
                     : "primary"
                 }
