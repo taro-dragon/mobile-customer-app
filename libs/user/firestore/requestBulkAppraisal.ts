@@ -17,7 +17,7 @@ export type RequestBulkAppraisalParams = {
 export const requestBulkAppraisal = async (
   params: RequestBulkAppraisalParams
 ) => {
-  const deadline = dayjs(params.sellTime).endOf("day").toDate();
+  const deadline = firestore.Timestamp.fromDate(dayjs().endOf("day").toDate());
   try {
     await firestore().collection("bulkAppraisalRequests").add({
       carId: params.carId,

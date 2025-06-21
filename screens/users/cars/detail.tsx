@@ -71,7 +71,11 @@ const CarDetailScreen: React.FC<CarDetailScreenProps> = ({
             <CarDetailOfferTab />
           </Tabs.Tab>
           <Tabs.Tab name="一括査定結果">
-            <CarDetailBulkAppraisalRequestsTab />
+            <CarDetailBulkAppraisalRequestsTab
+              bulkAppraisalRequest={bulkAppraisalRequest}
+              handleRequestBulkAppraisal={handleRequestBulkAppraisal}
+              isSubmitting={isSubmitting}
+            />
           </Tabs.Tab>
         </Tabs.Container>
       </View>

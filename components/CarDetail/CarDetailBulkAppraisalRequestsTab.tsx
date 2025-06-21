@@ -1,17 +1,27 @@
+import React, { useCallback } from "react";
+import { Gavel } from "lucide-react-native";
 import { Tabs } from "react-native-collapsible-tab-view";
 import { ActivityIndicator, Text, View } from "react-native";
 import { useCarBidsContext } from "@/contexts/CarBidsContext";
 import BidItem from "../CarInfo/BidItem";
 import { useStore } from "@/hooks/useStore";
 import { useLocalSearchParams } from "expo-router";
-import { useCallback } from "react";
 import { ExtendedBid } from "@/hooks/useFetchCarBids";
 import { useTheme } from "@/contexts/ThemeContext";
 import Button from "../common/Button";
-import { Book, Gavel } from "lucide-react-native";
 import Loader from "../common/Loader";
+import { BulkAppraisalRequest } from "@/types/firestore_schema/bulkAppraisalRequests";
+import dayjs from "dayjs";
 
-const CarDetailBulkAppraisalRequestsTab = () => {
+type CarDetailBulkAppraisalRequestsTabProps = {
+  bulkAppraisalRequest?: BulkAppraisalRequest;
+  handleRequestBulkAppraisal: () => void;
+  isSubmitting: boolean;
+};
+
+const CarDetailBulkAppraisalRequestsTab: React.FC<
+  CarDetailBulkAppraisalRequestsTabProps
+> = ({ handleRequestBulkAppraisal, isSubmitting, bulkAppraisalRequest }) => {
   const { bids, isLoading, hasMore, loadMore } = useCarBidsContext();
   const { cars } = useStore();
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -35,22 +45,51 @@ const CarDetailBulkAppraisalRequestsTab = () => {
         }}
       >
         <Gavel size={48} color={colors.iconSecondary} strokeWidth={1.5} />
-        <Text
-          style={{
-            ...typography.heading2,
-            color: colors.textSecondary,
-          }}
-        >
-          一括査定をしていません
-        </Text>
-        <Button
-          label="一括査定を依頼する"
-          onPress={() => {}}
-          color={colors.primary}
-        />
+        {bulkAppraisalRequest?.status === "in_progress" ? (
+          <View
+            style={{ gap: 8, justifyContent: "center", alignItems: "center" }}
+          >
+            <Text
+              style={{
+                ...typography.heading2,
+                color: colors.textSecondary,
+              }}
+            >
+              一括査定が進行中です
+            </Text>
+            <Text
+              style={{
+                ...typography.body3,
+                color: colors.textSecondary,
+              }}
+            >
+              査定終了時刻：
+              {dayjs(bulkAppraisalRequest.deadline.toDate()).format(
+                "YYYY/MM/DD HH:mm"
+              )}
+            </Text>
+          </View>
+        ) : (
+          <>
+            <Text
+              style={{
+                ...typography.heading2,
+                color: colors.textSecondary,
+              }}
+            >
+              一括査定をしていません
+            </Text>
+            <Button
+              label="一括査定を依頼する"
+              onPress={handleRequestBulkAppraisal}
+              color={colors.primary}
+              isLoading={isSubmitting}
+            />
+          </>
+        )}
       </View>
     ),
-    [colors, typography]
+    [colors, handleRequestBulkAppraisal, isSubmitting, typography]
   );
 
   if (isLoading) {
