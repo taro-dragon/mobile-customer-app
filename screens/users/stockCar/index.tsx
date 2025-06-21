@@ -16,13 +16,10 @@ import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 
 type StockCarProps = {
   stockCar: StockCar;
-  isCurrentStore: boolean;
+  isInquiry: boolean;
 };
 
-const StockCarScreen: React.FC<StockCarProps> = ({
-  stockCar,
-  isCurrentStore,
-}) => {
+const StockCarScreen: React.FC<StockCarProps> = ({ stockCar, isInquiry }) => {
   const { colors, typography } = useTheme();
   const carData = transformCarData(stockCar as unknown as Car);
   // 写真を指定した順序で配列にする
@@ -187,7 +184,7 @@ const StockCarScreen: React.FC<StockCarProps> = ({
           </Tabs.Tab>
         </Tabs.Container>
       </View>
-      {!isCurrentStore && (
+      {!isInquiry && (
         <>
           <Divider />
           <View

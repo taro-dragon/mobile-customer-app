@@ -1,7 +1,6 @@
 import firestore from "@react-native-firebase/firestore";
 import useSWR from "swr";
 import Toast from "react-native-toast-message";
-import { Bid } from "@/types/firestore_schema/bids";
 import { router } from "expo-router";
 import { BulkAppraisalRequest } from "@/types/firestore_schema/bulkAppraisalRequests";
 

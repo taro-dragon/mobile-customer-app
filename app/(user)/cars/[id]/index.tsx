@@ -12,78 +12,18 @@ import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import Button from "@/components/common/Button";
 import useFetchBulkAppraisalRequest from "@/hooks/user/useFetchBulkApprisalRequests";
 import { useLocalSearchParams } from "expo-router";
+import CarDetailScreen from "@/screens/users/cars/detail";
+import ShopDetailSkeleton from "@/components/Skelton/SkeltonShopInfo";
 
 const CarDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { bulkAppraisalRequest } = useFetchBulkAppraisalRequest(id);
-  const { colors, typography } = useTheme();
+  const { bulkAppraisalRequest, isLoading } = useFetchBulkAppraisalRequest(id);
 
-  const renderHeader = useCallback(() => <CarDetailHeader />, []);
-  const renderTabBar = useCallback(
-    (props: any) => (
-      <MaterialTabBar
-        {...props}
-        activeColor={colors.primary}
-        inactiveColor={colors.textSecondary}
-        indicatorStyle={{
-          backgroundColor: colors.primary,
-          height: 3,
-          borderRadius: 3,
-        }}
-        style={{
-          backgroundColor: colors.backgroundPrimary,
-        }}
-        labelStyle={typography.heading3}
-      />
-    ),
-    [colors, typography]
-  );
+  if (isLoading || !bulkAppraisalRequest) {
+    return <ShopDetailSkeleton />;
+  }
 
-  return (
-    <View style={{ flex: 1 }}>
-      <View style={{ flex: 1 }}>
-        <Tabs.Container
-          revealHeaderOnScroll
-          renderHeader={renderHeader}
-          headerContainerStyle={{
-            backgroundColor: colors.backgroundPrimary,
-            elevation: 0,
-            shadowOpacity: 0,
-            shadowOffset: { height: 0, width: 0 },
-            borderBottomWidth: 1,
-            borderBottomColor: colors.gray200,
-          }}
-          renderTabBar={renderTabBar}
-          lazy={true}
-          containerStyle={{
-            backgroundColor: colors.backgroundPrimary,
-          }}
-        >
-          <Tabs.Tab name="買取オファー">
-            <CarDetailOfferTab />
-          </Tabs.Tab>
-          <Tabs.Tab name="一括査定結果">
-            <CarDetailBulkAppraisalRequestsTab />
-          </Tabs.Tab>
-        </Tabs.Container>
-      </View>
-      {!bulkAppraisalRequest?.status && (
-        <>
-          <Divider />
-          <View
-            style={{ padding: 16, backgroundColor: colors.backgroundPrimary }}
-          >
-            <Button
-              label="一括査定を依頼する"
-              onPress={() => {}}
-              color={colors.primary}
-            />
-          </View>
-          <SafeAreaBottom />
-        </>
-      )}
-    </View>
-  );
+  return <CarDetailScreen bulkAppraisalRequest={bulkAppraisalRequest} />;
 };
 
 export default CarDetail;

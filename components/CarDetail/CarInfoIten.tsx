@@ -27,7 +27,13 @@ const CarInfoItem: React.FC<CarInfoItemProps> = ({
       <Text style={{ ...typography.heading3, color: colors.textSecondary }}>
         {label}
       </Text>
-      <Text style={{ ...typography.body3, color: colors.textPrimary }}>
+      <Text
+        style={{
+          ...typography.body3,
+          color: colors.textPrimary,
+          wordWrap: "break-word",
+        }}
+      >
         {value}
       </Text>
     </View>

@@ -7,17 +7,12 @@ import { useMemo } from "react";
 
 const StockCar = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { currentStore } = useStore();
   const { stockCar, isLoading } = useFetchStockCar(id);
-  const isCurrentStore = useMemo(
-    () => currentStore?.id === stockCar?.store.id,
-    [currentStore, stockCar]
-  );
   if (isLoading || !stockCar) {
     return <ShopDetailSkeleton />;
   }
   const onInquire = async () => {};
-  return <StockCarScreen stockCar={stockCar} isCurrentStore={isCurrentStore} />;
+  return <StockCarScreen stockCar={stockCar} isInquiry={false} />;
 };
 
 export default StockCar;
