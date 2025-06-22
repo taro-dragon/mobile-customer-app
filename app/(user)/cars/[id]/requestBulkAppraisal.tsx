@@ -3,10 +3,12 @@ import { transformCarData } from "@/libs/transformCarData";
 import { requestBulkAppraisal } from "@/libs/user/firestore/requestBulkAppraisal";
 import RequestBulkAppraisalScreen from "@/screens/users/cars/requestBulkAppraisal";
 import { Car } from "@/types/models/Car";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import Toast from "react-native-toast-message";
+import { z } from "zod";
 
 type RequestBulkAppraisalForm = {
   sellTime: string;
@@ -14,9 +16,22 @@ type RequestBulkAppraisalForm = {
   repairStatus: string;
 };
 
+const schema = z.object({
+  sellTime: z.string().min(1, "売却時期を選択してください"),
+  mileage: z.string().min(1, "走行距離を選択してください"),
+  repairStatus: z.string().min(1, "修復歴を選択してください"),
+});
+
 const RequestBulkAppraisal: React.FC = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const form = useForm<RequestBulkAppraisalForm>();
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      sellTime: "",
+      mileage: "",
+      repairStatus: "",
+    },
+  });
   const { handleSubmit } = form;
   const { cars, user } = useStore();
   const car = cars.find((car) => car.id === id);

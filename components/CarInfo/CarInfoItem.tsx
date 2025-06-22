@@ -1,5 +1,5 @@
 import { Image } from "expo-image";
-import { Text, View, Pressable } from "react-native";
+import { Text, View } from "react-native";
 import { Car } from "@/types/models/Car";
 
 import { useTheme } from "@/contexts/ThemeContext";
@@ -7,6 +7,7 @@ import { transformCarData } from "@/libs/transformCarData";
 import { useRouter } from "expo-router";
 import Divider from "../common/Divider";
 import Tag from "../common/Tag";
+import { Pressable } from "react-native-gesture-handler";
 
 type CarInfoItemProps = {
   car: Car;
@@ -19,7 +20,6 @@ const CarInfoItem: React.FC<CarInfoItemProps> = ({ car }) => {
   return (
     <Pressable
       onPress={() => router.push(`/cars/${car.id}`)}
-      android_ripple={{ color: colors.primary }}
       style={({ pressed }) => ({
         flexDirection: "row",
         gap: 8,

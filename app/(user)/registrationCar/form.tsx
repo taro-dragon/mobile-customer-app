@@ -18,14 +18,8 @@ import DisplaySelectItem from "../../../components/registrationCar/form/DisplayS
 import TakePhoto from "../../../components/registrationCar/form/TakePhoto";
 import TextInput from "../../../components/registrationCar/form/TextInput";
 import ColorSelect from "../../../components/registrationCar/form/ColorSelect";
-import ModalPicker from "../../../components/registrationCar/form/ModalPicker";
 import Button from "@/components/common/Button";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
-import {
-  mileageOptions,
-  repairStatusOptions,
-  sellTimeOptions,
-} from "@/constants/registrationCarOptions";
 import { useStore } from "@/hooks/useStore";
 import { useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
