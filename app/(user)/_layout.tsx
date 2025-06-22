@@ -28,6 +28,7 @@ export default function Layout() {
           animation: "slide_from_bottom",
           gestureDirection: "vertical",
           headerShown: false,
+          gestureEnabled: false,
         }}
       />
       <Stack.Screen

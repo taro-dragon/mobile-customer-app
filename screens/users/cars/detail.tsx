@@ -12,14 +12,12 @@ import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
 
 type CarDetailScreenProps = {
   bulkAppraisalRequest?: BulkAppraisalRequest;
-  handleRequestBulkAppraisal: () => void;
-  isSubmitting: boolean;
+  onButtonPress: () => void;
 };
 
 const CarDetailScreen: React.FC<CarDetailScreenProps> = ({
   bulkAppraisalRequest,
-  handleRequestBulkAppraisal,
-  isSubmitting,
+  onButtonPress,
 }) => {
   const { colors, typography } = useTheme();
 
@@ -73,8 +71,7 @@ const CarDetailScreen: React.FC<CarDetailScreenProps> = ({
           <Tabs.Tab name="一括査定結果">
             <CarDetailBulkAppraisalRequestsTab
               bulkAppraisalRequest={bulkAppraisalRequest}
-              handleRequestBulkAppraisal={handleRequestBulkAppraisal}
-              isSubmitting={isSubmitting}
+              handleRequestBulkAppraisal={onButtonPress}
             />
           </Tabs.Tab>
         </Tabs.Container>
@@ -87,9 +84,8 @@ const CarDetailScreen: React.FC<CarDetailScreenProps> = ({
           >
             <Button
               label="一括査定を依頼する"
-              onPress={handleRequestBulkAppraisal}
+              onPress={onButtonPress}
               color={colors.primary}
-              isLoading={isSubmitting}
             />
           </View>
           <SafeAreaBottom />

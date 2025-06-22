@@ -6,7 +6,7 @@ import { Model } from "@/types/models/carData/model";
 import { Year } from "@/types/models/carData/year";
 import { Grade } from "@/types/models/carData/grade";
 
-type CarDetails = {
+export type CarDetails = {
   maker: Omit<Manufacture, "carModels">;
   model: Omit<Model, "years">;
   year: Omit<Year, "grades">;

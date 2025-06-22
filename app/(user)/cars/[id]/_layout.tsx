@@ -70,6 +70,13 @@ const CarDetailLayout = () => {
               headerBackButtonDisplayMode: "minimal",
             }}
           />
+          <Stack.Screen
+            name="requestBulkAppraisal"
+            options={{
+              title: "一括査定依頼",
+              headerBackButtonDisplayMode: "minimal",
+            }}
+          />
         </Stack>
       </CarOfferProvider>
     </CarBidsProvider>

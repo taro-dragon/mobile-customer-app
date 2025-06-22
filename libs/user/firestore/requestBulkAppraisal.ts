@@ -12,6 +12,7 @@ export type RequestBulkAppraisalParams = {
   prefecture: string;
   sellTime: string;
   userId: string;
+  repairStatus: string;
 };
 
 export const requestBulkAppraisal = async (
@@ -33,6 +34,7 @@ export const requestBulkAppraisal = async (
       userId: params.userId,
       prefecture: params.prefecture,
       sellTime: params.sellTime,
+      repairStatus: params.repairStatus,
       deadline: deadline,
     });
   } catch (error) {

@@ -16,12 +16,11 @@ import dayjs from "dayjs";
 type CarDetailBulkAppraisalRequestsTabProps = {
   bulkAppraisalRequest?: BulkAppraisalRequest;
   handleRequestBulkAppraisal: () => void;
-  isSubmitting: boolean;
 };
 
 const CarDetailBulkAppraisalRequestsTab: React.FC<
   CarDetailBulkAppraisalRequestsTabProps
-> = ({ handleRequestBulkAppraisal, isSubmitting, bulkAppraisalRequest }) => {
+> = ({ handleRequestBulkAppraisal, bulkAppraisalRequest }) => {
   const { bids, isLoading, hasMore, loadMore } = useCarBidsContext();
   const { cars } = useStore();
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -83,13 +82,12 @@ const CarDetailBulkAppraisalRequestsTab: React.FC<
               label="一括査定を依頼する"
               onPress={handleRequestBulkAppraisal}
               color={colors.primary}
-              isLoading={isSubmitting}
             />
           </>
         )}
       </View>
     ),
-    [colors, handleRequestBulkAppraisal, isSubmitting, typography]
+    [colors, handleRequestBulkAppraisal, typography]
   );
 
   if (isLoading) {

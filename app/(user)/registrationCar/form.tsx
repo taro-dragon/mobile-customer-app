@@ -189,30 +189,6 @@ const RegistrationCarForm = () => {
         </View>
         <ColorSelect />
 
-        {/* <View style={{ paddingHorizontal: 16 }}>
-          <ModalPicker
-            name="repairStatus"
-            label="修復歴"
-            options={repairStatusOptions}
-            required={true}
-          />
-        </View>
-        <View style={{ paddingHorizontal: 16 }}>
-          <ModalPicker
-            name="mileage"
-            label="走行距離"
-            options={mileageOptions}
-            required={true}
-          />
-        </View>
-        <View style={{ paddingHorizontal: 16 }}>
-          <ModalPicker
-            name="sellTime"
-            label="売却時期"
-            options={sellTimeOptions}
-            required={true}
-          />
-        </View> */}
         <View style={{ paddingHorizontal: 16 }}>
           <TextInput label="備考" name="description" multiline />
         </View>
