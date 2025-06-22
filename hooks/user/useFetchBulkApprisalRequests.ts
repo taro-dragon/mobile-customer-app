@@ -33,10 +33,7 @@ const fetchBulkAppraisalRequest = async (id: string) => {
 const useFetchBulkAppraisalRequest = (id: string) => {
   const { data, error, mutate, isLoading } = useSWR(
     id ? `bulkAppraisalRequest-car-${id}` : null,
-    () => fetchBulkAppraisalRequest(id),
-    {
-      revalidateOnFocus: true,
-    }
+    () => fetchBulkAppraisalRequest(id)
   );
 
   return {
