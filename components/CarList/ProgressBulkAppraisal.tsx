@@ -2,13 +2,16 @@ import { useStore } from "@/hooks/useStore";
 import CarFlashList from "./CarFlashList";
 
 const ProgressBulkAppraisal = () => {
-  const { cars } = useStore();
-  const progressBulkAppraisalCars = cars.filter(
-    (car) =>
-      car.status === "in_progress" ||
-      car.status === "deadline" ||
-      car.status === "completed"
+  const { cars, bulkAppraisalRequests } = useStore();
+  const progressBulkAppraisalCars = cars.filter((car) =>
+    bulkAppraisalRequests.some(
+      (bulkAppraisalRequest) =>
+        bulkAppraisalRequest.carId === car.id &&
+        (bulkAppraisalRequest.status === "in_progress" ||
+          bulkAppraisalRequest.status === "deadline")
+    )
   );
+  console.log(progressBulkAppraisalCars);
   return <CarFlashList cars={progressBulkAppraisalCars} />;
 };
 
