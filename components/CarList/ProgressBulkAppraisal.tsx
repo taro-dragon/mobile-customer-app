@@ -11,7 +11,6 @@ const ProgressBulkAppraisal = () => {
           bulkAppraisalRequest.status === "deadline")
     )
   );
-  console.log(progressBulkAppraisalCars);
   return <CarFlashList cars={progressBulkAppraisalCars} />;
 };
 
