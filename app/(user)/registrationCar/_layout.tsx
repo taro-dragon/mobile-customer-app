@@ -4,19 +4,27 @@ import { ChevronLeft, X } from "lucide-react-native";
 import { FormProvider, useForm } from "react-hook-form";
 import { TouchableOpacity } from "react-native";
 import { useCallback } from "react";
-
-type RegistrationCarForm = {
-  description: string;
-  color: string;
-  mileage: number;
-  sellTime: string;
-  repairStatus: string;
-};
+import {
+  RegistrationCarFormData,
+  registrationCarSchema,
+} from "@/constants/schemas/registrationCarSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const RegistrationCarLayout = () => {
   const { colors } = useTheme();
   const router = useRouter();
-  const form = useForm();
+  const form = useForm<RegistrationCarFormData>({
+    resolver: zodResolver(registrationCarSchema),
+    defaultValues: {
+      front: "",
+      back: "",
+      left: "",
+      right: "",
+      interior: "",
+      color: "",
+      description: "",
+    },
+  });
 
   const handleGoBack = useCallback(() => {
     setTimeout(() => {

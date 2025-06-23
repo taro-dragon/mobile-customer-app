@@ -1,8 +1,6 @@
 import { z } from "zod";
 
-// Main schema that includes all fields from all tabs
-export const registrationStockSchema = z.object({
-  // Basic info fields
+export const registrationCarSchema = z.object({
   maker: z.string(),
   model: z.string(),
   year: z.string(),
@@ -23,12 +21,8 @@ export const registrationStockSchema = z.object({
     z.string().min(1, "初年度登録年を選択してください"),
     z.number().min(1, "初年度登録年を選択してください"),
   ]),
-  color: z.string(),
-  description: z.string(),
+  color: z.string().min(1, "車体色を選択してください"),
+  description: z.string().optional(),
 });
 
-// Simplified schema for draft saving (no required fields validation)
-export const registrationStockDraftSchema = z.object({}).catchall(z.any());
-
-// Types
-export type RegistrationStockFormData = z.infer<typeof registrationStockSchema>;
+export type RegistrationCarFormData = z.infer<typeof registrationCarSchema>;

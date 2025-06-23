@@ -89,7 +89,8 @@ const RegistrationCarForm = () => {
       Toast.show({
         type: "success",
         text1: "登録完了",
-        text2: "車両登録が完了しました",
+        text2:
+          "まだ一括査定は依頼していません。一括査定は詳細画面より依頼できます",
       });
       router.dismissTo("/(user)/(tabs)");
     } catch (error) {
