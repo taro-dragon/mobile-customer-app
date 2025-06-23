@@ -6,6 +6,8 @@ import CarInfoItem from "../CarInfo/CarInfoItem";
 import { useTheme } from "@/contexts/ThemeContext";
 import { CarIcon } from "lucide-react-native";
 import { FlashList } from "@shopify/flash-list";
+import Button from "../common/Button";
+import { useRouter } from "expo-router";
 
 type CarFlashListProps = {
   cars: Car[];
@@ -13,10 +15,11 @@ type CarFlashListProps = {
 
 const CarFlashList: React.FC<CarFlashListProps> = ({ cars }) => {
   const { colors, typography } = useTheme();
+  const router = useRouter();
   return (
-    <FlashList
+    <FlatList
       data={cars}
-      contentContainerStyle={{ padding: 16 }}
+      contentContainerStyle={{ padding: 16, flexGrow: 1 }}
       ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
       renderItem={({ item }) => <CarInfoItem car={item} />}
       ListEmptyComponent={
@@ -32,6 +35,11 @@ const CarFlashList: React.FC<CarFlashListProps> = ({ cars }) => {
           <Text style={{ color: colors.textSecondary, ...typography.heading2 }}>
             車両がありません
           </Text>
+          <Button
+            label="車両登録"
+            color={colors.primary}
+            onPress={() => router.push("/registrationCar")}
+          />
         </View>
       }
     />

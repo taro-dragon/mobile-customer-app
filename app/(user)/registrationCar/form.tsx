@@ -79,7 +79,7 @@ const RegistrationCarForm = () => {
         images: downloadURLs,
         createdAt: firestore.Timestamp.now(),
         updatedAt: firestore.FieldValue.serverTimestamp(),
-        ...(data.description ? { description: data.description } : {}),
+        description: data.description,
         color: data.color,
       };
       await carRef.set(carData);

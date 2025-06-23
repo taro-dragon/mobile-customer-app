@@ -1,14 +1,21 @@
 import { useTheme } from "@/contexts/ThemeContext";
-import { Stack, useNavigation, useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { ChevronLeft, X } from "lucide-react-native";
 import { FormProvider, useForm } from "react-hook-form";
 import { TouchableOpacity } from "react-native";
 import { useCallback } from "react";
 
+type RegistrationCarForm = {
+  description: string;
+  color: string;
+  mileage: number;
+  sellTime: string;
+  repairStatus: string;
+};
+
 const RegistrationCarLayout = () => {
   const { colors } = useTheme();
   const router = useRouter();
-  const navigation = useNavigation();
   const form = useForm();
 
   const handleGoBack = useCallback(() => {
