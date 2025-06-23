@@ -26,11 +26,9 @@ const CarDetailHeader: React.FC<CarDetailHeaderProps> = ({
     .map((key) => car?.images?.[key])
     .filter((url): url is string => Boolean(url));
 
-  // 追加写真（otherPhoto）を取得
   const additionalImages = Object.keys(car?.images ?? {})
     .filter((key) => key.startsWith("otherPhoto"))
     .sort((a, b) => {
-      // otherPhoto1, otherPhoto2, ... の順序でソート
       const aNum = parseInt(a.replace("otherPhoto", ""));
       const bNum = parseInt(b.replace("otherPhoto", ""));
       return aNum - bNum;
@@ -38,10 +36,7 @@ const CarDetailHeader: React.FC<CarDetailHeaderProps> = ({
     .map((key) => car?.images?.[key as keyof typeof car.images])
     .filter((url): url is string => Boolean(url));
 
-  // 基本写真と追加写真を結合
   const carImages = [...basicImages, ...additionalImages];
-
-  console.log("car", car);
 
   return (
     <View pointerEvents="box-none">
