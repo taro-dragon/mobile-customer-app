@@ -23,6 +23,9 @@ import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import { useStore } from "@/hooks/useStore";
 import { useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
+import { useMemo } from "react";
+import createRegistrationYear from "@/libs/createRegistrationYear";
+import ModalPicker from "@/components/registrationCar/form/ModalPicker";
 
 const RegistrationCarForm = () => {
   const { user } = useStore();
@@ -33,7 +36,7 @@ const RegistrationCarForm = () => {
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useFormContext();
-  const { grade, model, year, maker } = watch();
+  const { grade, model, year, maker, modelNumber } = watch();
   const formCar = {
     grade,
     model,
@@ -98,6 +101,16 @@ const RegistrationCarForm = () => {
       });
     }
   });
+  const registrationYearOptions = useMemo(
+    () => [
+      {
+        label: "不明",
+        value: "not_specified",
+      },
+      ...createRegistrationYear(),
+    ],
+    [year]
+  );
 
   const photoErrors = [
     errors.front,
@@ -127,6 +140,7 @@ const RegistrationCarForm = () => {
           <DisplaySelectItem label="車種" value={carData.model.name} />
           <DisplaySelectItem label="年式" value={carData.year.year} />
           <DisplaySelectItem label="グレード" value={carData.grade.gradeName} />
+          <DisplaySelectItem label="型番" value={modelNumber} />
         </View>
         <View style={{ gap: 8, paddingVertical: 16 }}>
           <Text
@@ -178,11 +192,15 @@ const RegistrationCarForm = () => {
             <TakePhoto name="other6" label="その他6" />
           </ScrollView>
         </View>
-        <View style={{ paddingHorizontal: 16 }}>
-          <TextInput label="型番" name="modelNumber" isRequired />
-        </View>
         <ColorSelect />
-
+        <View style={{ paddingHorizontal: 16 }}>
+          <ModalPicker
+            name="firstRegistrationYear"
+            label="初年度登録年"
+            options={registrationYearOptions}
+            required
+          />
+        </View>
         <View style={{ paddingHorizontal: 16 }}>
           <TextInput label="備考" name="description" multiline />
         </View>

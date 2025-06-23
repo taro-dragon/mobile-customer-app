@@ -5,7 +5,6 @@ import { Car } from "@/types/models/Car";
 import CarInfoItem from "../CarInfo/CarInfoItem";
 import { useTheme } from "@/contexts/ThemeContext";
 import { CarIcon } from "lucide-react-native";
-import { FlashList } from "@shopify/flash-list";
 import Button from "../common/Button";
 import { useRouter } from "expo-router";
 
