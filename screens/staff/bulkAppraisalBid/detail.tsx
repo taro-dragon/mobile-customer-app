@@ -9,7 +9,7 @@ import {
 import { useTheme } from "@/contexts/ThemeContext";
 import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
-import { FlatList, RefreshControl, ScrollView, Text, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 import CarInfoItem from "@/components/CarDetail/CarInfoIten";
 import { BulkAppraisalBid } from "@/hooks/staff/useFetchBulkAppraisalBid";
 import Bid from "@/components/staff/bulkAppraisalCarDetail/Bid";
@@ -22,13 +22,13 @@ type BulkAppraisalBidDetailScreenProps = {
 const BulkAppraisalBidDetailScreen: React.FC<
   BulkAppraisalBidDetailScreenProps
 > = ({ data }) => {
-  const { car, bids } = data;
+  const { car, bids, mileage, repairStatus, sellTime } = data;
   const { colors, typography } = useTheme();
   const carData = transformCarData(car as Car);
   const carImages = Object.values(car?.images ?? {});
-  const mileageLabel = getMileageLabel(car.mileage.toString());
-  const sellTimeLabel = getSellTimeLabel(car.sellTime);
-  const repairStatusLabel = getRepairStatusLabel(car.repairStatus);
+  const mileageLabel = getMileageLabel(mileage.toString());
+  const sellTimeLabel = getSellTimeLabel(sellTime);
+  const repairStatusLabel = getRepairStatusLabel(repairStatus);
   const CarHeader = useMemo(
     () => (
       <View pointerEvents="box-none">

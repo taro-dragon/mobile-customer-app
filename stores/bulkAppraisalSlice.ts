@@ -3,6 +3,7 @@ import { StateCreator } from "zustand";
 import firestore from "@react-native-firebase/firestore";
 import dayjs from "dayjs";
 import { BulkAppraisalSlice } from "@/types/slices/BulkAppraisalSlice";
+import { Bid } from "@/types/firestore_schema/bids";
 export const createBulkAppraisalSlice: StateCreator<
   BulkAppraisalSlice,
   [],
@@ -25,15 +26,24 @@ export const createBulkAppraisalSlice: StateCreator<
       .collection("bulkAppraisalRequests")
       .where("userId", "==", userId)
       .onSnapshot(
-        (snapshot) => {
+        async (snapshot) => {
           set({
-            bulkAppraisalRequests: snapshot.docs.map((doc) => {
-              const data = doc.data() as BulkAppraisalRequest;
-              return {
-                ...data,
-                id: doc.id,
-              };
-            }),
+            bulkAppraisalRequests: await Promise.all(
+              snapshot.docs.map(async (doc) => {
+                const data = doc.data() as BulkAppraisalRequest;
+                const BulkAppraisalRequestId = doc.id;
+                const bidsSnapshot = await firestore()
+                  .collection("bids")
+                  .where("bulkAppraisalRequestId", "==", BulkAppraisalRequestId)
+                  .get();
+                const bids = bidsSnapshot.docs.map((bid) => bid.data() as Bid);
+                return {
+                  ...data,
+                  id: doc.id,
+                  bids,
+                };
+              })
+            ),
             loading: false,
           });
         },
@@ -78,6 +88,9 @@ export const createBulkAppraisalSlice: StateCreator<
         grade: "",
         modelNumber: "",
         prefecture: "",
+        mileage: 0,
+        repairStatus: "",
+        sellTime: "",
         status: "in_progress",
         deadline: firestore.Timestamp.fromDate(deadline),
         createdAt: now,

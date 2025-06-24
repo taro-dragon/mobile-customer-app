@@ -4,7 +4,6 @@ import { Text, View } from "react-native";
 import Divider from "../common/Divider";
 import Button from "../common/Button";
 import { useRouter } from "expo-router";
-import { useBulkAppraisal } from "@/hooks/useBulkAppraisal";
 import Card from "../common/Card";
 import { ExtendedBid } from "@/hooks/useFetchCarBids";
 type BidItemProps = {
@@ -13,7 +12,6 @@ type BidItemProps = {
 
 const BidItem: React.FC<BidItemProps> = ({ bid }) => {
   const { colors, typography } = useTheme();
-  const { isDeadlineRequest } = useBulkAppraisal();
   const router = useRouter();
   return (
     <Card>

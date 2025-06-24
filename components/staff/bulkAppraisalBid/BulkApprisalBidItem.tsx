@@ -18,12 +18,11 @@ type BulkApprisalBidItemProps = {
 
 const BulkApprisalBidItem: React.FC<BulkApprisalBidItemProps> = ({ item }) => {
   const { colors, typography } = useTheme();
-  const { car } = item;
+  const { car, mileage, repairStatus, sellTime } = item;
   const router = useRouter();
-  const { mileage, repairStatus, sellTime } = car;
   const { maker, model, year, grade } = transformCarData(car);
   const targetMileage = useMemo(
-    () => mileageOptions.find((option) => option.value === mileage.toString()),
+    () => mileageOptions.find((option) => option.value === mileage?.toString()),
     [mileage]
   );
   const targetRepairStatus = useMemo(

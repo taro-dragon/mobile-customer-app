@@ -8,6 +8,7 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (
 ) => ({
   staff: undefined,
   user: undefined,
+  todo: [],
   isAuthLoading: false,
   setStaff: (staff: Staff) => set((state) => ({ ...state, staff })),
   editStaff: (updatedStaff: Staff) =>

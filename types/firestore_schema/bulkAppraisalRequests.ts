@@ -10,6 +10,9 @@ export type BulkAppraisalRequest = {
   grade: string;
   prefecture: string;
   modelNumber: string;
+  mileage: number;
+  repairStatus: string;
+  sellTime: string;
   status?: "in_progress" | "deadline" | "completed";
   deadline: FirebaseFirestoreTypes.Timestamp;
   createdAt: FirebaseFirestoreTypes.Timestamp;

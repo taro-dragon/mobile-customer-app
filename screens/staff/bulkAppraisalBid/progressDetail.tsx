@@ -28,7 +28,7 @@ type BulkAppraisalBidDetailScreenProps = {
 const BulkAppraisalBidProgressDetailScreen: React.FC<
   BulkAppraisalBidDetailScreenProps
 > = ({ data, mutate }) => {
-  const { car, bids } = data;
+  const { car, bids, mileage, repairStatus, sellTime } = data;
   const { currentStore } = useStore();
   const router = useRouter();
   const currentStoreId = currentStore?.id;
@@ -38,9 +38,9 @@ const BulkAppraisalBidProgressDetailScreen: React.FC<
   const { colors, typography } = useTheme();
   const carData = transformCarData(car as Car);
   const carImages = Object.values(car?.images ?? {});
-  const mileageLabel = getMileageLabel(car.mileage.toString());
-  const sellTimeLabel = getSellTimeLabel(car.sellTime);
-  const repairStatusLabel = getRepairStatusLabel(car.repairStatus);
+  const mileageLabel = getMileageLabel(mileage.toString());
+  const sellTimeLabel = getSellTimeLabel(sellTime);
+  const repairStatusLabel = getRepairStatusLabel(repairStatus);
   const colorValue = colorOptions.find(
     (option) => option.color === car.color
   )?.bgColor;
