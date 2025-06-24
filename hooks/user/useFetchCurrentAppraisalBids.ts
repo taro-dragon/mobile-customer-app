@@ -59,7 +59,9 @@ const useFetchCurrentAppraisalBids = (
 ) => {
   const { data, error, isLoading } = useSWR(
     bulkAppraisalRequests.length > 0
-      ? bulkAppraisalRequests.map((request) => request.id)
+      ? bulkAppraisalRequests.map(
+          (request) => `bulkAppraisalRequest-${request.id}`
+        )
       : null,
     () => fetchCurrentAppraisalBids(bulkAppraisalRequests),
     {
