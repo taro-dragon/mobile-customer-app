@@ -3,7 +3,6 @@ import { StateCreator } from "zustand";
 import firestore from "@react-native-firebase/firestore";
 import dayjs from "dayjs";
 import { BulkAppraisalSlice } from "@/types/slices/BulkAppraisalSlice";
-import { Bid } from "@/types/firestore_schema/bids";
 export const createBulkAppraisalSlice: StateCreator<
   BulkAppraisalSlice,
   [],
@@ -26,24 +25,15 @@ export const createBulkAppraisalSlice: StateCreator<
       .collection("bulkAppraisalRequests")
       .where("userId", "==", userId)
       .onSnapshot(
-        async (snapshot) => {
+        (snapshot) => {
           set({
-            bulkAppraisalRequests: await Promise.all(
-              snapshot.docs.map(async (doc) => {
-                const data = doc.data() as BulkAppraisalRequest;
-                const BulkAppraisalRequestId = doc.id;
-                const bidsSnapshot = await firestore()
-                  .collection("bids")
-                  .where("bulkAppraisalRequestId", "==", BulkAppraisalRequestId)
-                  .get();
-                const bids = bidsSnapshot.docs.map((bid) => bid.data() as Bid);
-                return {
-                  ...data,
-                  id: doc.id,
-                  bids,
-                };
-              })
-            ),
+            bulkAppraisalRequests: snapshot.docs.map((doc) => {
+              const data = doc.data() as BulkAppraisalRequest;
+              return {
+                ...data,
+                id: doc.id,
+              };
+            }),
             loading: false,
           });
         },

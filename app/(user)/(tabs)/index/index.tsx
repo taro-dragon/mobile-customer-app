@@ -3,12 +3,22 @@ import UserIndexScreen from "@/screens/users/tabs";
 
 const CustomerIndex = () => {
   const { cars, bulkAppraisalRequests } = useStore();
-  console.log(JSON.stringify(bulkAppraisalRequests, null, 2));
-
-  const currentAppraisalCars = cars.filter(
-    (car) => car.status === "in_progress" || car.status === "deadline"
+  const currentAppraisalRequests = bulkAppraisalRequests.filter(
+    (request) =>
+      request.status === "in_progress" || request.status === "deadline"
   );
-  return <UserIndexScreen currentAppraisalCars={currentAppraisalCars} />;
+  const currentAppraisalCars = cars.filter((car) => {
+    const request = currentAppraisalRequests.find(
+      (request) => request.carId === car.id
+    );
+    return request;
+  });
+  return (
+    <UserIndexScreen
+      currentAppraisalCars={currentAppraisalCars}
+      currentAppraisalRequests={currentAppraisalRequests}
+    />
+  );
 };
 
 export default CustomerIndex;

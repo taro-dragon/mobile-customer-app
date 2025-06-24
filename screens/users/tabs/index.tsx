@@ -14,13 +14,17 @@ import {
   View,
 } from "react-native";
 import { Car } from "@/types/models/Car";
+import { BulkAppraisalRequest } from "@/types/firestore_schema/bulkAppraisalRequests";
+import CurrentAppraisalCarsList from "@/components/CurrentAppraisalCarsList/CurrentAppraisalCarsList";
 
 type UserIndexScreenProps = {
   currentAppraisalCars: Car[];
+  currentAppraisalRequests: BulkAppraisalRequest[];
 };
 
 const UserIndexScreen: React.FC<UserIndexScreenProps> = ({
   currentAppraisalCars,
+  currentAppraisalRequests,
 }) => {
   const { colors, typography } = useTheme();
   const router = useRouter();
@@ -93,9 +97,10 @@ const UserIndexScreen: React.FC<UserIndexScreenProps> = ({
         </Text>
         {currentAppraisalCars?.length ? (
           <>
-            {currentAppraisalCars.map((item, i) => (
-              <CarInfoItem car={item} key={i} />
-            ))}
+            <CurrentAppraisalCarsList
+              currentAppraisalCars={currentAppraisalCars}
+              currentAppraisalRequests={currentAppraisalRequests}
+            />
           </>
         ) : (
           <Card>
