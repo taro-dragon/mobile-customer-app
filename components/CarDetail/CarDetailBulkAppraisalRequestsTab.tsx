@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { Gavel } from "lucide-react-native";
 import { Tabs } from "react-native-collapsible-tab-view";
 import { ActivityIndicator, Text, View } from "react-native";
@@ -22,10 +22,15 @@ const CarDetailBulkAppraisalRequestsTab: React.FC<
   CarDetailBulkAppraisalRequestsTabProps
 > = ({ handleRequestBulkAppraisal, bulkAppraisalRequest }) => {
   const { bids, isLoading, hasMore, loadMore } = useCarBidsContext();
-  const { cars } = useStore();
-  const { id } = useLocalSearchParams<{ id: string }>();
   const { colors, typography } = useTheme();
-  const car = cars.find((car) => car.id === id);
+
+  console.log("bulkAppraisalRequest", bulkAppraisalRequest);
+  const isDisplayBulkResult = useMemo(() => {
+    return (
+      bulkAppraisalRequest?.status === "deadline" ||
+      bulkAppraisalRequest?.status === "completed"
+    );
+  }, [bulkAppraisalRequest]);
 
   const renderItem = useCallback(
     ({ item }: { item: ExtendedBid }) => <BidItem bid={item} />,
@@ -55,6 +60,14 @@ const CarDetailBulkAppraisalRequestsTab: React.FC<
               }}
             >
               一括査定が進行中です
+            </Text>
+            <Text
+              style={{
+                ...typography.body3,
+                color: colors.textSecondary,
+              }}
+            >
+              入札件数：{bids.length}件
             </Text>
             <Text
               style={{
@@ -106,7 +119,7 @@ const CarDetailBulkAppraisalRequestsTab: React.FC<
 
   return (
     <Tabs.FlatList
-      data={bids}
+      data={isDisplayBulkResult ? bids : []}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
       onEndReached={hasMore ? loadMore : undefined}
