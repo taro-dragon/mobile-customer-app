@@ -8,6 +8,9 @@ import { Car } from "@/types/models/Car";
 import CarInfoItem from "./CarInfoIten";
 import ImageCarousel from "../common/ImageCarousel";
 import { BulkAppraisalRequest } from "@/types/firestore_schema/bulkAppraisalRequests";
+import Alert from "../common/Alert";
+import { useMemo } from "react";
+import { colorOptions } from "../registrationCar/form/ColorSelect";
 
 type CarDetailHeaderProps = {
   bulkAppraisalRequest?: BulkAppraisalRequest;
@@ -25,6 +28,11 @@ const CarDetailHeader: React.FC<CarDetailHeaderProps> = ({
   const basicImages = imageOrder
     .map((key) => car?.images?.[key])
     .filter((url): url is string => Boolean(url));
+  const colorValue = useMemo(() => {
+    return (
+      colorOptions.find((option) => option.color === car?.color)?.bgColor || ""
+    );
+  }, [car?.color]);
 
   const additionalImages = Object.keys(car?.images ?? {})
     .filter((key) => key.startsWith("otherPhoto"))
@@ -52,6 +60,9 @@ const CarDetailHeader: React.FC<CarDetailHeaderProps> = ({
           <AppraisalStatusTag bulkAppraisalRequest={bulkAppraisalRequest} />
         </View>
         <View style={{ gap: 8 }}>
+          {car?.description && (
+            <Alert title="備考" message={car?.description} type="info" />
+          )}
           <Text style={{ ...typography.heading3, color: colors.textPrimary }}>
             車両情報
           </Text>
@@ -75,6 +86,32 @@ const CarDetailHeader: React.FC<CarDetailHeaderProps> = ({
             )}
             <CarInfoItem label="年式" value={carData.year.year} />
             <CarInfoItem label="グレード" value={carData.grade.gradeName} />
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  ...typography.heading3,
+                  color: colors.textSecondary,
+                }}
+              >
+                車体色
+              </Text>
+              <View
+                style={{
+                  width: 24,
+                  height: 24,
+                  backgroundColor: colorValue,
+                  borderRadius: 12,
+                  borderWidth: 1,
+                  borderColor: colors.borderPrimary,
+                }}
+              />
+            </View>
           </View>
         </View>
       </View>

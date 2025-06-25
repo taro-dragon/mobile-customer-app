@@ -88,7 +88,7 @@ const CarDetailScreen: React.FC<CarDetailScreenProps> = ({
               color={colors.primary}
             />
           </View>
-          <SafeAreaBottom />
+          <SafeAreaBottom color={colors.backgroundPrimary} />
         </>
       )}
     </View>
