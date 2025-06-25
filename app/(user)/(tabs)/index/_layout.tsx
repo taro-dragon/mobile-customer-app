@@ -22,11 +22,6 @@ const Layout = () => {
         name="index"
         options={{
           title: "ホーム",
-          headerRight: () => (
-            <TouchableOpacity onPress={() => push("./todo")}>
-              <Check size={24} color={colors.primary} />
-            </TouchableOpacity>
-          ),
         }}
       />
       <Stack.Screen

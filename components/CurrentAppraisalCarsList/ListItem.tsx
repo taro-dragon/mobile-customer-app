@@ -3,7 +3,8 @@ import { transformCarData } from "@/libs/transformCarData";
 import { Bid } from "@/types/firestore_schema/bids";
 import { Car } from "@/types/models/Car";
 import { Image } from "expo-image";
-import { Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { Text, TouchableOpacity, View } from "react-native";
 
 type ListItemProps = {
   car: Car & { bids: Bid[] };
@@ -12,8 +13,9 @@ type ListItemProps = {
 const ListItem: React.FC<ListItemProps> = ({ car }) => {
   const { colors, typography } = useTheme();
   const carData = transformCarData(car as Car);
+  const router = useRouter();
   return (
-    <View
+    <TouchableOpacity
       style={{
         backgroundColor: colors.backgroundSecondary,
         borderRadius: 8,
@@ -22,6 +24,7 @@ const ListItem: React.FC<ListItemProps> = ({ car }) => {
         borderWidth: 1,
         borderColor: colors.borderPrimary,
       }}
+      onPress={() => router.push(`/cars/${car.id}`)}
     >
       <View style={{ width: "100%", aspectRatio: 1 }}>
         <Image
@@ -61,7 +64,7 @@ const ListItem: React.FC<ListItemProps> = ({ car }) => {
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

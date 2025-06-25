@@ -1,8 +1,9 @@
 import useFetchCurrentAppraisalBids from "@/hooks/user/useFetchCurrentAppraisalBids";
 import { BulkAppraisalRequest } from "@/types/firestore_schema/bulkAppraisalRequests";
 import { Car } from "@/types/models/Car";
-import { FlatList, View } from "react-native";
+import { FlatList } from "react-native";
 import ListItem from "./ListItem";
+import { useTheme } from "@/contexts/ThemeContext";
 
 type CurrentAppraisalCarsListProps = {
   currentAppraisalCars: Car[];
@@ -19,7 +20,6 @@ const CurrentAppraisalCarsList: React.FC<CurrentAppraisalCarsListProps> = ({
     isLoading,
   } = useFetchCurrentAppraisalBids(currentAppraisalRequests);
 
-  //  carlistにbidsの情報を付与する
   const carListWithBids = currentAppraisalCars.map((car) => {
     const request = currentAppraisalRequests.find(
       (req) => req.carId === car.id
@@ -28,7 +28,6 @@ const CurrentAppraisalCarsList: React.FC<CurrentAppraisalCarsListProps> = ({
     return { ...car, bids: carBids };
   });
 
-  console.log("carListWithBids", JSON.stringify(carListWithBids, null, 2));
   return (
     <FlatList
       data={carListWithBids}
