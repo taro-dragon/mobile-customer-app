@@ -1,17 +1,15 @@
 import React, { useCallback, useMemo } from "react";
+import dayjs from "dayjs";
 import { Gavel } from "lucide-react-native";
 import { Tabs } from "react-native-collapsible-tab-view";
 import { ActivityIndicator, Text, View } from "react-native";
 import { useCarBidsContext } from "@/contexts/CarBidsContext";
 import BidItem from "../CarInfo/BidItem";
-import { useStore } from "@/hooks/useStore";
-import { useLocalSearchParams } from "expo-router";
 import { ExtendedBid } from "@/hooks/useFetchCarBids";
 import { useTheme } from "@/contexts/ThemeContext";
 import Button from "../common/Button";
 import Loader from "../common/Loader";
 import { BulkAppraisalRequest } from "@/types/firestore_schema/bulkAppraisalRequests";
-import dayjs from "dayjs";
 
 type CarDetailBulkAppraisalRequestsTabProps = {
   bulkAppraisalRequest?: BulkAppraisalRequest;
@@ -24,7 +22,6 @@ const CarDetailBulkAppraisalRequestsTab: React.FC<
   const { bids, isLoading, hasMore, loadMore } = useCarBidsContext();
   const { colors, typography } = useTheme();
 
-  console.log("bulkAppraisalRequest", bulkAppraisalRequest);
   const isDisplayBulkResult = useMemo(() => {
     return (
       bulkAppraisalRequest?.status === "deadline" ||
