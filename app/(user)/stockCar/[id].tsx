@@ -1,18 +1,50 @@
 import ShopDetailSkeleton from "@/components/Skelton/SkeltonShopInfo";
 import useFetchStockCar from "@/hooks/staff/useFetchStockCar";
-import { useStore } from "@/hooks/useStore";
+import functions from "@react-native-firebase/functions";
+
 import StockCarScreen from "@/screens/users/stockCar";
 import { useLocalSearchParams } from "expo-router";
-import { useMemo } from "react";
+import { useState } from "react";
+import Toast from "react-native-toast-message";
+import { useStore } from "@/hooks/useStore";
 
 const StockCar = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { stockCar, isLoading } = useFetchStockCar(id);
+  const { talks } = useStore();
+  const [isInquiring, setIsInquiring] = useState(false);
+  const isInquiry = talks.some((talk) => talk.sourceId === id);
   if (isLoading || !stockCar) {
     return <ShopDetailSkeleton />;
   }
-  const onInquire = async () => {};
-  return <StockCarScreen stockCar={stockCar} isInquiry={false} />;
+  const onInquire = async () => {
+    const userInquire = functions().httpsCallable("userInquire");
+    setIsInquiring(true);
+    try {
+      await userInquire({
+        targetStockCarId: id,
+      });
+      Toast.show({
+        type: "success",
+        text1: "問い合わせを送信しました",
+      });
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "問い合わせに失敗しました",
+      });
+    } finally {
+      setIsInquiring(false);
+    }
+  };
+  return (
+    <StockCarScreen
+      stockCar={stockCar}
+      isInquiry={isInquiry}
+      onInquire={onInquire}
+      isInquiring={isInquiring}
+    />
+  );
 };
 
 export default StockCar;

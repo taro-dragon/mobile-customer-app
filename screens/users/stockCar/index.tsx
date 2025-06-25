@@ -17,9 +17,16 @@ import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 type StockCarProps = {
   stockCar: StockCar;
   isInquiry: boolean;
+  onInquire: () => void;
+  isInquiring: boolean;
 };
 
-const StockCarScreen: React.FC<StockCarProps> = ({ stockCar, isInquiry }) => {
+const StockCarScreen: React.FC<StockCarProps> = ({
+  stockCar,
+  isInquiry,
+  onInquire,
+  isInquiring,
+}) => {
   const { colors, typography } = useTheme();
   const carData = transformCarData(stockCar as unknown as Car);
   // 写真を指定した順序で配列にする
@@ -232,11 +239,10 @@ const StockCarScreen: React.FC<StockCarProps> = ({ stockCar, isInquiry }) => {
             </View>
             <View style={{ flex: 1 }}>
               <Button
-                onPress={() => {
-                  console.log("pressed");
-                }}
+                onPress={onInquire}
                 label="問い合わせる"
                 color={colors.primary}
+                isLoading={isInquiring}
               />
             </View>
           </View>
