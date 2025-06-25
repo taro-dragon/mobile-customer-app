@@ -95,7 +95,7 @@ const UserIndexScreen: React.FC<UserIndexScreenProps> = ({
         <Text style={{ ...typography.heading2, color: colors.textPrimary }}>
           査定中の車両
         </Text>
-        {currentAppraisalCars?.length ? (
+        {currentAppraisalCars?.length > 0 ? (
           <>
             <CurrentAppraisalCarsList
               currentAppraisalCars={currentAppraisalCars}
