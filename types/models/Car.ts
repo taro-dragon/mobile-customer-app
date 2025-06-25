@@ -27,6 +27,7 @@ export type Car = {
   repairStatus: string;
   sellTime: string;
   color: string;
+  firstRegistrationYear: string;
   status?: BulkAppraisalStatus;
   createdAt: FirebaseFirestoreTypes.Timestamp;
 };

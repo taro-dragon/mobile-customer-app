@@ -84,6 +84,7 @@ const RegistrationCarForm = () => {
         updatedAt: firestore.FieldValue.serverTimestamp(),
         description: data.description,
         color: data.color,
+        firstRegistrationYear: Number(data.firstRegistrationYear),
       };
       await carRef.set(carData);
       Toast.show({

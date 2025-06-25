@@ -64,6 +64,15 @@ const CarDetailHeader: React.FC<CarDetailHeaderProps> = ({
               borderRadius: 12,
             }}
           >
+            {car?.firstRegistrationYear && (
+              <CarInfoItem
+                label="初年度登録年"
+                value={car?.firstRegistrationYear}
+              />
+            )}
+            {car?.modelNumber && (
+              <CarInfoItem label="型式" value={car?.modelNumber} />
+            )}
             <CarInfoItem label="年式" value={carData.year.year} />
             <CarInfoItem label="グレード" value={carData.grade.gradeName} />
           </View>
