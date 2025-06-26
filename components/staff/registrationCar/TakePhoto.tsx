@@ -44,6 +44,7 @@ const TakePhoto: React.FC<Props> = ({ name, label, isRequired = false }) => {
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       quality: 1,
+      mediaTypes: ["images"],
     });
     if (result.assets) {
       setValue(name, result.assets[0].uri);

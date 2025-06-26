@@ -147,14 +147,7 @@ export const registrationStockSchema = z.object({
   backSeatMonitor: z.boolean().optional(),
 
   // Manager fields
-  managerStaffs: z
-    .array(
-      z.object({
-        id: z.string(),
-        name: z.string(),
-      })
-    )
-    .optional(),
+  managerStaffs: z.array(z.string()).optional(),
 });
 
 // Simplified schema for draft saving (no required fields validation)

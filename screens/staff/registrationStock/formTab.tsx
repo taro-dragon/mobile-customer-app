@@ -62,8 +62,9 @@ const RegistrationStockFormScreen: React.FC = () => {
   const {
     watch,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = useFormContext();
+  console.log(errors);
 
   const collectImageFields = (
     data: Record<string, any>
