@@ -20,6 +20,7 @@ const Index = () => {
         justifyContent: "space-around",
         alignItems: "center",
         paddingHorizontal: 24,
+        paddingVertical: 40,
       }}
     >
       <View
