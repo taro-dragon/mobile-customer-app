@@ -11,9 +11,9 @@ import { useStore } from "@/hooks/useStore";
 const StockCar = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { stockCar, isLoading } = useFetchStockCar(id);
-  const { talks } = useStore();
+  const { userTalks } = useStore();
   const [isInquiring, setIsInquiring] = useState(false);
-  const isInquiry = talks.some((talk) => talk.sourceId === id);
+  const isInquiry = userTalks.some((talk) => talk.sourceId === id);
   if (isLoading || !stockCar) {
     return <ShopDetailSkeleton />;
   }

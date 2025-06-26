@@ -9,11 +9,11 @@ export const createTalkSlice: StateCreator<TalkSlice, [], [], TalkSlice> = (
   set,
   get
 ) => ({
-  talks: [] as TalkWithAffiliate[],
+  userTalks: [] as TalkWithAffiliate[],
   talkLoading: false,
-  unsubscribe: undefined,
+  talkUnsubscribe: undefined,
   fetchUserTalks: (userId: string) => {
-    const currentUnsubscribe = get().unsubscribe;
+    const currentUnsubscribe = get().talkUnsubscribe;
     if (currentUnsubscribe) {
       currentUnsubscribe();
     }
@@ -58,7 +58,7 @@ export const createTalkSlice: StateCreator<TalkSlice, [], [], TalkSlice> = (
 
             set((state) => ({
               ...state,
-              talks: talksWithAffiliateStores,
+              userTalks: talksWithAffiliateStores,
               talkLoading: false,
             }));
           } catch (error) {
@@ -72,19 +72,19 @@ export const createTalkSlice: StateCreator<TalkSlice, [], [], TalkSlice> = (
         }
       );
 
-    set((state) => ({ ...state, unsubscribe }));
+    set((state) => ({ ...state, talkUnsubscribe: unsubscribe }));
     return unsubscribe;
   },
   deleteTalk: () => {
-    set((state) => ({ ...state, talks: [] }));
+    set((state) => ({ ...state, userTalks: [] }));
   },
   setTalkLoading: (talkLoading: boolean) => {
     set((state) => ({ ...state, talkLoading }));
   },
   clearTalks: () => {
-    if (get().unsubscribe) {
-      get().unsubscribe!();
+    if (get().talkUnsubscribe) {
+      get().talkUnsubscribe!();
     }
-    set((state) => ({ ...state, talks: [], unsubscribe: undefined }));
+    set((state) => ({ ...state, userTalks: [], unsubscribe: undefined }));
   },
 });

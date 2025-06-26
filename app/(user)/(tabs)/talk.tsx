@@ -1,3 +1,4 @@
+import Loader from "@/components/common/Loader";
 import TalkItem from "@/components/talks/TalkItem";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useStore } from "@/hooks/useStore";
@@ -5,12 +6,15 @@ import { MessageSquare } from "lucide-react-native";
 import { FlatList, Text, View } from "react-native";
 
 const Talk = () => {
-  const { talks } = useStore();
+  const { userTalks, talkLoading } = useStore();
   const { colors, typography } = useTheme();
+  if (talkLoading) {
+    return <Loader />;
+  }
   return (
     <View style={{ flex: 1 }}>
       <FlatList
-        data={talks}
+        data={userTalks}
         renderItem={({ item }) => <TalkItem talk={item} />}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ flex: 1 }}
