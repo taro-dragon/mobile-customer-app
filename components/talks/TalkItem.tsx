@@ -1,7 +1,7 @@
 import { useTheme } from "@/contexts/ThemeContext";
 import { TalkWithAffiliate } from "@/types/extendType/TalkWithAffiliate";
 import { Image } from "expo-image";
-import React from "react";
+import React, { useMemo } from "react";
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import dayjs from "dayjs";
 import { useRouter } from "expo-router";
@@ -10,7 +10,7 @@ import "dayjs/locale/ja";
 import Divider from "../common/Divider";
 import Tag from "../common/Tag";
 import Logo from "../common/Logo";
-import { useGetSourceTypeLabel } from "@/hooks/useGetSourceTypeLabel";
+import { getSourceTypeLabel } from "@/libs/getSourceTypeLabel";
 
 // dayjsの設定
 dayjs.extend(relativeTime);
@@ -23,7 +23,10 @@ type TalkItemProps = {
 const TalkItem: React.FC<TalkItemProps> = ({ talk }) => {
   const { colors } = useTheme();
   const router = useRouter();
-  const { label, color } = useGetSourceTypeLabel(talk.sourceType);
+  const { label, color } = useMemo(
+    () => getSourceTypeLabel(talk.sourceType),
+    [talk.sourceType]
+  );
 
   const handlePress = () => {
     router.push(`/talks/${talk.id}`);

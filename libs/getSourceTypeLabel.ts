@@ -1,12 +1,9 @@
-import { useTheme } from "@/contexts/ThemeContext";
-
-export const useGetSourceTypeLabel = (
+export const getSourceTypeLabel = (
   sourceType: string
 ): {
   label: string;
   color: "info" | "success" | "warning" | "error" | "primary";
 } => {
-  const { colors } = useTheme();
   switch (sourceType) {
     case "bids":
       return { label: "一括査定", color: "info" };
