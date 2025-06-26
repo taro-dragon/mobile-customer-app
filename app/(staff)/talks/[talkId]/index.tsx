@@ -19,6 +19,7 @@ import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import MessageItem from "@/components/staff/talks/MessageItem";
 import TalkHeader from "@/components/staff/talks/TalkHeader";
 import MessageInput from "@/components/staff/talks/MessageInput";
+import Toast from "react-native-toast-message";
 
 const TalkDetail = () => {
   const { talkId } = useLocalSearchParams<{ talkId: string }>();
@@ -91,10 +92,12 @@ const TalkDetail = () => {
           lastMessageAt: firestore.Timestamp.now(),
         });
       });
-
       setText("");
     } catch (error) {
-      console.error("Error sending message:", error);
+      Toast.show({
+        type: "error",
+        text1: "メッセージの送信に失敗しました",
+      });
     } finally {
       setSending(false);
     }
