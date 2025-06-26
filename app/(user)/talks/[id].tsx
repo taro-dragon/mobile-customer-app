@@ -23,8 +23,8 @@ import Divider from "@/components/common/Divider";
 
 const TalkDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { talks, user } = useStore();
-  const talk = talks.find((talk) => talk.id === id);
+  const { userTalks, user } = useStore();
+  const talk = userTalks.find((talk) => talk.id === id);
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [text, setText] = useState("");

@@ -9,8 +9,8 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ja";
 import Divider from "../common/Divider";
 import Tag from "../common/Tag";
-import { StoreIcon } from "lucide-react-native";
 import Logo from "../common/Logo";
+import { useGetSourceTypeLabel } from "@/hooks/useGetSourceTypeLabel";
 
 // dayjsの設定
 dayjs.extend(relativeTime);
@@ -23,6 +23,7 @@ type TalkItemProps = {
 const TalkItem: React.FC<TalkItemProps> = ({ talk }) => {
   const { colors } = useTheme();
   const router = useRouter();
+  const { label, color } = useGetSourceTypeLabel(talk.sourceType);
 
   const handlePress = () => {
     router.push(`/talks/${talk.id}`);
@@ -75,10 +76,7 @@ const TalkItem: React.FC<TalkItemProps> = ({ talk }) => {
           <Text style={[styles.time, { color: colors.textSecondary }]}>
             {dayjs(talk.lastMessageAt.toDate()).fromNow()}
           </Text>
-          <Tag
-            label={talk.sourceType === "bids" ? "一括査定" : "買取オファー"}
-            color={talk.sourceType === "bids" ? "info" : "success"}
-          />
+          <Tag label={label} color={color} />
         </View>
       </TouchableOpacity>
       <Divider />

@@ -24,9 +24,19 @@ const ShopHeader: React.FC<ShopHeaderProps> = ({ shop }) => {
             backgroundColor: colors.gray200,
             alignItems: "center",
             justifyContent: "center",
+            gap: 12,
           }}
         >
           <Store size={48} color={colors.textSecondary} />
+          <Text
+            style={{
+              ...typography.heading2,
+              color: colors.textSecondary,
+              textAlign: "center",
+            }}
+          >
+            No Image
+          </Text>
         </View>
       )}
 
