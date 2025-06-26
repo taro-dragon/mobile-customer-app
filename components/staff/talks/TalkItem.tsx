@@ -23,6 +23,7 @@ const TalkItem: React.FC<TalkItemProps> = ({ talk }) => {
   const { colors } = useTheme();
   const router = useRouter();
   const { label, color } = getSourceTypeLabel(talk.sourceType);
+  console.log(talk);
 
   const handlePress = () => {
     router.push(`/talks/${talk.id}`);
@@ -32,11 +33,11 @@ const TalkItem: React.FC<TalkItemProps> = ({ talk }) => {
     <>
       <TouchableOpacity style={styles.container} onPress={handlePress}>
         <Image
-          source={
-            {
-              // uri: talk?.car.images.front,
-            }
-          }
+          source={{
+            uri:
+              talk?.sourceCar?.images.front ||
+              talk?.sourceStockCar?.images.front,
+          }}
           style={styles.avatar}
         />
         <View style={styles.content}>

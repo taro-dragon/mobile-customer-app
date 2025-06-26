@@ -4,7 +4,7 @@ import { StateCreator } from "zustand";
 import { Car } from "@/types/models/Car";
 import { User } from "@/types/firestore_schema/users";
 import { TalkWithUser } from "@/types/extendType/TalkWithUser";
-import { StockCar } from "@/types/firestore_schema/stockCar";
+import { Stock } from "@/types/firestore_schema/stock";
 
 export const createStaffTalkSlice: StateCreator<
   StaffTalkSlice,
@@ -52,7 +52,7 @@ export const createStaffTalkSlice: StateCreator<
                     return {
                       ...talk,
                       user: user.data() as User,
-                      sourceStockCar: stockCar.data() as StockCar,
+                      sourceStockCar: stockCar.data() as Stock,
                     };
                   } else {
                     const car = await firestore()
