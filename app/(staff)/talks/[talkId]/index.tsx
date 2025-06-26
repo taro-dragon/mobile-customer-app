@@ -8,19 +8,17 @@ import {
   Platform,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import firestore from "@react-native-firebase/firestore";
 import { Message } from "@/types/firestore_schema/messages";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Car, ChevronLeft, File, Store, User } from "lucide-react-native";
+import { ChevronLeft } from "lucide-react-native";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
-import Divider from "@/components/common/Divider";
 import MessageItem from "@/components/staff/talks/MessageItem";
 import TalkHeader from "@/components/staff/talks/TalkHeader";
+import MessageInput from "@/components/staff/talks/MessageInput";
 
 const TalkDetail = () => {
   const { talkId } = useLocalSearchParams<{ talkId: string }>();
@@ -31,7 +29,7 @@ const TalkDetail = () => {
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
   const flatListRef = useRef<FlatList>(null);
-  const { colors, typography } = useTheme();
+  const { colors } = useTheme();
   const router = useRouter();
 
   useEffect(() => {
@@ -150,45 +148,12 @@ const TalkDetail = () => {
             inverted
           />
 
-          <View
-            style={{
-              ...styles.inputContainer,
-              backgroundColor: colors.backgroundPrimary,
-            }}
-          >
-            <TextInput
-              style={[
-                styles.input,
-                {
-                  color: colors.textPrimary,
-                  backgroundColor: colors.backgroundSecondary,
-                },
-              ]}
-              value={text}
-              onChangeText={setText}
-              placeholder="メッセージを入力..."
-              multiline
-            />
-
-            <TouchableOpacity
-              style={[
-                styles.sendButton,
-                { backgroundColor: colors.primary },
-                !text.trim() && {
-                  backgroundColor: colors.primary,
-                  opacity: 0.2,
-                },
-              ]}
-              onPress={sendMessage}
-              disabled={!text.trim() || sending}
-            >
-              {sending ? (
-                <ActivityIndicator size="small" color={colors.white} />
-              ) : (
-                <Ionicons name="send" size={20} color={colors.white} />
-              )}
-            </TouchableOpacity>
-          </View>
+          <MessageInput
+            sendMessage={sendMessage}
+            sending={sending}
+            text={text}
+            setText={setText}
+          />
         </KeyboardAvoidingView>
         <SafeAreaBottom color={colors.backgroundPrimary} />
       </View>
