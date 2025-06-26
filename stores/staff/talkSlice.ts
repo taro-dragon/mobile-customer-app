@@ -1,10 +1,10 @@
 import { StaffTalkSlice } from "@/types/slices/TalkSlice";
-import { TalkWithAffiliate } from "@/types/extendType/TalkWithAffiliate";
 import firestore from "@react-native-firebase/firestore";
 import { StateCreator } from "zustand";
 import { Car } from "@/types/models/Car";
 import { User } from "@/types/firestore_schema/users";
 import { TalkWithUser } from "@/types/extendType/TalkWithUser";
+import { StockCar } from "@/types/firestore_schema/stockCar";
 
 export const createStaffTalkSlice: StateCreator<
   StaffTalkSlice,
@@ -14,9 +14,9 @@ export const createStaffTalkSlice: StateCreator<
 > = (set, get) => ({
   staffTalks: [] as TalkWithUser[],
   staffTalkLoading: false,
-  staffUnsubscribe: undefined,
+  staffTalkUnsubscribe: undefined,
   fetchStaffTalks: (shopId: string) => {
-    const currentUnsubscribe = get().staffUnsubscribe;
+    const currentUnsubscribe = get().staffTalkUnsubscribe;
     if (currentUnsubscribe) {
       currentUnsubscribe();
     }
@@ -43,16 +43,29 @@ export const createStaffTalkSlice: StateCreator<
                     .collection("users")
                     .doc(talk.userId)
                     .get();
-                  const car = await firestore()
-                    .collection("cars")
-                    .doc(talk.carId)
-                    .get();
+                  const sourceType = talk.sourceType;
+                  if (sourceType === "car_inquiry") {
+                    const stockCar = await firestore()
+                      .collection("stockCars")
+                      .doc(talk.sourceId)
+                      .get();
+                    return {
+                      ...talk,
+                      user: user.data() as User,
+                      sourceStockCar: stockCar.data() as StockCar,
+                    };
+                  } else {
+                    const car = await firestore()
+                      .collection("cars")
+                      .doc(talk.carId)
+                      .get();
 
-                  return {
-                    ...talk,
-                    user: user.data() as User,
-                    car: car.data() as Car,
-                  };
+                    return {
+                      ...talk,
+                      user: user.data() as User,
+                      sourceCar: car.data() as Car,
+                    };
+                  }
                 } catch (error) {
                   console.error("Error fetching affiliate store:", error);
                   return talk;
@@ -75,7 +88,7 @@ export const createStaffTalkSlice: StateCreator<
         }
       );
 
-    set((state) => ({ ...state, unsubscribe }));
+    set((state) => ({ ...state, staffTalkUnsubscribe: unsubscribe }));
     return unsubscribe;
   },
   deleteStaffTalk: () => {
@@ -85,8 +98,8 @@ export const createStaffTalkSlice: StateCreator<
     set((state) => ({ ...state, staffTalkLoading }));
   },
   clearStaffTalks: () => {
-    if (get().staffUnsubscribe) {
-      get().staffUnsubscribe!();
+    if (get().staffTalkUnsubscribe) {
+      get().staffTalkUnsubscribe!();
     }
     set((state) => ({ ...state, staffTalks: [], staffUnsubscribe: undefined }));
   },

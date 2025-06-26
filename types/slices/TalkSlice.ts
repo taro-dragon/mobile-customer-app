@@ -4,7 +4,7 @@ import { TalkWithUser } from "../extendType/TalkWithUser";
 export type StaffTalkSlice = {
   staffTalks: TalkWithUser[];
   staffTalkLoading: boolean;
-  staffUnsubscribe?: () => void;
+  staffTalkUnsubscribe?: () => void;
   fetchStaffTalks: (userId: string) => void;
   deleteStaffTalk: () => void;
   setStaffTalkLoading: (staffTalkLoading: boolean) => void;
