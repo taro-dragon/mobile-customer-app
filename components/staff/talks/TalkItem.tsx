@@ -23,7 +23,6 @@ const TalkItem: React.FC<TalkItemProps> = ({ talk }) => {
   const { colors } = useTheme();
   const router = useRouter();
   const { label, color } = getSourceTypeLabel(talk.sourceType);
-  console.log(talk);
 
   const handlePress = () => {
     router.push(`/talks/${talk.id}`);

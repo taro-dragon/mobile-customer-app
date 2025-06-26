@@ -9,7 +9,7 @@ export const getSourceTypeLabel = (
       return { label: "一括査定", color: "info" };
     case "offers":
       return { label: "買取オファー", color: "success" };
-    case "car_inquire":
+    case "car_inquiry":
       return { label: "問い合わせ", color: "primary" };
     default:
       return { label: "不明", color: "error" };

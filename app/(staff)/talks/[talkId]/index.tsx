@@ -182,7 +182,7 @@ const TalkDetail = () => {
       >
         <Stack.Screen
           options={{
-            // title: `${talk.user.familyName} ${talk.user.givenName}`,
+            title: `${talk.user.familyName} ${talk.user.givenName}`,
             headerTitleStyle: styles.headerTitle,
             headerLeft: () => (
               <TouchableOpacity onPress={() => router.back()}>

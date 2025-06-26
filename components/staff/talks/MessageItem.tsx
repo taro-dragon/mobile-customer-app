@@ -39,7 +39,9 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, talk }) => {
         >
           <Image
             source={{
-              uri: talk.car.images.front,
+              uri:
+                talk.sourceCar?.images.front ||
+                talk.sourceStockCar?.images.front,
             }}
             style={styles.avatar}
           />
