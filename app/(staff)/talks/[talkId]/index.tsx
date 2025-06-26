@@ -20,6 +20,7 @@ import { Car, ChevronLeft, File, Store, User } from "lucide-react-native";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import Divider from "@/components/common/Divider";
 import MessageItem from "@/components/staff/talks/MessageItem";
+import TalkHeader from "@/components/staff/talks/TalkHeader";
 
 const TalkDetail = () => {
   const { talkId } = useLocalSearchParams<{ talkId: string }>();
@@ -117,128 +118,81 @@ const TalkDetail = () => {
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      <View
-        style={{
-          flexDirection: "row",
-          backgroundColor: colors.backgroundPrimary,
+    <>
+      <Stack.Screen
+        options={{
+          title: `${talk.user.familyName} ${talk.user.givenName}`,
+          headerTitleStyle: styles.headerTitle,
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <ChevronLeft size={24} color={colors.primary} />
+            </TouchableOpacity>
+          ),
         }}
-      >
-        <TouchableOpacity
-          onPress={() => router.push(`/customer/${talk.userId}`)}
-          style={[styles.headerMenu]}
-        >
-          <User size={24} color={colors.textPrimary} />
-          <Text style={{ ...typography.title5, color: colors.textPrimary }}>
-            顧客情報
-          </Text>
-        </TouchableOpacity>
-        <View
+      />
+      <View style={{ flex: 1 }}>
+        <TalkHeader talk={talk} />
+        <KeyboardAvoidingView
           style={{
-            width: 1,
-            height: "100%",
-            backgroundColor: colors.borderPrimary,
+            ...styles.container,
           }}
-        />
-        <TouchableOpacity
-          onPress={() => router.push(`/bulkAppraisalCars/${talk.carId}`)}
-          style={[styles.headerMenu]}
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
         >
-          <Car size={24} color={colors.textPrimary} />
-          <Text style={{ ...typography.title5, color: colors.textPrimary }}>
-            車両情報
-          </Text>
-        </TouchableOpacity>
-        <View
-          style={{
-            width: 1,
-            height: "100%",
-            backgroundColor: colors.borderPrimary,
-          }}
-        />
-        <TouchableOpacity
-          onPress={() =>
-            router.push(
-              talk.sourceType === "buyOffer"
-                ? `/offers/${talk.sourceId}`
-                : `/bids/${talk.sourceId}`
-            )
-          }
-          style={styles.headerMenu}
-        >
-          <File size={24} color={colors.textPrimary} />
-          <Text style={{ ...typography.title5, color: colors.textPrimary }}>
-            {talk.sourceType === "buyOffer" ? "オファー情報" : "一括査定情報"}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <Divider />
-      <KeyboardAvoidingView
-        style={{
-          ...styles.container,
-        }}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
-      >
-        <Stack.Screen
-          options={{
-            title: `${talk.user.familyName} ${talk.user.givenName}`,
-            headerTitleStyle: styles.headerTitle,
-            headerLeft: () => (
-              <TouchableOpacity onPress={() => router.back()}>
-                <ChevronLeft size={24} color={colors.primary} />
-              </TouchableOpacity>
-            ),
-          }}
-        />
-        <FlatList
-          ref={flatListRef}
-          data={messages}
-          renderItem={({ item }) => <MessageItem message={item} talk={talk} />}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.messagesContainer}
-          inverted
-        />
-
-        <View
-          style={{
-            ...styles.inputContainer,
-            backgroundColor: colors.backgroundPrimary,
-          }}
-        >
-          <TextInput
-            style={[
-              styles.input,
-              {
-                color: colors.textPrimary,
-                backgroundColor: colors.backgroundSecondary,
-              },
-            ]}
-            value={text}
-            onChangeText={setText}
-            placeholder="メッセージを入力..."
-            multiline
+          <FlatList
+            ref={flatListRef}
+            data={messages}
+            renderItem={({ item }) => (
+              <MessageItem message={item} talk={talk} />
+            )}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.messagesContainer}
+            inverted
           />
 
-          <TouchableOpacity
-            style={[
-              styles.sendButton,
-              { backgroundColor: colors.primary },
-              !text.trim() && { backgroundColor: colors.primary, opacity: 0.2 },
-            ]}
-            onPress={sendMessage}
-            disabled={!text.trim() || sending}
+          <View
+            style={{
+              ...styles.inputContainer,
+              backgroundColor: colors.backgroundPrimary,
+            }}
           >
-            {sending ? (
-              <ActivityIndicator size="small" color={colors.white} />
-            ) : (
-              <Ionicons name="send" size={20} color={colors.white} />
-            )}
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
-      <SafeAreaBottom color={colors.backgroundPrimary} />
-    </View>
+            <TextInput
+              style={[
+                styles.input,
+                {
+                  color: colors.textPrimary,
+                  backgroundColor: colors.backgroundSecondary,
+                },
+              ]}
+              value={text}
+              onChangeText={setText}
+              placeholder="メッセージを入力..."
+              multiline
+            />
+
+            <TouchableOpacity
+              style={[
+                styles.sendButton,
+                { backgroundColor: colors.primary },
+                !text.trim() && {
+                  backgroundColor: colors.primary,
+                  opacity: 0.2,
+                },
+              ]}
+              onPress={sendMessage}
+              disabled={!text.trim() || sending}
+            >
+              {sending ? (
+                <ActivityIndicator size="small" color={colors.white} />
+              ) : (
+                <Ionicons name="send" size={20} color={colors.white} />
+              )}
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+        <SafeAreaBottom color={colors.backgroundPrimary} />
+      </View>
+    </>
   );
 };
 
