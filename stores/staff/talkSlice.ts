@@ -4,6 +4,7 @@ import firestore from "@react-native-firebase/firestore";
 import { StateCreator } from "zustand";
 import { Car } from "@/types/models/Car";
 import { User } from "@/types/firestore_schema/users";
+import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 
 export const createStaffTalkSlice: StateCreator<
   StaffTalkSlice,
@@ -11,10 +12,10 @@ export const createStaffTalkSlice: StateCreator<
   [],
   StaffTalkSlice
 > = (set, get) => ({
-  staffTalks: [] as TalkWithAffiliate[],
+  staffTalks: [] as TalkWithUser[],
   staffTalkLoading: false,
   staffUnsubscribe: undefined,
-  fetchStaffTalks: (affiliateStoreId: string) => {
+  fetchStaffTalks: (shopId: string) => {
     const currentUnsubscribe = get().staffUnsubscribe;
     if (currentUnsubscribe) {
       currentUnsubscribe();
@@ -22,7 +23,7 @@ export const createStaffTalkSlice: StateCreator<
     set((state) => ({ ...state, talkLoading: true }));
     const unsubscribe = firestore()
       .collection("talks")
-      .where("affiliateStoreId", "==", affiliateStoreId)
+      .where("affiliateStoreId", "==", shopId)
       .where("isArchived", "==", false)
       .orderBy("lastMessageAt", "desc")
       .onSnapshot(
@@ -32,10 +33,10 @@ export const createStaffTalkSlice: StateCreator<
               return {
                 id: doc.id,
                 ...doc.data(),
-              } as TalkWithAffiliate;
+              } as TalkWithUser;
             });
 
-            const talksWithAffiliateStores = await Promise.all(
+            const talkWithUser = await Promise.all(
               talks.map(async (talk) => {
                 try {
                   const user = await firestore()
@@ -60,7 +61,7 @@ export const createStaffTalkSlice: StateCreator<
             );
             set((state) => ({
               ...state,
-              staffTalks: talksWithAffiliateStores,
+              staffTalks: talkWithUser,
               staffTalkLoading: false,
             }));
           } catch (error) {
