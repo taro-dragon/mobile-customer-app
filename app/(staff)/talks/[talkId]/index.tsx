@@ -154,6 +154,7 @@ const TalkDetail = () => {
           />
 
           <MessageInput
+            sourceType={talk.sourceType}
             sendMessage={sendMessage}
             sending={sending}
             text={text}

@@ -11,9 +11,13 @@ import {
 import { useTheme } from "@/contexts/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
 import { Plus, X } from "lucide-react-native";
-import { staffCarInquiryTalkPanel } from "@/constants/staffTalkPanel";
+import {
+  staffCarInquiryTalkPanel,
+  staffRequestApprovalTalkPanel,
+} from "@/constants/staffTalkPanel";
 
 type MessageInputProps = {
+  sourceType: string;
   text: string;
   setText: React.Dispatch<React.SetStateAction<string>>;
   sendMessage: () => void;
@@ -23,6 +27,7 @@ type MessageInputProps = {
 };
 
 const MessageInput: React.FC<MessageInputProps> = ({
+  sourceType,
   text,
   setText,
   sendMessage,
@@ -31,6 +36,10 @@ const MessageInput: React.FC<MessageInputProps> = ({
   setIsOpenPanel,
 }) => {
   const { colors } = useTheme();
+  const targetPanel =
+    sourceType === "car_inquiry"
+      ? staffCarInquiryTalkPanel
+      : staffRequestApprovalTalkPanel;
   return (
     <View
       style={{
@@ -104,7 +113,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
             gap: 8,
           }}
         >
-          {staffCarInquiryTalkPanel.map((item, index) => {
+          {targetPanel.map((item, index) => {
             return (
               <TouchableOpacity
                 key={index}
@@ -117,7 +126,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
                   gap: 8,
                 }}
               >
-                <item.icon size={28} color={colors.textPrimary} />
+                <item.icon size={24} color={colors.textPrimary} />
                 <Text style={{ fontSize: 12, color: colors.textPrimary }}>
                   {item.label}
                 </Text>
