@@ -37,7 +37,7 @@ export const staffCarInquiryTalkPanel: {
     label: "納車日調整",
     icon: Calendar,
     onPress: () => {
-      console.log("日程調整");
+      console.log("納車日調整");
     },
   },
 ];
@@ -79,7 +79,7 @@ export const staffRequestApprovalTalkPanel: {
     label: "査定金額提示",
     icon: DollarSign,
     onPress: () => {
-      console.log("日程調整");
+      console.log("査定金額提示");
     },
   },
 ];

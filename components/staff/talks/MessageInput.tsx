@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   ActivityIndicator,
   StyleSheet,
@@ -125,6 +125,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
                   alignItems: "center",
                   gap: 8,
                 }}
+                onPress={item.onPress}
               >
                 <item.icon size={24} color={colors.textPrimary} />
                 <Text style={{ fontSize: 12, color: colors.textPrimary }}>

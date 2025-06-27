@@ -19,7 +19,6 @@ const TalkHeader: React.FC<TalkHeaderProps> = ({ talk }) => {
       ? (talk.sourceStockCar as unknown as Car)
       : (talk.sourceCar as Car)
   );
-  console.log("carData", carData);
   const router = useRouter();
   const onCarInfoPress = () => {
     if (talk.sourceType === "car_inquiry") {
