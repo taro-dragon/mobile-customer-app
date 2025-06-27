@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ActivityIndicator,
   StyleSheet,
@@ -9,7 +9,7 @@ import {
 
 import { useTheme } from "@/contexts/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
-import { Plus } from "lucide-react-native";
+import { Plus, X } from "lucide-react-native";
 
 type MessageInputProps = {
   text: string;
@@ -25,66 +25,74 @@ const MessageInput: React.FC<MessageInputProps> = ({
   sending,
 }) => {
   const { colors } = useTheme();
+  const [isOpenPanel, setIsOpenPanel] = useState(false);
   return (
     <View
       style={{
-        ...styles.inputContainer,
+        padding: 8,
         backgroundColor: colors.backgroundPrimary,
       }}
     >
-      <TouchableOpacity
-        style={[
-          styles.sendButton,
-          {
-            borderWidth: 1,
-            borderColor: colors.borderPrimary,
-          },
-        ]}
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 8,
+        }}
       >
-        <Plus size={20} color={colors.white} />
-      </TouchableOpacity>
-      <TextInput
-        style={[
-          styles.input,
-          {
-            color: colors.textPrimary,
-            backgroundColor: colors.backgroundSecondary,
-          },
-        ]}
-        value={text}
-        onChangeText={setText}
-        placeholder="メッセージを入力..."
-        multiline
-      />
-      <TouchableOpacity
-        style={[
-          styles.sendButton,
-          { backgroundColor: colors.primary },
-          !text.trim() && {
-            backgroundColor: colors.primary,
-            opacity: 0.2,
-          },
-        ]}
-        onPress={sendMessage}
-        disabled={!text.trim() || sending}
-      >
-        {sending ? (
-          <ActivityIndicator size="small" color={colors.white} />
-        ) : (
-          <Ionicons name="send" size={20} color={colors.white} />
-        )}
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.sendButton,
+            {
+              borderWidth: 1,
+              borderColor: colors.borderPrimary,
+            },
+          ]}
+          onPress={() => setIsOpenPanel(!isOpenPanel)}
+        >
+          {isOpenPanel ? (
+            <X size={20} color={colors.white} />
+          ) : (
+            <Plus size={20} color={colors.white} />
+          )}
+        </TouchableOpacity>
+        <TextInput
+          style={[
+            styles.input,
+            {
+              color: colors.textPrimary,
+              backgroundColor: colors.backgroundSecondary,
+            },
+          ]}
+          value={text}
+          onChangeText={setText}
+          placeholder="メッセージを入力..."
+          multiline
+        />
+        <TouchableOpacity
+          style={[
+            styles.sendButton,
+            { backgroundColor: colors.primary },
+            !text.trim() && {
+              backgroundColor: colors.primary,
+              opacity: 0.2,
+            },
+          ]}
+          onPress={sendMessage}
+          disabled={!text.trim() || sending}
+        >
+          {sending ? (
+            <ActivityIndicator size="small" color={colors.white} />
+          ) : (
+            <Ionicons name="send" size={20} color={colors.white} />
+          )}
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-    gap: 8,
-  },
   input: {
     flex: 1,
     borderRadius: 20,
