@@ -11,35 +11,30 @@ import {
 import { useTheme } from "@/contexts/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
 import { Plus, X } from "lucide-react-native";
-import {
-  staffCarInquiryTalkPanel,
-  staffRequestApprovalTalkPanel,
-} from "@/constants/staffTalkPanel";
+import { TalkWithUser } from "@/types/extendType/TalkWithUser";
+import useStaffTalkPanel from "@/hooks/staff/useStaffTalkPanel";
 
 type MessageInputProps = {
-  sourceType: string;
   text: string;
   setText: React.Dispatch<React.SetStateAction<string>>;
   sendMessage: () => void;
   sending: boolean;
   isOpenPanel: boolean;
   setIsOpenPanel: React.Dispatch<React.SetStateAction<boolean>>;
+  talk: TalkWithUser;
 };
 
 const MessageInput: React.FC<MessageInputProps> = ({
-  sourceType,
   text,
   setText,
   sendMessage,
   sending,
   isOpenPanel,
   setIsOpenPanel,
+  talk,
 }) => {
   const { colors } = useTheme();
-  const targetPanel =
-    sourceType === "car_inquiry"
-      ? staffCarInquiryTalkPanel
-      : staffRequestApprovalTalkPanel;
+  const panel = useStaffTalkPanel(talk);
   return (
     <View
       style={{
@@ -113,7 +108,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
             gap: 8,
           }}
         >
-          {targetPanel.map((item, index) => {
+          {panel.map((item, index) => {
             return (
               <TouchableOpacity
                 key={index}

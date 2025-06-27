@@ -153,13 +153,13 @@ const TalkDetail = () => {
           />
 
           <MessageInput
-            sourceType={talk.sourceType}
             sendMessage={sendMessage}
             sending={sending}
             text={text}
             setText={setText}
             isOpenPanel={isOpenPanel}
             setIsOpenPanel={setIsOpenPanel}
+            talk={talk}
           />
         </KeyboardAvoidingView>
         <SafeAreaBottom color={colors.backgroundPrimary} />
