@@ -30,44 +30,7 @@ const TalkHeader: React.FC<TalkHeaderProps> = ({ talk }) => {
     }
   };
   return (
-    <>
-      <TouchableOpacity
-        onPress={onCarInfoPress}
-        style={{
-          padding: 8,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          backgroundColor: colors.backgroundPrimary,
-        }}
-      >
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-          <Image
-            source={{
-              uri:
-                talk.sourceCar?.images.front ||
-                talk.sourceStockCar?.images.front,
-            }}
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: 10,
-              borderWidth: 1,
-              borderColor: colors.borderPrimary,
-            }}
-          />
-          <View>
-            <Text style={{ ...typography.title4, color: colors.textPrimary }}>
-              {carData.maker.name} {carData.model.name}
-            </Text>
-            <Text style={{ ...typography.body2, color: colors.textSecondary }}>
-              {carData.year.year}
-            </Text>
-          </View>
-        </View>
-        <ChevronRight size={24} color={colors.textPrimary} />
-      </TouchableOpacity>
-      <Divider />
+    <View>
       <View
         style={{
           flexDirection: "row",
@@ -79,9 +42,6 @@ const TalkHeader: React.FC<TalkHeaderProps> = ({ talk }) => {
           style={[styles.headerMenu]}
         >
           <User size={24} color={colors.textPrimary} />
-          <Text style={{ ...typography.title5, color: colors.textPrimary }}>
-            顧客情報
-          </Text>
         </TouchableOpacity>
 
         {talk.sourceType !== "car_inquiry" && (
@@ -104,17 +64,70 @@ const TalkHeader: React.FC<TalkHeaderProps> = ({ talk }) => {
               style={styles.headerMenu}
             >
               <File size={24} color={colors.textPrimary} />
-              <Text style={{ ...typography.title5, color: colors.textPrimary }}>
-                {talk.sourceType === "buyOffer"
-                  ? "オファー情報"
-                  : "一括査定情報"}
-              </Text>
             </TouchableOpacity>
           </>
         )}
+        <View
+          style={{
+            width: 1,
+            height: "100%",
+            backgroundColor: colors.borderPrimary,
+          }}
+        />
+        <TouchableOpacity
+          onPress={onCarInfoPress}
+          style={{
+            padding: 8,
+            flex: 1,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            backgroundColor: colors.backgroundPrimary,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 8,
+              flex: 1,
+            }}
+          >
+            <Image
+              source={{
+                uri:
+                  talk.sourceCar?.images.front ||
+                  talk.sourceStockCar?.images.front,
+              }}
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 10,
+              }}
+            />
+            <View style={{ flex: 1 }}>
+              <Text
+                numberOfLines={1}
+                style={{
+                  ...typography.title4,
+                  color: colors.textPrimary,
+                  flex: 1,
+                }}
+              >
+                {carData.maker.name} {carData.model.name}
+              </Text>
+              <Text
+                numberOfLines={1}
+                style={{ ...typography.body2, color: colors.textSecondary }}
+              >
+                {carData.year.year}
+              </Text>
+            </View>
+          </View>
+          <ChevronRight size={24} color={colors.textPrimary} />
+        </TouchableOpacity>
       </View>
-      <Divider />
-    </>
+    </View>
   );
 };
 
@@ -127,11 +140,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   headerMenu: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 10,
-    gap: 8,
+    paddingHorizontal: 12,
+    aspectRatio: 1,
   },
   centerContainer: {
     flex: 1,
