@@ -1,59 +1,52 @@
-import React from "react";
-import { Message } from "@/types/firestore_schema/messages";
 import { useTheme } from "@/contexts/ThemeContext";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Image } from "expo-image";
-import dayjs from "dayjs";
-import { Check } from "lucide-react-native";
-import { useRouter } from "expo-router";
 import { TalkWithUser } from "@/types/extendType/TalkWithUser";
+import { Message } from "@/types/firestore_schema/messages";
+import dayjs from "dayjs";
+import { Image } from "expo-image";
+import { useRouter } from "expo-router";
+import { Check } from "lucide-react-native";
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-type MessageItemProps = {
-  message: Message;
+type TalkTextContentProps = {
+  isMe: boolean;
+  bubbleColor: {
+    backgroundColor: string;
+    borderColor: string;
+  };
   talk: TalkWithUser;
+  message: Message;
 };
-
-const MessageItem: React.FC<MessageItemProps> = ({ message, talk }) => {
+const TalkTextContent: React.FC<TalkTextContentProps> = ({
+  isMe,
+  bubbleColor,
+  talk,
+  message,
+}) => {
   const { colors } = useTheme();
-  const router = useRouter();
-  const isUser = message.senderType === "user";
-  const userBubbleColor = !isUser
-    ? {
-        backgroundColor: colors.backgroundInfo,
-        borderColor: colors.borderInfo,
-      }
-    : {
-        backgroundColor: colors.backgroundPrimary,
-        borderColor: colors.borderPrimary,
-      };
   return (
     <View
       style={[
         styles.messageContainer,
-        !isUser ? styles.userMessage : styles.otherMessage,
+        isMe ? styles.userMessage : styles.otherMessage,
       ]}
     >
-      {isUser && (
-        <TouchableOpacity
-          onPress={() => router.push(`/bulkAppraisalCars/${talk.carId}`)}
-        >
-          <Image
-            source={{
-              uri:
-                talk.sourceCar?.images.front ||
-                talk.sourceStockCar?.images.front,
-            }}
-            style={styles.avatar}
-          />
-        </TouchableOpacity>
+      {!isMe && (
+        <Image
+          source={{
+            uri:
+              talk.sourceCar?.images.front || talk.sourceStockCar?.images.front,
+          }}
+          style={styles.avatar}
+        />
       )}
       <View
         style={[
           styles.messageBubble,
-          !isUser ? styles.userBubble : styles.otherBubble,
+          isMe ? styles.userBubble : styles.otherBubble,
           {
-            backgroundColor: userBubbleColor.backgroundColor,
-            borderColor: userBubbleColor.borderColor,
+            backgroundColor: bubbleColor.backgroundColor,
+            borderColor: bubbleColor.borderColor,
             borderWidth: 1,
           },
         ]}
@@ -69,9 +62,7 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, talk }) => {
             gap: 8,
           }}
         >
-          {message.read && !isUser && (
-            <Check size={12} color={colors.primary} />
-          )}
+          {message.read && isMe && <Check size={12} color={colors.primary} />}
           <Text style={[styles.timeText, { color: colors.textSecondary }]}>
             {dayjs(message.createdAt.toDate()).format("HH:mm")}
           </Text>
@@ -125,4 +116,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MessageItem;
+export default TalkTextContent;

@@ -9,4 +9,5 @@ export type Message = {
   imageUrl?: string; // 画像URL（オプション）
   read: boolean; // 既読状態
   createdAt: FirebaseFirestoreTypes.Timestamp;
+  type?: "image" | "currentCarCheckRequested";
 };
