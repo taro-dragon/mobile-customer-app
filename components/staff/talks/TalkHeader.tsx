@@ -1,8 +1,11 @@
 import Divider from "@/components/common/Divider";
 import { useTheme } from "@/contexts/ThemeContext";
+import { transformCarData } from "@/libs/transformCarData";
 import { TalkWithUser } from "@/types/extendType/TalkWithUser";
+import { Car } from "@/types/models/Car";
+import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import { Car, File, User } from "lucide-react-native";
+import { CarIcon, ChevronRight, File, User } from "lucide-react-native";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -12,16 +15,59 @@ type TalkHeaderProps = {
 
 const TalkHeader: React.FC<TalkHeaderProps> = ({ talk }) => {
   const { colors, typography } = useTheme();
+  const carData = transformCarData(
+    talk.sourceType === "car_inquiry"
+      ? (talk.sourceStockCar as unknown as Car)
+      : (talk.sourceCar as Car)
+  );
+  console.log("carData", carData);
   const router = useRouter();
   const onCarInfoPress = () => {
     if (talk.sourceType === "car_inquiry") {
       router.push(`/stockCar/${talk.sourceId}`);
     } else {
-      router.push(`/cars/${talk.carId}`);
+      router.push(`/bulkAppraisalCars/${talk.carId}`);
     }
   };
   return (
     <>
+      <TouchableOpacity
+        onPress={onCarInfoPress}
+        style={{
+          padding: 8,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          backgroundColor: colors.backgroundPrimary,
+        }}
+      >
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <Image
+            source={{
+              uri:
+                talk.sourceCar?.images.front ||
+                talk.sourceStockCar?.images.front,
+            }}
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 10,
+              borderWidth: 1,
+              borderColor: colors.borderPrimary,
+            }}
+          />
+          <View>
+            <Text style={{ ...typography.title4, color: colors.textPrimary }}>
+              {carData.maker.name} {carData.model.name}
+            </Text>
+            <Text style={{ ...typography.body2, color: colors.textSecondary }}>
+              {carData.year.year}
+            </Text>
+          </View>
+        </View>
+        <ChevronRight size={24} color={colors.textPrimary} />
+      </TouchableOpacity>
+      <Divider />
       <View
         style={{
           flexDirection: "row",
@@ -37,19 +83,7 @@ const TalkHeader: React.FC<TalkHeaderProps> = ({ talk }) => {
             顧客情報
           </Text>
         </TouchableOpacity>
-        <View
-          style={{
-            width: 1,
-            height: "100%",
-            backgroundColor: colors.borderPrimary,
-          }}
-        />
-        <TouchableOpacity onPress={onCarInfoPress} style={[styles.headerMenu]}>
-          <Car size={24} color={colors.textPrimary} />
-          <Text style={{ ...typography.title5, color: colors.textPrimary }}>
-            {talk.sourceType === "car_inquiry" ? "問い合わせ車両" : "車両情報"}
-          </Text>
-        </TouchableOpacity>
+
         {talk.sourceType !== "car_inquiry" && (
           <>
             <View

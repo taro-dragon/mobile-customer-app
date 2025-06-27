@@ -9,6 +9,7 @@ import {
 
 import { useTheme } from "@/contexts/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
+import { Plus } from "lucide-react-native";
 
 type MessageInputProps = {
   text: string;
@@ -31,6 +32,17 @@ const MessageInput: React.FC<MessageInputProps> = ({
         backgroundColor: colors.backgroundPrimary,
       }}
     >
+      <TouchableOpacity
+        style={[
+          styles.sendButton,
+          {
+            borderWidth: 1,
+            borderColor: colors.borderPrimary,
+          },
+        ]}
+      >
+        <Plus size={20} color={colors.white} />
+      </TouchableOpacity>
       <TextInput
         style={[
           styles.input,
@@ -44,7 +56,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
         placeholder="メッセージを入力..."
         multiline
       />
-
       <TouchableOpacity
         style={[
           styles.sendButton,
@@ -68,32 +79,11 @@ const MessageInput: React.FC<MessageInputProps> = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  headerTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  headerMenu: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 10,
-    gap: 8,
-  },
-  centerContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  messagesContainer: {
-    padding: 10,
-  },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
+    gap: 8,
   },
   input: {
     flex: 1,
@@ -101,7 +91,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 12,
     maxHeight: 100,
-    marginRight: 8,
   },
   sendButton: {
     width: 36,

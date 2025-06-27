@@ -25,6 +25,7 @@ const TalkDetail = () => {
   const { talkId } = useLocalSearchParams<{ talkId: string }>();
   const { staffTalks, staff } = useStore();
   const talk = staffTalks.find((talk) => talk.id === talkId);
+  console.log("talk", talk);
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [text, setText] = useState("");
