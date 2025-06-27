@@ -75,7 +75,7 @@ const TalkItem: React.FC<TalkItemProps> = ({ talk }) => {
             </Text>
           </View>
         </View>
-        <View style={{ alignItems: "center", gap: 8 }}>
+        <View style={{ alignItems: "flex-end", gap: 8 }}>
           <Text style={[styles.time, { color: colors.textSecondary }]}>
             {dayjs(talk.lastMessageAt.toDate()).fromNow()}
           </Text>

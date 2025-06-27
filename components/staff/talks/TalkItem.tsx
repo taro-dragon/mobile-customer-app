@@ -10,6 +10,8 @@ import Tag from "@/components/common/Tag";
 import Divider from "@/components/common/Divider";
 import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { getSourceTypeLabel } from "@/libs/getSourceTypeLabel";
+import { transformCarData } from "@/libs/transformCarData";
+import { Car } from "@/types/models/Car";
 
 // dayjsの設定
 dayjs.extend(relativeTime);
@@ -20,10 +22,14 @@ type TalkItemProps = {
 };
 
 const TalkItem: React.FC<TalkItemProps> = ({ talk }) => {
-  const { colors } = useTheme();
+  const { colors, typography } = useTheme();
   const router = useRouter();
   const { label, color } = getSourceTypeLabel(talk.sourceType);
-
+  const carData = transformCarData(
+    talk.sourceType === "car_inquiry"
+      ? (talk.sourceStockCar as unknown as Car)
+      : (talk.sourceCar as Car)
+  );
   const handlePress = () => {
     router.push(`/talks/${talk.id}`);
   };
@@ -39,8 +45,19 @@ const TalkItem: React.FC<TalkItemProps> = ({ talk }) => {
           }}
           style={styles.avatar}
         />
-        <View style={styles.content}>
-          <View style={styles.header}>
+        <View style={[styles.content, { gap: 4 }]}>
+          <View>
+            <Text
+              style={[
+                styles.name,
+                { color: colors.textPrimary, ...typography.title3 },
+              ]}
+              numberOfLines={1}
+            >
+              {`${carData.maker.name} ${carData.model.name}`}
+            </Text>
+          </View>
+          <View>
             <Text
               style={[styles.name, { color: colors.textPrimary }]}
               numberOfLines={1}
@@ -57,7 +74,7 @@ const TalkItem: React.FC<TalkItemProps> = ({ talk }) => {
             </Text>
           </View>
         </View>
-        <View style={{ alignItems: "center", gap: 8 }}>
+        <View style={{ alignItems: "flex-end", gap: 8 }}>
           <Text style={[styles.time, { color: colors.textSecondary }]}>
             {dayjs(talk.lastMessageAt.toDate()).fromNow()}
           </Text>
@@ -84,14 +101,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
   },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 4,
-  },
   name: {
-    fontSize: 16,
-    fontWeight: "600",
     flex: 1,
     marginRight: 8,
   },

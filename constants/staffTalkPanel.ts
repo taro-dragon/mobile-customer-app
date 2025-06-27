@@ -34,10 +34,10 @@ export const staffCarInquiryTalkPanel: {
     },
   },
   {
-    label: "納車日調整",
+    label: "来店日程調整",
     icon: Calendar,
     onPress: () => {
-      console.log("納車日調整");
+      console.log("日程調整");
     },
   },
 ];
@@ -69,7 +69,7 @@ export const staffRequestApprovalTalkPanel: {
     },
   },
   {
-    label: "現社確認依頼",
+    label: "現車確認依頼",
     icon: Car,
     onPress: () => {
       console.log("日程調整");
