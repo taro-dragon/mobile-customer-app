@@ -1,11 +1,10 @@
-import Divider from "@/components/common/Divider";
 import { useTheme } from "@/contexts/ThemeContext";
 import { transformCarData } from "@/libs/transformCarData";
 import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { Car } from "@/types/models/Car";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import { CarIcon, ChevronRight, File, User } from "lucide-react-native";
+import { ChevronRight, File, User } from "lucide-react-native";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
