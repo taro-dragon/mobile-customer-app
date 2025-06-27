@@ -27,6 +27,7 @@ const TalkDetail = () => {
   const talk = staffTalks.find((talk) => talk.id === talkId);
   console.log("talk", talk);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [isOpenPanel, setIsOpenPanel] = useState(false);
   const [loading, setLoading] = useState(true);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
@@ -157,6 +158,8 @@ const TalkDetail = () => {
             sending={sending}
             text={text}
             setText={setText}
+            isOpenPanel={isOpenPanel}
+            setIsOpenPanel={setIsOpenPanel}
           />
         </KeyboardAvoidingView>
         <SafeAreaBottom color={colors.backgroundPrimary} />

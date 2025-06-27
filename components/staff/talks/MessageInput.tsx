@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   ActivityIndicator,
   StyleSheet,
+  Text,
   TextInput,
   TouchableOpacity,
   View,
@@ -10,12 +11,15 @@ import {
 import { useTheme } from "@/contexts/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
 import { Plus, X } from "lucide-react-native";
+import { staffCarInquiryTalkPanel } from "@/constants/staffTalkPanel";
 
 type MessageInputProps = {
   text: string;
   setText: React.Dispatch<React.SetStateAction<string>>;
   sendMessage: () => void;
   sending: boolean;
+  isOpenPanel: boolean;
+  setIsOpenPanel: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const MessageInput: React.FC<MessageInputProps> = ({
@@ -23,14 +27,16 @@ const MessageInput: React.FC<MessageInputProps> = ({
   setText,
   sendMessage,
   sending,
+  isOpenPanel,
+  setIsOpenPanel,
 }) => {
   const { colors } = useTheme();
-  const [isOpenPanel, setIsOpenPanel] = useState(false);
   return (
     <View
       style={{
         padding: 8,
         backgroundColor: colors.backgroundPrimary,
+        gap: 12,
       }}
     >
       <View
@@ -68,6 +74,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
           onChangeText={setText}
           placeholder="メッセージを入力..."
           multiline
+          onFocus={() => setIsOpenPanel(false)}
         />
         <TouchableOpacity
           style={[
@@ -88,6 +95,37 @@ const MessageInput: React.FC<MessageInputProps> = ({
           )}
         </TouchableOpacity>
       </View>
+      {isOpenPanel && (
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: 8,
+          }}
+        >
+          {staffCarInquiryTalkPanel.map((item, index) => {
+            return (
+              <TouchableOpacity
+                key={index}
+                style={{
+                  width: "23%",
+                  aspectRatio: 1,
+                  borderRadius: 10,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+              >
+                <item.icon size={28} color={colors.textPrimary} />
+                <Text style={{ fontSize: 12, color: colors.textPrimary }}>
+                  {item.label}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      )}
     </View>
   );
 };
