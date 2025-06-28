@@ -10,4 +10,5 @@ export type Message = {
   read: boolean; // 既読状態
   createdAt: FirebaseFirestoreTypes.Timestamp;
   type?: "image" | "currentCarCheckRequested";
+  isAnswered?: boolean;
 };

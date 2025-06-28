@@ -32,6 +32,7 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
         senderId: staff?.id,
         type: "currentCarCheckRequested",
         read: false,
+        isAnswered: false,
       });
       await transaction.update(talkRef, {
         lastMessage: "現車確認依頼",

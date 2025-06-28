@@ -5,6 +5,7 @@ import { StyleSheet } from "react-native";
 import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { useStore } from "@/hooks/useStore";
 import TalkTextContent from "./TalkTextContent";
+import CurrentCarCheckRequestItem from "./CurrentCarCheckRequestItem";
 
 type MessageItemProps = {
   message: Message;
@@ -26,7 +27,14 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, talk }) => {
         borderColor: colors.borderPrimary,
       };
   if (message.type === "currentCarCheckRequested") {
-    return;
+    return (
+      <CurrentCarCheckRequestItem
+        bubbleColor={bubbleColor}
+        talk={talk}
+        message={message}
+        isMe={isMe}
+      />
+    );
   }
   return (
     <TalkTextContent

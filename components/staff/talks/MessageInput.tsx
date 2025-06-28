@@ -61,9 +61,9 @@ const MessageInput: React.FC<MessageInputProps> = ({
           onPress={() => setIsOpenPanel(!isOpenPanel)}
         >
           {isOpenPanel ? (
-            <X size={20} color={colors.white} />
+            <X size={20} color={colors.textPrimary} />
           ) : (
-            <Plus size={20} color={colors.white} />
+            <Plus size={20} color={colors.textPrimary} />
           )}
         </TouchableOpacity>
         <TextInput
