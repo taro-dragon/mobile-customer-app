@@ -3,7 +3,7 @@ import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { Message } from "@/types/firestore_schema/messages";
 import dayjs from "dayjs";
 import { Image } from "expo-image";
-import { Calendar, Check } from "lucide-react-native";
+import { Calendar, CarIcon, Check } from "lucide-react-native";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type CurrentCarCheckRequestItemProps = {
@@ -52,7 +52,7 @@ const CurrentCarCheckRequestItem: React.FC<CurrentCarCheckRequestItemProps> = ({
         <View
           style={[styles.calendarWrapper, { backgroundColor: colors.primary }]}
         >
-          <Calendar size={36} color={colors.white} />
+          <CarIcon size={36} color={colors.white} />
         </View>
         <View style={styles.messageAreaWrapper}>
           <View style={styles.messageWrapper}>
