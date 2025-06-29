@@ -106,7 +106,7 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
           label: "査定金額提示",
           icon: DollarSign,
           onPress: () => {
-            console.log("査定金額提示");
+            router.push(`/talks/${talk.id}/appraisalPrice/create`);
           },
         },
       ];

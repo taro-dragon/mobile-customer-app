@@ -151,7 +151,6 @@ const TalkDetail = () => {
             contentContainerStyle={styles.messagesContainer}
             inverted
           />
-
           <MessageInput
             sendMessage={sendMessage}
             sending={sending}

@@ -14,6 +14,14 @@ const TalkLayout = () => {
       }}
     >
       <Stack.Screen name="index" />
+      <Stack.Screen
+        name="appraisalPrice"
+        options={{
+          animation: "slide_from_bottom",
+          gestureEnabled: false,
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 };
