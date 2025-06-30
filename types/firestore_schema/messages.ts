@@ -12,4 +12,6 @@ export type Message = {
   type?: "image" | "currentCarCheckRequested" | "appraisalPrice";
   isAnswered?: boolean; //currentCarCheckRequestedの回答フラグ
   isOpened?: boolean; //appraisalPriceの開封フラグ
+  appraisalPrice?: string; //appraisalPriceの査定金額
+  appraisalPriceNote?: string; //appraisalPriceの査定金額のメモ
 };
