@@ -124,7 +124,7 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
     } finally {
       setIsDownloading(false);
       setDownloadProgress(0);
-      setTimeout(() => setShowProgressModal(false), 1000); // 完了表示を少し表示
+      setShowProgressModal(false);
     }
   };
 
