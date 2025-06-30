@@ -6,6 +6,7 @@ import { useStore } from "@/hooks/useStore";
 import TalkTextContent from "./TalkTextContent";
 import CurrentCarCheckRequestItem from "./CurrentCarCheckRequestItem";
 import AppraisalPriceItem from "./AppraisalPriceItem";
+import FileMessageItem from "./FileMessageItem";
 
 type MessageItemProps = {
   message: Message;
@@ -39,6 +40,16 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, talk }) => {
   if (message.type === "appraisalPrice") {
     return (
       <AppraisalPriceItem
+        bubbleColor={bubbleColor}
+        talk={talk}
+        message={message}
+        isMe={isMe}
+      />
+    );
+  }
+  if (message.type === "file") {
+    return (
+      <FileMessageItem
         bubbleColor={bubbleColor}
         talk={talk}
         message={message}

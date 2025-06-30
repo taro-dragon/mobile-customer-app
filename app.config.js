@@ -42,6 +42,7 @@ const commonConfig = {
       "react-native-vision-camera",
       "expo-font",
       "expo-web-browser",
+      "expo-document-picker",
       [
         "expo-build-properties",
         {

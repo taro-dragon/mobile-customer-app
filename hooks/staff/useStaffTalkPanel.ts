@@ -9,6 +9,8 @@ import {
   MapPin,
 } from "lucide-react-native";
 import firestore from "@react-native-firebase/firestore";
+import storage from "@react-native-firebase/storage";
+import * as DocumentPicker from "expo-document-picker";
 
 import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { useStore } from "../useStore";
@@ -16,6 +18,7 @@ import { useStore } from "../useStore";
 const useStaffTalkPanel = (talk: TalkWithUser) => {
   const router = useRouter();
   const { staff } = useStore();
+
   const onPressCheckCurrentCar = async (talkId: string) => {
     await firestore().runTransaction(async (transaction) => {
       const messageRef = await firestore()
@@ -40,15 +43,72 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
       });
     });
   };
+
+  const onPressFile = async () => {
+    try {
+      // ファイルを選択
+      const result = await DocumentPicker.getDocumentAsync({
+        type: "*/*", // すべてのファイルタイプを許可
+        copyToCacheDirectory: true,
+      });
+
+      if (result.canceled) {
+        return;
+      }
+
+      const file = result.assets[0];
+      if (!file) {
+        return;
+      }
+
+      // Firebase Storageにアップロード
+      const fileRef = storage()
+        .ref()
+        .child(`talks/${talk.id}/files/${Date.now()}_${file.name}`);
+
+      await fileRef.putFile(file.uri);
+      const downloadURL = await fileRef.getDownloadURL();
+
+      // Firestoreにメッセージとして保存
+      await firestore().runTransaction(async (transaction) => {
+        const messageRef = firestore()
+          .collection("talks")
+          .doc(talk.id)
+          .collection("messages")
+          .doc();
+
+        const talkRef = firestore().collection("talks").doc(talk.id);
+
+        await transaction.set(messageRef, {
+          talkId: talk.id,
+          text: `ファイル: ${file.name}`,
+          fileUrl: downloadURL,
+          fileName: file.name,
+          fileSize: file.size,
+          createdAt: firestore.FieldValue.serverTimestamp(),
+          senderType: "staff",
+          senderId: staff?.id,
+          type: "file",
+          read: false,
+        });
+
+        await transaction.update(talkRef, {
+          lastMessage: `ファイル: ${file.name}`,
+          lastMessageAt: firestore.Timestamp.now(),
+        });
+      });
+    } catch (error) {
+      console.error("ファイル送信エラー:", error);
+    }
+  };
+
   const panel = useMemo(() => {
     if (talk.sourceType === "car_inquiry") {
       return [
         {
           label: "ファイル",
           icon: File,
-          onPress: () => {
-            console.log("ファイル");
-          },
+          onPress: onPressFile,
         },
         {
           label: "画像",
@@ -77,9 +137,7 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
         {
           label: "ファイル",
           icon: File,
-          onPress: () => {
-            console.log("ファイル");
-          },
+          onPress: onPressFile,
         },
         {
           label: "画像",
@@ -111,7 +169,8 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
         },
       ];
     }
-  }, [talk.sourceType]);
+  }, [talk.sourceType, talk.id]);
+
   return panel;
 };
 
