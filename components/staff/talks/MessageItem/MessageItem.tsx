@@ -6,6 +6,7 @@ import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { useStore } from "@/hooks/useStore";
 import TalkTextContent from "./TalkTextContent";
 import CurrentCarCheckRequestItem from "./CurrentCarCheckRequestItem";
+import AppraisalPriceItem from "./AppraisalPriceItem";
 
 type MessageItemProps = {
   message: Message;
@@ -29,6 +30,16 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, talk }) => {
   if (message.type === "currentCarCheckRequested") {
     return (
       <CurrentCarCheckRequestItem
+        bubbleColor={bubbleColor}
+        talk={talk}
+        message={message}
+        isMe={isMe}
+      />
+    );
+  }
+  if (message.type === "appraisalPrice") {
+    return (
+      <AppraisalPriceItem
         bubbleColor={bubbleColor}
         talk={talk}
         message={message}
