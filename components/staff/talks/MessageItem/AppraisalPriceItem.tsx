@@ -50,7 +50,10 @@ const AppraisalPriceItem: React.FC<AppraisalPriceItemProps> = ({
         ]}
       >
         <View
-          style={[styles.calendarWrapper, { backgroundColor: colors.primary }]}
+          style={[
+            styles.calendarWrapper,
+            { backgroundColor: colors.textWarning },
+          ]}
         >
           <DollarSign size={36} color={colors.white} />
         </View>
@@ -138,6 +141,8 @@ const styles = StyleSheet.create({
     aspectRatio: 16 / 9,
     alignItems: "center",
     justifyContent: "center",
+    borderTopLeftRadius: 18,
+    borderTopRightRadius: 18,
   },
   messageWrapper: {
     gap: 4,
