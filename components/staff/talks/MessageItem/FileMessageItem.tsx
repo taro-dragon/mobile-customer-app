@@ -1,10 +1,18 @@
+import React, { useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { Message } from "@/types/firestore_schema/messages";
 import dayjs from "dayjs";
 import { Image } from "expo-image";
-import { File, Download, Check } from "lucide-react-native";
-import { StyleSheet, Text, TouchableOpacity, View, Alert } from "react-native";
+import { File, Download, Check, X } from "lucide-react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Alert,
+  Modal,
+} from "react-native";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 
@@ -25,6 +33,9 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
   bubbleColor,
 }) => {
   const { colors, typography } = useTheme();
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadProgress, setDownloadProgress] = useState(0);
+  const [showProgressModal, setShowProgressModal] = useState(false);
 
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return "0 B";
@@ -35,110 +46,226 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
   };
 
   const handleDownload = async () => {
-    if (!message.fileUrl || !message.fileName) return;
+    if (!message.fileUrl || !message.fileName) {
+      Alert.alert("エラー", "ファイル情報が不完全です");
+      return;
+    }
+
+    if (isDownloading) return; // 重複ダウンロードを防ぐ
 
     try {
-      const fileName = message.fileName;
-      const fileUri = `${FileSystem.documentDirectory}${fileName}`;
+      setIsDownloading(true);
+      setDownloadProgress(0);
+      setShowProgressModal(true);
 
-      // ファイルをダウンロード
-      const downloadResult = await FileSystem.downloadAsync(
+      const fileUri = `${FileSystem.documentDirectory}${message.fileName}`;
+
+      // 既存ファイルの確認
+      const fileInfo = await FileSystem.getInfoAsync(fileUri);
+      if (fileInfo.exists) {
+        console.log("既存ファイルを削除:", fileUri);
+        await FileSystem.deleteAsync(fileUri);
+      }
+
+      // ダウンロード進捗を監視するためのカスタムダウンロード
+      const downloadResumable = FileSystem.createDownloadResumable(
         message.fileUrl,
-        fileUri
+        fileUri,
+        {},
+        (downloadProgress) => {
+          const progress =
+            (downloadProgress.totalBytesWritten /
+              downloadProgress.totalBytesExpectedToWrite) *
+            100;
+          setDownloadProgress(progress);
+          console.log(`ダウンロード進捗: ${progress.toFixed(1)}%`);
+        }
       );
 
-      if (downloadResult.status === 200) {
+      const downloadResult = await downloadResumable.downloadAsync();
+
+      if (downloadResult && downloadResult.status === 200) {
+        setDownloadProgress(100);
+        console.log("ダウンロード完了:", downloadResult.uri);
+
+        // ファイルの存在確認
+        const downloadedFileInfo = await FileSystem.getInfoAsync(
+          downloadResult.uri
+        );
+        if (!downloadedFileInfo.exists) {
+          throw new Error("ダウンロードしたファイルが見つかりません");
+        }
+
         // ファイルを共有
         if (await Sharing.isAvailableAsync()) {
-          await Sharing.shareAsync(fileUri);
+          await Sharing.shareAsync(downloadResult.uri, {
+            mimeType: "application/octet-stream",
+            dialogTitle: `ファイルを共有: ${message.fileName}`,
+          });
         } else {
-          Alert.alert("ダウンロード完了", "ファイルがダウンロードされました");
+          Alert.alert(
+            "ダウンロード完了",
+            `ファイルがダウンロードされました\n保存先: ${downloadResult.uri}`
+          );
         }
       } else {
-        Alert.alert("エラー", "ファイルのダウンロードに失敗しました");
+        throw new Error(
+          `ダウンロードに失敗しました: ${downloadResult?.status}`
+        );
       }
     } catch (error) {
       console.error("ファイルダウンロードエラー:", error);
-      Alert.alert("エラー", "ファイルのダウンロードに失敗しました");
+      Alert.alert(
+        "ダウンロードエラー",
+        `ファイルのダウンロードに失敗しました\n${
+          error instanceof Error ? error.message : "不明なエラー"
+        }`
+      );
+    } finally {
+      setIsDownloading(false);
+      setDownloadProgress(0);
+      setTimeout(() => setShowProgressModal(false), 1000); // 完了表示を少し表示
     }
   };
 
   return (
-    <View
-      style={[
-        styles.messageContainer,
-        isMe ? styles.userMessage : styles.otherMessage,
-      ]}
-    >
-      {!isMe && (
-        <Image
-          source={{
-            uri:
-              talk.sourceCar?.images.front || talk.sourceStockCar?.images.front,
-          }}
-          style={styles.avatar}
-        />
-      )}
+    <>
       <View
         style={[
-          styles.bubble,
-          isMe ? styles.userBubble : styles.otherBubble,
-          {
-            backgroundColor: bubbleColor.backgroundColor,
-            borderColor: bubbleColor.borderColor,
-            borderWidth: 1,
-          },
+          styles.messageContainer,
+          isMe ? styles.userMessage : styles.otherMessage,
         ]}
       >
-        <TouchableOpacity
-          style={styles.fileContainer}
-          onPress={handleDownload}
-          activeOpacity={0.7}
+        {!isMe && (
+          <Image
+            source={{
+              uri:
+                talk.sourceCar?.images.front ||
+                talk.sourceStockCar?.images.front,
+            }}
+            style={styles.avatar}
+          />
+        )}
+        <View
+          style={[
+            styles.bubble,
+            isMe ? styles.userBubble : styles.otherBubble,
+            {
+              backgroundColor: bubbleColor.backgroundColor,
+              borderColor: bubbleColor.borderColor,
+              borderWidth: 1,
+            },
+          ]}
         >
-          <View style={styles.fileIconContainer}>
-            <File size={24} color={colors.primary} />
+          <TouchableOpacity
+            style={[styles.fileContainer, isDownloading && { opacity: 0.7 }]}
+            onPress={handleDownload}
+            activeOpacity={0.7}
+            disabled={isDownloading}
+          >
+            <View style={styles.fileIconContainer}>
+              <File size={24} color={colors.primary} />
+            </View>
+            <View style={styles.fileInfo}>
+              <Text
+                style={[
+                  styles.fileName,
+                  { color: colors.textPrimary },
+                  typography.body2,
+                ]}
+                numberOfLines={2}
+              >
+                {message.fileName}
+              </Text>
+              {message.fileSize && (
+                <Text
+                  style={[
+                    styles.fileSize,
+                    { color: colors.textSecondary },
+                    typography.body4,
+                  ]}
+                >
+                  {formatFileSize(message.fileSize)}
+                </Text>
+              )}
+            </View>
+            {isDownloading ? (
+              <View style={styles.downloadingContainer}>
+                <Text
+                  style={[styles.downloadingText, { color: colors.primary }]}
+                >
+                  {Math.round(downloadProgress)}%
+                </Text>
+              </View>
+            ) : (
+              <Download size={20} color={colors.primary} />
+            )}
+          </TouchableOpacity>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              alignItems: "flex-end",
+              gap: 8,
+              marginTop: 8,
+            }}
+          >
+            {message.read && isMe && <Check size={12} color={colors.primary} />}
+            <Text style={[styles.timeText, { color: colors.textSecondary }]}>
+              {dayjs(message.createdAt.toDate()).format("HH:mm")}
+            </Text>
           </View>
-          <View style={styles.fileInfo}>
+        </View>
+      </View>
+
+      {/* ダウンロード進捗モーダル */}
+      <Modal
+        visible={showProgressModal}
+        transparent={true}
+        animationType="fade"
+      >
+        <View style={styles.modalOverlay}>
+          <View
+            style={[
+              styles.progressModal,
+              { backgroundColor: colors.backgroundPrimary },
+            ]}
+          >
+            <Text style={[styles.progressTitle, { color: colors.textPrimary }]}>
+              ファイルをダウンロード中...
+            </Text>
+            <View style={styles.progressBarContainer}>
+              <View
+                style={[
+                  styles.progressBar,
+                  { backgroundColor: colors.borderPrimary },
+                ]}
+              >
+                <View
+                  style={[
+                    styles.progressFill,
+                    {
+                      backgroundColor: colors.primary,
+                      width: `${downloadProgress}%`,
+                    },
+                  ]}
+                />
+              </View>
+              <Text
+                style={[styles.progressText, { color: colors.textSecondary }]}
+              >
+                {Math.round(downloadProgress)}%
+              </Text>
+            </View>
             <Text
-              style={[
-                styles.fileName,
-                { color: colors.textPrimary },
-                typography.body2,
-              ]}
-              numberOfLines={2}
+              style={[styles.progressFileName, { color: colors.textSecondary }]}
             >
               {message.fileName}
             </Text>
-            {message.fileSize && (
-              <Text
-                style={[
-                  styles.fileSize,
-                  { color: colors.textSecondary },
-                  typography.body4,
-                ]}
-              >
-                {formatFileSize(message.fileSize)}
-              </Text>
-            )}
           </View>
-          <Download size={20} color={colors.primary} />
-        </TouchableOpacity>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "flex-end",
-            alignItems: "flex-end",
-            gap: 8,
-            marginTop: 8,
-          }}
-        >
-          {message.read && isMe && <Check size={12} color={colors.primary} />}
-          <Text style={[styles.timeText, { color: colors.textSecondary }]}>
-            {dayjs(message.createdAt.toDate()).format("HH:mm")}
-          </Text>
         </View>
-      </View>
-    </View>
+      </Modal>
+    </>
   );
 };
 
@@ -197,6 +324,58 @@ const styles = StyleSheet.create({
   timeText: {
     fontSize: 10,
     alignSelf: "flex-end",
+  },
+  downloadingContainer: {
+    width: 40,
+    height: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  downloadingText: {
+    fontSize: 10,
+    fontWeight: "500",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  progressModal: {
+    padding: 24,
+    borderRadius: 16,
+    alignItems: "center",
+    minWidth: 280,
+    gap: 16,
+  },
+  progressTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  progressBarContainer: {
+    width: "100%",
+    gap: 8,
+    alignItems: "center",
+  },
+  progressBar: {
+    width: "100%",
+    height: 8,
+    borderRadius: 4,
+    overflow: "hidden",
+  },
+  progressFill: {
+    height: "100%",
+    borderRadius: 4,
+  },
+  progressText: {
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  progressFileName: {
+    fontSize: 12,
+    textAlign: "center",
+    maxWidth: 200,
   },
 });
 
