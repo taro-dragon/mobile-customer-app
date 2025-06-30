@@ -7,6 +7,7 @@ import TalkTextContent from "./TalkTextContent";
 import CurrentCarCheckRequestItem from "./CurrentCarCheckRequestItem";
 import AppraisalPriceItem from "./AppraisalPriceItem";
 import FileMessageItem from "./FileMessageItem";
+import ImageMessageItem from "./ImageMessageItem";
 
 type MessageItemProps = {
   message: Message;
@@ -50,6 +51,16 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, talk }) => {
   if (message.type === "file") {
     return (
       <FileMessageItem
+        bubbleColor={bubbleColor}
+        talk={talk}
+        message={message}
+        isMe={isMe}
+      />
+    );
+  }
+  if (message.type === "image") {
+    return (
+      <ImageMessageItem
         bubbleColor={bubbleColor}
         talk={talk}
         message={message}

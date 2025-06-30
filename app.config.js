@@ -43,6 +43,7 @@ const commonConfig = {
       "expo-font",
       "expo-web-browser",
       "expo-document-picker",
+      "expo-image-picker",
       [
         "expo-build-properties",
         {

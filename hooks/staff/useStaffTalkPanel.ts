@@ -11,6 +11,7 @@ import {
 import firestore from "@react-native-firebase/firestore";
 import storage from "@react-native-firebase/storage";
 import * as DocumentPicker from "expo-document-picker";
+import * as ImagePicker from "expo-image-picker";
 
 import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { useStore } from "../useStore";
@@ -102,6 +103,64 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
     }
   };
 
+  const onPressImage = async () => {
+    try {
+      // 画像を選択
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.8,
+      });
+
+      if (result.canceled) {
+        return;
+      }
+
+      const image = result.assets[0];
+      if (!image) {
+        return;
+      }
+
+      // Firebase Storageにアップロード
+      const imageRef = storage()
+        .ref()
+        .child(`talks/${talk.id}/images/${Date.now()}_image.jpg`);
+
+      await imageRef.putFile(image.uri);
+      const downloadURL = await imageRef.getDownloadURL();
+
+      // Firestoreにメッセージとして保存
+      await firestore().runTransaction(async (transaction) => {
+        const messageRef = firestore()
+          .collection("talks")
+          .doc(talk.id)
+          .collection("messages")
+          .doc();
+
+        const talkRef = firestore().collection("talks").doc(talk.id);
+
+        await transaction.set(messageRef, {
+          talkId: talk.id,
+          text: "画像",
+          imageUrl: downloadURL,
+          createdAt: firestore.FieldValue.serverTimestamp(),
+          senderType: "staff",
+          senderId: staff?.id,
+          type: "image",
+          read: false,
+        });
+
+        await transaction.update(talkRef, {
+          lastMessage: "画像",
+          lastMessageAt: firestore.Timestamp.now(),
+        });
+      });
+    } catch (error) {
+      console.error("画像送信エラー:", error);
+    }
+  };
+
   const panel = useMemo(() => {
     if (talk.sourceType === "car_inquiry") {
       return [
@@ -113,9 +172,7 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
         {
           label: "画像",
           icon: Image,
-          onPress: () => {
-            console.log("画像");
-          },
+          onPress: onPressImage,
         },
         {
           label: "位置情報",
@@ -142,9 +199,7 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
         {
           label: "画像",
           icon: Image,
-          onPress: () => {
-            console.log("画像");
-          },
+          onPress: onPressImage,
         },
         {
           label: "位置情報",
