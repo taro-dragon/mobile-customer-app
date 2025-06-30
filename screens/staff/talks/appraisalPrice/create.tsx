@@ -1,25 +1,50 @@
+import Button from "@/components/common/Button";
+import Divider from "@/components/common/Divider";
+import SafeAreaBottom from "@/components/common/SafeAreaBottom";
+import TextInput from "@/components/registrationCar/form/TextInput";
 import CreateAppraisalPriceHeader from "@/components/staff/talks/appraisalPrice/create/CreateAppraisalPriceheader";
-import { useStore } from "@/hooks/useStore";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { View } from "react-native";
-import Toast from "react-native-toast-message";
+import { useTheme } from "@/contexts/ThemeContext";
+import { TalkWithUser } from "@/types/extendType/TalkWithUser";
+import { ScrollView, View } from "react-native";
 
-const CreateAppraisalPriceScreen = () => {
-  const router = useRouter();
-  const { talkId } = useLocalSearchParams<{ talkId: string }>();
-  const { staffTalks, staff } = useStore();
-  const talk = staffTalks.find((talk) => talk.id === talkId);
-  if (!talk) {
-    router.back();
-    Toast.show({
-      type: "error",
-      text1: "エラーが発生しました",
-    });
-    return null;
-  }
+type CreateAppraisalPriceScreenProps = {
+  talk: TalkWithUser;
+};
+
+const CreateAppraisalPriceScreen: React.FC<CreateAppraisalPriceScreenProps> = ({
+  talk,
+}) => {
+  const { colors } = useTheme();
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <CreateAppraisalPriceHeader talk={talk} />
+      <ScrollView
+        style={{
+          flex: 1,
+        }}
+        contentContainerStyle={{
+          padding: 16,
+          gap: 16,
+        }}
+      >
+        <TextInput
+          label="査定金額"
+          name="appraisalPrice"
+          placeholder="査定金額提示"
+          keyboardType="numeric"
+        />
+        <TextInput
+          label="査定金額に関する備考"
+          name="appraisalPriceNote"
+          placeholder="査定金額に関する備考"
+          multiline
+        />
+      </ScrollView>
+      <Divider />
+      <View style={{ padding: 16 }}>
+        <Button label="送信" color={colors.primary} onPress={() => {}} />
+        <SafeAreaBottom />
+      </View>
     </View>
   );
 };

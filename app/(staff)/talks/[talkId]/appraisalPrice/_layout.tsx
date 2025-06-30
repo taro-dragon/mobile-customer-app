@@ -26,6 +26,7 @@ const AppraisalPriceLayout = () => {
               <X size={24} color={colors.primary} />
             </TouchableOpacity>
           ),
+          headerShadowVisible: false,
         }}
       />
     </Stack>

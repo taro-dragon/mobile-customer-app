@@ -31,15 +31,12 @@ const CreateAppraisalPriceHeader: React.FC<CreateAppraisalPriceHeaderProps> = ({
     }
   };
   return (
-    <View
-      style={{
-        backgroundColor: colors.backgroundPrimary,
-      }}
-    >
+    <View>
       <TouchableOpacity
         onPress={onCarInfoPress}
         style={{
-          padding: 8,
+          paddingVertical: 8,
+          paddingHorizontal: 16,
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
