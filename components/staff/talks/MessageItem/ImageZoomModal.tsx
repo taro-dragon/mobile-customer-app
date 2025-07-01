@@ -45,6 +45,11 @@ const ImageZoomModal: React.FC<ImageZoomModalProps> = ({
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
   const lastTap = useRef(0);
+  const resetZoom = () => {
+    scale.value = withSpring(1);
+    translateX.value = withSpring(0);
+    translateY.value = withSpring(0);
+  };
 
   const pinchGestureHandler =
     useAnimatedGestureHandler<PinchGestureHandlerGestureEvent>({
@@ -104,6 +109,7 @@ const ImageZoomModal: React.FC<ImageZoomModalProps> = ({
       lastTap.current = now;
       setTimeout(() => {
         if (lastTap.current === now) {
+          resetZoom();
           onRequestClose();
           lastTap.current = 0;
         }
