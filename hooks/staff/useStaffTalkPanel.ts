@@ -16,6 +16,7 @@ import Toast from "react-native-toast-message";
 
 import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { useStore } from "../useStore";
+import { uploadTalkFile } from "@/libs/firestore/uploadTalkFile";
 
 const useStaffTalkPanel = (talk: TalkWithUser) => {
   const router = useRouter();
@@ -85,66 +86,18 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
       setIsUploading(true);
       setUploadProgress(10); // ファイル選択完了
 
-      // Firebase Storageにアップロード
-      const fileRef = storage()
-        .ref()
-        .child(`talks/${talk.id}/files/${Date.now()}_${file.name}`);
+      // 共通アップロード関数を利用
+      await uploadTalkFile({
+        talkId: talk.id,
+        staffId: staff?.id ?? "",
+        file,
+        onProgress: setUploadProgress,
+      });
 
-      const uploadTask = fileRef.putFile(file.uri);
-
-      // アップロード進捗を監視
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 80 + 10; // 10-90%
-          setUploadProgress(progress);
-        },
-        (error) => {
-          console.error("ファイルアップロードエラー:", error);
-          setIsUploading(false);
-          setUploadProgress(0);
-        },
-        async () => {
-          setUploadProgress(90); // アップロード完了
-          const downloadURL = await fileRef.getDownloadURL();
-
-          // Firestoreにメッセージとして保存
-          await firestore().runTransaction(async (transaction) => {
-            const messageRef = firestore()
-              .collection("talks")
-              .doc(talk.id)
-              .collection("messages")
-              .doc();
-
-            const talkRef = firestore().collection("talks").doc(talk.id);
-
-            await transaction.set(messageRef, {
-              talkId: talk.id,
-              text: `ファイル: ${file.name}`,
-              fileUrl: downloadURL,
-              fileName: file.name,
-              fileSize: file.size,
-              createdAt: firestore.FieldValue.serverTimestamp(),
-              senderType: "staff",
-              senderId: staff?.id,
-              type: "file",
-              read: false,
-            });
-
-            await transaction.update(talkRef, {
-              lastMessage: `ファイル: ${file.name}`,
-              lastMessageAt: firestore.Timestamp.now(),
-            });
-          });
-
-          setUploadProgress(100); // 完了
-          setTimeout(() => {
-            setIsUploading(false);
-            setUploadProgress(0);
-          }, 500); // 完了表示を少し表示
-        }
-      );
+      setTimeout(() => {
+        setIsUploading(false);
+        setUploadProgress(0);
+      }, 500); // 完了表示を少し表示
     } catch (error) {
       console.error("ファイル送信エラー:", error);
       setIsUploading(false);
