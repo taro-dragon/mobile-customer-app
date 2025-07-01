@@ -4,7 +4,23 @@ import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { Message } from "@/types/firestore_schema/messages";
 import dayjs from "dayjs";
 import { Image } from "expo-image";
-import { File, Download, Check, X } from "lucide-react-native";
+import {
+  File,
+  Download,
+  Check,
+  X,
+  FileText,
+  Image as ImageIcon,
+  Video,
+  Music,
+  FileSpreadsheet,
+  Presentation,
+  Archive,
+  FileCode,
+  FileAudio,
+  FileVideo,
+  FileImage,
+} from "lucide-react-native";
 import {
   StyleSheet,
   Text,
@@ -17,6 +33,7 @@ import {
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import DownloadProgressModal from "@/components/common/Modal/DownloadProgressModal";
+import useGetFileIcon from "@/hooks/useGetFileIcon";
 
 type FileMessageItemProps = {
   talk: TalkWithUser;
@@ -38,6 +55,7 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [showProgressModal, setShowProgressModal] = useState(false);
+  const { FileIcon, fileIconColor } = useGetFileIcon(message.fileName || "");
 
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return "0 B";
@@ -80,7 +98,6 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
               downloadProgress.totalBytesExpectedToWrite) *
             100;
           setDownloadProgress(progress);
-          console.log(`ダウンロード進捗: ${progress.toFixed(1)}%`);
         }
       );
 
@@ -88,7 +105,6 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
 
       if (downloadResult && downloadResult.status === 200) {
         setDownloadProgress(100);
-        console.log("ダウンロード完了:", downloadResult.uri);
 
         // ファイルの存在確認
         const downloadedFileInfo = await FileSystem.getInfoAsync(
@@ -116,7 +132,6 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
         );
       }
     } catch (error) {
-      console.error("ファイルダウンロードエラー:", error);
       Alert.alert(
         "ダウンロードエラー",
         `ファイルのダウンロードに失敗しました\n${
@@ -165,8 +180,13 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
             activeOpacity={0.7}
             disabled={isDownloading}
           >
-            <View style={styles.fileIconContainer}>
-              <File size={24} color={colors.primary} />
+            <View
+              style={[
+                styles.fileIconContainer,
+                { backgroundColor: `${fileIconColor}20` },
+              ]}
+            >
+              <FileIcon size={24} color={fileIconColor} />
             </View>
             <View style={styles.fileInfo}>
               <Text
