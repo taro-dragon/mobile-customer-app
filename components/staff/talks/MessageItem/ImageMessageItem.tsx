@@ -16,6 +16,7 @@ import {
 } from "react-native";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
+import DownloadProgressModal from "@/components/common/Modal/DownloadProgressModal";
 
 type ImageMessageItemProps = {
   talk: TalkWithUser;
@@ -257,53 +258,11 @@ const ImageMessageItem: React.FC<ImageMessageItemProps> = ({
         </View>
       </Modal>
 
-      {/* ダウンロード進捗モーダル */}
-      <Modal
+      <DownloadProgressModal
         visible={showProgressModal}
-        transparent={true}
-        animationType="fade"
-      >
-        <View style={styles.progressModalOverlay}>
-          <View
-            style={[
-              styles.progressModal,
-              { backgroundColor: colors.backgroundPrimary },
-            ]}
-          >
-            <Text style={[styles.progressTitle, { color: colors.textPrimary }]}>
-              画像をダウンロード中...
-            </Text>
-            <View style={styles.progressBarContainer}>
-              <View
-                style={[
-                  styles.progressBar,
-                  { backgroundColor: colors.borderPrimary },
-                ]}
-              >
-                <View
-                  style={[
-                    styles.progressFill,
-                    {
-                      backgroundColor: colors.primary,
-                      width: `${downloadProgress}%`,
-                    },
-                  ]}
-                />
-              </View>
-              <Text
-                style={[styles.progressText, { color: colors.textSecondary }]}
-              >
-                {Math.round(downloadProgress)}%
-              </Text>
-            </View>
-            <Text
-              style={[styles.progressFileName, { color: colors.textSecondary }]}
-            >
-              画像ファイル
-            </Text>
-          </View>
-        </View>
-      </Modal>
+        downloadProgress={downloadProgress}
+        fileName={message.fileName || "ファイル"}
+      />
     </>
   );
 };
@@ -425,48 +384,6 @@ const styles = StyleSheet.create({
   modalDownloadText: {
     fontSize: 12,
     fontWeight: "600",
-  },
-  progressModalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  progressModal: {
-    padding: 24,
-    borderRadius: 16,
-    alignItems: "center",
-    minWidth: 280,
-    gap: 16,
-  },
-  progressTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    textAlign: "center",
-  },
-  progressBarContainer: {
-    width: "100%",
-    gap: 8,
-    alignItems: "center",
-  },
-  progressBar: {
-    width: "100%",
-    height: 8,
-    borderRadius: 4,
-    overflow: "hidden",
-  },
-  progressFill: {
-    height: "100%",
-    borderRadius: 4,
-  },
-  progressText: {
-    fontSize: 14,
-    fontWeight: "500",
-  },
-  progressFileName: {
-    fontSize: 12,
-    textAlign: "center",
-    maxWidth: 200,
   },
 });
 

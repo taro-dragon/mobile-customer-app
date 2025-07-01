@@ -51,7 +51,6 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
     if (isUploading) return; // アップロード中は重複実行を防ぐ
 
     try {
-      setIsUploading(true);
       setUploadProgress(0);
 
       // ファイルを選択
@@ -61,18 +60,16 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
       });
 
       if (result.canceled) {
-        setIsUploading(false);
         setUploadProgress(0);
         return;
       }
 
       const file = result.assets[0];
       if (!file) {
-        setIsUploading(false);
         setUploadProgress(0);
         return;
       }
-
+      setIsUploading(true);
       setUploadProgress(10); // ファイル選択完了
 
       // Firebase Storageにアップロード
