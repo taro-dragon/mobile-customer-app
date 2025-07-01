@@ -20,6 +20,7 @@ import Animated, {
   useAnimatedStyle,
   useAnimatedGestureHandler,
   withSpring,
+  runOnJS,
 } from "react-native-reanimated";
 
 interface ImageZoomModalProps {
@@ -31,6 +32,9 @@ interface ImageZoomModalProps {
   downloadProgress: number;
   colors: any;
 }
+
+// ダブルタップ判定用の定数
+const DOUBLE_TAP_DELAY = 300;
 
 const ImageZoomModal: React.FC<ImageZoomModalProps> = ({
   visible,
@@ -106,11 +110,22 @@ const ImageZoomModal: React.FC<ImageZoomModalProps> = ({
           translateY.value = context.startY + event.translationY;
         }
       },
-      onEnd: () => {
-        // ズームが1以下になった場合は中央に戻す
+      onEnd: (event) => {
         if (scale.value <= 1) {
-          translateX.value = withSpring(0);
-          translateY.value = withSpring(0);
+          // スワイプ量が一定以上ならモーダルを閉じる
+          if (
+            Math.abs(event.translationY) > 60 ||
+            Math.abs(event.translationX) > 60
+          ) {
+            // runOnJSでJS関数を呼ぶ
+            if (typeof onRequestClose === "function") {
+              // @ts-ignore
+              runOnJS(onRequestClose)();
+            }
+          } else {
+            translateX.value = withSpring(0);
+            translateY.value = withSpring(0);
+          }
         }
       },
     });
@@ -127,8 +142,6 @@ const ImageZoomModal: React.FC<ImageZoomModalProps> = ({
 
   const handleModalImagePress = (event: any) => {
     const now = Date.now();
-    const DOUBLE_TAP_DELAY = 300;
-
     // タップ位置を取得
     const { locationX, locationY } = event.nativeEvent;
     lastTapPosition.current = { x: locationX, y: locationY };
@@ -144,13 +157,10 @@ const ImageZoomModal: React.FC<ImageZoomModalProps> = ({
       }
       lastTap.current = 0;
     } else {
-      // シングルタップの場合
+      // シングルタップの場合は何もしない
       lastTap.current = now;
       setTimeout(() => {
         if (lastTap.current === now) {
-          // シングルタップの場合はモーダルを閉じる
-          resetZoom();
-          onRequestClose();
           lastTap.current = 0;
         }
       }, DOUBLE_TAP_DELAY);
@@ -167,7 +177,10 @@ const ImageZoomModal: React.FC<ImageZoomModalProps> = ({
       <View style={styles.modalOverlay}>
         <TouchableOpacity
           style={styles.modalCloseButton}
-          onPress={handleModalImagePress}
+          onPress={() => {
+            resetZoom();
+            onRequestClose();
+          }}
         >
           <X size={24} color={colors.white} />
         </TouchableOpacity>

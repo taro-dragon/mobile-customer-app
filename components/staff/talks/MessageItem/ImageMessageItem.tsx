@@ -212,16 +212,17 @@ const ImageMessageItem: React.FC<ImageMessageItemProps> = ({
           </View>
         </View>
       </View>
-
-      <ImageZoomModal
-        visible={isImageModalVisible}
-        onRequestClose={closeImageModal}
-        imageUrl={message.imageUrl || ""}
-        onDownload={handleDownload}
-        isDownloading={isDownloading}
-        downloadProgress={downloadProgress}
-        colors={colors}
-      />
+      {isImageModalVisible && (
+        <ImageZoomModal
+          visible={isImageModalVisible}
+          onRequestClose={closeImageModal}
+          imageUrl={message.imageUrl || ""}
+          onDownload={handleDownload}
+          isDownloading={isDownloading}
+          downloadProgress={downloadProgress}
+          colors={colors}
+        />
+      )}
       <DownloadProgressModal
         visible={showProgressModal}
         downloadProgress={downloadProgress}
