@@ -45,10 +45,37 @@ const ImageZoomModal: React.FC<ImageZoomModalProps> = ({
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
   const lastTap = useRef(0);
+  const lastTapPosition = useRef({ x: 0, y: 0 });
+
   const resetZoom = () => {
     scale.value = withSpring(1);
     translateX.value = withSpring(0);
     translateY.value = withSpring(0);
+  };
+
+  const zoomToPosition = (x: number, y: number) => {
+    const screenWidth = Dimensions.get("window").width;
+    const screenHeight = Dimensions.get("window").height;
+
+    // ズーム倍率を設定（2倍にズーム）
+    const zoomScale = 2.0;
+
+    // タップ位置を中心にズームするための計算
+    // タップ位置から画面中心までの距離を計算し、ズーム時にその位置が中心になるように調整
+    const centerX = screenWidth / 2;
+    const centerY = screenHeight / 2;
+
+    // タップ位置から中心までの距離
+    const deltaX = x - centerX;
+    const deltaY = y - centerY;
+
+    // ズーム時にタップした位置が中心になるように移動量を計算
+    const newTranslateX = -deltaX * (zoomScale - 1);
+    const newTranslateY = -deltaY * (zoomScale - 1);
+
+    scale.value = withSpring(zoomScale);
+    translateX.value = withSpring(newTranslateX);
+    translateY.value = withSpring(newTranslateY);
   };
 
   const pinchGestureHandler =
@@ -80,6 +107,7 @@ const ImageZoomModal: React.FC<ImageZoomModalProps> = ({
         }
       },
       onEnd: () => {
+        // ズームが1以下になった場合は中央に戻す
         if (scale.value <= 1) {
           translateX.value = withSpring(0);
           translateY.value = withSpring(0);
@@ -97,18 +125,30 @@ const ImageZoomModal: React.FC<ImageZoomModalProps> = ({
     };
   });
 
-  const handleModalImagePress = () => {
+  const handleModalImagePress = (event: any) => {
     const now = Date.now();
     const DOUBLE_TAP_DELAY = 300;
+
+    // タップ位置を取得
+    const { locationX, locationY } = event.nativeEvent;
+    lastTapPosition.current = { x: locationX, y: locationY };
+
     if (lastTap.current && now - lastTap.current < DOUBLE_TAP_DELAY) {
-      scale.value = withSpring(1);
-      translateX.value = withSpring(0);
-      translateY.value = withSpring(0);
+      // ダブルタップの場合
+      if (scale.value > 1) {
+        // 既にズームしている場合はリセット
+        resetZoom();
+      } else {
+        // ズームしていない場合はタップした位置にズーム
+        zoomToPosition(locationX, locationY);
+      }
       lastTap.current = 0;
     } else {
+      // シングルタップの場合
       lastTap.current = now;
       setTimeout(() => {
         if (lastTap.current === now) {
+          // シングルタップの場合はモーダルを閉じる
           resetZoom();
           onRequestClose();
           lastTap.current = 0;
