@@ -12,6 +12,7 @@ import firestore from "@react-native-firebase/firestore";
 import storage from "@react-native-firebase/storage";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
+import Toast from "react-native-toast-message";
 
 import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { useStore } from "../useStore";
@@ -66,6 +67,18 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
 
       const file = result.assets[0];
       if (!file) {
+        setUploadProgress(0);
+        return;
+      }
+
+      // ファイルサイズチェック（50MB = 50 * 1024 * 1024 bytes）
+      const maxFileSize = 50 * 1024 * 1024; // 50MB
+      if (file.size && file.size > maxFileSize) {
+        Toast.show({
+          type: "error",
+          text1: "エラー",
+          text2: "ファイルサイズが50MBを超えています。",
+        });
         setUploadProgress(0);
         return;
       }
