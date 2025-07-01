@@ -143,7 +143,6 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
     if (isUploading) return; // アップロード中は重複実行を防ぐ
 
     try {
-      setIsUploading(true);
       setUploadProgress(0);
 
       // 画像を選択
@@ -153,18 +152,16 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
       });
 
       if (result.canceled) {
-        setIsUploading(false);
         setUploadProgress(0);
         return;
       }
 
       const image = result.assets[0];
       if (!image) {
-        setIsUploading(false);
         setUploadProgress(0);
         return;
       }
-
+      setIsUploading(true);
       setUploadProgress(10); // 画像選択完了
 
       // Firebase Storageにアップロード
