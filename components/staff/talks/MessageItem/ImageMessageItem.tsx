@@ -10,13 +10,14 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Modal,
   Dimensions,
   Alert,
 } from "react-native";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import DownloadProgressModal from "@/components/common/Modal/DownloadProgressModal";
+import { useSharedValue, withSpring } from "react-native-reanimated";
+import ImageZoomModal from "./ImageZoomModal";
 
 type ImageMessageItemProps = {
   talk: TalkWithUser;
@@ -212,52 +213,15 @@ const ImageMessageItem: React.FC<ImageMessageItemProps> = ({
         </View>
       </View>
 
-      {/* 画像拡大表示モーダル */}
-      <Modal
+      <ImageZoomModal
         visible={isImageModalVisible}
-        transparent={true}
-        animationType="fade"
         onRequestClose={closeImageModal}
-      >
-        <View style={styles.modalOverlay}>
-          <TouchableOpacity
-            style={styles.modalCloseButton}
-            onPress={closeImageModal}
-          >
-            <X size={24} color={colors.white} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.modalImageContainer}
-            onPress={closeImageModal}
-            activeOpacity={1}
-          >
-            <Image
-              source={{ uri: message.imageUrl }}
-              style={styles.modalImage}
-              contentFit="contain"
-            />
-          </TouchableOpacity>
-          {/* モーダル内のダウンロードボタン */}
-          <TouchableOpacity
-            style={[
-              styles.modalDownloadButton,
-              { backgroundColor: colors.primary },
-              isDownloading && { opacity: 0.7 },
-            ]}
-            onPress={handleDownload}
-            disabled={isDownloading}
-          >
-            {isDownloading ? (
-              <Text style={[styles.modalDownloadText, { color: colors.white }]}>
-                {Math.round(downloadProgress)}%
-              </Text>
-            ) : (
-              <Download size={20} color={colors.white} />
-            )}
-          </TouchableOpacity>
-        </View>
-      </Modal>
-
+        imageUrl={message.imageUrl || ""}
+        onDownload={handleDownload}
+        isDownloading={isDownloading}
+        downloadProgress={downloadProgress}
+        colors={colors}
+      />
       <DownloadProgressModal
         visible={showProgressModal}
         downloadProgress={downloadProgress}
@@ -333,57 +297,6 @@ const styles = StyleSheet.create({
   timeText: {
     fontSize: 10,
     alignSelf: "flex-end",
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.9)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalCloseButton: {
-    position: "absolute",
-    top: 50,
-    right: 20,
-    zIndex: 1,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalImageContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-    height: "100%",
-  },
-  modalImage: {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height * 0.8,
-  },
-  modalDownloadButton: {
-    position: "absolute",
-    bottom: 50,
-    right: 20,
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  modalDownloadText: {
-    fontSize: 12,
-    fontWeight: "600",
   },
 });
 
