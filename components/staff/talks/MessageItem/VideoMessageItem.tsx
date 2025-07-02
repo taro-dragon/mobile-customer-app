@@ -24,6 +24,7 @@ import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import DownloadProgressModal from "@/components/common/Modal/DownloadProgressModal";
 import { Video, ResizeMode, AVPlaybackStatus } from "expo-av";
+import VideoZoomModal from "./VideoZoomModal";
 
 type VideoMessageItemProps = {
   talk: TalkWithUser;
@@ -45,6 +46,7 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [showProgressModal, setShowProgressModal] = useState(false);
+  const [isVideoModalVisible, setIsVideoModalVisible] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [duration, setDuration] = useState(0);
@@ -83,6 +85,14 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
+  const handleVideoPress = () => {
+    setIsVideoModalVisible(true);
+  };
+
+  const closeVideoModal = () => {
+    setIsVideoModalVisible(false);
+  };
+
   const handleDownload = async () => {
     if (!message.videoUrl) {
       Alert.alert("エラー", "動画URLが存在しません");
@@ -99,9 +109,6 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
       const timestamp = Date.now();
       const fileName = `video_${timestamp}.mp4`;
       const fileUri = `${FileSystem.documentDirectory}${fileName}`;
-
-      console.log("動画ダウンロード開始:", message.videoUrl);
-      console.log("保存先:", fileUri);
 
       // 既存ファイルの確認
       const fileInfo = await FileSystem.getInfoAsync(fileUri);
@@ -121,7 +128,6 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
               downloadProgress.totalBytesExpectedToWrite) *
             100;
           setDownloadProgress(progress);
-          console.log(`動画ダウンロード進捗: ${progress.toFixed(1)}%`);
         }
       );
 
@@ -129,7 +135,6 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
 
       if (downloadResult && downloadResult.status === 200) {
         setDownloadProgress(100);
-        console.log("動画ダウンロード完了:", downloadResult.uri);
 
         // ファイルの存在確認
         const downloadedFileInfo = await FileSystem.getInfoAsync(
@@ -157,7 +162,6 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
         );
       }
     } catch (error) {
-      console.error("動画ダウンロードエラー:", error);
       Alert.alert(
         "ダウンロードエラー",
         `動画のダウンロードに失敗しました\n${
@@ -201,7 +205,11 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
           ]}
         >
           <View style={styles.videoWrapper}>
-            <View style={styles.videoContainer}>
+            <TouchableOpacity
+              style={styles.videoContainer}
+              onPress={handleVideoPress}
+              activeOpacity={0.8}
+            >
               <Video
                 ref={videoRef}
                 source={{ uri: message.videoUrl || "" }}
@@ -214,7 +222,6 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
                 isMuted={isMuted}
               />
 
-              {/* 動画コントロールオーバーレイ */}
               <View style={styles.videoControls}>
                 <TouchableOpacity
                   style={styles.playButton}
@@ -241,7 +248,6 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
                 </TouchableOpacity>
               </View>
 
-              {/* 動画時間表示 */}
               {duration > 0 && (
                 <View style={styles.timeOverlay}>
                   <Text style={[styles.timeText, { color: colors.white }]}>
@@ -249,9 +255,8 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
                   </Text>
                 </View>
               )}
-            </View>
+            </TouchableOpacity>
 
-            {/* ダウンロードボタン */}
             <TouchableOpacity
               style={[
                 styles.downloadButton,
@@ -270,16 +275,6 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
               )}
             </TouchableOpacity>
           </View>
-
-          {/* 動画の長さ表示 */}
-          {message.videoDuration && (
-            <Text
-              style={[styles.durationText, { color: colors.textSecondary }]}
-            >
-              動画の長さ: {formatTime(message.videoDuration * 1000)}
-            </Text>
-          )}
-
           <View
             style={{
               flexDirection: "row",
@@ -296,6 +291,17 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
           </View>
         </View>
       </View>
+      {isVideoModalVisible && (
+        <VideoZoomModal
+          visible={isVideoModalVisible}
+          onRequestClose={closeVideoModal}
+          videoUrl={message.videoUrl || ""}
+          onDownload={handleDownload}
+          isDownloading={isDownloading}
+          downloadProgress={downloadProgress}
+          colors={colors}
+        />
+      )}
       <DownloadProgressModal
         visible={showProgressModal}
         downloadProgress={downloadProgress}
@@ -369,7 +375,7 @@ const styles = StyleSheet.create({
   muteButton: {
     position: "absolute",
     top: 8,
-    right: 8,
+    left: 8,
     width: 32,
     height: 32,
     borderRadius: 16,
