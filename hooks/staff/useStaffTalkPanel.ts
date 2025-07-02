@@ -17,6 +17,7 @@ import Toast from "react-native-toast-message";
 import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { useStore } from "../useStore";
 import { uploadTalkFile } from "@/libs/firestore/uploadTalkFile";
+import { Message } from "@/types/firestore_schema/messages";
 
 const useStaffTalkPanel = (talk: TalkWithUser) => {
   const router = useRouter();
@@ -105,16 +106,17 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
     }
   };
 
-  const onPressImage = async () => {
+  const onPressMedia = async () => {
     if (isUploading) return; // アップロード中は重複実行を防ぐ
 
     try {
       setUploadProgress(0);
 
-      // 画像を選択
+      // 画像または動画を選択
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ["images"],
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
         quality: 0.8,
+        videoMaxDuration: 60, // 動画の最大長を60秒に制限
       });
 
       if (result.canceled) {
@@ -122,20 +124,28 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
         return;
       }
 
-      const image = result.assets[0];
-      if (!image) {
+      const media = result.assets[0];
+      if (!media) {
         setUploadProgress(0);
         return;
       }
+
       setIsUploading(true);
-      setUploadProgress(10); // 画像選択完了
+      setUploadProgress(10); // メディア選択完了
+
+      // ファイル拡張子を取得
+      const fileExtension = media.uri.split(".").pop()?.toLowerCase() || "mp4";
+      const isVideo = media.type === "video";
+      const fileName = `${Date.now()}_${
+        isVideo ? "video" : "image"
+      }.${fileExtension}`;
+      const storagePath = `talks/${talk.id}/${
+        isVideo ? "videos" : "images"
+      }/${fileName}`;
 
       // Firebase Storageにアップロード
-      const imageRef = storage()
-        .ref()
-        .child(`talks/${talk.id}/images/${Date.now()}_image.jpg`);
-
-      const uploadTask = imageRef.putFile(image.uri);
+      const mediaRef = storage().ref().child(storagePath);
+      const uploadTask = mediaRef.putFile(media.uri);
 
       // アップロード進捗を監視
       uploadTask.on(
@@ -146,13 +156,13 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
           setUploadProgress(progress);
         },
         (error) => {
-          console.error("画像アップロードエラー:", error);
+          console.error("メディアアップロードエラー:", error);
           setIsUploading(false);
           setUploadProgress(0);
         },
         async () => {
           setUploadProgress(90); // アップロード完了
-          const downloadURL = await imageRef.getDownloadURL();
+          const downloadURL = await mediaRef.getDownloadURL();
 
           // Firestoreにメッセージとして保存
           await firestore().runTransaction(async (transaction) => {
@@ -164,19 +174,30 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
 
             const talkRef = firestore().collection("talks").doc(talk.id);
 
-            await transaction.set(messageRef, {
+            const messageData: Message = {
+              id: messageRef.id,
               talkId: talk.id,
-              text: "画像",
-              imageUrl: downloadURL,
-              createdAt: firestore.FieldValue.serverTimestamp(),
+              text: isVideo ? "動画" : "画像",
+              createdAt: firestore.Timestamp.now(),
               senderType: "staff",
-              senderId: staff?.id,
-              type: "image",
+              senderId: staff?.id || "",
+              type: isVideo ? "video" : "image",
               read: false,
-            });
+            };
+
+            if (isVideo) {
+              messageData.videoUrl = downloadURL;
+              if (media.duration) {
+                messageData.videoDuration = media.duration;
+              }
+            } else {
+              messageData.imageUrl = downloadURL;
+            }
+
+            await transaction.set(messageRef, messageData);
 
             await transaction.update(talkRef, {
-              lastMessage: "画像",
+              lastMessage: isVideo ? "動画" : "画像",
               lastMessageAt: firestore.Timestamp.now(),
             });
           });
@@ -189,7 +210,7 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
         }
       );
     } catch (error) {
-      console.error("画像送信エラー:", error);
+      console.error("メディア送信エラー:", error);
       setIsUploading(false);
       setUploadProgress(0);
     }
@@ -205,16 +226,16 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
           disabled: isUploading,
         },
         {
-          label: "画像",
+          label: "メディア",
           icon: Image,
-          onPress: onPressImage,
+          onPress: onPressMedia,
           disabled: isUploading,
         },
         {
           label: "位置情報",
           icon: MapPin,
           onPress: () => {
-            console.log("位置情報");
+            router.push(`/talks/${talk.id}/map`);
           },
           disabled: isUploading,
         },
@@ -236,16 +257,16 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
           disabled: isUploading,
         },
         {
-          label: "画像",
+          label: "メディア",
           icon: Image,
-          onPress: onPressImage,
+          onPress: onPressMedia,
           disabled: isUploading,
         },
         {
           label: "位置情報",
           icon: MapPin,
           onPress: () => {
-            console.log("位置情報");
+            router.push(`/talks/${talk.id}/map`);
           },
           disabled: isUploading,
         },

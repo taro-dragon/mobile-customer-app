@@ -12,9 +12,16 @@ export type Message = {
   fileSize?: number; // ファイルサイズ（オプション）
   read: boolean; // 既読状態
   createdAt: FirebaseFirestoreTypes.Timestamp;
-  type?: "image" | "file" | "currentCarCheckRequested" | "appraisalPrice";
+  type?:
+    | "image"
+    | "file"
+    | "currentCarCheckRequested"
+    | "appraisalPrice"
+    | "video";
   isAnswered?: boolean; //currentCarCheckRequestedの回答フラグ
   isOpened?: boolean; //appraisalPriceの開封フラグ
   appraisalPrice?: string; //appraisalPriceの査定金額
   appraisalPriceNote?: string; //appraisalPriceの査定金額のメモ
+  videoUrl?: string; //videoのURL
+  videoDuration?: number; //videoの再生時間
 };

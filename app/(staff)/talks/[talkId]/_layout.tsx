@@ -22,6 +22,14 @@ const TalkLayout = () => {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="map"
+        options={{
+          animation: "slide_from_bottom",
+          gestureEnabled: false,
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
     </Stack>
   );
 };
