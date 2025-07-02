@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Image,
   ImageSourcePropType,
+  TouchableOpacity,
 } from "react-native";
 import MapView, { PROVIDER_DEFAULT } from "react-native-maps";
 import BottomSheet, {
@@ -15,41 +16,21 @@ import BottomSheet, {
 import { useTheme } from "@/contexts/ThemeContext";
 import { useAssets } from "expo-asset";
 
-const ADDRESS = "日本、〒453-0843 愛知県名古屋市中村区鴨付町２丁目１１";
 const LATITUDE = 35.1681;
 const LONGITUDE = 136.8572;
 
-// Google Maps Geocoding APIのキー（環境変数から取得することを推奨）
+// Google Maps APIのキー（環境変数から取得することを推奨）
 const GOOGLE_MAPS_API_KEY = process.env
   .EXPO_PUBLIC_GOOGLE_MAP_API_KEY as string;
 
-const places = [
-  {
-    id: "1",
-    name: "米沢電気工事株式会社 名古屋支店",
-    address: "愛知県名古屋市中村区鴨付町２丁目４",
-  },
-  {
-    id: "2",
-    name: "森本接骨院",
-    address: "愛知県名古屋市中村区鴨付町２丁目７",
-  },
-  {
-    id: "3",
-    name: "立正佼成会名古屋西教会",
-    address: "愛知県名古屋市中村区鴨付町２丁目４２",
-  },
-  {
-    id: "4",
-    name: "樹の恵本舗中村",
-    address: "愛知県名古屋市中村区鴨付町２丁目４７",
-  },
-  {
-    id: "5",
-    name: "名古屋市消防局　中村消防署岩塚出張所",
-    address: "愛知県名古屋市中村区剣町１５８",
-  },
-];
+interface SearchResult {
+  place_id: string;
+  description: string;
+  structured_formatting: {
+    main_text: string;
+    secondary_text: string;
+  };
+}
 
 const TalkMap = () => {
   const { colors } = useTheme();
@@ -63,14 +44,24 @@ const TalkMap = () => {
   });
   const [centerAddress, setCenterAddress] = useState("");
   const [isLoadingAddress, setIsLoadingAddress] = useState(false);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [bottomSheetIndex, setBottomSheetIndex] = useState(1);
   const bottomSheetRef = useRef<BottomSheet | null>(null);
   const mapRef = useRef<MapView | null>(null);
 
-  const snapPoints = useMemo(() => ["40%", "90%"], []);
+  const snapPoints = useMemo(() => ["40%", "60%"], []);
 
   const handleFocus = () => {
     (bottomSheetRef.current as any)?.snapToIndex(2);
   };
+
+  // BottomSheetの高さ変更を監視
+  const handleBottomSheetChange = (index: number) => {
+    setBottomSheetIndex(index);
+  };
+
+  // マップの高さを計算（BottomSheetの高さに応じて変動）
+  const mapHeight = bottomSheetIndex === 0 ? "40%" : "10%";
 
   // 座標から住所を取得する関数
   const fetchAddress = async (latitude: number, longitude: number) => {
@@ -91,16 +82,76 @@ const TalkMap = () => {
         setCenterAddress(address);
       }
     } catch (error) {
-      console.error("住所取得エラー:", error);
     } finally {
       setIsLoadingAddress(false);
     }
   };
 
-  // マップの移動が終わった時の処理
+  const searchPlaces = async (query: string) => {
+    if (!query.trim() || GOOGLE_MAPS_API_KEY === "YOUR_API_KEY") {
+      setSearchResults([]);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(
+          query
+        )}&key=${GOOGLE_MAPS_API_KEY}&language=ja&components=country:jp`
+      );
+      const data = await response.json();
+
+      if (data.predictions) {
+        setSearchResults(data.predictions);
+      }
+    } catch (error) {
+      setSearchResults([]);
+    }
+  };
+
+  // 検索テキストが変更された時の処理
+  const handleSearchChange = (text: string) => {
+    setSearch(text);
+    if (text.trim()) {
+      searchPlaces(text);
+    } else {
+      setSearchResults([]);
+    }
+  };
+
+  const handleSearchResultTap = async (result: SearchResult) => {
+    try {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/place/details/json?place_id=${result.place_id}&fields=geometry&key=${GOOGLE_MAPS_API_KEY}`
+      );
+      const data = await response.json();
+
+      if (
+        data.result &&
+        data.result.geometry &&
+        data.result.geometry.location
+      ) {
+        const { lat, lng } = data.result.geometry.location;
+        const newRegion = {
+          latitude: lat,
+          longitude: lng,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        };
+
+        setRegion(newRegion);
+        mapRef.current?.animateToRegion(newRegion, 1000);
+        setSearchResults([]);
+        setSearch(result.description);
+
+        // BottomSheetのindexを0に変更
+        bottomSheetRef.current?.snapToIndex(1);
+      }
+    } catch (error) {}
+  };
+
   const handleRegionChangeComplete = (newRegion: any) => {
     setRegion(newRegion);
-    // 移動が終わったら住所を取得
     fetchAddress(newRegion.latitude, newRegion.longitude);
   };
 
@@ -109,11 +160,13 @@ const TalkMap = () => {
       <View style={{ flex: 1, position: "relative" }}>
         <MapView
           ref={mapRef}
-          style={styles.map}
+          style={[styles.map, { height: mapHeight }]}
           provider={PROVIDER_DEFAULT}
           initialRegion={region}
           onRegionChangeComplete={handleRegionChangeComplete}
-        />
+        >
+          {/* Markerは使わない */}
+        </MapView>
         <View pointerEvents="none" style={styles.centerPin}>
           <Image
             source={assets?.[0] as ImageSourcePropType}
@@ -135,12 +188,15 @@ const TalkMap = () => {
           </Text>
         </View>
       )}
-      <View style={{ height: "35%" }} />
+      <View
+        style={{ height: "35%", backgroundColor: colors.backgroundPrimary }}
+      />
       <BottomSheet
         ref={bottomSheetRef}
-        index={0}
+        index={1}
         snapPoints={snapPoints}
         enablePanDownToClose={false}
+        onChange={handleBottomSheetChange}
         backgroundStyle={{ backgroundColor: colors.backgroundPrimary }}
         handleIndicatorStyle={{
           backgroundColor: colors.textSecondary,
@@ -160,34 +216,58 @@ const TalkMap = () => {
           <BottomSheetTextInput
             style={[
               styles.searchInput,
-              { backgroundColor: colors.backgroundSecondary },
+              {
+                backgroundColor: colors.backgroundSecondary,
+                color: colors.textPrimary,
+                fontWeight: "600",
+              },
             ]}
-            placeholder="検索"
+            placeholder="住所や場所を検索"
             value={search}
-            onChangeText={setSearch}
+            onChangeText={handleSearchChange}
             onFocus={handleFocus}
           />
-        </BottomSheetView>
-        <BottomSheetFlatList
-          data={places}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={{
-            padding: 16,
-            gap: 12,
-          }}
-          renderItem={({ item }) => (
-            <View style={{ gap: 4 }}>
-              <Text style={[styles.placeName, { color: colors.textPrimary }]}>
-                {item.name}
-              </Text>
-              <Text
-                style={[styles.placeAddress, { color: colors.textSecondary }]}
+          <BottomSheetFlatList
+            data={searchResults}
+            ListEmptyComponent={
+              <View style={styles.loadingContainer}>
+                <Text
+                  style={[styles.loadingText, { color: colors.textSecondary }]}
+                >
+                  検索結果がありません
+                </Text>
+              </View>
+            }
+            keyExtractor={(item) => item.place_id}
+            contentContainerStyle={{
+              paddingVertical: 16,
+              gap: 8,
+            }}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={[styles.searchResultItem]}
+                onPress={() => handleSearchResultTap(item)}
               >
-                {item.address}
-              </Text>
-            </View>
-          )}
-        />
+                <Text
+                  style={[
+                    styles.searchResultMainText,
+                    { color: colors.textPrimary },
+                  ]}
+                >
+                  {item.structured_formatting.main_text}
+                </Text>
+                <Text
+                  style={[
+                    styles.searchResultSecondaryText,
+                    { color: colors.textSecondary },
+                  ]}
+                >
+                  {item.structured_formatting.secondary_text}
+                </Text>
+              </TouchableOpacity>
+            )}
+          />
+        </BottomSheetView>
       </BottomSheet>
     </View>
   );
@@ -251,6 +331,24 @@ const styles = StyleSheet.create({
   addressText: {
     fontSize: 14,
     textAlign: "center",
+  },
+  searchResultItem: {
+    gap: 4,
+  },
+  searchResultMainText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 4,
+  },
+  searchResultSecondaryText: {
+    fontSize: 14,
+  },
+  loadingContainer: {
+    padding: 16,
+    alignItems: "center",
+  },
+  loadingText: {
+    fontSize: 14,
   },
 });
 
