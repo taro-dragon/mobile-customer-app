@@ -1,16 +1,12 @@
 import React, { useRef, useMemo, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-  TextInput,
-  Platform,
-} from "react-native";
+import { View, Text, StyleSheet, TextInput } from "react-native";
 import MapView, { Marker, Callout, PROVIDER_DEFAULT } from "react-native-maps";
-import { Ionicons } from "@expo/vector-icons";
-import BottomSheet from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetFlatList,
+  BottomSheetTextInput,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const ADDRESS = "日本、〒453-0843 愛知県名古屋市中村区鴨付町２丁目１１";
 const LATITUDE = 35.1681;
@@ -45,20 +41,18 @@ const places = [
 ];
 
 const TalkMap = () => {
+  const { colors } = useTheme();
   const [search, setSearch] = useState("");
   const bottomSheetRef = useRef<BottomSheet | null>(null);
 
-  // スナップポイント（高さ）を定義
-  const snapPoints = useMemo(() => ["15%", "40%", "90%"], []);
+  const snapPoints = useMemo(() => ["40%", "90%"], []);
 
-  // TextInputフォーカス時に最大まで開く
   const handleFocus = () => {
     (bottomSheetRef.current as any)?.snapToIndex(2);
   };
 
   return (
     <View style={styles.container}>
-      {/* Map */}
       <MapView
         style={styles.map}
         provider={PROVIDER_DEFAULT}
@@ -75,16 +69,14 @@ const TalkMap = () => {
           </Callout>
         </Marker>
       </MapView>
-
-      {/* BottomSheet */}
       <BottomSheet
         ref={bottomSheetRef}
-        index={1}
+        index={0}
         snapPoints={snapPoints}
         enablePanDownToClose={false}
-        backgroundStyle={{ backgroundColor: "#fff" }}
+        backgroundStyle={{ backgroundColor: colors.backgroundPrimary }}
         handleIndicatorStyle={{
-          backgroundColor: "#ccc",
+          backgroundColor: colors.textSecondary,
           height: 5,
           width: 40,
           alignSelf: "center",
@@ -92,16 +84,43 @@ const TalkMap = () => {
           borderRadius: 3,
         }}
       >
-        <View style={{ paddingHorizontal: 16, paddingTop: 4 }}>
-          <Text style={styles.sheetTitle}>周辺スポットを探す</Text>
-          <TextInput
-            style={styles.searchInput}
+        <BottomSheetView
+          style={{
+            paddingHorizontal: 16,
+            paddingTop: 4,
+          }}
+        >
+          <BottomSheetTextInput
+            style={[
+              styles.searchInput,
+              { backgroundColor: colors.backgroundSecondary },
+            ]}
             placeholder="検索"
             value={search}
             onChangeText={setSearch}
             onFocus={handleFocus}
           />
-        </View>
+        </BottomSheetView>
+        <BottomSheetFlatList
+          data={places}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={{
+            padding: 16,
+            gap: 12,
+          }}
+          renderItem={({ item }) => (
+            <View style={{ gap: 4 }}>
+              <Text style={[styles.placeName, { color: colors.textPrimary }]}>
+                {item.name}
+              </Text>
+              <Text
+                style={[styles.placeAddress, { color: colors.textSecondary }]}
+              >
+                {item.address}
+              </Text>
+            </View>
+          )}
+        />
       </BottomSheet>
     </View>
   );
@@ -130,12 +149,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   searchInput: {
-    backgroundColor: "#f2f2f2",
     borderRadius: 8,
-    padding: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     marginBottom: 8,
   },
-  listItem: { marginBottom: 12 },
   placeName: { fontWeight: "bold", fontSize: 16 },
   placeAddress: { color: "#666", fontSize: 14 },
 });

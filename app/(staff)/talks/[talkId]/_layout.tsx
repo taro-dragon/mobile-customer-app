@@ -25,6 +25,7 @@ const TalkLayout = () => {
       <Stack.Screen
         name="map"
         options={{
+          title: "位置情報",
           animation: "slide_from_bottom",
           gestureEnabled: false,
           headerBackButtonDisplayMode: "minimal",
