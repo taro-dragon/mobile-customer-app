@@ -1,16 +1,27 @@
 import React, { useRef, useMemo, useState } from "react";
-import { View, Text, StyleSheet, TextInput } from "react-native";
-import MapView, { Marker, Callout, PROVIDER_DEFAULT } from "react-native-maps";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ImageSourcePropType,
+} from "react-native";
+import MapView, { PROVIDER_DEFAULT } from "react-native-maps";
 import BottomSheet, {
   BottomSheetFlatList,
   BottomSheetTextInput,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useAssets } from "expo-asset";
 
 const ADDRESS = "日本、〒453-0843 愛知県名古屋市中村区鴨付町２丁目１１";
 const LATITUDE = 35.1681;
 const LONGITUDE = 136.8572;
+
+// Google Maps Geocoding APIのキー（環境変数から取得することを推奨）
+const GOOGLE_MAPS_API_KEY = process.env
+  .EXPO_PUBLIC_GOOGLE_MAP_API_KEY as string;
 
 const places = [
   {
@@ -43,7 +54,17 @@ const places = [
 const TalkMap = () => {
   const { colors } = useTheme();
   const [search, setSearch] = useState("");
+  const [assets] = useAssets(require("@/assets/images/pin.png"));
+  const [region, setRegion] = useState({
+    latitude: LATITUDE,
+    longitude: LONGITUDE,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  });
+  const [centerAddress, setCenterAddress] = useState("");
+  const [isLoadingAddress, setIsLoadingAddress] = useState(false);
   const bottomSheetRef = useRef<BottomSheet | null>(null);
+  const mapRef = useRef<MapView | null>(null);
 
   const snapPoints = useMemo(() => ["40%", "90%"], []);
 
@@ -51,24 +72,70 @@ const TalkMap = () => {
     (bottomSheetRef.current as any)?.snapToIndex(2);
   };
 
+  // 座標から住所を取得する関数
+  const fetchAddress = async (latitude: number, longitude: number) => {
+    if (GOOGLE_MAPS_API_KEY === "YOUR_API_KEY") {
+      console.warn("Google Maps APIキーが設定されていません");
+      return;
+    }
+
+    setIsLoadingAddress(true);
+    try {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_MAPS_API_KEY}&language=ja`
+      );
+      const data = await response.json();
+
+      if (data.results && data.results.length > 0) {
+        const address = data.results[0].formatted_address;
+        setCenterAddress(address);
+      }
+    } catch (error) {
+      console.error("住所取得エラー:", error);
+    } finally {
+      setIsLoadingAddress(false);
+    }
+  };
+
+  // マップの移動が終わった時の処理
+  const handleRegionChangeComplete = (newRegion: any) => {
+    setRegion(newRegion);
+    // 移動が終わったら住所を取得
+    fetchAddress(newRegion.latitude, newRegion.longitude);
+  };
+
   return (
     <View style={styles.container}>
-      <MapView
-        style={styles.map}
-        provider={PROVIDER_DEFAULT}
-        initialRegion={{
-          latitude: LATITUDE,
-          longitude: LONGITUDE,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01,
-        }}
-      >
-        <Marker coordinate={{ latitude: LATITUDE, longitude: LONGITUDE }}>
-          <Callout>
-            <Text>{ADDRESS}</Text>
-          </Callout>
-        </Marker>
-      </MapView>
+      <View style={{ flex: 1, position: "relative" }}>
+        <MapView
+          ref={mapRef}
+          style={styles.map}
+          provider={PROVIDER_DEFAULT}
+          initialRegion={region}
+          onRegionChangeComplete={handleRegionChangeComplete}
+        />
+        <View pointerEvents="none" style={styles.centerPin}>
+          <Image
+            source={assets?.[0] as ImageSourcePropType}
+            style={{ width: 40, height: 40 }}
+            resizeMode="contain"
+          />
+        </View>
+      </View>
+      {/* 中央住所表示 */}
+      {centerAddress && (
+        <View
+          style={[
+            styles.addressContainer,
+            { backgroundColor: colors.backgroundPrimary },
+          ]}
+        >
+          <Text style={[styles.addressText, { color: colors.textPrimary }]}>
+            {isLoadingAddress ? "住所を取得中..." : centerAddress}
+          </Text>
+        </View>
+      )}
+      <View style={{ height: "35%" }} />
       <BottomSheet
         ref={bottomSheetRef}
         index={0}
@@ -156,6 +223,35 @@ const styles = StyleSheet.create({
   },
   placeName: { fontWeight: "bold", fontSize: 16 },
   placeAddress: { color: "#666", fontSize: 14 },
+  centerPin: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    marginLeft: -20,
+    marginTop: -40,
+    width: 40,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    pointerEvents: "none",
+  },
+  addressContainer: {
+    position: "absolute",
+    top: 120,
+    left: 60,
+    right: 60,
+    padding: 12,
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  addressText: {
+    fontSize: 14,
+    textAlign: "center",
+  },
 });
 
 export default TalkMap;
