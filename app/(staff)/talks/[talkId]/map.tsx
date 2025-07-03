@@ -15,22 +15,12 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useAssets } from "expo-asset";
+import { fetchPlaceCoordinates } from "@/libs/fetchPlaceCoordinates";
+import { fetchAddressFromCoordinates } from "@/libs/fetchAddressFromCoordinates";
+import { searchPlaces, SearchResult } from "@/libs/searchPlaces";
 
 const LATITUDE = 35.1681;
 const LONGITUDE = 136.8572;
-
-// Google Maps APIのキー（環境変数から取得することを推奨）
-const GOOGLE_MAPS_API_KEY = process.env
-  .EXPO_PUBLIC_GOOGLE_MAP_API_KEY as string;
-
-interface SearchResult {
-  place_id: string;
-  description: string;
-  structured_formatting: {
-    main_text: string;
-    secondary_text: string;
-  };
-}
 
 const TalkMap = () => {
   const { colors } = useTheme();
@@ -55,65 +45,31 @@ const TalkMap = () => {
     (bottomSheetRef.current as any)?.snapToIndex(2);
   };
 
-  // BottomSheetの高さ変更を監視
   const handleBottomSheetChange = (index: number) => {
     setBottomSheetIndex(index);
   };
 
-  // マップの高さを計算（BottomSheetの高さに応じて変動）
   const mapHeight = bottomSheetIndex === 0 ? "40%" : "10%";
 
-  // 座標から住所を取得する関数
   const fetchAddress = async (latitude: number, longitude: number) => {
-    if (GOOGLE_MAPS_API_KEY === "YOUR_API_KEY") {
-      console.warn("Google Maps APIキーが設定されていません");
-      return;
-    }
-
     setIsLoadingAddress(true);
     try {
-      const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_MAPS_API_KEY}&language=ja`
-      );
-      const data = await response.json();
-
-      if (data.results && data.results.length > 0) {
-        const address = data.results[0].formatted_address;
+      const address = await fetchAddressFromCoordinates(latitude, longitude);
+      if (address) {
         setCenterAddress(address);
       }
     } catch (error) {
+      console.error("Failed to fetch address:", error);
     } finally {
       setIsLoadingAddress(false);
     }
   };
 
-  const searchPlaces = async (query: string) => {
-    if (!query.trim() || GOOGLE_MAPS_API_KEY === "YOUR_API_KEY") {
-      setSearchResults([]);
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(
-          query
-        )}&key=${GOOGLE_MAPS_API_KEY}&language=ja&components=country:jp`
-      );
-      const data = await response.json();
-
-      if (data.predictions) {
-        setSearchResults(data.predictions);
-      }
-    } catch (error) {
-      setSearchResults([]);
-    }
-  };
-
-  // 検索テキストが変更された時の処理
-  const handleSearchChange = (text: string) => {
+  const handleSearchChange = async (text: string) => {
     setSearch(text);
     if (text.trim()) {
-      searchPlaces(text);
+      const results = await searchPlaces(text);
+      setSearchResults(results);
     } else {
       setSearchResults([]);
     }
@@ -121,20 +77,12 @@ const TalkMap = () => {
 
   const handleSearchResultTap = async (result: SearchResult) => {
     try {
-      const response = await fetch(
-        `https://maps.googleapis.com/maps/api/place/details/json?place_id=${result.place_id}&fields=geometry&key=${GOOGLE_MAPS_API_KEY}`
-      );
-      const data = await response.json();
+      const coordinates = await fetchPlaceCoordinates(result.place_id);
 
-      if (
-        data.result &&
-        data.result.geometry &&
-        data.result.geometry.location
-      ) {
-        const { lat, lng } = data.result.geometry.location;
+      if (coordinates) {
         const newRegion = {
-          latitude: lat,
-          longitude: lng,
+          latitude: coordinates.lat,
+          longitude: coordinates.lng,
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
         };
@@ -142,11 +90,11 @@ const TalkMap = () => {
         setRegion(newRegion);
         mapRef.current?.animateToRegion(newRegion, 1000);
         setSearch(result.description);
-
-        // BottomSheetのindexを0に変更
         bottomSheetRef.current?.snapToIndex(1);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error("Failed to fetch place coordinates:", error);
+    }
   };
 
   const handleRegionChangeComplete = (newRegion: any) => {
