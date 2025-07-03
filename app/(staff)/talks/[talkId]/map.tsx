@@ -141,7 +141,6 @@ const TalkMap = () => {
 
         setRegion(newRegion);
         mapRef.current?.animateToRegion(newRegion, 1000);
-        setSearchResults([]);
         setSearch(result.description);
 
         // BottomSheetのindexを0に変更
