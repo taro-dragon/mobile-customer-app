@@ -20,6 +20,7 @@ import { useAssets } from "expo-asset";
 import { fetchPlaceCoordinates } from "@/libs/fetchPlaceCoordinates";
 import { fetchAddressFromCoordinates } from "@/libs/fetchAddressFromCoordinates";
 import { searchPlaces, SearchResult } from "@/libs/searchPlaces";
+import { LocateFixed } from "lucide-react-native";
 
 const LATITUDE = 35.1681;
 const LONGITUDE = 136.8572;
@@ -44,13 +45,10 @@ const TalkMap = () => {
   const mapRef = useRef<MapView | null>(null);
   useEffect(() => {
     (async () => {
-      // パーミッション要求
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        // 許可されなかった場合は何もしない
         return;
       }
-      // 現在地取得
       const location = await Location.getCurrentPositionAsync({});
       if (location) {
         const { latitude, longitude } = location.coords;
@@ -134,6 +132,26 @@ const TalkMap = () => {
     fetchAddress(newRegion.latitude, newRegion.longitude);
   };
 
+  const handleMoveToCurrentLocation = async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      return;
+    }
+    const location = await Location.getCurrentPositionAsync({});
+    if (location) {
+      const { latitude, longitude } = location.coords;
+      const newRegion = {
+        latitude,
+        longitude,
+        latitudeDelta: region.latitudeDelta,
+        longitudeDelta: region.longitudeDelta,
+      };
+      setRegion(newRegion);
+      mapRef.current?.animateToRegion(newRegion, 1000);
+      fetchAddress(latitude, longitude);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={{ flex: 1, position: "relative" }}>
@@ -141,11 +159,9 @@ const TalkMap = () => {
           ref={mapRef}
           style={styles.map}
           provider={PROVIDER_DEFAULT}
-          initialRegion={region}
+          region={region}
           onRegionChangeComplete={handleRegionChangeComplete}
-        >
-          {/* Markerは使わない */}
-        </MapView>
+        />
         <View pointerEvents="none" style={styles.centerPin}>
           <Image
             source={assets?.[0] as ImageSourcePropType}
@@ -165,8 +181,22 @@ const TalkMap = () => {
             </Text>
           </View>
         )}
+        <TouchableOpacity
+          style={{
+            position: "absolute",
+            bottom: 56,
+            right: 20,
+            paddingVertical: 10,
+            paddingHorizontal: 16,
+            borderRadius: 24,
+            borderWidth: 1,
+            borderColor: colors.textPrimary,
+          }}
+          onPress={handleMoveToCurrentLocation}
+        >
+          <LocateFixed size={24} color={colors.textPrimary} />
+        </TouchableOpacity>
       </View>
-      {/* 中央住所表示 */}
       <View
         style={{
           height: mapHeight as DimensionValue,
@@ -331,6 +361,26 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
+  },
+  currentLocationButton: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: "#fff",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 24,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    zIndex: 20,
+  },
+  currentLocationButtonText: {
+    color: "#007AFF",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });
 
