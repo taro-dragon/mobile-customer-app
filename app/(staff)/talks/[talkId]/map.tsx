@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useState } from "react";
+import React, { useRef, useMemo, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,8 +6,10 @@ import {
   Image,
   ImageSourcePropType,
   TouchableOpacity,
+  DimensionValue,
 } from "react-native";
 import MapView, { PROVIDER_DEFAULT } from "react-native-maps";
+import * as Location from "expo-location";
 import BottomSheet, {
   BottomSheetFlatList,
   BottomSheetTextInput,
@@ -26,6 +28,7 @@ const TalkMap = () => {
   const { colors } = useTheme();
   const [search, setSearch] = useState("");
   const [assets] = useAssets(require("@/assets/images/pin.png"));
+
   const [region, setRegion] = useState({
     latitude: LATITUDE,
     longitude: LONGITUDE,
@@ -36,8 +39,29 @@ const TalkMap = () => {
   const [isLoadingAddress, setIsLoadingAddress] = useState(false);
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [bottomSheetIndex, setBottomSheetIndex] = useState(1);
+  const [mapHeight, setMapHeight] = useState("40%");
   const bottomSheetRef = useRef<BottomSheet | null>(null);
   const mapRef = useRef<MapView | null>(null);
+  useEffect(() => {
+    (async () => {
+      // パーミッション要求
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        // 許可されなかった場合は何もしない
+        return;
+      }
+      // 現在地取得
+      const location = await Location.getCurrentPositionAsync({});
+      if (location) {
+        const { latitude, longitude } = location.coords;
+        setRegion((prev) => ({
+          ...prev,
+          latitude,
+          longitude,
+        }));
+      }
+    })();
+  }, []);
 
   const snapPoints = useMemo(() => ["40%", "60%"], []);
 
@@ -49,7 +73,15 @@ const TalkMap = () => {
     setBottomSheetIndex(index);
   };
 
-  const mapHeight = bottomSheetIndex === 0 ? "40%" : "10%";
+  useEffect(() => {
+    if (bottomSheetIndex === 0) {
+      setMapHeight("10%");
+    } else if (bottomSheetIndex === 1) {
+      setMapHeight("35%");
+    } else {
+      setMapHeight("50%");
+    }
+  }, [bottomSheetIndex]);
 
   const fetchAddress = async (latitude: number, longitude: number) => {
     setIsLoadingAddress(true);
@@ -107,7 +139,7 @@ const TalkMap = () => {
       <View style={{ flex: 1, position: "relative" }}>
         <MapView
           ref={mapRef}
-          style={[styles.map, { height: mapHeight }]}
+          style={styles.map}
           provider={PROVIDER_DEFAULT}
           initialRegion={region}
           onRegionChangeComplete={handleRegionChangeComplete}
@@ -121,22 +153,25 @@ const TalkMap = () => {
             resizeMode="contain"
           />
         </View>
+        {centerAddress && (
+          <View
+            style={[
+              styles.addressContainer,
+              { backgroundColor: colors.backgroundPrimary },
+            ]}
+          >
+            <Text style={[styles.addressText, { color: colors.textPrimary }]}>
+              {isLoadingAddress ? "住所を取得中..." : centerAddress}
+            </Text>
+          </View>
+        )}
       </View>
       {/* 中央住所表示 */}
-      {centerAddress && (
-        <View
-          style={[
-            styles.addressContainer,
-            { backgroundColor: colors.backgroundPrimary },
-          ]}
-        >
-          <Text style={[styles.addressText, { color: colors.textPrimary }]}>
-            {isLoadingAddress ? "住所を取得中..." : centerAddress}
-          </Text>
-        </View>
-      )}
       <View
-        style={{ height: "35%", backgroundColor: colors.backgroundPrimary }}
+        style={{
+          height: mapHeight as DimensionValue,
+          backgroundColor: colors.backgroundPrimary,
+        }}
       />
       <BottomSheet
         ref={bottomSheetRef}
@@ -264,7 +299,7 @@ const styles = StyleSheet.create({
   },
   addressContainer: {
     position: "absolute",
-    top: 120,
+    top: 20,
     left: 60,
     right: 60,
     padding: 12,

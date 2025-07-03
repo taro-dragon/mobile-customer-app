@@ -46,6 +46,7 @@ const commonConfig = {
       "expo-image-picker",
       "expo-av",
       "expo-asset",
+      "expo-location",
       [
         "expo-build-properties",
         {
