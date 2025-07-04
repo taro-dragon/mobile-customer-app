@@ -156,17 +156,27 @@ const SearchMap: React.FC<SearchMapProps> = ({ submit }) => {
       fetchAddress(latitude, longitude);
     }
   };
+  const handleSubmit = async () => {
+    let address: string | null = centerAddress;
+
+    if (!address) {
+      try {
+        address = await fetchAddressFromCoordinates(
+          region.latitude,
+          region.longitude
+        );
+      } catch (error) {}
+    }
+
+    submit(region.latitude, region.longitude, address || undefined);
+  };
 
   return (
     <>
       <Stack.Screen
         options={{
           headerRight: () => (
-            <TouchableOpacity
-              onPress={() =>
-                submit(region.latitude, region.longitude, centerAddress)
-              }
-            >
+            <TouchableOpacity onPress={handleSubmit}>
               <Text
                 style={{ color: colors.textPrimary, ...typography.heading4 }}
               >
