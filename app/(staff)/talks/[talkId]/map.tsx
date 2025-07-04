@@ -2,9 +2,11 @@ import React from "react";
 import SearchMap from "@/components/map/SearchMap";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import firestore from "@react-native-firebase/firestore";
+import { useStore } from "@/hooks/useStore";
 
 const TalkMap = () => {
   const router = useRouter();
+  const { staff } = useStore();
   const { talkId } = useLocalSearchParams<{ talkId: string }>();
 
   const handleSubmit = async (lat: number, lng: number, address?: string) => {
@@ -29,6 +31,7 @@ const TalkMap = () => {
           text: address || "位置情報",
           createdAt: firestore.FieldValue.serverTimestamp(),
           senderType: "staff",
+          senderId: staff?.id,
           type: "location",
           location: {
             latitude: lat,

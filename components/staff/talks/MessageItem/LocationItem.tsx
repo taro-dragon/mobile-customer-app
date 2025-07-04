@@ -31,8 +31,8 @@ const LocationItem: React.FC<LocationItemProps> = ({
   const [region, setRegion] = useState<Region>({
     latitude: message.location.latitude,
     longitude: message.location.longitude,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
+    latitudeDelta: 0.003,
+    longitudeDelta: 0.003,
   });
   return (
     <View
@@ -84,7 +84,7 @@ const LocationItem: React.FC<LocationItemProps> = ({
             <Text style={{ color: colors.textPrimary, ...typography.heading2 }}>
               位置情報
             </Text>
-            <Text style={{ color: colors.textPrimary, ...typography.body3 }}>
+            <Text style={{ color: colors.textSecondary, ...typography.body3 }}>
               {message.location.address}
             </Text>
           </View>
