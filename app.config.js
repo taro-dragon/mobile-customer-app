@@ -44,7 +44,7 @@ const commonConfig = {
       "expo-web-browser",
       "expo-document-picker",
       "expo-image-picker",
-      "expo-av",
+      "expo-video",
       "expo-asset",
       "expo-location",
       [

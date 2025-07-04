@@ -1,30 +1,15 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { Message } from "@/types/firestore_schema/messages";
 import dayjs from "dayjs";
 import { Image } from "expo-image";
-import {
-  Check,
-  Download,
-  Play,
-  Pause,
-  Volume2,
-  VolumeX,
-} from "lucide-react-native";
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Dimensions,
-  Alert,
-} from "react-native";
+import { Check, Download } from "lucide-react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Alert } from "react-native";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import DownloadProgressModal from "@/components/common/Modal/DownloadProgressModal";
-import { Video, ResizeMode, AVPlaybackStatus } from "expo-av";
-import VideoZoomModal from "./VideoZoomModal";
+import { useVideoPlayer, VideoView } from "expo-video";
 
 type VideoMessageItemProps = {
   talk: TalkWithUser;
@@ -46,52 +31,9 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [showProgressModal, setShowProgressModal] = useState(false);
-  const [isVideoModalVisible, setIsVideoModalVisible] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
-  const [duration, setDuration] = useState(0);
-  const [position, setPosition] = useState(0);
-  const videoRef = useRef<Video>(null);
 
-  const handlePlayPause = async () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        await videoRef.current.pauseAsync();
-      } else {
-        await videoRef.current.playAsync();
-      }
-    }
-  };
-
-  const handleMuteToggle = async () => {
-    if (videoRef.current) {
-      await videoRef.current.setIsMutedAsync(!isMuted);
-      setIsMuted(!isMuted);
-    }
-  };
-
-  const onPlaybackStatusUpdate = (status: AVPlaybackStatus) => {
-    if (status.isLoaded) {
-      setIsPlaying(status.isPlaying);
-      setDuration(status.durationMillis || 0);
-      setPosition(status.positionMillis || 0);
-    }
-  };
-
-  const formatTime = (milliseconds: number) => {
-    const totalSeconds = Math.floor(milliseconds / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-  };
-
-  const handleVideoPress = () => {
-    setIsVideoModalVisible(true);
-  };
-
-  const closeVideoModal = () => {
-    setIsVideoModalVisible(false);
-  };
+  // expo-videoの新しいAPIを使用
+  const player = useVideoPlayer(message.videoUrl || "");
 
   const handleDownload = async () => {
     if (!message.videoUrl) {
@@ -205,58 +147,14 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
           ]}
         >
           <View style={styles.videoWrapper}>
-            <TouchableOpacity
-              style={styles.videoContainer}
-              onPress={handleVideoPress}
-              activeOpacity={0.8}
-            >
-              <Video
-                ref={videoRef}
-                source={{ uri: message.videoUrl || "" }}
+            <TouchableOpacity style={styles.videoContainer} activeOpacity={0.8}>
+              <VideoView
+                player={player}
                 style={styles.video}
-                useNativeControls={false}
-                resizeMode={ResizeMode.CONTAIN}
-                isLooping={false}
-                onPlaybackStatusUpdate={onPlaybackStatusUpdate}
-                shouldPlay={false}
-                isMuted={isMuted}
+                allowsFullscreen
+                allowsPictureInPicture={false}
               />
-
-              <View style={styles.videoControls}>
-                <TouchableOpacity
-                  style={styles.playButton}
-                  onPress={handlePlayPause}
-                  activeOpacity={0.8}
-                >
-                  {isPlaying ? (
-                    <Pause size={24} color={colors.white} />
-                  ) : (
-                    <Play size={24} color={colors.white} />
-                  )}
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.muteButton}
-                  onPress={handleMuteToggle}
-                  activeOpacity={0.8}
-                >
-                  {isMuted ? (
-                    <VolumeX size={16} color={colors.white} />
-                  ) : (
-                    <Volume2 size={16} color={colors.white} />
-                  )}
-                </TouchableOpacity>
-              </View>
-
-              {duration > 0 && (
-                <View style={styles.timeOverlay}>
-                  <Text style={[styles.timeText, { color: colors.white }]}>
-                    {formatTime(position)} / {formatTime(duration)}
-                  </Text>
-                </View>
-              )}
             </TouchableOpacity>
-
             <TouchableOpacity
               style={[
                 styles.downloadButton,
@@ -291,17 +189,6 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
           </View>
         </View>
       </View>
-      {isVideoModalVisible && (
-        <VideoZoomModal
-          visible={isVideoModalVisible}
-          onRequestClose={closeVideoModal}
-          videoUrl={message.videoUrl || ""}
-          onDownload={handleDownload}
-          isDownloading={isDownloading}
-          downloadProgress={downloadProgress}
-          colors={colors}
-        />
-      )}
       <DownloadProgressModal
         visible={showProgressModal}
         downloadProgress={downloadProgress}
