@@ -13,7 +13,7 @@ const TalkLayout = () => {
         },
       }}
     >
-      <Stack.Screen name="index" />
+      <Stack.Screen name="index" options={{ title: "トーク" }} />
       <Stack.Screen
         name="appraisalPrice"
         options={{
