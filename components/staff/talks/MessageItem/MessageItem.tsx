@@ -9,6 +9,7 @@ import AppraisalPriceItem from "./AppraisalPriceItem";
 import FileMessageItem from "./FileMessageItem";
 import ImageMessageItem from "./ImageMessageItem";
 import VideoMessageItem from "./VideoMessageItem";
+import LocationItem from "./LocationItem";
 
 type MessageItemProps = {
   message: Message;
@@ -72,6 +73,16 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, talk }) => {
   if (message.type === "video") {
     return (
       <VideoMessageItem
+        bubbleColor={bubbleColor}
+        talk={talk}
+        message={message}
+        isMe={isMe}
+      />
+    );
+  }
+  if (message.type === "location") {
+    return (
+      <LocationItem
         bubbleColor={bubbleColor}
         talk={talk}
         message={message}

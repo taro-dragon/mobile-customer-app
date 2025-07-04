@@ -17,11 +17,17 @@ export type Message = {
     | "file"
     | "currentCarCheckRequested"
     | "appraisalPrice"
-    | "video";
+    | "video"
+    | "location";
   isAnswered?: boolean; //currentCarCheckRequestedの回答フラグ
   isOpened?: boolean; //appraisalPriceの開封フラグ
   appraisalPrice?: string; //appraisalPriceの査定金額
   appraisalPriceNote?: string; //appraisalPriceの査定金額のメモ
   videoUrl?: string; //videoのURL
   videoDuration?: number; //videoの再生時間
+  location?: {
+    latitude: number;
+    longitude: number;
+    address: string;
+  };
 };
