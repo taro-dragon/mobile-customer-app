@@ -4,9 +4,16 @@ import { Message } from "@/types/firestore_schema/messages";
 import dayjs from "dayjs";
 import { useAssets } from "expo-asset";
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import { DollarSign } from "lucide-react-native";
 import { useRef, useState } from "react";
-import { ImageSourcePropType, StyleSheet, Text, View } from "react-native";
+import {
+  ImageSourcePropType,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import MapView, { PROVIDER_DEFAULT, Region } from "react-native-maps";
 
 type LocationItemProps = {
@@ -28,6 +35,7 @@ const LocationItem: React.FC<LocationItemProps> = ({
   const [assets] = useAssets(require("@/assets/images/pin.png"));
   const { colors, typography } = useTheme();
   const mapRef = useRef<MapView>(null);
+  const router = useRouter();
   const [region, setRegion] = useState<Region>({
     latitude: message.location.latitude,
     longitude: message.location.longitude,
@@ -50,7 +58,17 @@ const LocationItem: React.FC<LocationItemProps> = ({
           style={styles.avatar}
         />
       )}
-      <View
+      <TouchableOpacity
+        onPress={() => {
+          router.push({
+            pathname: "/map",
+            params: {
+              latitude: message.location?.latitude,
+              longitude: message.location?.longitude,
+              address: message.location?.address,
+            },
+          });
+        }}
         style={[
           styles.bubble,
           isMe ? styles.userBubble : styles.otherBubble,
@@ -101,7 +119,7 @@ const LocationItem: React.FC<LocationItemProps> = ({
             </Text>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };

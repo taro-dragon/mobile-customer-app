@@ -1,8 +1,12 @@
 import { useTheme } from "@/contexts/ThemeContext";
+import { useRouter } from "expo-router";
 import { Stack } from "expo-router/stack";
+import { X } from "lucide-react-native";
+import { TouchableOpacity } from "react-native";
 
 export default function Layout() {
   const { colors } = useTheme();
+  const router = useRouter();
   return (
     <Stack
       screenOptions={{
@@ -107,6 +111,15 @@ export default function Layout() {
         name="bids"
         options={{
           gestureDirection: "vertical",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="map"
+        options={{
+          title: "位置情報",
+          animation: "slide_from_bottom",
+          gestureEnabled: false,
           headerShown: false,
         }}
       />
