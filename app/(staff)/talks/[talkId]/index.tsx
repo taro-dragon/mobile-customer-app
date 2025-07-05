@@ -21,7 +21,9 @@ import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import MessageItem from "@/components/staff/talks/MessageItem/MessageItem";
 import TalkHeader from "@/components/staff/talks/TalkHeader";
 import MessageInput from "@/components/staff/talks/MessageInput";
+import DateSeparator from "@/components/staff/talks/MessageItem/DateSeparator";
 import Toast from "react-native-toast-message";
+import { isSameDate, formatMessageDate } from "@/utils/dateUtils";
 
 const MESSAGES_PER_PAGE = 30; // 1ページあたりのメッセージ数
 
@@ -70,6 +72,9 @@ const TalkDetail = () => {
         // 最新メッセージのタイムスタンプを保存
         if (messagesData.length > 0) {
           setLatestMessageTimestamp(messagesData[0].createdAt);
+
+          // 一番古いメッセージの日付も確認
+          const oldestMessage = messagesData[messagesData.length - 1];
         }
 
         // さらに古いメッセージがあるかチェック
@@ -246,6 +251,38 @@ const TalkDetail = () => {
     );
   };
 
+  const renderMessageWithDateSeparator = ({
+    item,
+    index,
+  }: {
+    item: Message;
+    index: number;
+  }) => {
+    if (!talk) return null;
+
+    const showDateSeparator = (() => {
+      if (index === 0) return true;
+
+      const currentMessage = item;
+      const previousMessage = messages[index - 1];
+
+      return !isSameDate(currentMessage.createdAt, previousMessage.createdAt);
+    })();
+
+    const isLastMessage = index === messages.length - 1;
+    const showLastMessageDateSeparator = isLastMessage && messages.length > 1;
+
+    return (
+      <View>
+        {showDateSeparator && <DateSeparator timestamp={item.createdAt} />}
+        {showLastMessageDateSeparator && (
+          <DateSeparator timestamp={item.createdAt} isOldest={true} />
+        )}
+        <MessageItem message={item} talk={talk} />
+      </View>
+    );
+  };
+
   if (!talk) {
     return (
       <View style={styles.centerContainer}>
@@ -286,15 +323,17 @@ const TalkDetail = () => {
           <FlatList
             ref={flatListRef}
             data={messages}
-            renderItem={({ item }) => (
-              <MessageItem message={item} talk={talk} />
-            )}
+            renderItem={renderMessageWithDateSeparator}
             keyExtractor={(item) => item.id}
             contentContainerStyle={styles.messagesContainer}
             inverted
             ListFooterComponent={renderLoadMoreButton}
             onEndReached={loadMoreMessages}
             onEndReachedThreshold={0.1}
+            showsVerticalScrollIndicator={false}
+            maintainVisibleContentPosition={{
+              minIndexForVisible: 0,
+            }}
           />
           <MessageInput
             sendMessage={sendMessage}
@@ -333,7 +372,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   messagesContainer: {
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
   },
   inputContainer: {
     flexDirection: "row",
