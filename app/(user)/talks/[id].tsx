@@ -16,10 +16,10 @@ import { Ionicons } from "@expo/vector-icons";
 import firestore from "@react-native-firebase/firestore";
 import { Message } from "@/types/firestore_schema/messages";
 import { useTheme } from "@/contexts/ThemeContext";
-import MessageItem from "@/components/talks/MessageItem";
 import { Car, ChevronLeft, File, Store } from "lucide-react-native";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import Divider from "@/components/common/Divider";
+import MessageItem from "@/components/users/talks/MessageItem/MessageItem";
 
 const TalkDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
