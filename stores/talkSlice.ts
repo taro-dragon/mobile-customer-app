@@ -4,6 +4,7 @@ import firestore from "@react-native-firebase/firestore";
 import { StateCreator } from "zustand";
 import { AffiliateStore } from "@/types/firestore_schema/affiliateStores";
 import { Car } from "@/types/models/Car";
+import { Stock } from "@/types/firestore_schema/stock";
 
 export const createTalkSlice: StateCreator<TalkSlice, [], [], TalkSlice> = (
   set,
@@ -40,14 +41,29 @@ export const createTalkSlice: StateCreator<TalkSlice, [], [], TalkSlice> = (
                     .collection("shops")
                     .doc(talk.affiliateStoreId)
                     .get();
-                  const car = await firestore()
-                    .collection("cars")
-                    .doc(talk.carId)
-                    .get();
+
+                  let sourceCar: Car | undefined;
+                  let sourceStockCar: Stock | undefined;
+
+                  if (talk.sourceType === "car_inquiry") {
+                    const stockCar = await firestore()
+                      .collection("stockCars")
+                      .doc(talk.sourceId)
+                      .get();
+                    sourceStockCar = stockCar.data() as Stock;
+                  } else {
+                    const car = await firestore()
+                      .collection("cars")
+                      .doc(talk.carId)
+                      .get();
+                    sourceCar = car.data() as Car;
+                  }
+
                   return {
                     ...talk,
                     affiliateStore: affiliateStore.data() as AffiliateStore,
-                    car: car.data() as Car,
+                    sourceCar,
+                    sourceStockCar,
                   };
                 } catch (error) {
                   console.error("Error fetching affiliate store:", error);

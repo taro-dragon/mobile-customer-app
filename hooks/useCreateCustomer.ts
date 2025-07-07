@@ -60,6 +60,12 @@ const useCreateCustomer = () => {
       const createUserData: User = {
         id: userId,
         isAnonymous: true,
+        pushSettings: {
+          isMessage: true,
+          isBid: true,
+          isBulkStatusChange: true,
+        },
+        blockIdList: [],
         createdAt: firestore.Timestamp.now(),
         updatedAt: firestore.Timestamp.now(),
       };

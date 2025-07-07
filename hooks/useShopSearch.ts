@@ -81,7 +81,7 @@ const useShopSearch = () => {
             .doc(shopData.managementCompanyId)
             .get();
 
-          if (companySnapshot.exists) {
+          if (companySnapshot.exists()) {
             const companyData = companySnapshot.data() as ManagementCompany;
             shop.managementCompany = {
               ...companyData,

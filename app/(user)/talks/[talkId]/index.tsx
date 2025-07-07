@@ -20,21 +20,24 @@ import { Message } from "@/types/firestore_schema/messages";
 import { useTheme } from "@/contexts/ThemeContext";
 import { ChevronLeft, Send, DollarSign, Users } from "lucide-react-native";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
-import MessageItem from "@/components/staff/talks/MessageItem/MessageItem";
-import TalkHeader from "@/components/staff/talks/TalkHeader";
-import MessageInput from "@/components/staff/talks/MessageInput";
+import MessageItem from "@/components/users/talks/MessageItem/MessageItem";
 import Toast from "react-native-toast-message";
 import { formatMessageDate } from "@/utils/dateUtils";
 import DateSeparatorWrapper from "@/components/common/DateSeparatorWrapper";
-import { useTalkDetail } from "@/hooks/staff/useTalkDetail";
+
 import { sendTalkMessage } from "@/libs/firestore/sendTalkMessage";
+import { TalkWithAffiliate } from "@/types/extendType/TalkWithAffiliate";
+import TalkHeader from "@/components/users/talks/TalkHeader";
+import MessageInput from "@/components/users/talks/MessageInput";
 
 const MESSAGES_PER_PAGE = 30; // 1ページあたりのメッセージ数
 
 const TalkDetail = () => {
   const { talkId } = useLocalSearchParams<{ talkId: string }>();
-  const { staffTalks, staff } = useStore();
-  const talk = staffTalks.find((talk) => talk.id === talkId);
+  const { userTalks, user } = useStore();
+  const talk = userTalks.find((talk) => talk.id === talkId) as
+    | TalkWithAffiliate
+    | undefined;
   const [messages, setMessages] = useState<Message[]>([]);
   const [isOpenPanel, setIsOpenPanel] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -89,7 +92,7 @@ const TalkDetail = () => {
           .doc(talkId)
           .collection("messages")
           .where("read", "==", false)
-          .where("senderType", "==", "user")
+          .where("senderType", "==", "staff")
           .get();
 
         unreadMessagesRef.forEach((doc) => {
@@ -195,14 +198,14 @@ const TalkDetail = () => {
   };
 
   const sendMessage = async () => {
-    if (!text.trim() || !staff || !talkId) return;
+    if (!text.trim() || !user || !talkId) return;
 
     setSending(true);
     try {
       const messageData: Omit<Message, "id"> = {
         talkId,
-        senderId: staff.id,
-        senderType: "staff",
+        senderId: user.id,
+        senderType: "user",
         text: text.trim(),
         read: false,
         createdAt: firestore.Timestamp.now(),
@@ -292,7 +295,7 @@ const TalkDetail = () => {
     <>
       <Stack.Screen
         options={{
-          title: `${talk.user.familyName} ${talk.user.givenName}`,
+          title: "トーク",
           headerTitleStyle: styles.headerTitle,
           headerLeft: () => (
             <TouchableOpacity onPress={() => router.back()}>

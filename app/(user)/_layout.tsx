@@ -69,7 +69,7 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
-        name="talks"
+        name="talks/[talkId]"
         options={{
           headerShown: false,
           animation: "slide_from_right",

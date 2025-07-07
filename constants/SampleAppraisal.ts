@@ -7,6 +7,7 @@ import firestore from "@react-native-firebase/firestore";
 // Clientのサンプルデータ
 const sampleShop1: Shop = {
   id: "shop_001",
+  clientId: "client_001",
   staffInfo: {
     familyName: "山田",
     givenName: "太郎",
@@ -31,6 +32,7 @@ const sampleShop1: Shop = {
 
 const sampleShop2: Shop = {
   id: "shop_002",
+  clientId: "client_002",
   staffInfo: {
     familyName: "鈴木",
     givenName: "花子",
@@ -60,7 +62,7 @@ const sampleAppraisalBids: AppraisalBid[] = [
     amount: 1850000,
     comment: "走行距離が少なく、状態が良好です。即日査定可能です。",
     createdAt: firestore.Timestamp.fromDate(new Date("2024-03-01")), // 2024-03-01
-    status: "pending",
+    status: "in_progress",
     shop: sampleShop1,
   },
   {
@@ -70,7 +72,7 @@ const sampleAppraisalBids: AppraisalBid[] = [
     comment:
       "内装の状態が特に良好です。お客様のご要望に応じて柔軟に対応させていただきます。",
     createdAt: firestore.Timestamp.fromDate(new Date("2024-03-01")), // 2024-03-01
-    status: "pending",
+    status: "in_progress",
     shop: sampleShop2,
   },
 ];
@@ -78,7 +80,7 @@ const sampleAppraisalBids: AppraisalBid[] = [
 // 完全なAppraisalのサンプルデータ
 export const sampleAppraisal: Appraisal = {
   id: "appraisal_123",
-  status: "active",
+  status: "in_progress",
   carId: "car_456",
   maker: "toyota",
   model: "prius",
