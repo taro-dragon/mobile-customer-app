@@ -34,6 +34,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   talk,
 }) => {
   const { colors } = useTheme();
+  const isClosed = talk.status === "closed";
   const { panel, isUploading, uploadProgress } = useStaffTalkPanel(talk);
 
   return (
@@ -124,10 +125,12 @@ const MessageInput: React.FC<MessageInputProps> = ({
           ]}
           value={text}
           onChangeText={setText}
-          placeholder="メッセージを入力..."
+          placeholder={
+            isClosed ? "この問い合わせは終了しました" : "メッセージを入力..."
+          }
           multiline
           onFocus={() => setIsOpenPanel(false)}
-          editable={!isUploading}
+          editable={!isUploading && !isClosed}
         />
         <TouchableOpacity
           style={[
@@ -139,7 +142,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
             },
           ]}
           onPress={sendMessage}
-          disabled={!text.trim() || sending || isUploading}
+          disabled={!text.trim() || sending || isUploading || isClosed}
         >
           {sending ? (
             <ActivityIndicator size="small" color={colors.white} />
@@ -176,7 +179,9 @@ const MessageInput: React.FC<MessageInputProps> = ({
                 <item.icon
                   size={24}
                   color={
-                    item.disabled ? colors.textSecondary : colors.textPrimary
+                    item.disabled
+                      ? colors.textSecondary
+                      : (item as any).iconColor || colors.textPrimary
                   }
                 />
                 <Text

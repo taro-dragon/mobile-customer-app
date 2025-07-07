@@ -10,22 +10,18 @@ import {
   Text,
   TouchableOpacity,
   View,
-  TextInput,
-  Alert,
 } from "react-native";
 import firestore, {
   FirebaseFirestoreTypes,
 } from "@react-native-firebase/firestore";
 import { Message } from "@/types/firestore_schema/messages";
 import { useTheme } from "@/contexts/ThemeContext";
-import { ChevronLeft, Send, DollarSign, Users } from "lucide-react-native";
+import { ChevronLeft } from "lucide-react-native";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import MessageItem from "@/components/users/talks/MessageItem/MessageItem";
 import Toast from "react-native-toast-message";
-import { formatMessageDate } from "@/utils/dateUtils";
 import DateSeparatorWrapper from "@/components/common/DateSeparatorWrapper";
 
-import { sendTalkMessage } from "@/libs/firestore/sendTalkMessage";
 import { TalkWithAffiliate } from "@/types/extendType/TalkWithAffiliate";
 import TalkHeader from "@/components/users/talks/TalkHeader";
 import MessageInput from "@/components/users/talks/MessageInput";
@@ -38,6 +34,7 @@ const TalkDetail = () => {
   const talk = userTalks.find((talk) => talk.id === talkId) as
     | TalkWithAffiliate
     | undefined;
+  const isClosed = talk?.status === "closed";
   const [messages, setMessages] = useState<Message[]>([]);
   const [isOpenPanel, setIsOpenPanel] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -293,6 +290,20 @@ const TalkDetail = () => {
 
   return (
     <>
+      {isClosed && (
+        <View
+          style={{
+            backgroundColor: "#fee2e2",
+            padding: 8,
+            alignItems: "center",
+            borderRadius: 8,
+          }}
+        >
+          <Text style={{ color: "#b91c1c", fontWeight: "bold" }}>
+            この問い合わせは終了しました
+          </Text>
+        </View>
+      )}
       <Stack.Screen
         options={{
           title: "トーク",

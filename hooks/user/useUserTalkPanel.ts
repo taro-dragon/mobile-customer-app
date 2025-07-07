@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "expo-router";
-import { File, Image, MapPin } from "lucide-react-native";
+import { File, Image, MapPin, X } from "lucide-react-native";
 import firestore from "@react-native-firebase/firestore";
 import storage from "@react-native-firebase/storage";
 import * as DocumentPicker from "expo-document-picker";
@@ -11,19 +11,21 @@ import { TalkWithAffiliate } from "@/types/extendType/TalkWithAffiliate";
 import { useStore } from "../useStore";
 import { uploadFile } from "@/libs/uploadFile";
 import { Message } from "@/types/firestore_schema/messages";
+import { endTalk } from "@/libs/firestore/endTalk";
 
 const useUserTalkPanel = (talk: TalkWithAffiliate) => {
   const router = useRouter();
   const { user } = useStore();
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [showEndTalkModal, setShowEndTalkModal] = useState(false);
 
   const onPressFile = async () => {
-    if (isUploading) return;
+    if (isUploading || isProcessing) return;
+    setUploadProgress(0);
 
     try {
-      setUploadProgress(0);
-
       // ファイルを選択
       const result = await DocumentPicker.getDocumentAsync({
         type: "*/*", // すべてのファイルタイプを許可
@@ -40,6 +42,7 @@ const useUserTalkPanel = (talk: TalkWithAffiliate) => {
         setUploadProgress(0);
         return;
       }
+      setIsProcessing(true);
       setIsUploading(true);
 
       // ファイルサイズチェック（50MB = 50 * 1024 * 1024 bytes）
@@ -94,41 +97,39 @@ const useUserTalkPanel = (talk: TalkWithAffiliate) => {
 
       setTimeout(() => {
         setIsUploading(false);
+        setIsProcessing(false);
         setUploadProgress(0);
       }, 500); // 完了表示を少し表示
     } catch (error) {
       console.error("ファイル送信エラー:", error);
       setIsUploading(false);
+      setIsProcessing(false);
       setUploadProgress(0);
     }
   };
 
   const onPressMedia = async () => {
-    if (isUploading) return; // アップロード中は重複実行を防ぐ
+    if (isUploading || isProcessing) return;
+    setUploadProgress(0);
 
     try {
-      setUploadProgress(0);
-
       // 画像または動画を選択
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         quality: 0.8,
         videoMaxDuration: 60, // 動画の最大長を60秒に制限
       });
-      setIsUploading(true);
-
       if (result.canceled) {
         setUploadProgress(0);
-        setIsUploading(false);
         return;
       }
-
       const media = result.assets[0];
       if (!media) {
         setUploadProgress(0);
-        setIsUploading(false);
         return;
       }
+      setIsProcessing(true);
+      setIsUploading(true);
 
       setUploadProgress(10); // メディア選択完了
 
@@ -157,6 +158,7 @@ const useUserTalkPanel = (talk: TalkWithAffiliate) => {
         (error) => {
           console.error("メディアアップロードエラー:", error);
           setIsUploading(false);
+          setIsProcessing(false);
           setUploadProgress(0);
         },
         async () => {
@@ -203,6 +205,7 @@ const useUserTalkPanel = (talk: TalkWithAffiliate) => {
 
           setTimeout(() => {
             setIsUploading(false);
+            setIsProcessing(false);
             setUploadProgress(0);
           }, 500); // 完了表示を少し表示
         }
@@ -210,6 +213,7 @@ const useUserTalkPanel = (talk: TalkWithAffiliate) => {
     } catch (error) {
       console.error("メディア送信エラー:", error);
       setIsUploading(false);
+      setIsProcessing(false);
       setUploadProgress(0);
     }
   };
@@ -218,33 +222,57 @@ const useUserTalkPanel = (talk: TalkWithAffiliate) => {
     router.push(`/talks/${talk.id}/map`);
   };
 
+  const onPressEndTalk = () => {
+    setShowEndTalkModal(true);
+  };
+
+  const handleConfirmEndTalk = async () => {
+    await endTalk(talk.id);
+    setShowEndTalkModal(false);
+  };
+
+  const handleCancelEndTalk = () => {
+    setShowEndTalkModal(false);
+  };
+
   const panel = useMemo(() => {
     return [
       {
         label: "画像・動画",
         icon: Image,
         onPress: onPressMedia,
-        disabled: isUploading,
+        disabled: isUploading || isProcessing,
       },
       {
         label: "ファイル",
         icon: File,
         onPress: onPressFile,
-        disabled: isUploading,
+        disabled: isUploading || isProcessing,
       },
       {
         label: "位置情報",
         icon: MapPin,
         onPress: onPressLocation,
-        disabled: isUploading,
+        disabled: isUploading || isProcessing,
+      },
+      {
+        label: "問い合わせ終了",
+        icon: X,
+        onPress: onPressEndTalk,
+        disabled: talk.status === "closed" || talk.isArchived,
+        iconColor: "#ef4444",
       },
     ];
-  }, [isUploading]);
+  }, [isUploading, isProcessing, talk.status, talk.isArchived]);
 
   return {
     panel,
     isUploading,
     uploadProgress,
+    isProcessing,
+    showEndTalkModal,
+    handleConfirmEndTalk,
+    handleCancelEndTalk,
   };
 };
 

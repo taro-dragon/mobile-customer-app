@@ -13,6 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Plus, X } from "lucide-react-native";
 import { TalkWithAffiliate } from "@/types/extendType/TalkWithAffiliate";
 import useUserTalkPanel from "@/hooks/user/useUserTalkPanel";
+import ConfirmModal from "@/components/common/ConfirmModal";
 
 type MessageInputProps = {
   text: string;
@@ -22,6 +23,7 @@ type MessageInputProps = {
   isOpenPanel: boolean;
   setIsOpenPanel: React.Dispatch<React.SetStateAction<boolean>>;
   talk: TalkWithAffiliate;
+  disabled?: boolean;
 };
 
 const MessageInput: React.FC<MessageInputProps> = ({
@@ -32,9 +34,21 @@ const MessageInput: React.FC<MessageInputProps> = ({
   isOpenPanel,
   setIsOpenPanel,
   talk,
+  disabled = false,
 }) => {
   const { colors } = useTheme();
-  const { panel, isUploading, uploadProgress } = useUserTalkPanel(talk);
+  const {
+    panel,
+    isUploading,
+    uploadProgress,
+    isProcessing,
+    showEndTalkModal,
+    handleConfirmEndTalk,
+    handleCancelEndTalk,
+  } = useUserTalkPanel(talk);
+  const isClosed = talk.status === "closed";
+
+  const isInputDisabled = disabled || isUploading || isProcessing || isClosed;
 
   return (
     <View
@@ -87,7 +101,16 @@ const MessageInput: React.FC<MessageInputProps> = ({
           </View>
         </View>
       )}
-
+      {isProcessing && (
+        <View style={{ alignItems: "center", padding: 8 }}>
+          <ActivityIndicator size="small" color={colors.primary} />
+          <Text
+            style={{ color: colors.textSecondary, fontSize: 12, marginTop: 4 }}
+          >
+            処理中...
+          </Text>
+        </View>
+      )}
       <View
         style={{
           flexDirection: "row",
@@ -102,10 +125,12 @@ const MessageInput: React.FC<MessageInputProps> = ({
               borderWidth: 1,
               borderColor: colors.borderPrimary,
             },
-            isUploading && { opacity: 0.5 },
+            (isUploading || isProcessing || disabled) && { opacity: 0.5 },
           ]}
-          onPress={() => setIsOpenPanel(!isOpenPanel)}
-          disabled={isUploading}
+          onPress={() => {
+            if (!isInputDisabled) setIsOpenPanel(!isOpenPanel);
+          }}
+          disabled={isInputDisabled}
         >
           {isOpenPanel ? (
             <X size={20} color={colors.textPrimary} />
@@ -120,26 +145,28 @@ const MessageInput: React.FC<MessageInputProps> = ({
               color: colors.textPrimary,
               backgroundColor: colors.backgroundSecondary,
             },
-            isUploading && { opacity: 0.5 },
+            isInputDisabled && { opacity: 0.5 },
           ]}
           value={text}
           onChangeText={setText}
-          placeholder="メッセージを入力..."
+          placeholder={
+            isClosed ? "この問い合わせは終了しました" : "メッセージを入力..."
+          }
           multiline
           onFocus={() => setIsOpenPanel(false)}
-          editable={!isUploading}
+          editable={!isInputDisabled}
         />
         <TouchableOpacity
           style={[
             styles.sendButton,
             { backgroundColor: colors.primary },
-            (!text.trim() || sending || isUploading) && {
+            (!text.trim() || sending || isInputDisabled) && {
               backgroundColor: colors.primary,
               opacity: 0.2,
             },
           ]}
           onPress={sendMessage}
-          disabled={!text.trim() || sending || isUploading}
+          disabled={!text.trim() || sending || isInputDisabled}
         >
           {sending ? (
             <ActivityIndicator size="small" color={colors.white} />
@@ -148,7 +175,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
           )}
         </TouchableOpacity>
       </View>
-      {isOpenPanel && (
+      {isOpenPanel && !isInputDisabled && (
         <View
           style={{
             flexDirection: "row",
@@ -176,7 +203,9 @@ const MessageInput: React.FC<MessageInputProps> = ({
                 <item.icon
                   size={24}
                   color={
-                    item.disabled ? colors.textSecondary : colors.textPrimary
+                    item.disabled
+                      ? colors.textSecondary
+                      : item.iconColor || colors.textPrimary
                   }
                 />
                 <Text
@@ -194,6 +223,18 @@ const MessageInput: React.FC<MessageInputProps> = ({
           })}
         </View>
       )}
+
+      {/* 確認モーダル */}
+      <ConfirmModal
+        visible={showEndTalkModal}
+        title="問い合わせを終了しますか？"
+        message="この操作を実行すると、この問い合わせは終了し、新しいメッセージを送信できなくなります。この操作は取り消すことができません。"
+        confirmText="終了する"
+        cancelText="キャンセル"
+        onConfirm={handleConfirmEndTalk}
+        onCancel={handleCancelEndTalk}
+        confirmButtonColor="#ef4444"
+      />
     </View>
   );
 };

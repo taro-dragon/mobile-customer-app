@@ -11,6 +11,7 @@ import ImageMessageItem from "./ImageMessageItem";
 import VideoMessageItem from "./VideoMessageItem";
 import LocationItem from "./LocationItem";
 import { TalkWithAffiliate } from "@/types/extendType/TalkWithAffiliate";
+import { View, Text } from "react-native";
 
 type MessageItemProps = {
   message: Message;
@@ -31,6 +32,24 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, talk }) => {
         backgroundColor: colors.backgroundPrimary,
         borderColor: colors.borderPrimary,
       };
+
+  if (message.type === "system") {
+    return (
+      <View style={{ alignItems: "center", marginVertical: 8 }}>
+        <View
+          style={{
+            backgroundColor: "#f3f4f6",
+            borderRadius: 8,
+            paddingHorizontal: 12,
+            paddingVertical: 6,
+          }}
+        >
+          <Text style={{ color: "#6b7280", fontSize: 13 }}>{message.text}</Text>
+        </View>
+      </View>
+    );
+  }
+
   if (message.type === "currentCarCheckRequested") {
     return (
       <CurrentCarCheckRequestItem

@@ -35,6 +35,7 @@ const TalkDetail = () => {
   const { talkId } = useLocalSearchParams<{ talkId: string }>();
   const { staffTalks, staff } = useStore();
   const talk = staffTalks.find((talk) => talk.id === talkId);
+  const isClosed = talk?.status === "closed";
   const [messages, setMessages] = useState<Message[]>([]);
   const [isOpenPanel, setIsOpenPanel] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -290,6 +291,19 @@ const TalkDetail = () => {
 
   return (
     <>
+      {isClosed && (
+        <View
+          style={{
+            padding: 8,
+            alignItems: "center",
+            borderRadius: 8,
+          }}
+        >
+          <Text style={{ color: "#b91c1c", fontWeight: "bold" }}>
+            この問い合わせは終了しました
+          </Text>
+        </View>
+      )}
       <Stack.Screen
         options={{
           title: `${talk.user.familyName} ${talk.user.givenName}`,
