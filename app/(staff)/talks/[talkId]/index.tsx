@@ -297,10 +297,11 @@ const TalkDetail = () => {
             padding: 8,
             alignItems: "center",
             borderRadius: 8,
+            backgroundColor: colors.backgroundError,
           }}
         >
-          <Text style={{ color: "#b91c1c", fontWeight: "bold" }}>
-            この問い合わせは終了しました
+          <Text style={{ color: colors.textError, fontWeight: "bold" }}>
+            このトークは終了しました
           </Text>
         </View>
       )}

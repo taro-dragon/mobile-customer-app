@@ -24,7 +24,7 @@ export const createStaffTalkSlice: StateCreator<
     const unsubscribe = firestore()
       .collection("talks")
       .where("affiliateStoreId", "==", shopId)
-      .where("isArchived", "==", false)
+      // .where("isArchived", "==", false)
       .orderBy("lastMessageAt", "desc")
       .onSnapshot(
         async (snapshot) => {

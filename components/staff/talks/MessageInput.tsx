@@ -126,7 +126,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
           value={text}
           onChangeText={setText}
           placeholder={
-            isClosed ? "この問い合わせは終了しました" : "メッセージを入力..."
+            isClosed ? "このトークは終了しました" : "メッセージを入力..."
           }
           multiline
           onFocus={() => setIsOpenPanel(false)}
