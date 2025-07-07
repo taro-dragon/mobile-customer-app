@@ -1,13 +1,6 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "expo-router";
-import {
-  Calendar,
-  Car,
-  DollarSign,
-  File,
-  Image,
-  MapPin,
-} from "lucide-react-native";
+import { File, Image, MapPin } from "lucide-react-native";
 import firestore from "@react-native-firebase/firestore";
 import storage from "@react-native-firebase/storage";
 import * as DocumentPicker from "expo-document-picker";
@@ -26,7 +19,7 @@ const useUserTalkPanel = (talk: TalkWithAffiliate) => {
   const [uploadProgress, setUploadProgress] = useState(0);
 
   const onPressFile = async () => {
-    if (isUploading) return; // アップロード中は重複実行を防ぐ
+    if (isUploading) return;
 
     try {
       setUploadProgress(0);
@@ -47,6 +40,7 @@ const useUserTalkPanel = (talk: TalkWithAffiliate) => {
         setUploadProgress(0);
         return;
       }
+      setIsUploading(true);
 
       // ファイルサイズチェック（50MB = 50 * 1024 * 1024 bytes）
       const maxFileSize = 50 * 1024 * 1024; // 50MB
@@ -59,7 +53,7 @@ const useUserTalkPanel = (talk: TalkWithAffiliate) => {
         setUploadProgress(0);
         return;
       }
-      setIsUploading(true);
+
       setUploadProgress(10); // ファイル選択完了
 
       // ファイルを直接アップロード
@@ -121,19 +115,21 @@ const useUserTalkPanel = (talk: TalkWithAffiliate) => {
         quality: 0.8,
         videoMaxDuration: 60, // 動画の最大長を60秒に制限
       });
+      setIsUploading(true);
 
       if (result.canceled) {
         setUploadProgress(0);
+        setIsUploading(false);
         return;
       }
 
       const media = result.assets[0];
       if (!media) {
         setUploadProgress(0);
+        setIsUploading(false);
         return;
       }
 
-      setIsUploading(true);
       setUploadProgress(10); // メディア選択完了
 
       // ファイル拡張子を取得
