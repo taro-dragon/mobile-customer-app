@@ -3,26 +3,25 @@ import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { Message } from "@/types/firestore_schema/messages";
 import dayjs from "dayjs";
 import { Image } from "expo-image";
-import { useRouter } from "expo-router";
-import { Check } from "lucide-react-native";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import useFetchStaffName from "@/hooks/staff/useFetchStaffName";
 
-type TalkTextContentProps = {
+type SystemMessageItemProps = {
+  talk: TalkWithUser;
+  message: Message;
   isMe: boolean;
   bubbleColor: {
     backgroundColor: string;
     borderColor: string;
   };
-  talk: TalkWithUser;
-  message: Message;
 };
-const TalkTextContent: React.FC<TalkTextContentProps> = ({
-  isMe,
-  bubbleColor,
+
+const SystemMessageItem: React.FC<SystemMessageItemProps> = ({
   talk,
   message,
+  isMe,
+  bubbleColor,
 }) => {
   const { colors } = useTheme();
   const { staffName } = useFetchStaffName(message.senderId);
@@ -94,7 +93,6 @@ const TalkTextContent: React.FC<TalkTextContentProps> = ({
             gap: 8,
           }}
         >
-          {message.read && isMe && <Check size={12} color={colors.primary} />}
           <Text style={[styles.timeText, { color: colors.textSecondary }]}>
             {dayjs(message.createdAt.toDate()).format("HH:mm")}
           </Text>
@@ -105,9 +103,6 @@ const TalkTextContent: React.FC<TalkTextContentProps> = ({
 };
 
 const styles = StyleSheet.create({
-  messagesContainer: {
-    padding: 10,
-  },
   messageContainer: {
     flexDirection: "row",
     marginBottom: 10,
@@ -153,4 +148,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TalkTextContent;
+export default SystemMessageItem;

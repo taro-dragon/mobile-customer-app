@@ -10,6 +10,7 @@ import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import DownloadProgressModal from "@/components/common/Modal/DownloadProgressModal";
 import { useVideoPlayer, VideoView } from "expo-video";
+import useFetchStaffName from "@/hooks/staff/useFetchStaffName";
 
 type VideoMessageItemProps = {
   talk: TalkWithUser;
@@ -28,6 +29,7 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
   bubbleColor,
 }) => {
   const { colors } = useTheme();
+  const { staffName } = useFetchStaffName(message.senderId);
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [showProgressModal, setShowProgressModal] = useState(false);
@@ -146,6 +148,11 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
             },
           ]}
         >
+          {message.senderType === "staff" && !isMe && (
+            <Text style={[styles.staffName, { color: colors.textSecondary }]}>
+              {staffName}
+            </Text>
+          )}
           <View style={styles.videoWrapper}>
             <TouchableOpacity style={styles.videoContainer} activeOpacity={0.8}>
               <VideoView
@@ -309,6 +316,11 @@ const styles = StyleSheet.create({
   timeText: {
     fontSize: 10,
     alignSelf: "flex-end",
+  },
+  staffName: {
+    fontSize: 12,
+    marginBottom: 4,
+    fontWeight: "500",
   },
 });
 

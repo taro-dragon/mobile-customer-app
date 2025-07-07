@@ -34,6 +34,7 @@ import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import DownloadProgressModal from "@/components/common/Modal/DownloadProgressModal";
 import useGetFileIcon from "@/hooks/useGetFileIcon";
+import useFetchStaffName from "@/hooks/staff/useFetchStaffName";
 
 type FileMessageItemProps = {
   talk: TalkWithUser;
@@ -52,6 +53,7 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
   bubbleColor,
 }) => {
   const { colors, typography } = useTheme();
+  const { staffName } = useFetchStaffName(message.senderId);
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [showProgressModal, setShowProgressModal] = useState(false);
@@ -66,82 +68,60 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
   };
 
   const handleDownload = async () => {
-    if (!message.fileUrl || !message.fileName) {
-      Alert.alert("エラー", "ファイル情報が不完全です");
-      return;
-    }
+    if (!message.fileUrl) return;
 
-    if (isDownloading) return; // 重複ダウンロードを防ぐ
+    setIsDownloading(true);
+    setShowProgressModal(true);
+    setDownloadProgress(0);
 
     try {
-      setIsDownloading(true);
-      setDownloadProgress(0);
-      setShowProgressModal(true);
+      const fileName = message.fileName || "download";
+      const fileUri = `${FileSystem.documentDirectory}${fileName}`;
 
-      const fileUri = `${FileSystem.documentDirectory}${message.fileName}`;
-
-      // 既存ファイルの確認
-      const fileInfo = await FileSystem.getInfoAsync(fileUri);
-      if (fileInfo.exists) {
-        console.log("既存ファイルを削除:", fileUri);
-        await FileSystem.deleteAsync(fileUri);
-      }
-
-      // ダウンロード進捗を監視するためのカスタムダウンロード
       const downloadResumable = FileSystem.createDownloadResumable(
         message.fileUrl,
         fileUri,
         {},
         (downloadProgress) => {
           const progress =
-            (downloadProgress.totalBytesWritten /
-              downloadProgress.totalBytesExpectedToWrite) *
-            100;
+            downloadProgress.totalBytesWritten /
+            downloadProgress.totalBytesExpectedToWrite;
           setDownloadProgress(progress);
         }
       );
 
-      const downloadResult = await downloadResumable.downloadAsync();
-
-      if (downloadResult && downloadResult.status === 200) {
-        setDownloadProgress(100);
-
-        // ファイルの存在確認
-        const downloadedFileInfo = await FileSystem.getInfoAsync(
-          downloadResult.uri
-        );
-        if (!downloadedFileInfo.exists) {
-          throw new Error("ダウンロードしたファイルが見つかりません");
-        }
-
-        // ファイルを共有
-        if (await Sharing.isAvailableAsync()) {
-          await Sharing.shareAsync(downloadResult.uri, {
-            mimeType: "application/octet-stream",
-            dialogTitle: `ファイルを共有: ${message.fileName}`,
-          });
-        } else {
-          Alert.alert(
-            "ダウンロード完了",
-            `ファイルがダウンロードされました\n保存先: ${downloadResult.uri}`
-          );
-        }
-      } else {
-        throw new Error(
-          `ダウンロードに失敗しました: ${downloadResult?.status}`
-        );
-      }
+      const { uri } = await downloadResumable.downloadAsync();
+      await Sharing.shareAsync(uri);
     } catch (error) {
-      Alert.alert(
-        "ダウンロードエラー",
-        `ファイルのダウンロードに失敗しました\n${
-          error instanceof Error ? error.message : "不明なエラー"
-        }`
-      );
+      console.error("Download failed:", error);
     } finally {
       setIsDownloading(false);
-      setDownloadProgress(0);
       setShowProgressModal(false);
+      setDownloadProgress(0);
+    }
+  };
+
+  // アバター画像のURLを決定
+  const getAvatarUrl = () => {
+    if (message.senderType === "staff") {
+      // スタッフのプロフィール画像は都度fetchするため、デフォルト画像を使用
+      return ""; // デフォルト画像が表示される
+    } else {
+      return (
+        talk.sourceCar?.images.front || talk.sourceStockCar?.images.front || ""
+      ); // 車両画像
+    }
+  };
+
+  // 送信者名を取得
+  const getSenderName = () => {
+    if (message.senderType === "staff") {
+      return isMe ? "自分" : staffName;
+    } else {
+      // talkオブジェクトからユーザー情報を取得
+      return talk.user
+        ? `${talk.user.familyName} ${talk.user.givenName}`
+        : "不明なユーザー";
     }
   };
 
@@ -156,9 +136,7 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
         {!isMe && (
           <Image
             source={{
-              uri:
-                talk.sourceCar?.images.front ||
-                talk.sourceStockCar?.images.front,
+              uri: getAvatarUrl(),
             }}
             style={styles.avatar}
           />
@@ -174,18 +152,18 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
             },
           ]}
         >
+          {/* 送信者名表示 */}
+          {!isMe && (
+            <Text style={[styles.senderName, { color: colors.textSecondary }]}>
+              {getSenderName()}
+            </Text>
+          )}
           <TouchableOpacity
-            style={[styles.fileContainer, isDownloading && { opacity: 0.7 }]}
+            style={styles.fileContainer}
             onPress={handleDownload}
-            activeOpacity={0.7}
             disabled={isDownloading}
           >
-            <View
-              style={[
-                styles.fileIconContainer,
-                { backgroundColor: `${fileIconColor}20` },
-              ]}
-            >
+            <View style={styles.fileIconContainer}>
               <FileIcon size={24} color={fileIconColor} />
             </View>
             <View style={styles.fileInfo}>
@@ -193,35 +171,25 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
                 style={[
                   styles.fileName,
                   { color: colors.textPrimary },
-                  typography.title5,
+                  typography.body,
                 ]}
                 numberOfLines={2}
               >
                 {message.fileName}
               </Text>
-              {message.fileSize && (
-                <Text
-                  style={[
-                    styles.fileSize,
-                    { color: colors.textSecondary },
-                    typography.body4,
-                  ]}
-                >
-                  {formatFileSize(message.fileSize)}
-                </Text>
-              )}
+              <Text
+                style={[
+                  styles.fileSize,
+                  { color: colors.textSecondary },
+                  typography.caption,
+                ]}
+              >
+                {message.fileSize
+                  ? `${(message.fileSize / 1024 / 1024).toFixed(1)} MB`
+                  : ""}
+              </Text>
             </View>
-            {isDownloading ? (
-              <View style={styles.downloadingContainer}>
-                <Text
-                  style={[styles.downloadingText, { color: colors.primary }]}
-                >
-                  {Math.round(downloadProgress)}%
-                </Text>
-              </View>
-            ) : (
-              <Download size={20} color={colors.primary} />
-            )}
+            <Download size={16} color={colors.textSecondary} />
           </TouchableOpacity>
           <View
             style={{
@@ -229,7 +197,7 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
               justifyContent: "flex-end",
               alignItems: "flex-end",
               gap: 8,
-              marginTop: 8,
+              marginTop: 4,
             }}
           >
             {message.read && isMe && <Check size={12} color={colors.primary} />}
@@ -240,10 +208,9 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
         </View>
       </View>
 
-      {/* ダウンロード進捗モーダル */}
       <DownloadProgressModal
         visible={showProgressModal}
-        downloadProgress={downloadProgress}
+        progress={downloadProgress}
         fileName={message.fileName || "ファイル"}
       />
     </>
@@ -269,53 +236,49 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   bubble: {
-    maxWidth: "70%",
-    padding: 12,
+    maxWidth: "85%",
+    paddingHorizontal: 12,
+    paddingVertical: 8,
     borderRadius: 18,
   },
   userBubble: {
     borderBottomRightRadius: 4,
   },
   otherBubble: {
+    backgroundColor: "white",
     borderBottomLeftRadius: 4,
   },
   fileContainer: {
     flexDirection: "row",
     alignItems: "center",
+    paddingVertical: 8,
     gap: 12,
-    minHeight: 40,
   },
   fileIconContainer: {
     width: 40,
     height: 40,
     borderRadius: 8,
-    backgroundColor: "rgba(0, 122, 255, 0.1)",
+    backgroundColor: "rgba(0, 0, 0, 0.05)",
     justifyContent: "center",
     alignItems: "center",
-    flexShrink: 0,
   },
-  fileInfo: {},
-  fileName: {
-    marginBottom: 2,
+  fileInfo: {
     flex: 1,
-    maxWidth: 120,
+  },
+  fileName: {
+    fontWeight: "500",
+    marginBottom: 2,
   },
   fileSize: {
-    fontSize: 12,
+    opacity: 0.7,
   },
   timeText: {
     fontSize: 10,
     alignSelf: "flex-end",
   },
-  downloadingContainer: {
-    width: 40,
-    height: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    flexShrink: 0,
-  },
-  downloadingText: {
-    fontSize: 10,
+  senderName: {
+    fontSize: 12,
+    marginBottom: 4,
     fontWeight: "500",
   },
 });

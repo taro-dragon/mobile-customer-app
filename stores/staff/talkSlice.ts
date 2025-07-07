@@ -39,10 +39,13 @@ export const createStaffTalkSlice: StateCreator<
             const talkWithUser = await Promise.all(
               talks.map(async (talk) => {
                 try {
-                  const user = await firestore()
+                  // ユーザー情報を取得してtalkオブジェクトに含める
+                  const userDoc = await firestore()
                     .collection("users")
                     .doc(talk.userId)
                     .get();
+                  const user = userDoc.data() as User;
+
                   const sourceType = talk.sourceType;
                   if (sourceType === "car_inquiry") {
                     const stockCar = await firestore()
@@ -51,7 +54,7 @@ export const createStaffTalkSlice: StateCreator<
                       .get();
                     return {
                       ...talk,
-                      user: user.data() as User,
+                      user: user,
                       sourceStockCar: stockCar.data() as Stock,
                     };
                   } else {
@@ -62,7 +65,7 @@ export const createStaffTalkSlice: StateCreator<
 
                     return {
                       ...talk,
-                      user: user.data() as User,
+                      user: user,
                       sourceCar: car.data() as Car,
                     };
                   }
@@ -101,6 +104,10 @@ export const createStaffTalkSlice: StateCreator<
     if (get().staffTalkUnsubscribe) {
       get().staffTalkUnsubscribe!();
     }
-    set((state) => ({ ...state, staffTalks: [], staffUnsubscribe: undefined }));
+    set((state) => ({
+      ...state,
+      staffTalks: [],
+      staffUnsubscribe: undefined,
+    }));
   },
 });

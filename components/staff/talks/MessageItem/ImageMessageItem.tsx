@@ -18,6 +18,7 @@ import * as Sharing from "expo-sharing";
 import DownloadProgressModal from "@/components/common/Modal/DownloadProgressModal";
 import { useSharedValue, withSpring } from "react-native-reanimated";
 import ImageZoomModal from "./ImageZoomModal";
+import useFetchStaffName from "@/hooks/staff/useFetchStaffName";
 
 type ImageMessageItemProps = {
   talk: TalkWithUser;
@@ -36,10 +37,35 @@ const ImageMessageItem: React.FC<ImageMessageItemProps> = ({
   bubbleColor,
 }) => {
   const { colors } = useTheme();
+  const { staffName } = useFetchStaffName(message.senderId);
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [showProgressModal, setShowProgressModal] = useState(false);
+
+  // アバター画像のURLを決定
+  const getAvatarUrl = () => {
+    if (message.senderType === "staff") {
+      // スタッフのプロフィール画像は都度fetchするため、デフォルト画像を使用
+      return ""; // デフォルト画像が表示される
+    } else {
+      return (
+        talk.sourceCar?.images.front || talk.sourceStockCar?.images.front || ""
+      ); // 車両画像
+    }
+  };
+
+  // 送信者名を取得
+  const getSenderName = () => {
+    if (message.senderType === "staff") {
+      return isMe ? "自分" : staffName;
+    } else {
+      // talkオブジェクトからユーザー情報を取得
+      return talk.user
+        ? `${talk.user.familyName} ${talk.user.givenName}`
+        : "不明なユーザー";
+    }
+  };
 
   const handleImagePress = () => {
     setIsImageModalVisible(true);
@@ -148,9 +174,7 @@ const ImageMessageItem: React.FC<ImageMessageItemProps> = ({
         {!isMe && (
           <Image
             source={{
-              uri:
-                talk.sourceCar?.images.front ||
-                talk.sourceStockCar?.images.front,
+              uri: getAvatarUrl(),
             }}
             style={styles.avatar}
           />
@@ -166,6 +190,11 @@ const ImageMessageItem: React.FC<ImageMessageItemProps> = ({
             },
           ]}
         >
+          {!isMe && (
+            <Text style={[styles.senderName, { color: colors.textSecondary }]}>
+              {getSenderName()}
+            </Text>
+          )}
           <View style={styles.imageWrapper}>
             <TouchableOpacity
               style={styles.imageContainer}
@@ -298,6 +327,11 @@ const styles = StyleSheet.create({
   timeText: {
     fontSize: 10,
     alignSelf: "flex-end",
+  },
+  senderName: {
+    fontSize: 12,
+    marginBottom: 4,
+    fontWeight: "500",
   },
 });
 

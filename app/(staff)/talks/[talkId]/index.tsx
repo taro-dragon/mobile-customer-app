@@ -10,24 +10,19 @@ import {
   Text,
   TouchableOpacity,
   View,
-  TextInput,
-  Alert,
 } from "react-native";
 import firestore, {
   FirebaseFirestoreTypes,
 } from "@react-native-firebase/firestore";
 import { Message } from "@/types/firestore_schema/messages";
 import { useTheme } from "@/contexts/ThemeContext";
-import { ChevronLeft, Send, DollarSign, Users } from "lucide-react-native";
+import { ChevronLeft } from "lucide-react-native";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import MessageItem from "@/components/staff/talks/MessageItem/MessageItem";
 import TalkHeader from "@/components/staff/talks/TalkHeader";
 import MessageInput from "@/components/staff/talks/MessageInput";
 import Toast from "react-native-toast-message";
-import { formatMessageDate } from "@/utils/dateUtils";
 import DateSeparatorWrapper from "@/components/common/DateSeparatorWrapper";
-import { useTalkDetail } from "@/hooks/staff/useTalkDetail";
-import { sendTalkMessage } from "@/libs/firestore/sendTalkMessage";
 
 const MESSAGES_PER_PAGE = 30; // 1ページあたりのメッセージ数
 

@@ -106,7 +106,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
             isUploading && { opacity: 0.5 },
           ]}
           onPress={() => setIsOpenPanel(!isOpenPanel)}
-          disabled={isUploading}
+          disabled={isUploading || isClosed}
         >
           {isOpenPanel ? (
             <X size={20} color={colors.textPrimary} />
