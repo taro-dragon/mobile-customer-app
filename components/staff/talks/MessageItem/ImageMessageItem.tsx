@@ -4,21 +4,12 @@ import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { Message } from "@/types/firestore_schema/messages";
 import dayjs from "dayjs";
 import { Image } from "expo-image";
-import { Check, Download, X } from "lucide-react-native";
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Dimensions,
-  Alert,
-} from "react-native";
+import { Check, Download } from "lucide-react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import DownloadProgressModal from "@/components/common/Modal/DownloadProgressModal";
-import { useSharedValue, withSpring } from "react-native-reanimated";
 import ImageZoomModal from "./ImageZoomModal";
-import useFetchStaffName from "@/hooks/staff/useFetchStaffName";
 
 type ImageMessageItemProps = {
   talk: TalkWithUser;
@@ -37,7 +28,6 @@ const ImageMessageItem: React.FC<ImageMessageItemProps> = ({
   bubbleColor,
 }) => {
   const { colors } = useTheme();
-  const { staffName } = useFetchStaffName(message.senderId);
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState(0);
@@ -58,7 +48,13 @@ const ImageMessageItem: React.FC<ImageMessageItemProps> = ({
   // 送信者名を取得
   const getSenderName = () => {
     if (message.senderType === "staff") {
-      return isMe ? "自分" : staffName;
+      if (isMe) {
+        return "自分";
+      } else {
+        // talkオブジェクトからスタッフ情報を取得
+        const staff = talk.staffs?.get(message.senderId);
+        return staff ? staff.name : "不明なスタッフ";
+      }
     } else {
       // talkオブジェクトからユーザー情報を取得
       return talk.user
@@ -76,90 +72,38 @@ const ImageMessageItem: React.FC<ImageMessageItemProps> = ({
   };
 
   const handleDownload = async () => {
-    if (!message.imageUrl) {
-      Alert.alert("エラー", "画像URLが存在しません");
-      return;
-    }
+    if (!message.imageUrl) return;
 
-    if (isDownloading) return; // 重複ダウンロードを防ぐ
+    setIsDownloading(true);
+    setShowProgressModal(true);
+    setDownloadProgress(0);
 
     try {
-      setIsDownloading(true);
-      setDownloadProgress(0);
-      setShowProgressModal(true);
-
-      const timestamp = Date.now();
-      const fileName = `image_${timestamp}.jpg`;
+      const fileName = `image_${Date.now()}.jpg`;
       const fileUri = `${FileSystem.documentDirectory}${fileName}`;
 
-      console.log("画像ダウンロード開始:", message.imageUrl);
-      console.log("保存先:", fileUri);
-
-      // 既存ファイルの確認
-      const fileInfo = await FileSystem.getInfoAsync(fileUri);
-      if (fileInfo.exists) {
-        console.log("既存ファイルを削除:", fileUri);
-        await FileSystem.deleteAsync(fileUri);
-      }
-
-      // ダウンロード進捗を監視するためのカスタムダウンロード
       const downloadResumable = FileSystem.createDownloadResumable(
         message.imageUrl,
         fileUri,
         {},
         (downloadProgress) => {
           const progress =
-            (downloadProgress.totalBytesWritten /
-              downloadProgress.totalBytesExpectedToWrite) *
-            100;
+            downloadProgress.totalBytesWritten /
+            downloadProgress.totalBytesExpectedToWrite;
           setDownloadProgress(progress);
-          console.log(`画像ダウンロード進捗: ${progress.toFixed(1)}%`);
         }
       );
 
-      const downloadResult = await downloadResumable.downloadAsync();
-
-      if (downloadResult && downloadResult.status === 200) {
-        setDownloadProgress(100);
-        console.log("画像ダウンロード完了:", downloadResult.uri);
-
-        // ファイルの存在確認
-        const downloadedFileInfo = await FileSystem.getInfoAsync(
-          downloadResult.uri
-        );
-        if (!downloadedFileInfo.exists) {
-          throw new Error("ダウンロードした画像が見つかりません");
-        }
-
-        // 画像を共有
-        if (await Sharing.isAvailableAsync()) {
-          await Sharing.shareAsync(downloadResult.uri, {
-            mimeType: "image/jpeg",
-            dialogTitle: "画像を共有",
-          });
-        } else {
-          Alert.alert(
-            "ダウンロード完了",
-            `画像がダウンロードされました\n保存先: ${downloadResult.uri}`
-          );
-        }
-      } else {
-        throw new Error(
-          `画像ダウンロードに失敗しました: ${downloadResult?.status}`
-        );
+      const result = await downloadResumable.downloadAsync();
+      if (result && result.uri) {
+        await Sharing.shareAsync(result.uri);
       }
     } catch (error) {
-      console.error("画像ダウンロードエラー:", error);
-      Alert.alert(
-        "ダウンロードエラー",
-        `画像のダウンロードに失敗しました\n${
-          error instanceof Error ? error.message : "不明なエラー"
-        }`
-      );
+      console.error("Download failed:", error);
     } finally {
       setIsDownloading(false);
-      setDownloadProgress(0);
       setShowProgressModal(false);
+      setDownloadProgress(0);
     }
   };
 
@@ -190,72 +134,59 @@ const ImageMessageItem: React.FC<ImageMessageItemProps> = ({
             },
           ]}
         >
+          {/* 送信者名表示 */}
           {!isMe && (
             <Text style={[styles.senderName, { color: colors.textSecondary }]}>
               {getSenderName()}
             </Text>
           )}
-          <View style={styles.imageWrapper}>
-            <TouchableOpacity
-              style={styles.imageContainer}
-              onPress={handleImagePress}
-              activeOpacity={0.8}
-            >
-              <Image
-                source={{ uri: message.imageUrl }}
-                style={styles.messageImage}
-                contentFit="cover"
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.downloadButton,
-                { backgroundColor: colors.primary },
-                isDownloading && { opacity: 0.7 },
-              ]}
-              onPress={handleDownload}
-              disabled={isDownloading}
-            >
-              {isDownloading ? (
-                <Text style={[styles.downloadingText, { color: colors.white }]}>
-                  {Math.round(downloadProgress)}%
-                </Text>
-              ) : (
-                <Download size={16} color={colors.white} />
-              )}
-            </TouchableOpacity>
-          </View>
+
+          <TouchableOpacity
+            style={styles.imageContainer}
+            onPress={handleImagePress}
+            activeOpacity={0.8}
+          >
+            <Image
+              source={{ uri: message.imageUrl || "" }}
+              style={styles.image}
+              contentFit="cover"
+            />
+          </TouchableOpacity>
+
           <View
             style={{
               flexDirection: "row",
               justifyContent: "flex-end",
               alignItems: "flex-end",
               gap: 8,
-              marginTop: 8,
+              marginTop: 4,
             }}
           >
             {message.read && isMe && <Check size={12} color={colors.primary} />}
+            <TouchableOpacity onPress={handleDownload} disabled={isDownloading}>
+              <Download size={16} color={colors.textSecondary} />
+            </TouchableOpacity>
             <Text style={[styles.timeText, { color: colors.textSecondary }]}>
               {dayjs(message.createdAt.toDate()).format("HH:mm")}
             </Text>
           </View>
         </View>
       </View>
-      {isImageModalVisible && (
-        <ImageZoomModal
-          visible={isImageModalVisible}
-          onRequestClose={closeImageModal}
-          imageUrl={message.imageUrl || ""}
-          onDownload={handleDownload}
-          isDownloading={isDownloading}
-          downloadProgress={downloadProgress}
-          colors={colors}
-        />
-      )}
+
+      <ImageZoomModal
+        visible={isImageModalVisible}
+        imageUrl={message.imageUrl || ""}
+        onRequestClose={() => setIsImageModalVisible(false)}
+        onDownload={handleDownload}
+        isDownloading={isDownloading}
+        downloadProgress={downloadProgress}
+        colors={colors}
+      />
+
       <DownloadProgressModal
         visible={showProgressModal}
         downloadProgress={downloadProgress}
-        fileName={message.fileName || "ファイル"}
+        fileName="画像"
       />
     </>
   );
@@ -280,49 +211,27 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   bubble: {
-    maxWidth: "70%",
-    padding: 8,
+    maxWidth: "85%",
+    paddingHorizontal: 12,
+    paddingVertical: 8,
     borderRadius: 18,
   },
   userBubble: {
     borderBottomRightRadius: 4,
   },
   otherBubble: {
+    backgroundColor: "white",
     borderBottomLeftRadius: 4,
-  },
-  imageWrapper: {
-    position: "relative",
   },
   imageContainer: {
     borderRadius: 12,
     overflow: "hidden",
+    marginBottom: 4,
   },
-  messageImage: {
+  image: {
     width: 200,
     height: 150,
     borderRadius: 12,
-  },
-  downloadButton: {
-    position: "absolute",
-    top: 8,
-    right: 8,
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  downloadingText: {
-    fontSize: 10,
-    fontWeight: "600",
   },
   timeText: {
     fontSize: 10,

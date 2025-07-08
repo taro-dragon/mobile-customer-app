@@ -3,11 +3,9 @@ import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { Message } from "@/types/firestore_schema/messages";
 import dayjs from "dayjs";
 import { Image } from "expo-image";
-import { useRouter } from "expo-router";
 import { Check } from "lucide-react-native";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import useFetchStaffName from "@/hooks/staff/useFetchStaffName";
+import { StyleSheet, Text, View } from "react-native";
 
 type TalkTextContentProps = {
   isMe: boolean;
@@ -25,7 +23,6 @@ const TalkTextContent: React.FC<TalkTextContentProps> = ({
   message,
 }) => {
   const { colors } = useTheme();
-  const { staffName } = useFetchStaffName(message.senderId);
 
   // アバター画像のURLを決定
   const getAvatarUrl = () => {
@@ -42,7 +39,13 @@ const TalkTextContent: React.FC<TalkTextContentProps> = ({
   // 送信者名を取得
   const getSenderName = () => {
     if (message.senderType === "staff") {
-      return isMe ? "自分" : staffName;
+      if (isMe) {
+        return "自分";
+      } else {
+        // talkオブジェクトからスタッフ情報を取得
+        const staff = talk.staffs?.get(message.senderId);
+        return staff ? staff.name : "不明なスタッフ";
+      }
     } else {
       // talkオブジェクトからユーザー情報を取得
       return talk.user

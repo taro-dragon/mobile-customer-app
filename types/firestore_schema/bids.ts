@@ -9,6 +9,7 @@ export type Bid = {
   maxPrice: number; // 提示価格
   comment: string; // コメント
   isSelected: boolean; // ユーザーに選択されたかどうか
+  staffIds: string[];
   createdAt: FirebaseFirestoreTypes.Timestamp;
   updatedAt: FirebaseFirestoreTypes.Timestamp;
 };

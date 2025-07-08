@@ -4,37 +4,12 @@ import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { Message } from "@/types/firestore_schema/messages";
 import dayjs from "dayjs";
 import { Image } from "expo-image";
-import {
-  File,
-  Download,
-  Check,
-  X,
-  FileText,
-  Image as ImageIcon,
-  Video,
-  Music,
-  FileSpreadsheet,
-  Presentation,
-  Archive,
-  FileCode,
-  FileAudio,
-  FileVideo,
-  FileImage,
-} from "lucide-react-native";
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Alert,
-  Modal,
-  ActivityIndicator,
-} from "react-native";
+import { Download, Check } from "lucide-react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import DownloadProgressModal from "@/components/common/Modal/DownloadProgressModal";
 import useGetFileIcon from "@/hooks/useGetFileIcon";
-import useFetchStaffName from "@/hooks/staff/useFetchStaffName";
 
 type FileMessageItemProps = {
   talk: TalkWithUser;
@@ -53,7 +28,6 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
   bubbleColor,
 }) => {
   const { colors, typography } = useTheme();
-  const { staffName } = useFetchStaffName(message.senderId);
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [showProgressModal, setShowProgressModal] = useState(false);
@@ -90,8 +64,10 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
         }
       );
 
-      const { uri } = await downloadResumable.downloadAsync();
-      await Sharing.shareAsync(uri);
+      const result = await downloadResumable.downloadAsync();
+      if (result && result.uri) {
+        await Sharing.shareAsync(result.uri);
+      }
     } catch (error) {
       console.error("Download failed:", error);
     } finally {
@@ -116,7 +92,13 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
   // 送信者名を取得
   const getSenderName = () => {
     if (message.senderType === "staff") {
-      return isMe ? "自分" : staffName;
+      if (isMe) {
+        return "自分";
+      } else {
+        // talkオブジェクトからスタッフ情報を取得
+        const staff = talk.staffs?.get(message.senderId);
+        return staff ? staff.name : "不明なスタッフ";
+      }
     } else {
       // talkオブジェクトからユーザー情報を取得
       return talk.user
@@ -158,6 +140,7 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
               {getSenderName()}
             </Text>
           )}
+
           <TouchableOpacity
             style={styles.fileContainer}
             onPress={handleDownload}
@@ -171,7 +154,7 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
                 style={[
                   styles.fileName,
                   { color: colors.textPrimary },
-                  typography.body,
+                  typography.body1,
                 ]}
                 numberOfLines={2}
               >
@@ -181,7 +164,7 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
                 style={[
                   styles.fileSize,
                   { color: colors.textSecondary },
-                  typography.caption,
+                  typography.body4,
                 ]}
               >
                 {message.fileSize
@@ -191,6 +174,7 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
             </View>
             <Download size={16} color={colors.textSecondary} />
           </TouchableOpacity>
+
           <View
             style={{
               flexDirection: "row",
@@ -210,7 +194,7 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
 
       <DownloadProgressModal
         visible={showProgressModal}
-        progress={downloadProgress}
+        downloadProgress={downloadProgress}
         fileName={message.fileName || "ファイル"}
       />
     </>

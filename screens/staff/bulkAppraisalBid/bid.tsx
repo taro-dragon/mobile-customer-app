@@ -297,6 +297,7 @@ const BulkAppraisalBidBidScreen: React.FC<BulkAppraisalBidBidScreenProps> = ({
                   style={{ color: colors.textPrimary, ...typography.heading3 }}
                 >
                   担当者
+                  <Text style={{ color: colors.error }}>*</Text>
                 </Text>
                 <View
                   style={{
@@ -344,7 +345,7 @@ const BulkAppraisalBidBidScreen: React.FC<BulkAppraisalBidBidScreenProps> = ({
                 </View>
                 {errors.managerStaffs && (
                   <Text style={{ color: colors.error, ...typography.body2 }}>
-                    {errors.comment?.message as string}
+                    {errors.managerStaffs?.message as string}
                   </Text>
                 )}
               </View>

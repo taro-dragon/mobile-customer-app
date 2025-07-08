@@ -17,7 +17,6 @@ export const createTalk = async (params: CreateTalkParams): Promise<string> => {
   try {
     const talkRef = firestore().collection("talks").doc();
     const talkId = talkRef.id;
-
     // 車両情報を取得してタイトルを生成
     let title = params.title;
     if (!title) {

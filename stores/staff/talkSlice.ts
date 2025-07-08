@@ -5,6 +5,7 @@ import { Car } from "@/types/models/Car";
 import { User } from "@/types/firestore_schema/users";
 import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { Stock } from "@/types/firestore_schema/stock";
+import { Staff } from "@/types/firestore_schema/staff";
 
 export const createStaffTalkSlice: StateCreator<
   StaffTalkSlice,
@@ -46,6 +47,31 @@ export const createStaffTalkSlice: StateCreator<
                     .get();
                   const user = userDoc.data() as User;
 
+                  // スタッフ情報を取得してtalkオブジェクトに含める
+                  const staffIds = talk.staffIds || [];
+                  const staffsMap = new Map<string, Staff>();
+
+                  if (staffIds.length > 0) {
+                    const staffPromises = staffIds.map(async (staffId) => {
+                      try {
+                        const staffDoc = await firestore()
+                          .collection("staffs")
+                          .doc(staffId)
+                          .get();
+                        if (staffDoc.exists()) {
+                          const staffData = staffDoc.data() as Staff;
+                          staffsMap.set(staffId, staffData);
+                        }
+                      } catch (error) {
+                        console.error(
+                          `Error fetching staff ${staffId}:`,
+                          error
+                        );
+                      }
+                    });
+                    await Promise.all(staffPromises);
+                  }
+
                   const sourceType = talk.sourceType;
                   if (sourceType === "car_inquiry") {
                     const stockCar = await firestore()
@@ -55,6 +81,7 @@ export const createStaffTalkSlice: StateCreator<
                     return {
                       ...talk,
                       user: user,
+                      staffs: staffsMap,
                       sourceStockCar: stockCar.data() as Stock,
                     };
                   } else {
@@ -66,6 +93,7 @@ export const createStaffTalkSlice: StateCreator<
                     return {
                       ...talk,
                       user: user,
+                      staffs: staffsMap,
                       sourceCar: car.data() as Car,
                     };
                   }

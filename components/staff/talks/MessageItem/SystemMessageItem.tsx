@@ -5,7 +5,6 @@ import dayjs from "dayjs";
 import { Image } from "expo-image";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import useFetchStaffName from "@/hooks/staff/useFetchStaffName";
 
 type SystemMessageItemProps = {
   talk: TalkWithUser;
@@ -24,7 +23,6 @@ const SystemMessageItem: React.FC<SystemMessageItemProps> = ({
   bubbleColor,
 }) => {
   const { colors } = useTheme();
-  const { staffName } = useFetchStaffName(message.senderId);
 
   // アバター画像のURLを決定
   const getAvatarUrl = () => {
@@ -41,7 +39,13 @@ const SystemMessageItem: React.FC<SystemMessageItemProps> = ({
   // 送信者名を取得
   const getSenderName = () => {
     if (message.senderType === "staff") {
-      return isMe ? "自分" : staffName;
+      if (isMe) {
+        return "自分";
+      } else {
+        // talkオブジェクトからスタッフ情報を取得
+        const staff = talk.staffs?.get(message.senderId);
+        return staff ? staff.name : "不明なスタッフ";
+      }
     } else {
       // talkオブジェクトからユーザー情報を取得
       return talk.user

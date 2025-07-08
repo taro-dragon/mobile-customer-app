@@ -22,6 +22,37 @@ const AppraisalPriceItem: React.FC<AppraisalPriceItemProps> = ({
   bubbleColor,
 }) => {
   const { colors, typography } = useTheme();
+
+  // アバター画像のURLを決定
+  const getAvatarUrl = () => {
+    if (message.senderType === "staff") {
+      // スタッフのプロフィール画像は都度fetchするため、デフォルト画像を使用
+      return ""; // デフォルト画像が表示される
+    } else {
+      return (
+        talk.sourceCar?.images.front || talk.sourceStockCar?.images.front || ""
+      ); // 車両画像
+    }
+  };
+
+  // 送信者名を取得
+  const getSenderName = () => {
+    if (message.senderType === "staff") {
+      if (isMe) {
+        return "自分";
+      } else {
+        // talkオブジェクトからスタッフ情報を取得
+        const staff = talk.staffs?.get(message.senderId);
+        return staff ? staff.name : "不明なスタッフ";
+      }
+    } else {
+      // talkオブジェクトからユーザー情報を取得
+      return talk.user
+        ? `${talk.user.familyName} ${talk.user.givenName}`
+        : "不明なユーザー";
+    }
+  };
+
   return (
     <View
       style={[
@@ -32,8 +63,7 @@ const AppraisalPriceItem: React.FC<AppraisalPriceItemProps> = ({
       {!isMe && (
         <Image
           source={{
-            uri:
-              talk.sourceCar?.images.front || talk.sourceStockCar?.images.front,
+            uri: getAvatarUrl(),
           }}
           style={styles.avatar}
         />

@@ -15,6 +15,7 @@ const BulkAppraisalBidBidLayout = () => {
     defaultValues: {
       minBid: 0,
       maxBid: 0,
+      comment: "",
       managerStaffs: [],
     },
   });
