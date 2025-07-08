@@ -22,10 +22,18 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, talk }) => {
   const { staff } = useStore();
 
   const isMe = message.senderId === staff?.id;
+  const isStaff = message.senderType === "staff";
+
+  // 自分、他のスタッフ、ユーザーの3色に分ける
   const bubbleColor = isMe
     ? {
         backgroundColor: colors.backgroundInfo,
         borderColor: colors.borderInfo,
+      }
+    : isStaff
+    ? {
+        backgroundColor: colors.backgroundTertiary,
+        borderColor: colors.borderSecondary,
       }
     : {
         backgroundColor: colors.backgroundPrimary,

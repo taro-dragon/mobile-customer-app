@@ -24,7 +24,7 @@ import MessageInput from "@/components/staff/talks/MessageInput";
 import Toast from "react-native-toast-message";
 import DateSeparatorWrapper from "@/components/common/DateSeparatorWrapper";
 
-const MESSAGES_PER_PAGE = 30; // 1ページあたりのメッセージ数
+const MESSAGES_PER_PAGE = 30;
 
 const TalkDetail = () => {
   const { talkId } = useLocalSearchParams<{ talkId: string }>();
@@ -39,7 +39,7 @@ const TalkDetail = () => {
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
   const flatListRef = useRef<FlatList>(null);
-  const { colors } = useTheme();
+  const { colors, typography } = useTheme();
   const router = useRouter();
 
   // 最新のメッセージのタイムスタンプを追跡
@@ -280,6 +280,9 @@ const TalkDetail = () => {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color={colors.primary} />
+        <Text style={{ color: colors.textPrimary, ...typography.body3 }}>
+          トークを読み込んでいます...
+        </Text>
       </View>
     );
   }
@@ -370,6 +373,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    gap: 12,
   },
   messagesContainer: {
     paddingHorizontal: 10,
