@@ -49,7 +49,7 @@ const StoreTab: React.FC<StoreTabProps> = ({ store }) => {
         <Button
           label="店舗詳細"
           isBorder
-          onPress={() => router.push(`/shop/${store.id}`)}
+          onPress={() => router.push(`/shops/${store.id}`)}
           color={colors.primary}
         />
         <View style={{ gap: 8 }}>

@@ -1,7 +1,7 @@
 import Divider from "@/components/common/Divider";
 import ShopDetailSkeleton from "@/components/Skelton/SkeltonShopInfo";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Stack, useRouter } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { X } from "lucide-react-native";
 import { useEffect } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
@@ -10,15 +10,31 @@ import Toast from "react-native-toast-message";
 import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
 import ShopHeader from "@/components/shop/ShopHeader";
 import ShopOfferTab from "@/components/shop/ShopOfferTab";
-import { useShopContext } from "@/contexts/ShopContext";
+import useShop from "@/hooks/useFetchShop";
+import { useFetchShopStockCar } from "@/hooks/common/shop/useFetchShopStockCar";
+import { useFetchShopOffer } from "@/hooks/common/shop/useFetchShopOffer";
+import ShopStockCarTab from "@/components/shop/ShopStockCarTab";
 
 const ShopDetail = () => {
+  const { id } = useLocalSearchParams<{ id: string }>();
   const safeAreaInsets = useSafeAreaInsets();
   const router = useRouter();
 
   const { colors, typography } = useTheme();
 
-  const { shop, isLoading } = useShopContext();
+  const { shop, isLoading } = useShop(id);
+  const {
+    stockCars,
+    isLoading: isStockCarLoading,
+    hasMore: isStockCarLastPage,
+    loadMore: loadMoreStockCar,
+  } = useFetchShopStockCar(id);
+  const {
+    offers,
+    isLoading: isOfferLoading,
+    hasMore: isOfferLastPage,
+    loadMore: loadMoreOffer,
+  } = useFetchShopOffer(id);
 
   useEffect(() => {
     if (!isLoading && !shop) {
@@ -95,10 +111,20 @@ const ShopDetail = () => {
         )}
       >
         <Tabs.Tab name="買取オファー">
-          <ShopOfferTab />
+          <ShopOfferTab
+            offers={offers}
+            hasMoreOffers={isOfferLastPage}
+            loadMoreOffers={loadMoreOffer}
+            isLoading={isOfferLoading}
+          />
         </Tabs.Tab>
         <Tabs.Tab name="在庫車両">
-          <Tabs.ScrollView></Tabs.ScrollView>
+          <ShopStockCarTab
+            stockCars={stockCars}
+            hasMoreStockCars={isStockCarLastPage}
+            loadMoreStockCars={loadMoreStockCar}
+            isLoading={isStockCarLoading}
+          />
         </Tabs.Tab>
       </Tabs.Container>
     </View>

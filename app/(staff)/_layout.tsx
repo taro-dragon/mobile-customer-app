@@ -84,7 +84,7 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
-        name="shop"
+        name="shops"
         options={{
           gestureDirection: "vertical",
           headerShown: false,

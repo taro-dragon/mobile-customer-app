@@ -1,12 +1,24 @@
 import { ActivityIndicator, Text, View } from "react-native";
 import { Tabs } from "react-native-collapsible-tab-view";
 import ShopCarOfferItem from "./ShopCarOfferItem";
-import { useShopContext } from "@/contexts/ShopContext";
 import { Book } from "lucide-react-native";
 import { useTheme } from "@/contexts/ThemeContext";
+import { BuyOffer } from "@/types/firestore_schema/buyOffers";
+import React from "react";
 
-const ShopOfferTab = () => {
-  const { offers, hasMoreOffers, loadMoreOffers } = useShopContext();
+type ShopOfferTabProps = {
+  offers: BuyOffer[];
+  hasMoreOffers: boolean;
+  loadMoreOffers: () => void;
+  isLoading: boolean;
+};
+
+const ShopOfferTab: React.FC<ShopOfferTabProps> = ({
+  offers,
+  hasMoreOffers,
+  loadMoreOffers,
+  isLoading,
+}) => {
   const { colors, typography } = useTheme();
 
   return (
@@ -31,15 +43,21 @@ const ShopOfferTab = () => {
             gap: 16,
           }}
         >
-          <Book size={48} color={colors.iconSecondary} strokeWidth={1.5} />
-          <Text
-            style={{
-              ...typography.heading2,
-              color: colors.textSecondary,
-            }}
-          >
-            買取オファーがありません
-          </Text>
+          {isLoading ? (
+            <ActivityIndicator size="small" />
+          ) : (
+            <>
+              <Book size={48} color={colors.iconSecondary} strokeWidth={1.5} />
+              <Text
+                style={{
+                  ...typography.heading2,
+                  color: colors.textSecondary,
+                }}
+              >
+                買取オファーがありません
+              </Text>
+            </>
+          )}
         </View>
       }
     />
