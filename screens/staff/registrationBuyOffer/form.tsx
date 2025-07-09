@@ -25,20 +25,20 @@ import { Staff } from "@/types/firestore_schema/staff";
 interface RegistrationBuyOfferFormScreenProps {
   staffList: Staff[];
   confirmButton: () => void;
-  form: UseFormReturn<RegistrationBuyOfferFormData>;
 }
 
 const RegistrationBuyOfferFormScreen: React.FC<
   RegistrationBuyOfferFormScreenProps
-> = ({ confirmButton, form, staffList }) => {
+> = ({ confirmButton, staffList }) => {
   const router = useRouter();
-  const { getValues, watch } = useFormContext<RegistrationBuyOfferFormData>();
-  const { colors, typography } = useTheme();
-  const { grade, model, year, maker } = getValues();
   const {
+    getValues,
+    watch,
     control,
     formState: { errors, isSubmitting },
-  } = form;
+  } = useFormContext<RegistrationBuyOfferFormData>();
+  const { colors, typography } = useTheme();
+  const { grade, model, year, maker } = getValues();
   const {
     field: { value: minPrice, onChange: setMinPrice },
   } = useController({ control, name: "minPrice" });
@@ -121,6 +121,7 @@ const RegistrationBuyOfferFormScreen: React.FC<
             name="expiresAt"
             isRequired
             control={control}
+            minimumDate={new Date()}
           />
           <UnControlModalPicker
             label="査定依頼上限"
@@ -162,6 +163,7 @@ const RegistrationBuyOfferFormScreen: React.FC<
           <View style={{ gap: 8 }}>
             <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
               担当者
+              <Text style={{ color: colors.error }}>*</Text>
             </Text>
             <View
               style={{
@@ -178,7 +180,9 @@ const RegistrationBuyOfferFormScreen: React.FC<
                   padding: 16,
                   flex: 1,
                   borderWidth: 1,
-                  borderColor: colors.borderPrimary,
+                  borderColor: errors.managerStaffs
+                    ? colors.error
+                    : colors.borderPrimary,
                 }}
               >
                 <Text
@@ -203,6 +207,11 @@ const RegistrationBuyOfferFormScreen: React.FC<
                 </Text>
               </TouchableOpacity>
             </View>
+            {errors.managerStaffs && (
+              <Text style={{ color: colors.error, ...typography.body2 }}>
+                {errors.managerStaffs?.message as string}
+              </Text>
+            )}
           </View>
           <Button
             label="確認する"

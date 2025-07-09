@@ -1,5 +1,10 @@
+import {
+  RegistrationBuyOfferFormData,
+  registrationBuyOfferSchema,
+} from "@/constants/schemas/registrationBuyOfferSchema";
 import StaffListProvider from "@/contexts/staff/StaffList";
 import { useTheme } from "@/contexts/ThemeContext";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Stack, useRouter } from "expo-router";
 import { X } from "lucide-react-native";
 import { FormProvider, useForm } from "react-hook-form";
@@ -7,7 +12,16 @@ import { TouchableOpacity } from "react-native";
 
 const RegistrationBuyOfferLayout = () => {
   const router = useRouter();
-  const form = useForm();
+  const form = useForm<RegistrationBuyOfferFormData>({
+    resolver: zodResolver(registrationBuyOfferSchema),
+    defaultValues: {
+      description: "",
+      expiresAt: new Date(),
+      maxContact: "unlimited",
+      maxContactCount: 0,
+      managerStaffs: [],
+    },
+  });
   const handleGoBack = () => {
     router.back();
   };

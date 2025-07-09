@@ -16,20 +16,14 @@ import Loader from "@/components/common/Loader";
 const RegistrationBuyOfferForm = () => {
   const { getValues } = useFormContext();
   const { staffList, isLoading } = useStaffListContext();
-  const { currentStore, staff } = useStore();
+  const { currentStore } = useStore();
   const router = useRouter();
-  const form = useForm<RegistrationBuyOfferFormData>({
-    resolver: zodResolver(registrationBuyOfferSchema),
-    defaultValues: {
-      minPrice: undefined,
-      maxPrice: undefined,
-      description: undefined,
-      expiresAt: new Date(),
-      maxContact: "unlimited",
-      maxContactCount: undefined,
-    },
-  });
-  const { handleSubmit } = form;
+
+  const {
+    handleSubmit,
+    formState: { errors },
+  } = useFormContext<RegistrationBuyOfferFormData>();
+  console.log(errors);
   const { modelNumber } = getValues();
   const onSubmit = async (data: RegistrationBuyOfferFormData) => {
     const filteredData = Object.fromEntries(
@@ -101,7 +95,6 @@ const RegistrationBuyOfferForm = () => {
   return (
     <RegistrationBuyOfferFormScreen
       confirmButton={handleSubmit(confirmButton)}
-      form={form}
       staffList={staffList}
     />
   );

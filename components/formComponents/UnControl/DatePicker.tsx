@@ -45,7 +45,7 @@ const UnControlDatePicker: React.FC<UnControlDatePickerProps> = ({
         onPress={() => setOpen(!open)}
       >
         <Text style={{ color: colors.textPrimary, ...typography.body2 }}>
-          {field.value.toLocaleDateString("ja-JP")}
+          {field.value ? field.value.toLocaleDateString("ja-JP") : "日付を選択"}
         </Text>
       </TouchableOpacity>
       {errors.expiresAt && (
@@ -59,7 +59,7 @@ const UnControlDatePicker: React.FC<UnControlDatePickerProps> = ({
         cancelText="閉じる"
         modal
         open={open}
-        date={field.value}
+        date={field.value || new Date()}
         mode="date"
         locale="ja"
         minimumDate={minimumDate}
