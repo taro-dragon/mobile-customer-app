@@ -12,6 +12,9 @@ import Button from "@/components/common/Button";
 import useOffer from "@/hooks/useFetchOffer";
 import { useStore } from "@/hooks/useStore";
 import isTargetOffer from "@/libs/isTargetOffer";
+import Divider from "@/components/common/Divider";
+import SafeAreaBottom from "@/components/common/SafeAreaBottom";
+import React from "react";
 
 const OfferDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -73,7 +76,7 @@ const OfferDetail = () => {
           >
             <View style={{ alignItems: "center" }}>
               <Text style={{ ...typography.heading2, color: colors.white }}>
-                Min
+                最低査定金額
               </Text>
               <Text
                 style={{
@@ -89,7 +92,7 @@ const OfferDetail = () => {
             </Text>
             <View style={{ alignItems: "center" }}>
               <Text style={{ ...typography.heading2, color: colors.white }}>
-                Max
+                最高査定金額
               </Text>
               <Text
                 style={{
@@ -101,25 +104,8 @@ const OfferDetail = () => {
               </Text>
             </View>
           </View>
-          {isCurrentTargetOffer && (
-            <View style={{ flex: 1, width: "100%", marginTop: 16 }}>
-              <Button
-                label="買取査定依頼をする"
-                color={colors.white}
-                isBorder
-                onPress={() => {
-                  router.back();
-                  Toast.show({
-                    type: "success",
-                    text1: "買取査定依頼を送信しました",
-                    text2: "トーク画面から加盟店とやり取りが可能です",
-                  });
-                }}
-              />
-            </View>
-          )}
         </View>
-        <View style={{ padding: 16, gap: 16 }}>
+        <View style={{ padding: 16, gap: 16, flex: 1 }}>
           {offer?.description && (
             <View style={{ gap: 8 }}>
               <Alert
@@ -185,6 +171,26 @@ const OfferDetail = () => {
           </View>
         </View>
       </ScrollView>
+      {isCurrentTargetOffer && (
+        <>
+          <Divider />
+          <View style={{ marginTop: 16, paddingHorizontal: 16 }}>
+            <Button
+              label="買取査定依頼をする"
+              color={colors.primary}
+              onPress={() => {
+                router.back();
+                Toast.show({
+                  type: "success",
+                  text1: "買取査定依頼を送信しました",
+                  text2: "トーク画面から加盟店とやり取りが可能です",
+                });
+              }}
+            />
+          </View>
+        </>
+      )}
+      <SafeAreaBottom />
     </View>
   );
 };

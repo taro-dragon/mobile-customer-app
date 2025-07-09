@@ -1,3 +1,4 @@
+import { useUserCarContext } from "@/contexts/users/UserCarContext";
 import { useStore } from "@/hooks/useStore";
 import { transformCarData } from "@/libs/transformCarData";
 import { requestBulkAppraisal } from "@/libs/user/firestore/requestBulkAppraisal";
@@ -32,6 +33,7 @@ const RequestBulkAppraisal: React.FC = () => {
       repairStatus: "",
     },
   });
+  const { mutateBulkAppraisalRequest } = useUserCarContext();
   const { handleSubmit } = form;
   const { cars, user } = useStore();
   const car = cars.find((car) => car.id === id);
@@ -52,11 +54,11 @@ const RequestBulkAppraisal: React.FC = () => {
         sellTime: data.sellTime,
         repairStatus: data.repairStatus,
       });
+      mutateBulkAppraisalRequest();
       Toast.show({
         type: "success",
         text1: "一括査定を依頼しました",
       });
-      router.back();
     } catch (error) {
       Toast.show({
         type: "error",
