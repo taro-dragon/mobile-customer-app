@@ -1,18 +1,17 @@
-import { useCarOfferContext } from "@/contexts/CarOfferContext";
 import { Tabs } from "react-native-collapsible-tab-view";
 import CarOfferItem from "./CarOfferItem";
 import { ActivityIndicator, Text, View } from "react-native";
 import { Book } from "lucide-react-native";
 import { useTheme } from "@/contexts/ThemeContext";
-import Button from "../common/Button";
 import { useCallback } from "react";
 import { CarBuyOffer } from "@/hooks/useFetchCarOffer";
 import Loader from "../common/Loader";
+import { useUserCarContext } from "@/contexts/users/UserCarContext";
 
-const CarDetailOfferTab = () => {
-  const { offers, hasMore, loadMore, isLoading } = useCarOfferContext();
+const CarDetailOfferTab: React.FC = () => {
   const { colors, typography } = useTheme();
-
+  const { buyOffers, isBuyOffersLoading, hasMoreBuyOffers, loadMoreBuyOffers } =
+    useUserCarContext();
   const renderItem = useCallback(
     ({ item }: { item: CarBuyOffer }) => <CarOfferItem offer={item} />,
     []
@@ -41,7 +40,7 @@ const CarDetailOfferTab = () => {
     ),
     [colors, typography]
   );
-  if (isLoading) {
+  if (isBuyOffersLoading) {
     return (
       <Tabs.ScrollView
         contentContainerStyle={{
@@ -57,14 +56,16 @@ const CarDetailOfferTab = () => {
 
   return (
     <Tabs.FlatList
-      data={offers}
+      data={buyOffers}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
-      onEndReached={hasMore ? loadMore : undefined}
+      onEndReached={hasMoreBuyOffers ? loadMoreBuyOffers : undefined}
       onEndReachedThreshold={0.5}
       contentContainerStyle={{ gap: 8, padding: 16, paddingTop: 16 }}
       style={{ flex: 1 }}
-      ListFooterComponent={hasMore ? <ActivityIndicator size="small" /> : null}
+      ListFooterComponent={
+        hasMoreBuyOffers ? <ActivityIndicator size="small" /> : null
+      }
       ListEmptyComponent={ListEmptyComponent}
       removeClippedSubviews={true}
       maxToRenderPerBatch={10}

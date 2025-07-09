@@ -3,24 +3,29 @@ import dayjs from "dayjs";
 import { Gavel } from "lucide-react-native";
 import { Tabs } from "react-native-collapsible-tab-view";
 import { ActivityIndicator, Text, View } from "react-native";
-import { useCarBidsContext } from "@/contexts/CarBidsContext";
 import BidItem from "../CarInfo/BidItem";
 import { ExtendedBid } from "@/hooks/useFetchCarBids";
 import { useTheme } from "@/contexts/ThemeContext";
 import Button from "../common/Button";
 import Loader from "../common/Loader";
 import { BulkAppraisalRequest } from "@/types/firestore_schema/bulkAppraisalRequests";
+import { useUserCarContext } from "@/contexts/users/UserCarContext";
 
 type CarDetailBulkAppraisalRequestsTabProps = {
-  bulkAppraisalRequest?: BulkAppraisalRequest;
   handleRequestBulkAppraisal: () => void;
 };
 
 const CarDetailBulkAppraisalRequestsTab: React.FC<
   CarDetailBulkAppraisalRequestsTabProps
-> = ({ handleRequestBulkAppraisal, bulkAppraisalRequest }) => {
-  const { bids, isLoading, hasMore, loadMore } = useCarBidsContext();
+> = ({ handleRequestBulkAppraisal }) => {
   const { colors, typography } = useTheme();
+  const {
+    bids,
+    bulkAppraisalRequest,
+    isBulkAppraisalBidsLoading,
+    hasMoreBulkAppraisalBids,
+    loadMoreBulkAppraisalBids,
+  } = useUserCarContext();
 
   const isDisplayBulkResult = useMemo(() => {
     return (
@@ -100,7 +105,7 @@ const CarDetailBulkAppraisalRequestsTab: React.FC<
     [colors, handleRequestBulkAppraisal, typography]
   );
 
-  if (isLoading) {
+  if (isBulkAppraisalBidsLoading) {
     return (
       <Tabs.ScrollView
         contentContainerStyle={{
@@ -119,11 +124,15 @@ const CarDetailBulkAppraisalRequestsTab: React.FC<
       data={isDisplayBulkResult ? bids : []}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
-      onEndReached={hasMore ? loadMore : undefined}
+      onEndReached={
+        hasMoreBulkAppraisalBids ? loadMoreBulkAppraisalBids : undefined
+      }
       onEndReachedThreshold={0.5}
       contentContainerStyle={{ gap: 8, padding: 16, paddingTop: 16 }}
       style={{ flex: 1 }}
-      ListFooterComponent={hasMore ? <ActivityIndicator size="small" /> : null}
+      ListFooterComponent={
+        hasMoreBulkAppraisalBids ? <ActivityIndicator size="small" /> : null
+      }
       removeClippedSubviews={true}
       maxToRenderPerBatch={10}
       windowSize={5}

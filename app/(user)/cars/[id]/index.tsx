@@ -4,31 +4,31 @@ import useFetchBulkAppraisalRequest from "@/hooks/user/useFetchBulkApprisalReque
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import CarDetailScreen from "@/screens/users/cars/detail";
 import ShopDetailSkeleton from "@/components/Skelton/SkeltonShopInfo";
+import useFetchBuyOffers from "@/hooks/user/useFetchBuyOffers";
+import { useStore } from "@/hooks/useStore";
+import { Car } from "@/types/models/Car";
+import { useUserCarContext } from "@/contexts/users/UserCarContext";
 
 const CarDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { bulkAppraisalRequest, mutate, isLoading } =
-    useFetchBulkAppraisalRequest(id);
+  const { cars } = useStore();
+  const { mutateBulkAppraisalRequest, isBulkAppraisalRequestLoading } =
+    useUserCarContext();
   const router = useRouter();
   useFocusEffect(
     useCallback(() => {
-      mutate();
-    }, [mutate])
+      mutateBulkAppraisalRequest();
+    }, [mutateBulkAppraisalRequest])
   );
   const onButtonPress = () => {
     router.push(`/cars/${id}/requestBulkAppraisal`);
   };
 
-  if (isLoading) {
+  if (isBulkAppraisalRequestLoading) {
     return <ShopDetailSkeleton />;
   }
 
-  return (
-    <CarDetailScreen
-      bulkAppraisalRequest={bulkAppraisalRequest}
-      onButtonPress={onButtonPress}
-    />
-  );
+  return <CarDetailScreen onButtonPress={onButtonPress} />;
 };
 
 export default CarDetail;

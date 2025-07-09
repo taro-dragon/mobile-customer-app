@@ -58,7 +58,7 @@ const RegistrationBuyOfferForm = () => {
       }
       const submitData = {
         ...filteredData,
-        staffId: staff?.id,
+        managerStaffs: data.managerStaffs,
         affiliateStoreId: currentStore?.id,
         createdAt: firestore.FieldValue.serverTimestamp(),
         updatedAt: firestore.FieldValue.serverTimestamp(),

@@ -11,7 +11,6 @@ export type Message = {
   fileUrl?: string; // ファイルURL（オプション）
   fileName?: string; // ファイル名（オプション）
   fileSize?: number; // ファイルサイズ（オプション）
-  read: boolean; // 既読状態
   readBy?: string[]; // 既読したユーザー/スタッフIDの配列
   createdAt: FirebaseFirestoreTypes.Timestamp;
   type?:

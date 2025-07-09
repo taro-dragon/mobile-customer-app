@@ -41,7 +41,6 @@ const useFetchBulkAppraisalRequest = (id: string) => {
       dedupingInterval: 0,
     }
   );
-
   return {
     bulkAppraisalRequest: data as BulkAppraisalRequest | undefined,
     isLoading,

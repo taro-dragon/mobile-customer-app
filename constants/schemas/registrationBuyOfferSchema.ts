@@ -10,7 +10,7 @@ export const registrationBuyOfferSchema = z
     expiresAt: z
       .date()
       .min(new Date(), "有効期限は今日以降の日付でなければなりません"),
-    managerStaffs: z.array(z.string()).optional(),
+    managerStaffs: z.array(z.string()).min(1, "担当者は必須です"),
     grade: z.string().optional(),
     model: z.string().optional(),
     year: z.string().optional(),

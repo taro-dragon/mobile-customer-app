@@ -11,14 +11,10 @@ import { BulkAppraisalRequest } from "@/types/firestore_schema/bulkAppraisalRequ
 import Alert from "../common/Alert";
 import { useMemo } from "react";
 import { colorOptions } from "../registrationCar/form/ColorSelect";
+import { useUserCarContext } from "@/contexts/users/UserCarContext";
 
-type CarDetailHeaderProps = {
-  bulkAppraisalRequest?: BulkAppraisalRequest;
-};
-
-const CarDetailHeader: React.FC<CarDetailHeaderProps> = ({
-  bulkAppraisalRequest,
-}) => {
+const CarDetailHeader: React.FC = () => {
+  const { bulkAppraisalRequest } = useUserCarContext();
   const { colors, typography } = useTheme();
   const { cars } = useStore();
   const { id } = useLocalSearchParams<{ id: string }>();

@@ -200,17 +200,13 @@ const TalkDetail = () => {
         senderId: staff.id,
         senderType: "staff",
         text: text.trim(),
-        read: false,
+        readBy: [],
         createdAt: firestore.Timestamp.now(),
       };
 
       await firestore().runTransaction(async (transaction) => {
-        const messageRef = await firestore()
-          .collection("talks")
-          .doc(talkId)
-          .collection("messages")
-          .doc();
         const talkRef = await firestore().collection("talks").doc(talkId);
+        const messageRef = await talkRef.collection("messages").doc();
         await transaction.set(messageRef, messageData);
         await transaction.update(talkRef, {
           lastMessage: text.trim(),

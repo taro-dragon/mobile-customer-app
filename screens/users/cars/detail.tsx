@@ -5,26 +5,18 @@ import Button from "@/components/common/Button";
 import Divider from "@/components/common/Divider";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import { useTheme } from "@/contexts/ThemeContext";
-import { BulkAppraisalRequest } from "@/types/firestore_schema/bulkAppraisalRequests";
+import { useUserCarContext } from "@/contexts/users/UserCarContext";
 import React, { useCallback } from "react";
 import { View } from "react-native";
 import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
 
-type CarDetailScreenProps = {
-  bulkAppraisalRequest?: BulkAppraisalRequest;
-  onButtonPress: () => void;
-};
-
-const CarDetailScreen: React.FC<CarDetailScreenProps> = ({
-  bulkAppraisalRequest,
+const CarDetailScreen: React.FC<{ onButtonPress: () => void }> = ({
   onButtonPress,
 }) => {
   const { colors, typography } = useTheme();
+  const { bulkAppraisalRequest } = useUserCarContext();
 
-  const renderHeader = useCallback(
-    () => <CarDetailHeader bulkAppraisalRequest={bulkAppraisalRequest} />,
-    [bulkAppraisalRequest]
-  );
+  const renderHeader = useCallback(() => <CarDetailHeader />, []);
   const renderTabBar = useCallback(
     (props: any) => (
       <MaterialTabBar
@@ -70,7 +62,6 @@ const CarDetailScreen: React.FC<CarDetailScreenProps> = ({
           </Tabs.Tab>
           <Tabs.Tab name="一括査定結果">
             <CarDetailBulkAppraisalRequestsTab
-              bulkAppraisalRequest={bulkAppraisalRequest}
               handleRequestBulkAppraisal={onButtonPress}
             />
           </Tabs.Tab>
