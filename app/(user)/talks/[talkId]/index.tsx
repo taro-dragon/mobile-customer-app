@@ -204,7 +204,7 @@ const TalkDetail = () => {
         senderId: user.id,
         senderType: "user",
         text: text.trim(),
-        read: false,
+        readBy: [],
         createdAt: firestore.Timestamp.now(),
       };
 

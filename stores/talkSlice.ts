@@ -51,6 +51,12 @@ export const createTalkSlice: StateCreator<TalkSlice, [], [], TalkSlice> = (
                       .doc(talk.sourceId)
                       .get();
                     sourceStockCar = stockCar.data() as Stock;
+                  } else if (talk.sourceType === "buy_offer") {
+                    const car = await firestore()
+                      .collection("cars")
+                      .doc(talk.sourceCarId)
+                      .get();
+                    sourceCar = car.data() as Car;
                   } else {
                     const car = await firestore()
                       .collection("cars")

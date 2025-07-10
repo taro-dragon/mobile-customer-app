@@ -6,8 +6,9 @@ export type Talk = {
   carId: string; // 車両ID
   affiliateStoreId: string; // 加盟店ID
   staffIds: string[]; // 参加スタッフIDの配列（複数対応）
-  sourceType: "buyOffer" | "bids" | "car_inquiry"; // チャットの発生源
+  sourceType: "buy_offer" | "bids" | "car_inquiry"; // チャットの発生源
   sourceId: string; // 発生源ID（買取オファーIDまたは一括査定依頼ID）
+  sourceCarId?: string; // 車両ID
   status: "active" | "closed"; // チャットの状態
   lastMessage: string; // 最後のメッセージ
   isArchived: boolean; // チャットがアーカイブされているかどうか

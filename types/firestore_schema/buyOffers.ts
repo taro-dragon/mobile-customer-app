@@ -11,6 +11,7 @@ export type BuyOffer = {
   maxPrice: number; // 最高価格
   description: string; // 説明
   isActive: boolean; // 有効かどうか
+  contactUsers: string[]; // 連絡先ユーザーID
   expiresAt: FirebaseFirestoreTypes.Timestamp; // 有効期限
   createdAt: FirebaseFirestoreTypes.Timestamp;
   updatedAt: FirebaseFirestoreTypes.Timestamp;

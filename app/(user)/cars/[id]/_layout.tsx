@@ -69,6 +69,22 @@ const CarDetailLayout = () => {
             headerBackButtonDisplayMode: "minimal",
           }}
         />
+        <Stack.Screen
+          name="[offerId]"
+          options={{
+            title: "買取オファー詳細",
+            presentation: "modal",
+            headerTintColor: colors.white,
+            headerStyle: {
+              backgroundColor: colors.primary,
+            },
+            headerRight: () => (
+              <TouchableOpacity onPress={() => router.back()}>
+                <X size={24} color={colors.white} />
+              </TouchableOpacity>
+            ),
+          }}
+        />
       </Stack>
     </UserCarProvide>
   );

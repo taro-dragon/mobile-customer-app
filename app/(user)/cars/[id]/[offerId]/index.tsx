@@ -4,16 +4,29 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
 import dayjs from "dayjs";
+import Button from "@/components/common/Button";
 import useOffer from "@/hooks/useFetchOffer";
+import { useStore } from "@/hooks/useStore";
+import isTargetOffer from "@/libs/isTargetOffer";
+import Divider from "@/components/common/Divider";
+import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import React from "react";
+import functions from "@react-native-firebase/functions";
 
 const OfferDetail = () => {
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const { offer, isLoading } = useOffer(id);
+  const { offerId, id } = useLocalSearchParams<{
+    offerId: string;
+    id: string;
+  }>();
+  const { offer, isLoading, mutate } = useOffer(offerId);
+  const { cars, user } = useStore();
+  const isContactUser = offer?.contactUsers.includes(user?.id || "");
+  const [isRequesting, setIsRequesting] = useState(false);
+
   const router = useRouter();
   const { colors, typography } = useTheme();
   useEffect(() => {
@@ -34,6 +47,33 @@ const OfferDetail = () => {
   };
   if (!offer) return null;
   const carData = transformCarData(car as unknown as Car);
+
+  const isCurrentTargetOffer = isTargetOffer(cars, offer);
+
+  const onBuyOfferInquiry = async () => {
+    const requestBuyOffer = functions().httpsCallable("requestBuyOffer");
+    setIsRequesting(true);
+    try {
+      await requestBuyOffer({
+        targetBuyOfferId: offerId,
+        sourceCarId: id,
+      });
+      mutate();
+      Toast.show({
+        type: "success",
+        text1: "買取査定依頼を送信しました",
+        text2: "トーク画面から加盟店とやり取りが可能です",
+      });
+    } catch (error) {
+      console.error(error);
+      Toast.show({
+        type: "error",
+        text1: "買取査定依頼に失敗しました",
+      });
+    } finally {
+      setIsRequesting(false);
+    }
+  };
 
   return (
     <View style={{ flex: 1, paddingBottom: 24 }}>
@@ -163,6 +203,20 @@ const OfferDetail = () => {
           </View>
         </View>
       </ScrollView>
+      {isCurrentTargetOffer && !isContactUser && (
+        <>
+          <Divider />
+          <View style={{ marginTop: 16, paddingHorizontal: 16 }}>
+            <Button
+              label="買取査定依頼をする"
+              color={colors.primary}
+              onPress={onBuyOfferInquiry}
+              isLoading={isRequesting}
+            />
+          </View>
+        </>
+      )}
+      <SafeAreaBottom />
     </View>
   );
 };

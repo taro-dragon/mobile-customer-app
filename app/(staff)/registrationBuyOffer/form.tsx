@@ -61,6 +61,7 @@ const RegistrationBuyOfferForm = () => {
         year: getValues("year"),
         maker: getValues("maker"),
         modelNumber: normalizedSearchModelNumber,
+        contactUsers: [],
       };
       await firestore().collection("buyOffers").add(submitData);
       Toast.show({

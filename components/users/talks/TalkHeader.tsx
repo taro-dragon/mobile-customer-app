@@ -54,7 +54,7 @@ const TalkHeader: React.FC<TalkHeaderProps> = ({ talk }) => {
             <TouchableOpacity
               onPress={() =>
                 router.push(
-                  talk.sourceType === "buyOffer"
+                  talk.sourceType === "buy_offer"
                     ? `/offers/${talk.sourceId}`
                     : `/bids/${talk.sourceId}`
                 )

@@ -1,5 +1,4 @@
 import { Tabs } from "react-native-collapsible-tab-view";
-import CarOfferItem from "./CarOfferItem";
 import { ActivityIndicator, Text, View } from "react-native";
 import { Book } from "lucide-react-native";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -7,13 +6,18 @@ import { useCallback } from "react";
 import { CarBuyOffer } from "@/hooks/useFetchCarOffer";
 import Loader from "../common/Loader";
 import { useUserCarContext } from "@/contexts/users/UserCarContext";
+import CarOfferItem from "../users/car/detail/offerItem";
+import { useLocalSearchParams } from "expo-router";
 
 const CarDetailOfferTab: React.FC = () => {
   const { colors, typography } = useTheme();
   const { buyOffers, isBuyOffersLoading, hasMoreBuyOffers, loadMoreBuyOffers } =
     useUserCarContext();
+  const { id } = useLocalSearchParams<{ id: string }>();
   const renderItem = useCallback(
-    ({ item }: { item: CarBuyOffer }) => <CarOfferItem offer={item} />,
+    ({ item }: { item: CarBuyOffer }) => (
+      <CarOfferItem offer={item} carId={id} />
+    ),
     []
   );
   const keyExtractor = useCallback((item: CarBuyOffer) => item.id, []);
