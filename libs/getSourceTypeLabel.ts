@@ -7,7 +7,7 @@ export const getSourceTypeLabel = (
   switch (sourceType) {
     case "bids":
       return { label: "一括査定", color: "info" };
-    case "offers":
+    case "buy_offer":
       return { label: "買取オファー", color: "success" };
     case "car_inquiry":
       return { label: "問い合わせ", color: "primary" };
