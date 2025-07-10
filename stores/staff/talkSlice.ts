@@ -84,12 +84,22 @@ export const createStaffTalkSlice: StateCreator<
                       staffs: staffsMap,
                       sourceStockCar: stockCar.data() as Stock,
                     };
+                  } else if (sourceType === "buy_offer") {
+                    const car = await firestore()
+                      .collection("cars")
+                      .doc(talk.sourceCarId)
+                      .get();
+                    return {
+                      ...talk,
+                      user: user,
+                      staffs: staffsMap,
+                      sourceCar: car.data() as Car,
+                    };
                   } else {
                     const car = await firestore()
                       .collection("cars")
                       .doc(talk.carId)
                       .get();
-
                     return {
                       ...talk,
                       user: user,
