@@ -59,16 +59,17 @@ const OfferDetail = () => {
         sourceCarId: id,
       });
       mutate();
+      router.back();
       Toast.show({
         type: "success",
         text1: "買取査定依頼を送信しました",
         text2: "トーク画面から加盟店とやり取りが可能です",
       });
     } catch (error) {
-      console.error(error);
       Toast.show({
         type: "error",
         text1: "買取査定依頼に失敗しました",
+        text2: error instanceof Error ? error.message : "不明なエラー",
       });
     } finally {
       setIsRequesting(false);
@@ -76,148 +77,152 @@ const OfferDetail = () => {
   };
 
   return (
-    <View style={{ flex: 1, paddingBottom: 24 }}>
-      <ScrollView style={{ flex: 1 }}>
-        <View
-          style={{
-            paddingVertical: 32,
-            paddingHorizontal: 16,
-            backgroundColor: colors.primary,
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 4,
-          }}
-        >
-          <Text style={{ ...typography.body3, color: colors.white }}>
-            {carData.maker.name}
-          </Text>
-          <Text style={{ ...typography.heading1, color: colors.white }}>
-            {carData.model.name}
-          </Text>
-          <Text style={{ ...typography.body3, color: colors.white }}>
-            {carData?.year?.year} {carData?.grade?.gradeName}
-          </Text>
+    <>
+      <View style={{ flex: 1, paddingBottom: 24 }}>
+        <ScrollView style={{ flex: 1 }}>
           <View
             style={{
-              flexDirection: "row",
-              gap: 16,
-              justifyContent: "center",
+              paddingVertical: 32,
+              paddingHorizontal: 16,
+              backgroundColor: colors.primary,
               alignItems: "center",
-              marginTop: 16,
+              justifyContent: "center",
+              gap: 4,
             }}
           >
-            <View style={{ alignItems: "center" }}>
-              <Text style={{ ...typography.heading2, color: colors.white }}>
-                最低査定金額
-              </Text>
-              <Text
-                style={{
-                  ...typography.title1,
-                  color: colors.white,
-                }}
-              >
-                ￥{offer.minPrice.toLocaleString()}
-              </Text>
-            </View>
-            <Text style={{ ...typography.heading2, color: colors.white }}>
-              -
+            <Text style={{ ...typography.body3, color: colors.white }}>
+              {carData.maker.name}
             </Text>
-            <View style={{ alignItems: "center" }}>
+            <Text style={{ ...typography.heading1, color: colors.white }}>
+              {carData.model.name}
+            </Text>
+            <Text style={{ ...typography.body3, color: colors.white }}>
+              {carData?.year?.year} {carData?.grade?.gradeName}
+            </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 16,
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: 16,
+              }}
+            >
+              <View style={{ alignItems: "center" }}>
+                <Text style={{ ...typography.heading2, color: colors.white }}>
+                  最低査定金額
+                </Text>
+                <Text
+                  style={{
+                    ...typography.title1,
+                    color: colors.white,
+                  }}
+                >
+                  ￥{offer.minPrice.toLocaleString()}
+                </Text>
+              </View>
               <Text style={{ ...typography.heading2, color: colors.white }}>
-                最高査定金額
+                -
               </Text>
-              <Text
-                style={{
-                  ...typography.title1,
-                  color: colors.white,
-                }}
-              >
-                ￥{offer.maxPrice.toLocaleString()}
-              </Text>
+              <View style={{ alignItems: "center" }}>
+                <Text style={{ ...typography.heading2, color: colors.white }}>
+                  最高査定金額
+                </Text>
+                <Text
+                  style={{
+                    ...typography.title1,
+                    color: colors.white,
+                  }}
+                >
+                  ￥{offer.maxPrice.toLocaleString()}
+                </Text>
+              </View>
             </View>
           </View>
-        </View>
-        <View style={{ padding: 16, gap: 16, flex: 1 }}>
-          {offer?.description && (
+          <View style={{ padding: 16, gap: 16, flex: 1 }}>
+            {offer?.description && (
+              <View style={{ gap: 8 }}>
+                <Alert
+                  title="加盟店コメント"
+                  type="info"
+                  message={offer.description}
+                />
+              </View>
+            )}
             <View style={{ gap: 8 }}>
-              <Alert
-                title="加盟店コメント"
-                type="info"
-                message={offer.description}
+              <Text
+                style={{ ...typography.heading2, color: colors.textPrimary }}
+              >
+                買取オファー情報
+              </Text>
+              <Card>
+                <View style={{ gap: 8 }}>
+                  <View style={{ gap: 4 }}>
+                    <Text
+                      style={{
+                        ...typography.heading3,
+                        color: colors.textSecondary,
+                      }}
+                    >
+                      買取オファー有効期限
+                    </Text>
+                    <Text
+                      style={{ ...typography.heading2, color: colors.primary }}
+                    >
+                      {dayjs(offer.expiresAt.toDate()).format("YYYY/MM/DD")}
+                    </Text>
+                  </View>
+                  <View style={{ gap: 4 }}>
+                    <Text
+                      style={{
+                        ...typography.heading3,
+                        color: colors.textSecondary,
+                      }}
+                    >
+                      買取オファー登録日時
+                    </Text>
+                    <Text
+                      style={{ ...typography.body2, color: colors.textPrimary }}
+                    >
+                      {dayjs(offer.createdAt.toDate()).format("YYYY/MM/DD")}
+                    </Text>
+                  </View>
+                  <View style={{ gap: 4 }}>
+                    <Text
+                      style={{
+                        ...typography.heading3,
+                        color: colors.textSecondary,
+                      }}
+                    >
+                      買取オファー更新日時
+                    </Text>
+                    <Text
+                      style={{ ...typography.body2, color: colors.textPrimary }}
+                    >
+                      {dayjs(offer.updatedAt.toDate()).format("YYYY/MM/DD")}
+                    </Text>
+                  </View>
+                </View>
+              </Card>
+            </View>
+          </View>
+        </ScrollView>
+        {isCurrentTargetOffer && !isContactUser && (
+          <>
+            <Divider />
+            <View style={{ marginTop: 16, paddingHorizontal: 16 }}>
+              <Button
+                label="買取査定依頼をする"
+                color={colors.primary}
+                onPress={onBuyOfferInquiry}
+                isLoading={isRequesting}
               />
             </View>
-          )}
-          <View style={{ gap: 8 }}>
-            <Text style={{ ...typography.heading2, color: colors.textPrimary }}>
-              買取オファー情報
-            </Text>
-            <Card>
-              <View style={{ gap: 8 }}>
-                <View style={{ gap: 4 }}>
-                  <Text
-                    style={{
-                      ...typography.heading3,
-                      color: colors.textSecondary,
-                    }}
-                  >
-                    買取オファー有効期限
-                  </Text>
-                  <Text
-                    style={{ ...typography.heading2, color: colors.primary }}
-                  >
-                    {dayjs(offer.expiresAt.toDate()).format("YYYY/MM/DD")}
-                  </Text>
-                </View>
-                <View style={{ gap: 4 }}>
-                  <Text
-                    style={{
-                      ...typography.heading3,
-                      color: colors.textSecondary,
-                    }}
-                  >
-                    買取オファー登録日時
-                  </Text>
-                  <Text
-                    style={{ ...typography.body2, color: colors.textPrimary }}
-                  >
-                    {dayjs(offer.createdAt.toDate()).format("YYYY/MM/DD")}
-                  </Text>
-                </View>
-                <View style={{ gap: 4 }}>
-                  <Text
-                    style={{
-                      ...typography.heading3,
-                      color: colors.textSecondary,
-                    }}
-                  >
-                    買取オファー更新日時
-                  </Text>
-                  <Text
-                    style={{ ...typography.body2, color: colors.textPrimary }}
-                  >
-                    {dayjs(offer.updatedAt.toDate()).format("YYYY/MM/DD")}
-                  </Text>
-                </View>
-              </View>
-            </Card>
-          </View>
-        </View>
-      </ScrollView>
-      {isCurrentTargetOffer && !isContactUser && (
-        <>
-          <Divider />
-          <View style={{ marginTop: 16, paddingHorizontal: 16 }}>
-            <Button
-              label="買取査定依頼をする"
-              color={colors.primary}
-              onPress={onBuyOfferInquiry}
-              isLoading={isRequesting}
-            />
-          </View>
-        </>
-      )}
-      <SafeAreaBottom />
-    </View>
+          </>
+        )}
+        <SafeAreaBottom />
+      </View>
+    </>
   );
 };
 
