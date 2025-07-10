@@ -23,6 +23,8 @@ const TalkHeader: React.FC<TalkHeaderProps> = ({ talk }) => {
   const onCarInfoPress = () => {
     if (talk.sourceType === "car_inquiry") {
       router.push(`/stockCar/${talk.sourceId}`);
+    } else if (talk.sourceType === "buy_offer") {
+      router.push(`/cars/${talk.sourceCarId}`);
     } else {
       router.push(`/cars/${talk.carId}`);
     }
