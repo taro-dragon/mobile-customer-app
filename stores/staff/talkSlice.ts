@@ -16,7 +16,7 @@ export const createStaffTalkSlice: StateCreator<
   staffTalks: [] as TalkWithUser[],
   staffTalkLoading: false,
   staffTalkUnsubscribe: undefined,
-  fetchStaffTalks: (shopId: string) => {
+  fetchStaffTalks: (shopId: string, staffId: string) => {
     const currentUnsubscribe = get().staffTalkUnsubscribe;
     if (currentUnsubscribe) {
       currentUnsubscribe();
@@ -25,7 +25,8 @@ export const createStaffTalkSlice: StateCreator<
     const unsubscribe = firestore()
       .collection("talks")
       .where("affiliateStoreId", "==", shopId)
-      // .where("isArchived", "==", false)
+      .where("isArchived", "==", false)
+      .where("staffIds", "array-contains", staffId)
       .orderBy("lastMessageAt", "desc")
       .onSnapshot(
         async (snapshot) => {

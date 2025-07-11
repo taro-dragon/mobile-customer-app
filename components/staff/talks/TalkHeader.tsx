@@ -23,6 +23,8 @@ const TalkHeader: React.FC<TalkHeaderProps> = ({ talk }) => {
   const onCarInfoPress = () => {
     if (talk.sourceType === "car_inquiry") {
       router.push(`/stockCar/${talk.sourceId}`);
+    } else if (talk.sourceType === "buy_offer") {
+      router.push(`/bulkAppraisalCars/${talk.sourceCarId}`);
     } else {
       router.push(`/bulkAppraisalCars/${talk.carId}`);
     }
@@ -54,7 +56,7 @@ const TalkHeader: React.FC<TalkHeaderProps> = ({ talk }) => {
             <TouchableOpacity
               onPress={() =>
                 router.push(
-                  talk.sourceType === "buyOffer"
+                  talk.sourceType === "buy_offer"
                     ? `/offers/${talk.sourceId}`
                     : `/bids/${talk.sourceId}`
                 )

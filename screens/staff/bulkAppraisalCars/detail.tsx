@@ -26,7 +26,7 @@ const BulkAppraisalCarDetailScreen: React.FC<
   const carData = transformCarData(car as Car);
   const carImages = Object.values(car?.images ?? {});
   const { bids } = car;
-  const mileageLabel = getMileageLabel(car.mileage.toString());
+  const mileageLabel = getMileageLabel(car.mileage?.toString());
   const sellTimeLabel = getSellTimeLabel(car.sellTime);
   const repairStatusLabel = getRepairStatusLabel(car.repairStatus);
   const colorValue = colorOptions.find(
@@ -62,9 +62,15 @@ const BulkAppraisalCarDetailScreen: React.FC<
               <CarInfoItem label="年式" value={carData.year.year} />
               <CarInfoItem label="グレード" value={carData.grade.gradeName} />
               <CarInfoItem label="型番" value={car.modelNumber} />
-              <CarInfoItem label="走行距離" value={mileageLabel || ""} />
-              <CarInfoItem label="修復歴" value={repairStatusLabel || ""} />
-              <CarInfoItem label="売却時期" value={sellTimeLabel || ""} />
+              {mileageLabel && (
+                <CarInfoItem label="走行距離" value={mileageLabel} />
+              )}
+              {repairStatusLabel && (
+                <CarInfoItem label="修復歴" value={repairStatusLabel} />
+              )}
+              {sellTimeLabel && (
+                <CarInfoItem label="売却時期" value={sellTimeLabel} />
+              )}
               <View
                 style={{
                   flexDirection: "row",

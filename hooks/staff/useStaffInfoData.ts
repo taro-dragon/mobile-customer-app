@@ -21,11 +21,11 @@ const useStaffInfoData = () => {
       );
       if (localStorageStoreId) {
         fetchCurrentStore(localStorageStoreId);
-        fetchStaffTalks(localStorageStoreId);
+        fetchStaffTalks(localStorageStoreId, staff?.id || "");
       } else {
         await saveAsyncStorage(AsyncStorageKey.SELECTED_SHOP_ID, stores[0].id);
         fetchCurrentStore(stores[0].id);
-        fetchStaffTalks(stores[0].id);
+        fetchStaffTalks(stores[0].id, staff?.id || "");
       }
     };
     if (stores.length > 0) {

@@ -5,7 +5,7 @@ export type StaffTalkSlice = {
   staffTalks: TalkWithUser[];
   staffTalkLoading: boolean;
   staffTalkUnsubscribe?: () => void;
-  fetchStaffTalks: (userId: string) => void;
+  fetchStaffTalks: (shopId: string, staffId: string) => void;
   deleteStaffTalk: () => void;
   setStaffTalkLoading: (staffTalkLoading: boolean) => void;
   clearStaffTalks: () => void;
