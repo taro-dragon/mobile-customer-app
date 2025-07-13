@@ -52,7 +52,9 @@ const StaffIndexScreen = () => {
           }}
         >
           <TouchableOpacity
-            onPress={() => {}}
+            onPress={() => {
+              router.push("/projects");
+            }}
             style={styles.carRegistrationButton}
           >
             <FolderOpen size={24} color={colors.primary} />

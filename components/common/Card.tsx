@@ -1,13 +1,18 @@
 import { useTheme } from "@/contexts/ThemeContext";
-import { View, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet, ViewProps } from "react-native";
 
-type CardProps = {
+type CardProps = ViewProps & {
   children: React.ReactNode;
   onPress?: () => void;
   isSecondary?: boolean;
 };
 
-const Card: React.FC<CardProps> = ({ children, onPress, isSecondary }) => {
+const Card: React.FC<CardProps> = ({
+  children,
+  onPress,
+  isSecondary,
+  style,
+}) => {
   const { colors } = useTheme();
   const styles = StyleSheet.create({
     card: {
@@ -18,11 +23,11 @@ const Card: React.FC<CardProps> = ({ children, onPress, isSecondary }) => {
     },
   });
   return onPress ? (
-    <TouchableOpacity style={styles.card} onPress={onPress}>
+    <TouchableOpacity style={[styles.card, style]} onPress={onPress}>
       {children}
     </TouchableOpacity>
   ) : (
-    <View style={styles.card}>{children}</View>
+    <View style={[styles.card, style]}>{children}</View>
   );
 };
 

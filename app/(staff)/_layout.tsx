@@ -123,6 +123,23 @@ export default function Layout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="offers"
+        options={{
+          gestureDirection: "vertical",
+          headerShown: false,
+          animation: "slide_from_bottom",
+        }}
+      />
+      <Stack.Screen
+        name="projects"
+        options={{
+          gestureDirection: "vertical",
+          headerShown: false,
+          gestureEnabled: false,
+          animation: "slide_from_bottom",
+        }}
+      />
       <Stack.Screen name="shopSelect" />
     </Stack>
   );
