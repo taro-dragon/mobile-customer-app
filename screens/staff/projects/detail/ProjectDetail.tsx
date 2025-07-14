@@ -38,6 +38,7 @@ const ProjectDetailScreen: React.FC<ProjectDetailScreenProps> = ({
   const { label: statusLabel, color: statusColor } = getProjectsStatusLabel(
     project.status
   );
+  console.log(JSON.stringify(project, null, 2));
   return (
     <ScrollView
       refreshControl={

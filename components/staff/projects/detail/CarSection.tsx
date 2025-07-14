@@ -1,6 +1,8 @@
 import { useTheme } from "@/contexts/ThemeContext";
 import { ExtendedProject } from "@/hooks/staff/projects/useFetchProject";
 import { CarDetails } from "@/libs/transformCarData";
+import { Bid } from "@/types/firestore_schema/bids";
+import { BuyOffer } from "@/types/firestore_schema/buyOffers";
 import { Stock } from "@/types/firestore_schema/stock";
 import { Image } from "expo-image";
 import { Text, View } from "react-native";
@@ -8,6 +10,14 @@ import { Text, View } from "react-native";
 // 型ガード関数
 const isStock = (data: any): data is Stock => {
   return data && typeof data.totalPayment === "number";
+};
+
+const isBuyOffer = (data: any): data is BuyOffer => {
+  return data && typeof data.buyOffer === "object";
+};
+
+const isBid = (data: any): data is Bid => {
+  return data && typeof data.bid === "object";
 };
 
 type CarSectionProps = {
@@ -22,8 +32,11 @@ const CarSection: React.FC<CarSectionProps> = ({ project, carData }) => {
     ? project.targetStockCarData
     : project.targetCarData;
 
-  console.log(isStock(targetCarData));
-  console.log(JSON.stringify(targetCarData, null, 2));
+  const buyOffer = project.buyOffer;
+  const bid = project.bid;
+
+  console.log(JSON.stringify(buyOffer, null, 2));
+  console.log("isBuyOffer", isBuyOffer(project));
 
   return (
     <View style={{ gap: 8 }}>
@@ -121,6 +134,140 @@ const CarSection: React.FC<CarSectionProps> = ({ project, carData }) => {
               >
                 万円
               </Text>
+            </Text>
+          </View>
+        </View>
+      )}
+      {isBuyOffer(project) && (
+        <View style={{ flexDirection: "row", gap: 8 }}>
+          <View style={{ flex: 1, gap: 4 }}>
+            <View
+              style={{
+                backgroundColor: colors.primary,
+                borderRadius: 4,
+                padding: 2,
+                borderWidth: 1,
+                borderColor: colors.primary,
+              }}
+            >
+              <Text
+                style={{
+                  ...typography.heading4,
+                  color: colors.white,
+                  textAlign: "center",
+                }}
+              >
+                最低金額
+              </Text>
+            </View>
+            <Text style={{ ...typography.title1, color: colors.primary }}>
+              <Text
+                style={{
+                  ...typography.heading5,
+                  color: colors.textSecondary,
+                }}
+              >
+                ¥
+              </Text>
+              {buyOffer?.minPrice?.toLocaleString()}
+            </Text>
+          </View>
+          <View style={{ flex: 1, gap: 4 }}>
+            <View
+              style={{
+                borderRadius: 4,
+                padding: 2,
+                borderWidth: 1,
+                borderColor: colors.textSecondary,
+              }}
+            >
+              <Text
+                style={{
+                  ...typography.heading4,
+                  color: colors.textSecondary,
+                  textAlign: "center",
+                }}
+              >
+                最高金額
+              </Text>
+            </View>
+            <Text style={{ ...typography.title1, color: colors.textPrimary }}>
+              <Text
+                style={{
+                  ...typography.heading5,
+                  color: colors.textSecondary,
+                }}
+              >
+                ¥
+              </Text>
+              {buyOffer?.maxPrice?.toLocaleString()}
+            </Text>
+          </View>
+        </View>
+      )}
+      {isBid(project) && (
+        <View style={{ flexDirection: "row", gap: 8 }}>
+          <View style={{ flex: 1, gap: 4 }}>
+            <View
+              style={{
+                backgroundColor: colors.primary,
+                borderRadius: 4,
+                padding: 2,
+                borderWidth: 1,
+                borderColor: colors.primary,
+              }}
+            >
+              <Text
+                style={{
+                  ...typography.heading4,
+                  color: colors.white,
+                  textAlign: "center",
+                }}
+              >
+                最低金額
+              </Text>
+            </View>
+            <Text style={{ ...typography.title1, color: colors.primary }}>
+              <Text
+                style={{
+                  ...typography.heading5,
+                  color: colors.textSecondary,
+                }}
+              >
+                ¥
+              </Text>
+              {bid?.minPrice?.toLocaleString()}
+            </Text>
+          </View>
+          <View style={{ flex: 1, gap: 4 }}>
+            <View
+              style={{
+                borderRadius: 4,
+                padding: 2,
+                borderWidth: 1,
+                borderColor: colors.textSecondary,
+              }}
+            >
+              <Text
+                style={{
+                  ...typography.heading4,
+                  color: colors.textSecondary,
+                  textAlign: "center",
+                }}
+              >
+                最高金額
+              </Text>
+            </View>
+            <Text style={{ ...typography.title1, color: colors.textPrimary }}>
+              <Text
+                style={{
+                  ...typography.heading5,
+                  color: colors.textSecondary,
+                }}
+              >
+                ¥
+              </Text>
+              {bid?.maxPrice?.toLocaleString()}
             </Text>
           </View>
         </View>

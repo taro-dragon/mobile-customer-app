@@ -6,9 +6,13 @@ import { useStore } from "@/hooks/useStore";
 import { Project } from "@/types/firestore_schema/project";
 import { Car } from "@/types/models/Car";
 import { Stock } from "@/types/firestore_schema/stock";
+import { BuyOffer } from "@/types/firestore_schema/buyOffers";
+import { Bid } from "@/types/firestore_schema/bids";
 export type ExtendedProject = Project & {
   targetCarData?: Car;
   targetStockCarData?: Stock;
+  buyOffer?: BuyOffer;
+  bid?: Bid;
 };
 
 const fetchProject = async (id: string, storeId: string) => {
@@ -35,6 +39,34 @@ const fetchProject = async (id: string, storeId: string) => {
         targetStockCarData: targetCarSnapshot.data() as Stock,
       };
     } else {
+      const projectType = projectData.type;
+      if (projectType === "buy_offer") {
+        const buyOfferRef = firestore()
+          .collection("buyOffers")
+          .doc(projectData.targetId)
+          .get();
+        const buyOfferSnapshot = await buyOfferRef;
+        const buyOffer = buyOfferSnapshot.data();
+        return {
+          ...projectData,
+          id: projectSnapshot.id,
+          targetCarData: targetCarSnapshot.data() as Car,
+          buyOffer: buyOffer,
+        };
+      } else if (projectType === "bids") {
+        const bidRef = firestore()
+          .collection("bids")
+          .doc(projectData.targetId)
+          .get();
+        const bidSnapshot = await bidRef;
+        const bid = bidSnapshot.data();
+        return {
+          ...projectData,
+          id: projectSnapshot.id,
+          targetCarData: targetCarSnapshot.data() as Car,
+          bid: bid,
+        };
+      }
       return {
         ...projectData,
         id: projectSnapshot.id,
