@@ -32,6 +32,14 @@ const ProjectsLayout = () => {
             ),
           }}
         />
+        <Stack.Screen
+          name="[id]"
+          options={{
+            title: "案件詳細",
+            headerShadowVisible: false,
+            headerBackButtonDisplayMode: "minimal",
+          }}
+        />
       </Stack>
     </ProjectsProvider>
   );

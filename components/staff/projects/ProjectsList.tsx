@@ -1,11 +1,11 @@
 import { FlatList, Text, View } from "react-native";
 import { FileText } from "lucide-react-native";
 import { useTheme } from "@/contexts/ThemeContext";
-import { ExtendProject } from "@/hooks/staff/projects/useInProgressProjects";
 import ProjectItem from "./ProjectItem";
+import { Project } from "@/types/firestore_schema/project";
 
 type ProjecListProps = {
-  projects: ExtendProject[];
+  projects: Project[];
   isLoading: boolean;
   hasMore: boolean;
   loadMore: () => void;

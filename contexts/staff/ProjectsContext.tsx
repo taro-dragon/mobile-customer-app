@@ -1,13 +1,11 @@
 import useCompletedProjects from "@/hooks/staff/projects/useCompletedProjects";
-import useInProgressProjects, {
-  ExtendProject,
-} from "@/hooks/staff/projects/useInProgressProjects";
+import useInProgressProjects from "@/hooks/staff/projects/useInProgressProjects";
 import { Project } from "@/types/firestore_schema/project";
 import { createContext, useContext } from "react";
 
 type ProjectsContextType = {
-  inProgressProjects: ExtendProject[];
-  completedProjects: ExtendProject[];
+  inProgressProjects: Project[];
+  completedProjects: Project[];
   isLoadingInProgressProjects: boolean;
   isLoadingCompletedProjects: boolean;
   errorInProgressProjects: Error | null;

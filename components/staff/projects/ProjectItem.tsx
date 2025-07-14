@@ -1,5 +1,4 @@
 import { Text, View } from "react-native";
-import { ExtendProject } from "@/hooks/staff/projects/useInProgressProjects";
 import { useTheme } from "@/contexts/ThemeContext";
 import Card from "@/components/common/Card";
 import { transformCarData } from "@/libs/transformCarData";
@@ -9,9 +8,11 @@ import Tag from "@/components/common/Tag";
 import { useStore } from "@/hooks/useStore";
 import { Image } from "expo-image";
 import { User } from "lucide-react-native";
+import { useRouter } from "expo-router";
+import { Project } from "@/types/firestore_schema/project";
 
 type ProjectItemProps = {
-  project: ExtendProject;
+  project: Project;
 };
 
 const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
@@ -19,8 +20,12 @@ const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
   const carData = transformCarData(project as unknown as Car);
   const { label, color } = getSourceTypeLabel(project.type);
   const { currentStoreStaffs } = useStore();
+  const router = useRouter();
   return (
-    <Card style={{ backgroundColor: colors.backgroundSecondary }}>
+    <Card
+      style={{ backgroundColor: colors.backgroundSecondary }}
+      onPress={() => router.push(`/projects/${project.id}`)}
+    >
       <View style={{ gap: 8 }}>
         <View
           style={{

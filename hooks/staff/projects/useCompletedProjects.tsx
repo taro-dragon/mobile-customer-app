@@ -9,7 +9,7 @@ const PAGE_SIZE = 20;
 const fetchCompletedProjects = async (
   storeId: string,
   lastDoc?: any
-): Promise<{ data: ExtendProject[]; lastDoc: any; hasMore: boolean }> => {
+): Promise<{ data: Project[]; lastDoc: any; hasMore: boolean }> => {
   try {
     let query = firestore()
       .collection("shops")
@@ -24,44 +24,12 @@ const fetchCompletedProjects = async (
     }
 
     const snapshot = await query.get();
-    const data: ExtendProject[] = await Promise.all(
+    const data: Project[] = await Promise.all(
       snapshot.docs.map(async (doc) => {
-        const projectType = doc.data().projectType;
-        const targetId = doc.data().targetId;
-        if (projectType === "buy_offer") {
-          const targetCarRef = await firestore()
-            .collection("cars")
-            .doc(targetId)
-            .get();
-          const targetCarData = targetCarRef.data();
-          return {
-            id: doc.id,
-            ...doc.data(),
-            car: targetCarData,
-          } as ExtendProject;
-        } else if (projectType === "bid") {
-          const targetCarRef = await firestore()
-            .collection("cars")
-            .doc(targetId)
-            .get();
-          const targetCarData = targetCarRef.data();
-          return {
-            id: doc.id,
-            ...doc.data(),
-            car: targetCarData,
-          } as ExtendProject;
-        } else {
-          const targetCarRef = await firestore()
-            .collection("stockCars")
-            .doc(targetId)
-            .get();
-          const targetCarData = targetCarRef.data();
-          return {
-            id: doc.id,
-            ...doc.data(),
-            car: targetCarData,
-          } as ExtendProject;
-        }
+        return {
+          id: doc.id,
+          ...doc.data(),
+        } as Project;
       })
     );
     const lastDocument = snapshot.docs[snapshot.docs.length - 1];
@@ -105,9 +73,7 @@ const useCompletedProjects = () => {
       }
     );
 
-  const projects: ExtendProject[] = data
-    ? data.flatMap((page) => page.data)
-    : [];
+  const projects: Project[] = data ? data.flatMap((page) => page.data) : [];
   const hasMore =
     data && data.length > 0 ? data[data.length - 1]?.hasMore : false;
 
