@@ -1,14 +1,14 @@
 import React from "react";
 import BulkAppraisalBidBidScreen from "@/screens/staff/bulkAppraisalBid/bid";
-import { useStaffListContext } from "@/contexts/staff/StaffList";
 import Loader from "@/components/common/Loader";
+import { useStore } from "@/hooks/useStore";
 
 const BulkAppraisalBidBid = () => {
-  const { staffList, isLoading } = useStaffListContext();
-  if (isLoading || !staffList) {
+  const { currentStoreStaffs, currentStoreStaffsLoading } = useStore();
+  if (currentStoreStaffsLoading || !currentStoreStaffs) {
     return <Loader />;
   }
-  return <BulkAppraisalBidBidScreen staffList={staffList} />;
+  return <BulkAppraisalBidBidScreen staffList={currentStoreStaffs} />;
 };
 
 export default BulkAppraisalBidBid;

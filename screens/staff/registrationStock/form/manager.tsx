@@ -1,17 +1,17 @@
 import Loader from "@/components/common/Loader";
 import CheckBoxStaffItem from "@/components/staff/StaffList/CheckBoxStaffItem";
-import { useStaffListContext } from "@/contexts/staff/StaffList";
+import { useStore } from "@/hooks/useStore";
 import { FlatList, View } from "react-native";
 
 const RegistrationStockManagerFormScreen: React.FC = () => {
-  const { staffList, isLoading } = useStaffListContext();
-  if (isLoading || !staffList) {
+  const { currentStoreStaffs, currentStoreStaffsLoading } = useStore();
+  if (currentStoreStaffsLoading || !currentStoreStaffs) {
     return <Loader />;
   }
 
   return (
     <FlatList
-      data={staffList}
+      data={currentStoreStaffs}
       contentContainerStyle={{
         flexGrow: 1,
         paddingTop: 16,

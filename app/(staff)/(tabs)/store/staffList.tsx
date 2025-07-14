@@ -1,25 +1,18 @@
 import Loader from "@/components/common/Loader";
-import useFetchStaffList from "@/hooks/staff/useFetchStafflist";
+
 import { useStore } from "@/hooks/useStore";
 import StaffListScreen from "@/screens/staff/store/storeManagement/staffList";
-import { useFocusEffect } from "expo-router";
-import { useCallback, useMemo } from "react";
+
+import { useMemo } from "react";
 
 const StaffList = () => {
-  const { staff, currentStore } = useStore();
+  const { staff, currentStoreStaffs, currentStoreStaffsLoading } = useStore();
   const isOwner = useMemo(() => !!staff?.isOwner, [staff]);
-  const { staffList, isLoading, mutate } = useFetchStaffList(
-    currentStore?.id || ""
-  );
-  useFocusEffect(
-    useCallback(() => {
-      mutate();
-    }, [mutate])
-  );
-  if (isLoading || !staffList) {
+
+  if (currentStoreStaffsLoading || !currentStoreStaffs) {
     return <Loader />;
   }
-  return <StaffListScreen staffList={staffList} isOwner={isOwner} />;
+  return <StaffListScreen staffList={currentStoreStaffs} isOwner={isOwner} />;
 };
 
 export default StaffList;

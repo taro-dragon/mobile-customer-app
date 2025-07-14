@@ -2,7 +2,6 @@ import {
   RegistrationBuyOfferFormData,
   registrationBuyOfferSchema,
 } from "@/constants/schemas/registrationBuyOfferSchema";
-import StaffListProvider from "@/contexts/staff/StaffList";
 import { useTheme } from "@/contexts/ThemeContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Stack, useRouter } from "expo-router";
@@ -28,80 +27,78 @@ const RegistrationBuyOfferLayout = () => {
   const { colors } = useTheme();
   return (
     <FormProvider {...form}>
-      <StaffListProvider>
-        <Stack
-          screenOptions={{
-            contentStyle: {
-              backgroundColor: colors.backgroundPrimary,
-            },
-            headerTintColor: colors.primary,
-            headerStyle: {
-              backgroundColor: colors.backgroundPrimary,
-            },
+      <Stack
+        screenOptions={{
+          contentStyle: {
+            backgroundColor: colors.backgroundPrimary,
+          },
+          headerTintColor: colors.primary,
+          headerStyle: {
+            backgroundColor: colors.backgroundPrimary,
+          },
+        }}
+      >
+        <Stack.Screen
+          name="index"
+          options={{
+            title: "買取オファー登録",
+            headerLeft: () => (
+              <TouchableOpacity onPress={handleGoBack}>
+                <X size={24} color={colors.primary} />
+              </TouchableOpacity>
+            ),
           }}
-        >
-          <Stack.Screen
-            name="index"
-            options={{
-              title: "買取オファー登録",
-              headerLeft: () => (
-                <TouchableOpacity onPress={handleGoBack}>
-                  <X size={24} color={colors.primary} />
-                </TouchableOpacity>
-              ),
-            }}
-          />
-          <Stack.Screen
-            name="searchTypeNumber"
-            options={{
-              title: "型番検索",
-              headerBackButtonDisplayMode: "minimal",
-            }}
-          />
-          <Stack.Screen
-            name="selectMaker"
-            options={{
-              title: "メーカー選択",
-              headerBackButtonDisplayMode: "minimal",
-            }}
-          />
-          <Stack.Screen
-            name="selectCar"
-            options={{
-              title: "車種選択",
-              headerBackButtonDisplayMode: "minimal",
-            }}
-          />
-          <Stack.Screen
-            name="selectYear"
-            options={{
-              title: "モデル選択",
-              headerBackButtonDisplayMode: "minimal",
-            }}
-          />
-          <Stack.Screen
-            name="selectGrade"
-            options={{
-              title: "グレード選択",
-              headerBackButtonDisplayMode: "minimal",
-            }}
-          />
-          <Stack.Screen
-            name="form"
-            options={{
-              title: "買取オファー登録",
-              headerBackButtonDisplayMode: "minimal",
-            }}
-          />
-          <Stack.Screen
-            name="selectStaff"
-            options={{
-              title: "担当者選択",
-              headerBackButtonDisplayMode: "minimal",
-            }}
-          />
-        </Stack>
-      </StaffListProvider>
+        />
+        <Stack.Screen
+          name="searchTypeNumber"
+          options={{
+            title: "型番検索",
+            headerBackButtonDisplayMode: "minimal",
+          }}
+        />
+        <Stack.Screen
+          name="selectMaker"
+          options={{
+            title: "メーカー選択",
+            headerBackButtonDisplayMode: "minimal",
+          }}
+        />
+        <Stack.Screen
+          name="selectCar"
+          options={{
+            title: "車種選択",
+            headerBackButtonDisplayMode: "minimal",
+          }}
+        />
+        <Stack.Screen
+          name="selectYear"
+          options={{
+            title: "モデル選択",
+            headerBackButtonDisplayMode: "minimal",
+          }}
+        />
+        <Stack.Screen
+          name="selectGrade"
+          options={{
+            title: "グレード選択",
+            headerBackButtonDisplayMode: "minimal",
+          }}
+        />
+        <Stack.Screen
+          name="form"
+          options={{
+            title: "買取オファー登録",
+            headerBackButtonDisplayMode: "minimal",
+          }}
+        />
+        <Stack.Screen
+          name="selectStaff"
+          options={{
+            title: "担当者選択",
+            headerBackButtonDisplayMode: "minimal",
+          }}
+        />
+      </Stack>
     </FormProvider>
   );
 };

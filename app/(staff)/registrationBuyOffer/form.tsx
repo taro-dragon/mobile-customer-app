@@ -1,22 +1,17 @@
 import { Alert } from "react-native";
-import { useForm, useFormContext } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useFormContext } from "react-hook-form";
 import firestore from "@react-native-firebase/firestore";
-import {
-  RegistrationBuyOfferFormData,
-  registrationBuyOfferSchema,
-} from "@/constants/schemas/registrationBuyOfferSchema";
+import { RegistrationBuyOfferFormData } from "@/constants/schemas/registrationBuyOfferSchema";
 import RegistrationBuyOfferFormScreen from "@/screens/staff/registrationBuyOffer/form";
 import { useStore } from "@/hooks/useStore";
 import Toast from "react-native-toast-message";
 import { useRouter } from "expo-router";
-import { useStaffListContext } from "@/contexts/staff/StaffList";
 import Loader from "@/components/common/Loader";
 
 const RegistrationBuyOfferForm = () => {
   const { getValues } = useFormContext();
-  const { staffList, isLoading } = useStaffListContext();
-  const { currentStore } = useStore();
+  const { currentStore, currentStoreStaffs, currentStoreStaffsLoading } =
+    useStore();
   const router = useRouter();
 
   const {
@@ -90,13 +85,13 @@ const RegistrationBuyOfferForm = () => {
       },
     ]);
   };
-  if (isLoading || !staffList) {
+  if (currentStoreStaffsLoading || !currentStoreStaffs) {
     return <Loader />;
   }
   return (
     <RegistrationBuyOfferFormScreen
       confirmButton={handleSubmit(confirmButton)}
-      staffList={staffList}
+      staffList={currentStoreStaffs}
     />
   );
 };
