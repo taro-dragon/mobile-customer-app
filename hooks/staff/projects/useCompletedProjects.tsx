@@ -2,7 +2,6 @@ import { useStore } from "@/hooks/useStore";
 import { Project } from "@/types/firestore_schema/project";
 import firestore from "@react-native-firebase/firestore";
 import useSWRInfinite from "swr/infinite";
-import { ExtendProject } from "./useInProgressProjects";
 
 const PAGE_SIZE = 20;
 

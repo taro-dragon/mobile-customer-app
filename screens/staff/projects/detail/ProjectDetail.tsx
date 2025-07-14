@@ -1,25 +1,23 @@
 import Divider from "@/components/common/Divider";
 import Tag from "@/components/common/Tag";
+import CarSection from "@/components/staff/projects/detail/CarSection";
 import { useTheme } from "@/contexts/ThemeContext";
 import { ExtendedProject } from "@/hooks/staff/projects/useFetchProject";
 import { useStore } from "@/hooks/useStore";
 import { getSourceTypeLabel } from "@/libs/getSourceTypeLabel";
 import { getProjectsStatusLabel } from "@/libs/staffs/projects/getProjectsStatusLabel";
 import { transformCarData } from "@/libs/transformCarData";
-import { Project } from "@/types/firestore_schema/project";
 import { Car } from "@/types/models/Car";
 import dayjs from "dayjs";
 import { Image } from "expo-image";
 import {
   Calendar,
-  CarIcon,
-  ChevronRight,
   CircleCheck,
   Loader,
   User,
   Users,
 } from "lucide-react-native";
-import { RefreshControl, TouchableOpacity } from "react-native";
+import { RefreshControl } from "react-native";
 import { ScrollView, Text, View } from "react-native";
 
 type ProjectDetailScreenProps = {
@@ -40,10 +38,6 @@ const ProjectDetailScreen: React.FC<ProjectDetailScreenProps> = ({
   const { label: statusLabel, color: statusColor } = getProjectsStatusLabel(
     project.status
   );
-  const targetCarData =
-    project.type === "car_inquiry"
-      ? project.targetStockCarData
-      : project.targetCarData;
   return (
     <ScrollView
       refreshControl={
@@ -58,17 +52,6 @@ const ProjectDetailScreen: React.FC<ProjectDetailScreenProps> = ({
           </Text>
           <Text style={{ ...typography.title1, color: colors.textPrimary }}>
             {carData.model.name}
-          </Text>
-        </View>
-        <View style={{ gap: 4 }}>
-          <Text style={{ ...typography.body2, color: colors.textPrimary }}>
-            年式: {carData.year.year}
-          </Text>
-          <Text style={{ ...typography.body2, color: colors.textPrimary }}>
-            グレード: {carData.grade?.gradeName}
-          </Text>
-          <Text style={{ ...typography.body2, color: colors.textPrimary }}>
-            型番: {carData.grade?.modelNumber.replace(/[\s\u3000]/g, "")}
           </Text>
         </View>
       </View>
@@ -126,7 +109,6 @@ const ProjectDetailScreen: React.FC<ProjectDetailScreenProps> = ({
             {dayjs(project.createdAt.toDate()).format("YYYY/MM/DD HH:mm")}
           </Text>
         </View>
-
         <View
           style={{
             flexDirection: "row",
@@ -175,7 +157,7 @@ const ProjectDetailScreen: React.FC<ProjectDetailScreenProps> = ({
                       borderColor: colors.borderPrimary,
                     }}
                   >
-                    <User size={24} color={colors.textSecondary} />
+                    <User size={16} color={colors.textSecondary} />
                   </View>
                 );
               }
@@ -184,35 +166,7 @@ const ProjectDetailScreen: React.FC<ProjectDetailScreenProps> = ({
         </View>
       </View>
       <Divider />
-      <TouchableOpacity
-        style={{
-          flexDirection: "row",
-          gap: 8,
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
-          <CarIcon size={24} color={colors.textPrimary} />
-          <Text style={{ ...typography.body2, color: colors.textPrimary }}>
-            対象車両
-          </Text>
-        </View>
-        <View style={{ flexDirection: "row", gap: 4, alignItems: "center" }}>
-          <Image
-            source={{ uri: targetCarData?.images.front }}
-            style={{
-              width: 48,
-              height: 48,
-              borderRadius: 8,
-              borderWidth: 1,
-              borderColor: colors.borderPrimary,
-            }}
-          />
-          <ChevronRight size={24} color={colors.textPrimary} />
-        </View>
-      </TouchableOpacity>
-      <Divider />
+      <CarSection project={project} carData={carData} />
     </ScrollView>
   );
 };

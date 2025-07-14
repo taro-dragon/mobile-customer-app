@@ -5,9 +5,6 @@ import firestore from "@react-native-firebase/firestore";
 import useSWRInfinite from "swr/infinite";
 
 const PAGE_SIZE = 20;
-export type ExtendProject = Project & {
-  car: Car;
-};
 
 const fetchInProgressProjects = async (
   storeId: string,
