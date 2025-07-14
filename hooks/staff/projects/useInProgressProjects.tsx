@@ -105,8 +105,6 @@ const useInProgressProjects = () => {
       ([_, storeId, lastDoc]: [string, string, any]) =>
         fetchInProgressProjects(storeId, lastDoc),
       {
-        revalidateFirstPage: false,
-        revalidateAll: false,
         revalidateOnMount: true,
         revalidateOnFocus: false,
       }

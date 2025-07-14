@@ -53,7 +53,11 @@ export const createCurrentStoreSlice: StateCreator<
         .collection("staffs")
         .where("shops", "array-contains", shopId)
         .onSnapshot((snapshot) => {
-          const staffs = snapshot.docs.map((doc) => doc.data() as Staff);
+          const staffs = snapshot.docs.map((doc) => {
+            const staff = doc.data() as Staff;
+            staff.id = doc.id;
+            return staff;
+          });
           set((state) => ({
             ...state,
             currentStoreStaffs: staffs,

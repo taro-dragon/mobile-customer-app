@@ -1,10 +1,8 @@
 import { FlatList, Text, View } from "react-native";
-import { CarIcon } from "lucide-react-native";
+import { FileText } from "lucide-react-native";
 import { useTheme } from "@/contexts/ThemeContext";
-import Card from "@/components/common/Card";
 import { ExtendProject } from "@/hooks/staff/projects/useInProgressProjects";
 import ProjectItem from "./ProjectItem";
-import { useStore } from "@/hooks/useStore";
 
 type ProjecListProps = {
   projects: ExtendProject[];
@@ -22,8 +20,6 @@ const ProjectsList: React.FC<ProjecListProps> = ({
   mutate,
 }) => {
   const { colors, typography } = useTheme();
-  const { currentStoreStaffs } = useStore();
-  console.log("currentStoreStaffs", currentStoreStaffs);
 
   return (
     <FlatList
@@ -40,7 +36,7 @@ const ProjectsList: React.FC<ProjecListProps> = ({
             gap: 16,
           }}
         >
-          <CarIcon size={48} color={colors.iconSecondary} strokeWidth={1.5} />
+          <FileText size={48} color={colors.iconSecondary} strokeWidth={1.5} />
           <Text style={{ color: colors.textSecondary, ...typography.heading2 }}>
             対象の案件がありません
           </Text>
