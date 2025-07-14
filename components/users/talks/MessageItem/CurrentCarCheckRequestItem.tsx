@@ -4,6 +4,7 @@ import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { Message } from "@/types/firestore_schema/messages";
 import dayjs from "dayjs";
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import { Calendar, CarIcon, Check } from "lucide-react-native";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -23,6 +24,7 @@ const CurrentCarCheckRequestItem: React.FC<CurrentCarCheckRequestItemProps> = ({
   bubbleColor,
 }) => {
   const { colors, typography } = useTheme();
+  const router = useRouter();
   return (
     <View
       style={[
@@ -83,21 +85,28 @@ const CurrentCarCheckRequestItem: React.FC<CurrentCarCheckRequestItemProps> = ({
               </Text>
             </TouchableOpacity>
           ) : (
-            <View
+            <TouchableOpacity
+              onPress={() => {
+                router.push(
+                  `/talks/${talk.id}/answerCarCheckRequest?messageId=${message.id}`
+                );
+              }}
               style={{
                 borderWidth: 1,
-                borderColor: colors.gray400,
-                backgroundColor: colors.white,
+                borderColor: colors.borderSuccess,
+                backgroundColor: colors.backgroundSuccess,
                 padding: 12,
                 borderRadius: 12,
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
-              <Text style={{ color: colors.gray500, ...typography.heading3 }}>
-                回答待ち
+              <Text
+                style={{ color: colors.textSuccess, ...typography.heading3 }}
+              >
+                回答する
               </Text>
-            </View>
+            </TouchableOpacity>
           )}
           <View
             style={{

@@ -23,6 +23,15 @@ const TalkLayout = () => {
         }}
       />
       <Stack.Screen
+        name="answerCarCheckRequest"
+        options={{
+          title: "回答する",
+          animation: "slide_from_bottom",
+          gestureEnabled: false,
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name="map"
         options={{
           title: "位置情報",
