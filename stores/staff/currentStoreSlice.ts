@@ -3,6 +3,7 @@ import firestore from "@react-native-firebase/firestore";
 
 import { Shop } from "@/types/models/Shop";
 import { CurrentStoreSlice } from "@/types/slices/staff/currentStoreSlice";
+import { Staff } from "@/types/firestore_schema/staff";
 
 export const createCurrentStoreSlice: StateCreator<
   CurrentStoreSlice,
@@ -11,16 +12,19 @@ export const createCurrentStoreSlice: StateCreator<
   CurrentStoreSlice
 > = (set, get) => ({
   currentStore: null,
+  currentStoreStaffs: [],
   currentStoreLoading: false,
-  unsubscribe: undefined,
+  currentStoreStaffsLoading: false,
+  currentStoreUnsubscribe: undefined,
+  currentStoreStaffsUnsubscribe: undefined,
   fetchCurrentStore: async (shopId: string) => {
-    const currentUnsubscribe = get().unsubscribe;
+    const currentUnsubscribe = get().currentStoreUnsubscribe;
     if (currentUnsubscribe) {
       currentUnsubscribe();
     }
     set((state) => ({ ...state, currentStoreLoading: true }));
     try {
-      const unsubscribe = await firestore()
+      const currentStoreUnsubscribe = await firestore()
         .collection("shops")
         .doc(shopId)
         .onSnapshot((snapshot) => {
@@ -32,9 +36,33 @@ export const createCurrentStoreSlice: StateCreator<
             currentStoreLoading: false,
           }));
         });
-      set((state) => ({ ...state, unsubscribe }));
+      set((state) => ({ ...state, currentStoreUnsubscribe }));
     } catch (error) {
       set((state) => ({ ...state, currentStoreLoading: false }));
+      return undefined;
+    }
+  },
+  fetchCurrentStoreStaffs: async (shopId: string) => {
+    const currentStoreStaffsUnsubscribe = get().currentStoreStaffsUnsubscribe;
+    if (currentStoreStaffsUnsubscribe) {
+      currentStoreStaffsUnsubscribe();
+    }
+    set((state) => ({ ...state, currentStoreStaffsLoading: true }));
+    try {
+      const currentStoreStaffsUnsubscribe = await firestore()
+        .collection("staffs")
+        .where("shops", "array-contains", shopId)
+        .onSnapshot((snapshot) => {
+          const staffs = snapshot.docs.map((doc) => doc.data() as Staff);
+          set((state) => ({
+            ...state,
+            currentStoreStaffs: staffs,
+            currentStoreStaffsLoading: false,
+          }));
+        });
+      set((state) => ({ ...state, currentStoreStaffsUnsubscribe }));
+    } catch (error) {
+      set((state) => ({ ...state, currentStoreStaffsLoading: false }));
       return undefined;
     }
   },

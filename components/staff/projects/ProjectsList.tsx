@@ -4,6 +4,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import Card from "@/components/common/Card";
 import { ExtendProject } from "@/hooks/staff/projects/useInProgressProjects";
 import ProjectItem from "./ProjectItem";
+import { useStore } from "@/hooks/useStore";
 
 type ProjecListProps = {
   projects: ExtendProject[];
@@ -21,6 +22,8 @@ const ProjectsList: React.FC<ProjecListProps> = ({
   mutate,
 }) => {
   const { colors, typography } = useTheme();
+  const { currentStoreStaffs } = useStore();
+  console.log("currentStoreStaffs", currentStoreStaffs);
 
   return (
     <FlatList
