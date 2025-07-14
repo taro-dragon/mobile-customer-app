@@ -13,9 +13,8 @@ type ProjectItemProps = {
 
 const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
   const { colors, typography } = useTheme();
-  const catData = transformCarData(project as unknown as Car);
+  const carData = transformCarData(project as unknown as Car);
   const { label, color } = getSourceTypeLabel(project.type);
-  console.log("catData", catData);
   return (
     <Card style={{ backgroundColor: colors.backgroundSecondary }}>
       <View style={{ gap: 8 }}>
@@ -28,16 +27,16 @@ const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
         >
           <View style={{ gap: 4 }}>
             <Text style={{ color: colors.textSecondary, ...typography.body2 }}>
-              {catData?.maker.name}
+              {carData?.maker.name}
             </Text>
             <Text style={{ color: colors.textPrimary, ...typography.heading2 }}>
-              {catData?.model.name}
+              {carData?.model.name}
             </Text>
           </View>
           <Tag label={label} color={color} />
         </View>
         <Text style={{ color: colors.textSecondary, ...typography.body2 }}>
-          {catData?.year.year}
+          {carData?.year.year}
         </Text>
       </View>
     </Card>
