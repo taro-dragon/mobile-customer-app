@@ -1,8 +1,10 @@
+import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
+
 export type Project = {
   id: string;
   userId: string;
-  updatedAt: string;
-  createdAt: string;
+  updatedAt: FirebaseFirestoreTypes.Timestamp;
+  createdAt: FirebaseFirestoreTypes.Timestamp;
   status: "in_progress" | "completed";
   targetId: string;
   maker: string;

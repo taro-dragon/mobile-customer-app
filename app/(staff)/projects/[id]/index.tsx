@@ -1,13 +1,27 @@
+import Loader from "@/components/common/Loader";
+import useFetchProject from "@/hooks/staff/projects/useFetchProject";
+import ProjectDetailScreen from "@/screens/staff/projects/detail/ProjectDetail";
 import { useLocalSearchParams } from "expo-router";
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 
 const ProjectDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  console.log(id);
+  const { project, isLoading, isError, mutate } = useFetchProject(id);
+  if (isLoading || !project) {
+    return <Loader />;
+  }
+  if (isError) {
+    return <Text>Error</Text>;
+  }
+  if (!project) {
+    return <Text>Project not found</Text>;
+  }
   return (
-    <View>
-      <Text>{id}</Text>
-    </View>
+    <ProjectDetailScreen
+      project={project}
+      isLoading={isLoading}
+      mutate={mutate}
+    />
   );
 };
 
