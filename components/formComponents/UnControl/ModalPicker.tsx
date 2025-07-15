@@ -63,15 +63,17 @@ const UnControlModalPicker: React.FC<ModalPickerProps> = ({
 
   return (
     <View>
-      <Text
-        style={{
-          color: colors.textPrimary,
-          ...typography.heading3,
-          marginBottom: 8,
-        }}
-      >
-        {label} {required && <Text style={{ color: colors.error }}>*</Text>}
-      </Text>
+      {label && (
+        <Text
+          style={{
+            color: colors.textPrimary,
+            ...typography.heading3,
+            marginBottom: 8,
+          }}
+        >
+          {label} {required && <Text style={{ color: colors.error }}>*</Text>}
+        </Text>
+      )}
       <TouchableOpacity
         style={{
           padding: 16,

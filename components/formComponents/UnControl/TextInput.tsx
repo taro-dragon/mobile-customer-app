@@ -27,10 +27,12 @@ const UnControlTextInput: React.FC<UnControlTextInputProps> = ({
   const { colors, typography } = useTheme();
   return (
     <View style={{ gap: 8 }}>
-      <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
-        {label}
-        {isRequired && <Text style={{ color: colors.error }}>*</Text>}
-      </Text>
+      {label && (
+        <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
+          {label}
+          {isRequired && <Text style={{ color: colors.error }}>*</Text>}
+        </Text>
+      )}
       <View
         style={{
           flexDirection: "row",
