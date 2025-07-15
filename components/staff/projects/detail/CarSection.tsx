@@ -39,7 +39,7 @@ const CarSection: React.FC<CarSectionProps> = ({ project, carData }) => {
   const bid = project.bid;
   return (
     <View style={{ gap: 8 }}>
-      <Text style={{ ...typography.title5, color: colors.textPrimary }}>
+      <Text style={{ ...typography.title3, color: colors.textPrimary }}>
         車両詳細
       </Text>
       <TouchableOpacity style={{ flexDirection: "row", gap: 8 }}>
@@ -152,24 +152,24 @@ const CarSection: React.FC<CarSectionProps> = ({ project, carData }) => {
           <View style={{ flex: 1, gap: 4 }}>
             <View
               style={{
-                backgroundColor: colors.primary,
                 borderRadius: 4,
                 padding: 2,
                 borderWidth: 1,
-                borderColor: colors.primary,
+                borderColor: colors.error,
+                backgroundColor: colors.backgroundError,
               }}
             >
               <Text
                 style={{
                   ...typography.heading4,
-                  color: colors.white,
+                  color: colors.error,
                   textAlign: "center",
                 }}
               >
                 最低金額
               </Text>
             </View>
-            <Text style={{ ...typography.title1, color: colors.primary }}>
+            <Text style={{ ...typography.title1, color: colors.textError }}>
               <Text
                 style={{
                   ...typography.heading5,
@@ -187,20 +187,21 @@ const CarSection: React.FC<CarSectionProps> = ({ project, carData }) => {
                 borderRadius: 4,
                 padding: 2,
                 borderWidth: 1,
-                borderColor: colors.textSecondary,
+                borderColor: colors.borderSuccess,
+                backgroundColor: colors.backgroundSuccess,
               }}
             >
               <Text
                 style={{
                   ...typography.heading4,
-                  color: colors.textSecondary,
+                  color: colors.textSuccess,
                   textAlign: "center",
                 }}
               >
                 最高金額
               </Text>
             </View>
-            <Text style={{ ...typography.title1, color: colors.textPrimary }}>
+            <Text style={{ ...typography.title1, color: colors.textSuccess }}>
               <Text
                 style={{
                   ...typography.heading5,
