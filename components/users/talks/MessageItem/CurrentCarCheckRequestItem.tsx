@@ -67,11 +67,11 @@ const CurrentCarCheckRequestItem: React.FC<CurrentCarCheckRequestItemProps> = ({
             </Text>
           </View>
           {message.isAnswered ? (
-            <TouchableOpacity
+            <View
               style={{
                 borderWidth: 1,
-                borderColor: colors.borderSuccess,
-                backgroundColor: colors.backgroundSuccess,
+                borderColor: colors.borderPrimary,
+                backgroundColor: colors.backgroundSecondary,
                 padding: 12,
                 borderRadius: 12,
                 alignItems: "center",
@@ -79,16 +79,16 @@ const CurrentCarCheckRequestItem: React.FC<CurrentCarCheckRequestItemProps> = ({
               }}
             >
               <Text
-                style={{ color: colors.textSuccess, ...typography.heading3 }}
+                style={{ color: colors.textSecondary, ...typography.heading3 }}
               >
-                確認する
+                回答済み
               </Text>
-            </TouchableOpacity>
+            </View>
           ) : (
             <TouchableOpacity
               onPress={() => {
                 router.push(
-                  `/talks/${talk.id}/answerCarCheckRequest?messageId=${message.id}`
+                  `/talks/${talk.id}/answerCarCheckRequest?messageId=${message.id}&shopId=${talk.affiliateStoreId}`
                 );
               }}
               style={{

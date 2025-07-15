@@ -18,8 +18,7 @@ const AnswerCarCheckRequestLayout = () => {
     defaultValues: {
       preferredDates: [
         {
-          date: new Date(),
-          time: "",
+          datetime: new Date(),
           priority: 1,
         },
       ],

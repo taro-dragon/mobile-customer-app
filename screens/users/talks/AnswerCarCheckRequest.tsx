@@ -37,19 +37,18 @@ const AnswerCarCheckRequestScreen: React.FC<
     formState: { errors, isSubmitting },
   } = useFormContext<AnswerCarCheckRequestFormData>();
 
-  const [datePickerOpen, setDatePickerOpen] = useState<number | null>(null);
-  const [timePickerOpen, setTimePickerOpen] = useState<number | null>(null);
+  const [dateTimePickerOpen, setDateTimePickerOpen] = useState<number | null>(
+    null
+  );
   const [currentDateIndex, setCurrentDateIndex] = useState<number | null>(null);
 
   const preferredDates = watch("preferredDates") || [];
   const location = watch("location");
-  console.log(location);
 
   // 日付フィールドを追加
   const addDateField = () => {
     const newDate = {
-      date: new Date(),
-      time: "",
+      datetime: new Date(),
       priority: preferredDates.length + 1,
     };
     setValue("preferredDates", [...preferredDates, newDate]);
@@ -66,48 +65,23 @@ const AnswerCarCheckRequestScreen: React.FC<
     setValue("preferredDates", adjustedDates);
   };
 
-  // 日付選択を開く
-  const openDatePicker = (index: number) => {
+  // 日時選択を開く
+  const openDateTimePicker = (index: number) => {
     setCurrentDateIndex(index);
-    setDatePickerOpen(index);
+    setDateTimePickerOpen(index);
   };
 
-  // 時間選択を開く
-  const openTimePicker = (index: number) => {
-    setCurrentDateIndex(index);
-    setTimePickerOpen(index);
-  };
-
-  // 日付を確定
-  const confirmDate = (date: Date) => {
+  // 日時を確定
+  const confirmDateTime = (datetime: Date) => {
     if (currentDateIndex !== null) {
       const newDates = [...preferredDates];
       newDates[currentDateIndex] = {
         ...newDates[currentDateIndex],
-        date,
+        datetime,
       };
       setValue("preferredDates", newDates);
     }
-    setDatePickerOpen(null);
-    setCurrentDateIndex(null);
-  };
-
-  // 時間を確定
-  const confirmTime = (time: Date) => {
-    if (currentDateIndex !== null) {
-      const newDates = [...preferredDates];
-      const timeString = time.toLocaleTimeString("ja-JP", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-      });
-      newDates[currentDateIndex] = {
-        ...newDates[currentDateIndex],
-        time: timeString,
-      };
-      setValue("preferredDates", newDates);
-    }
-    setTimePickerOpen(null);
+    setDateTimePickerOpen(null);
     setCurrentDateIndex(null);
   };
 
@@ -198,15 +172,15 @@ const AnswerCarCheckRequestScreen: React.FC<
                   )}
                 </View>
 
-                {/* 日付選択 */}
+                {/* 日時選択 */}
                 <TouchableOpacity
-                  onPress={() => openDatePicker(index)}
+                  onPress={() => openDateTimePicker(index)}
                   style={{
                     backgroundColor: colors.backgroundSecondary,
                     borderRadius: 8,
                     padding: 12,
                     borderWidth: 1,
-                    borderColor: errors.preferredDates?.[index]?.date
+                    borderColor: errors.preferredDates?.[index]?.datetime
                       ? colors.error
                       : colors.borderPrimary,
                   }}
@@ -222,38 +196,15 @@ const AnswerCarCheckRequestScreen: React.FC<
                     <Text
                       style={{ color: colors.textPrimary, ...typography.body2 }}
                     >
-                      {dateField.date
-                        ? dateField.date.toLocaleDateString("ja-JP")
-                        : "日付を選択"}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-
-                {/* 時間選択 */}
-                <TouchableOpacity
-                  onPress={() => openTimePicker(index)}
-                  style={{
-                    backgroundColor: colors.backgroundSecondary,
-                    borderRadius: 8,
-                    padding: 12,
-                    borderWidth: 1,
-                    borderColor: errors.preferredDates?.[index]?.time
-                      ? colors.error
-                      : colors.borderPrimary,
-                  }}
-                >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      gap: 8,
-                    }}
-                  >
-                    <Clock size={16} color={colors.textPrimary} />
-                    <Text
-                      style={{ color: colors.textPrimary, ...typography.body2 }}
-                    >
-                      {dateField.time || "時間を選択"}
+                      {dateField.datetime
+                        ? dateField.datetime.toLocaleString("ja-JP", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                        : "日時を選択"}
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -380,35 +331,20 @@ const AnswerCarCheckRequestScreen: React.FC<
         </View>
       </KeyboardAvoidingView>
 
-      {/* 日付選択モーダル */}
+      {/* 日時選択モーダル */}
       <DatePicker
         modal
-        open={datePickerOpen !== null}
+        open={dateTimePickerOpen !== null}
         date={
           currentDateIndex !== null
-            ? preferredDates[currentDateIndex]?.date || new Date()
+            ? preferredDates[currentDateIndex]?.datetime || new Date()
             : new Date()
         }
-        mode="date"
-        locale="ja"
         minimumDate={new Date()}
-        onConfirm={confirmDate}
-        onCancel={() => {
-          setDatePickerOpen(null);
-          setCurrentDateIndex(null);
-        }}
-      />
-
-      {/* 時間選択モーダル */}
-      <DatePicker
-        modal
-        open={timePickerOpen !== null}
-        date={currentDateIndex !== null ? new Date() : new Date()}
-        mode="time"
         locale="ja"
-        onConfirm={confirmTime}
+        onConfirm={confirmDateTime}
         onCancel={() => {
-          setTimePickerOpen(null);
+          setDateTimePickerOpen(null);
           setCurrentDateIndex(null);
         }}
       />

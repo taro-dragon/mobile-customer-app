@@ -2,15 +2,38 @@ import AnswerCarCheckRequestScreen from "@/screens/users/talks/AnswerCarCheckReq
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useFormContext } from "react-hook-form";
 import Toast from "react-native-toast-message";
+import firestore from "@react-native-firebase/firestore";
+import functions from "@react-native-firebase/functions";
 
 const AnswerCarCheckRequest = () => {
-  const { messageId } = useLocalSearchParams<{ messageId: string }>();
+  const { messageId, shopId, talkId } = useLocalSearchParams<{
+    messageId: string;
+    shopId: string;
+    talkId: string;
+  }>();
   const router = useRouter();
   const { handleSubmit } = useFormContext();
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log("送信データ:", data);
+      const answeredCarCheckRequest = functions().httpsCallable(
+        "answeredCarCheckRequest"
+      );
+
+      const firestoreData = {
+        ...data,
+        preferredDates: data.preferredDates.map(
+          (dateItem: { datetime: Date; priority: number }) => ({
+            ...dateItem,
+            datetime: firestore.Timestamp.fromDate(dateItem.datetime),
+          })
+        ),
+        messageId,
+        shopId,
+        talkId,
+      };
+
+      await answeredCarCheckRequest(firestoreData);
 
       Toast.show({
         type: "success",
