@@ -27,4 +27,16 @@ export type Talk = {
   appraisalStatus?: "pending" | "in_progress" | "completed" | "cancelled";
   currentAppraisalPrice?: string;
   finalAppraisalPrice?: string;
+  preferredInfo?: {
+    preferredDates: {
+      datetime: FirebaseFirestoreTypes.Timestamp;
+      priority: number;
+    }[];
+    location: {
+      lat: number;
+      lng: number;
+      address: string;
+    };
+    comment: string;
+  };
 };

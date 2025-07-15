@@ -4,6 +4,8 @@ import { useFormContext } from "react-hook-form";
 import Toast from "react-native-toast-message";
 import firestore from "@react-native-firebase/firestore";
 import functions from "@react-native-firebase/functions";
+import { useStore } from "@/hooks/useStore";
+import { TalkWithAffiliate } from "@/types/extendType/TalkWithAffiliate";
 
 const AnswerCarCheckRequest = () => {
   const { messageId, shopId, talkId } = useLocalSearchParams<{
@@ -11,6 +13,11 @@ const AnswerCarCheckRequest = () => {
     shopId: string;
     talkId: string;
   }>();
+  const { userTalks } = useStore();
+  const talk = userTalks.find((talk) => talk.id === talkId) as
+    | TalkWithAffiliate
+    | undefined;
+
   const router = useRouter();
   const { handleSubmit } = useFormContext();
 

@@ -109,7 +109,6 @@ const TalkDetail = () => {
     loadInitialMessages();
   }, [talkId]);
 
-  // リアルタイムで新メッセージを監視
   useEffect(() => {
     if (!talkId || !latestMessageTimestamp) return;
 
