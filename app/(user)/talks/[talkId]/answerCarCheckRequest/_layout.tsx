@@ -56,6 +56,13 @@ const AnswerCarCheckRequestLayout = () => {
             ),
           }}
         />
+        <Stack.Screen
+          name="map"
+          options={{
+            title: "位置情報",
+            headerBackButtonDisplayMode: "minimal",
+          }}
+        />
       </Stack>
     </FormProvider>
   );

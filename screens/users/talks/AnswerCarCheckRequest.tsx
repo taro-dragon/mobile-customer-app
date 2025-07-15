@@ -11,12 +11,15 @@ import { useFormContext } from "react-hook-form";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Plus, X, Calendar, Clock, MapPin } from "lucide-react-native";
 import DatePicker from "react-native-date-picker";
-import MapView, { PROVIDER_DEFAULT } from "react-native-maps";
+import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 import { AnswerCarCheckRequestFormData } from "@/constants/schemas/answerCarCheckRequest";
 import Button from "@/components/common/Button";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import TextInput from "@/components/registrationCar/form/TextInput";
+
+const LATITUDE = 35.1709;
+const LONGITUDE = 136.8816;
 
 interface AnswerCarCheckRequestScreenProps {
   onSubmit: () => void;
@@ -26,6 +29,7 @@ const AnswerCarCheckRequestScreen: React.FC<
   AnswerCarCheckRequestScreenProps
 > = ({ onSubmit }) => {
   const { colors, typography } = useTheme();
+  const { talkId } = useLocalSearchParams<{ talkId: string }>();
   const router = useRouter();
   const {
     watch,
@@ -39,6 +43,7 @@ const AnswerCarCheckRequestScreen: React.FC<
 
   const preferredDates = watch("preferredDates") || [];
   const location = watch("location");
+  console.log(location);
 
   // 日付フィールドを追加
   const addDateField = () => {
@@ -108,9 +113,7 @@ const AnswerCarCheckRequestScreen: React.FC<
 
   // 位置情報選択ページに遷移
   const handleLocationSelect = () => {
-    // TODO: 位置情報選択ページに遷移
-    // router.push("/location-select");
-    console.log("位置情報選択ページに遷移");
+    router.push(`/talks/${talkId}/answerCarCheckRequest/map`);
   };
 
   return (
@@ -291,9 +294,9 @@ const AnswerCarCheckRequestScreen: React.FC<
                 <MapView
                   style={{ flex: 1 }}
                   provider={PROVIDER_DEFAULT}
-                  initialRegion={{
-                    latitude: location?.lat || 35.6762,
-                    longitude: location?.lng || 139.6503,
+                  region={{
+                    latitude: location?.lat || LATITUDE,
+                    longitude: location?.lng || LONGITUDE,
                     latitudeDelta: 0.01,
                     longitudeDelta: 0.01,
                   }}
@@ -301,38 +304,50 @@ const AnswerCarCheckRequestScreen: React.FC<
                   zoomEnabled={false}
                   rotateEnabled={false}
                   pitchEnabled={false}
-                />
-                <View
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    backgroundColor: "rgba(0, 0, 0, 0.3)",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
                 >
+                  <Marker
+                    coordinate={{
+                      latitude: location?.lat || LATITUDE,
+                      longitude: location?.lng || LONGITUDE,
+                    }}
+                  />
+                </MapView>
+                {!location?.address && (
                   <View
                     style={{
-                      flexDirection: "row",
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      backgroundColor: "rgba(0, 0, 0, 0.3)",
+                      justifyContent: "center",
                       alignItems: "center",
-                      gap: 8,
-                      backgroundColor: colors.backgroundPrimary,
-                      paddingHorizontal: 16,
-                      paddingVertical: 8,
-                      borderRadius: 20,
                     }}
                   >
-                    <MapPin size={16} color={colors.textPrimary} />
-                    <Text
-                      style={{ color: colors.textPrimary, ...typography.body2 }}
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 8,
+                        backgroundColor: colors.backgroundPrimary,
+                        paddingHorizontal: 16,
+                        paddingVertical: 8,
+                        borderRadius: 20,
+                      }}
                     >
-                      位置情報を選択
-                    </Text>
+                      <MapPin size={16} color={colors.textPrimary} />
+                      <Text
+                        style={{
+                          color: colors.textPrimary,
+                          ...typography.body2,
+                        }}
+                      >
+                        位置情報を選択
+                      </Text>
+                    </View>
                   </View>
-                </View>
+                )}
               </View>
             </TouchableOpacity>
 

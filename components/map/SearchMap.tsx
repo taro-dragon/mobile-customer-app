@@ -28,9 +28,13 @@ const LONGITUDE = 136.8816;
 
 type SearchMapProps = {
   submit: (lat: number, lng: number, address?: string) => void;
+  submitButtonText?: string;
 };
 
-const SearchMap: React.FC<SearchMapProps> = ({ submit }) => {
+const SearchMap: React.FC<SearchMapProps> = ({
+  submit,
+  submitButtonText = "送信",
+}) => {
   const { colors, typography } = useTheme();
   const [search, setSearch] = useState("");
   const [assets] = useAssets(require("@/assets/images/pin.png"));
@@ -180,7 +184,7 @@ const SearchMap: React.FC<SearchMapProps> = ({ submit }) => {
               <Text
                 style={{ color: colors.textPrimary, ...typography.heading4 }}
               >
-                送信
+                {submitButtonText}
               </Text>
             </TouchableOpacity>
           ),
