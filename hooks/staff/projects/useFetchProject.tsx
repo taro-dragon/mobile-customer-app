@@ -98,6 +98,7 @@ const useFetchProject = (id: string) => {
   return {
     project: data as ExtendedProject | undefined,
     isLoading,
+    error,
     isError: !!error,
     mutate,
   };
