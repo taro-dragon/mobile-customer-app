@@ -1,3 +1,4 @@
+import React from "react";
 import Divider from "@/components/common/Divider";
 import Tag from "@/components/common/Tag";
 import CarSection from "@/components/staff/projects/detail/CarSection";
@@ -12,13 +13,15 @@ import dayjs from "dayjs";
 import { Image } from "expo-image";
 import {
   Calendar,
+  ChevronRight,
   CircleCheck,
   Loader,
   User,
   Users,
 } from "lucide-react-native";
-import { RefreshControl } from "react-native";
+import { RefreshControl, TouchableOpacity } from "react-native";
 import { ScrollView, Text, View } from "react-native";
+import PreferredInfoSection from "@/components/staff/projects/detail/PreferredInfoSection";
 
 type ProjectDetailScreenProps = {
   project: ExtendedProject;
@@ -168,6 +171,52 @@ const ProjectDetailScreen: React.FC<ProjectDetailScreenProps> = ({
       </View>
       <Divider />
       <CarSection project={project} carData={carData} />
+      {project.type !== "car_inquiry" && (
+        <>
+          <Divider />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ ...typography.title3, color: colors.textPrimary }}>
+              現車確認情報
+            </Text>
+          </View>
+          {project.preferredInfo ? (
+            <TouchableOpacity
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text
+                style={{ ...typography.heading3, color: colors.textPrimary }}
+              >
+                現車確認回答情報を確認する
+              </Text>
+              <ChevronRight size={24} color={colors.textPrimary} />
+            </TouchableOpacity>
+          ) : (
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text
+                style={{ ...typography.body2, color: colors.textSecondary }}
+              >
+                現車確認回答情報がありません
+              </Text>
+            </View>
+          )}
+        </>
+      )}
     </ScrollView>
   );
 };

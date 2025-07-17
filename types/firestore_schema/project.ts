@@ -16,4 +16,19 @@ export type Project = {
   shopId: string;
   targetCarId: string;
   managerStaffs: string[];
+  preferredInfo?: {
+    preferredDates: {
+      datetime: {
+        seconds: number;
+        nanoseconds: number;
+      };
+      priority: number;
+    }[];
+    location: {
+      lat: number;
+      lng: number;
+      address: string;
+    };
+    comment: string;
+  };
 };

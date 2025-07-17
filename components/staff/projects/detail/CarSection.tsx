@@ -69,7 +69,7 @@ const CarSection: React.FC<CarSectionProps> = ({ project, carData }) => {
               {carData.grade.gradeName}
             </Text>
           </View>
-          <ChevronRight size={24} color={colors.textSecondary} />
+          <ChevronRight size={24} color={colors.textPrimary} />
         </View>
       </TouchableOpacity>
       {isStock(targetCarData) && (
