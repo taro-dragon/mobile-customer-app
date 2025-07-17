@@ -7,13 +7,20 @@ import { ScrollView, Text, View } from "react-native";
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 
 type Props = {
-  talk: TalkWithUser;
+  preferredInfo: {
+    preferredDates: {
+      priority: number;
+      datetime: { seconds: number };
+    }[];
+    location: { lat: number; lng: number };
+    comment?: string;
+  };
 };
 
 const LATITUDE = 35.1709;
 const LONGITUDE = 136.8816;
 
-const CarCheckRequestScreen: React.FC<Props> = ({ talk }) => {
+const CarCheckRequestScreen: React.FC<Props> = ({ preferredInfo }) => {
   const { colors, typography } = useTheme();
   return (
     <ScrollView contentContainerStyle={{ padding: 16, gap: 16 }}>
@@ -30,7 +37,7 @@ const CarCheckRequestScreen: React.FC<Props> = ({ talk }) => {
           </Text>
         </View>
 
-        {talk.preferredInfo?.preferredDates.map((dateField, index) => (
+        {preferredInfo?.preferredDates.map((dateField, index) => (
           <View
             key={index}
             style={{
@@ -107,8 +114,8 @@ const CarCheckRequestScreen: React.FC<Props> = ({ talk }) => {
               style={{ flex: 1 }}
               provider={PROVIDER_DEFAULT}
               region={{
-                latitude: talk.preferredInfo?.location?.lat || LATITUDE,
-                longitude: talk.preferredInfo?.location?.lng || LONGITUDE,
+                latitude: preferredInfo?.location?.lat || LATITUDE,
+                longitude: preferredInfo?.location?.lng || LONGITUDE,
                 latitudeDelta: 0.01,
                 longitudeDelta: 0.01,
               }}
@@ -119,18 +126,18 @@ const CarCheckRequestScreen: React.FC<Props> = ({ talk }) => {
             >
               <Marker
                 coordinate={{
-                  latitude: talk.preferredInfo?.location?.lat || LATITUDE,
-                  longitude: talk.preferredInfo?.location?.lng || LONGITUDE,
+                  latitude: preferredInfo?.location?.lat || LATITUDE,
+                  longitude: preferredInfo?.location?.lng || LONGITUDE,
                 }}
               />
             </MapView>
           </View>
         </View>
       </View>
-      {talk.preferredInfo?.comment && (
+      {preferredInfo?.comment && (
         <Alert
           title="コメント"
-          message={talk.preferredInfo?.comment || ""}
+          message={preferredInfo?.comment || ""}
           type="info"
         />
       )}

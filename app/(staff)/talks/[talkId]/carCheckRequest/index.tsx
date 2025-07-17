@@ -12,7 +12,7 @@ const CarCheckRequest = () => {
     router.back();
     return null;
   }
-  return <CarCheckRequestScreen talk={talk} />;
+  return <CarCheckRequestScreen preferredInfo={talk.preferredInfo} />;
 };
 
 export default CarCheckRequest;

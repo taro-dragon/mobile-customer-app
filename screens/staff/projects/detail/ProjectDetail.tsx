@@ -22,6 +22,7 @@ import {
 import { RefreshControl, TouchableOpacity } from "react-native";
 import { ScrollView, Text, View } from "react-native";
 import PreferredInfoSection from "@/components/staff/projects/detail/PreferredInfoSection";
+import { useRouter } from "expo-router";
 
 type ProjectDetailScreenProps = {
   project: ExtendedProject;
@@ -34,6 +35,7 @@ const ProjectDetailScreen: React.FC<ProjectDetailScreenProps> = ({
   isLoading,
   mutate,
 }) => {
+  const router = useRouter();
   const carData = transformCarData(project as unknown as Car);
   const { currentStoreStaffs } = useStore();
   const { colors, typography } = useTheme();
@@ -41,7 +43,6 @@ const ProjectDetailScreen: React.FC<ProjectDetailScreenProps> = ({
   const { label: statusLabel, color: statusColor } = getProjectsStatusLabel(
     project.status
   );
-  console.log(JSON.stringify(project, null, 2));
   return (
     <ScrollView
       refreshControl={
@@ -191,6 +192,9 @@ const ProjectDetailScreen: React.FC<ProjectDetailScreenProps> = ({
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-between",
+              }}
+              onPress={() => {
+                router.push(`/projects/${project.id}/carCheckRequest`);
               }}
             >
               <Text
