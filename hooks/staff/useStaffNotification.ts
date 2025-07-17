@@ -45,7 +45,7 @@ const useStaffNotification = () => {
         }
       } else if (finalStatus === "undetermined") {
         // Permission hasn't been asked yet, redirect to notification initialization
-        router.push("/(staff)/notificationInitialize");
+        router.push("/notificationInitialize");
       }
       // If denied, do nothing (could show UI to educate user about benefits)
     } catch (error) {

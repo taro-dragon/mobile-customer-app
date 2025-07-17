@@ -18,20 +18,16 @@ const useUserNotification = () => {
 
   const checkAndRequestPermissions = async () => {
     try {
-      // Check current permission status
       const { status } = await Notifications.getPermissionsAsync();
       if (status === Notifications.PermissionStatus.GRANTED) {
-        // User has already granted permission, register for push token
         const token = await registerForPushNotificationsAsync();
         if (token !== undefined) {
-          // Save token to Firestore
           if (token) {
             await savePushTokenToFirestore(token);
           }
         }
       } else if (status === Notifications.PermissionStatus.UNDETERMINED) {
-        // Permission hasn't been asked yet, redirect to notification initialization
-        router.push("/(user)/notificationInitialize");
+        router.push("/notificationInitialize");
       }
       // If denied, do nothing (could show UI to educate user about benefits)
     } catch (error) {

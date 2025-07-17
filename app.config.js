@@ -87,10 +87,11 @@ const config = () => {
     commonConfig.expo.ios.googleServicesFile =
       process.env.GOOGLE_SERVICES_PLIST || "./GoogleService-Info.plist";
   } else if (process.env.APP_ENV === "preview") {
-    commonConfig.expo.name = "Mobile AI 査定";
+    commonConfig.expo.name = "CarWaRa stg";
     commonConfig.expo.ios.bundleIdentifier =
-      "com.mobile-car-app.ai-car-price.stg";
-    commonConfig.expo.ios.googleServicesFile = "./GoogleService-Info-dev.plist";
+      "com.mobile-car-app.ai-car-price.dev";
+    commonConfig.expo.ios.googleServicesFile =
+      process.env.GOOGLE_SERVICES_PLIST || "./GoogleService-Info.plist";
     commonConfig.expo.android.package = "com.mobile_car_app.ai_car_price.stg";
     commonConfig.expo.android.googleServicesFile = "./google-services-dev.json";
   } else {

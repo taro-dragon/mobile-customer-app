@@ -3,6 +3,7 @@ import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { Message } from "@/types/firestore_schema/messages";
 import dayjs from "dayjs";
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import { Calendar, CarIcon, Check } from "lucide-react-native";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -21,6 +22,7 @@ const CurrentCarCheckRequestItem: React.FC<CurrentCarCheckRequestItemProps> = ({
   isMe,
   bubbleColor,
 }) => {
+  const router = useRouter();
   const { colors, typography } = useTheme();
 
   // アバター画像のURLを決定
@@ -104,6 +106,7 @@ const CurrentCarCheckRequestItem: React.FC<CurrentCarCheckRequestItemProps> = ({
                 alignItems: "center",
                 justifyContent: "center",
               }}
+              onPress={() => router.push(`/talks/${talk.id}/carCheckRequest`)}
             >
               <Text
                 style={{ color: colors.textSuccess, ...typography.heading3 }}

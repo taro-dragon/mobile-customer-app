@@ -31,6 +31,15 @@ const TalkLayout = () => {
           headerBackButtonDisplayMode: "minimal",
         }}
       />
+      <Stack.Screen
+        name="carCheckRequest"
+        options={{
+          title: "現車確認依頼",
+          animation: "slide_from_bottom",
+          gestureDirection: "vertical",
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 };

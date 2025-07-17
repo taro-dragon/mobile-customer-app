@@ -6,6 +6,7 @@ import firestore from "@react-native-firebase/firestore";
 import functions from "@react-native-firebase/functions";
 import { useStore } from "@/hooks/useStore";
 import { TalkWithAffiliate } from "@/types/extendType/TalkWithAffiliate";
+import { AnswerCarCheckRequestFormData } from "@/constants/schemas/answerCarCheckRequest";
 
 const AnswerCarCheckRequest = () => {
   const { messageId, shopId, talkId } = useLocalSearchParams<{
@@ -19,9 +20,9 @@ const AnswerCarCheckRequest = () => {
     | undefined;
 
   const router = useRouter();
-  const { handleSubmit } = useFormContext();
+  const { handleSubmit } = useFormContext<AnswerCarCheckRequestFormData>();
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (data: AnswerCarCheckRequestFormData) => {
     try {
       const answeredCarCheckRequest = functions().httpsCallable(
         "answeredCarCheckRequest"
@@ -29,16 +30,17 @@ const AnswerCarCheckRequest = () => {
 
       const firestoreData = {
         ...data,
-        preferredDates: data.preferredDates.map(
-          (dateItem: { datetime: Date; priority: number }) => ({
-            ...dateItem,
-            datetime: firestore.Timestamp.fromDate(dateItem.datetime),
-          })
-        ),
         messageId,
         shopId,
         talkId,
+        preferredDates: data.preferredDates?.map((d) => ({
+          ...d,
+          datetime:
+            d.datetime instanceof Date ? d.datetime.toISOString() : d.datetime,
+        })),
       };
+
+      console.log("firestoreData", firestoreData);
 
       await answeredCarCheckRequest(firestoreData);
 
@@ -49,6 +51,7 @@ const AnswerCarCheckRequest = () => {
 
       router.back();
     } catch (error) {
+      console.log(error);
       Toast.show({
         type: "error",
         text1: "送信に失敗しました",

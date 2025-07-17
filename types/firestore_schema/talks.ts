@@ -29,7 +29,10 @@ export type Talk = {
   finalAppraisalPrice?: string;
   preferredInfo?: {
     preferredDates: {
-      datetime: FirebaseFirestoreTypes.Timestamp;
+      datetime: {
+        seconds: number;
+        nanoseconds: number;
+      };
       priority: number;
     }[];
     location: {
