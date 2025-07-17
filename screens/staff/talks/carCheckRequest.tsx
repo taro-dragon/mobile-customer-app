@@ -1,6 +1,5 @@
 import Alert from "@/components/common/Alert";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
-import TextInput from "@/components/registrationCar/form/TextInput";
 import { useTheme } from "@/contexts/ThemeContext";
 import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import dayjs from "dayjs";
