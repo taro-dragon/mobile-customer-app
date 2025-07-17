@@ -1,16 +1,23 @@
+import Alert from "@/components/common/Alert";
+import SafeAreaBottom from "@/components/common/SafeAreaBottom";
+import TextInput from "@/components/registrationCar/form/TextInput";
 import { useTheme } from "@/contexts/ThemeContext";
 import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import dayjs from "dayjs";
 import { ScrollView, Text, View } from "react-native";
+import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 
 type Props = {
   talk: TalkWithUser;
 };
 
+const LATITUDE = 35.1709;
+const LONGITUDE = 136.8816;
+
 const CarCheckRequestScreen: React.FC<Props> = ({ talk }) => {
   const { colors, typography } = useTheme();
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={{ padding: 16, gap: 16 }}>
       <View style={{ gap: 12 }}>
         <View
           style={{
@@ -82,6 +89,53 @@ const CarCheckRequestScreen: React.FC<Props> = ({ talk }) => {
           </View>
         ))}
       </View>
+      {/* 位置情報セクション */}
+      <View style={{ gap: 12 }}>
+        <Text style={{ ...typography.heading2, color: colors.textPrimary }}>
+          位置情報
+        </Text>
+
+        <View
+          style={{
+            borderWidth: 1,
+            borderColor: colors.borderPrimary,
+            borderRadius: 8,
+            overflow: "hidden",
+          }}
+        >
+          <View style={{ height: 200 }}>
+            <MapView
+              style={{ flex: 1 }}
+              provider={PROVIDER_DEFAULT}
+              region={{
+                latitude: talk.preferredInfo?.location?.lat || LATITUDE,
+                longitude: talk.preferredInfo?.location?.lng || LONGITUDE,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+              }}
+              scrollEnabled={false}
+              zoomEnabled={false}
+              rotateEnabled={false}
+              pitchEnabled={false}
+            >
+              <Marker
+                coordinate={{
+                  latitude: talk.preferredInfo?.location?.lat || LATITUDE,
+                  longitude: talk.preferredInfo?.location?.lng || LONGITUDE,
+                }}
+              />
+            </MapView>
+          </View>
+        </View>
+      </View>
+      {talk.preferredInfo?.comment && (
+        <Alert
+          title="コメント"
+          message={talk.preferredInfo?.comment || ""}
+          type="info"
+        />
+      )}
+      <SafeAreaBottom />
     </ScrollView>
   );
 };
