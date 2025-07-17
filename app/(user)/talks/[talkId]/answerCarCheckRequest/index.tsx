@@ -2,7 +2,6 @@ import AnswerCarCheckRequestScreen from "@/screens/users/talks/AnswerCarCheckReq
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useFormContext } from "react-hook-form";
 import Toast from "react-native-toast-message";
-import firestore from "@react-native-firebase/firestore";
 import functions from "@react-native-firebase/functions";
 import { useStore } from "@/hooks/useStore";
 import { TalkWithAffiliate } from "@/types/extendType/TalkWithAffiliate";
@@ -40,8 +39,6 @@ const AnswerCarCheckRequest = () => {
         })),
       };
 
-      console.log("firestoreData", firestoreData);
-
       await answeredCarCheckRequest(firestoreData);
 
       Toast.show({
@@ -51,7 +48,6 @@ const AnswerCarCheckRequest = () => {
 
       router.back();
     } catch (error) {
-      console.log(error);
       Toast.show({
         type: "error",
         text1: "送信に失敗しました",
