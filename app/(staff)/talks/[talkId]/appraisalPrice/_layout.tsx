@@ -20,7 +20,7 @@ const AppraisalPriceLayout = () => {
       <Stack.Screen
         name="create"
         options={{
-          title: "査定金額提示",
+          title: "正式査定金額",
           headerRight: () => (
             <TouchableOpacity onPress={() => router.back()}>
               <X size={24} color={colors.primary} />

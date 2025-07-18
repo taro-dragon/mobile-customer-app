@@ -25,7 +25,6 @@ import {
 } from "lucide-react-native";
 import { RefreshControl, TouchableOpacity } from "react-native";
 import { ScrollView, Text, View } from "react-native";
-import PreferredInfoSection from "@/components/staff/projects/detail/PreferredInfoSection";
 import { useRouter } from "expo-router";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 

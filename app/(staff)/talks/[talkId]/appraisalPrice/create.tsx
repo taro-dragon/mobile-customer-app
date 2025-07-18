@@ -51,7 +51,7 @@ const CreateAppraisalPrice = () => {
           senderType: "staff",
           senderId: staff?.id,
           type: "appraisalPrice",
-          read: false,
+          readBy: [],
           isOpened: false,
           text: "査定金額が提示されました",
         });

@@ -182,7 +182,7 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
               senderType: "staff",
               senderId: staff?.id || "",
               type: isVideo ? "video" : "image",
-              read: false,
+              readBy: [],
             };
 
             if (isVideo) {
@@ -279,7 +279,7 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
           disabled: isUploading,
         },
         {
-          label: "査定金額提示",
+          label: "正式査定金額",
           icon: DollarSign,
           onPress: () => {
             router.push(`/talks/${talk.id}/appraisalPrice/create`);
