@@ -13,16 +13,21 @@ import dayjs from "dayjs";
 import { Image } from "expo-image";
 import {
   Calendar,
+  CarIcon,
   ChevronRight,
   CircleCheck,
+  FileText,
   Loader,
+  MessageSquare,
   User,
+  UserIcon,
   Users,
 } from "lucide-react-native";
 import { RefreshControl, TouchableOpacity } from "react-native";
 import { ScrollView, Text, View } from "react-native";
 import PreferredInfoSection from "@/components/staff/projects/detail/PreferredInfoSection";
 import { useRouter } from "expo-router";
+import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 
 type ProjectDetailScreenProps = {
   project: ExtendedProject;
@@ -221,6 +226,83 @@ const ProjectDetailScreen: React.FC<ProjectDetailScreenProps> = ({
           )}
         </>
       )}
+      <Divider />
+      <View style={{ gap: 8 }}>
+        <Text style={{ ...typography.title3, color: colors.textPrimary }}>
+          関連項目
+        </Text>
+        <View style={{ flexDirection: "row", gap: 8 }}>
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              borderWidth: 1,
+              borderColor: colors.borderPrimary,
+              borderRadius: 8,
+              aspectRatio: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 4,
+            }}
+          >
+            <FileText size={24} color={colors.textPrimary} />
+            <Text style={{ ...typography.body2, color: colors.textPrimary }}>
+              査定情報
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              borderWidth: 1,
+              borderColor: colors.borderPrimary,
+              borderRadius: 8,
+              aspectRatio: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 4,
+            }}
+          >
+            <CarIcon size={24} color={colors.textPrimary} />
+            <Text style={{ ...typography.body2, color: colors.textPrimary }}>
+              車両情報
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              borderWidth: 1,
+              borderColor: colors.borderPrimary,
+              borderRadius: 8,
+              aspectRatio: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 4,
+            }}
+          >
+            <UserIcon size={24} color={colors.textPrimary} />
+            <Text style={{ ...typography.body2, color: colors.textPrimary }}>
+              顧客情報
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              borderWidth: 1,
+              borderColor: colors.borderPrimary,
+              borderRadius: 8,
+              aspectRatio: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 4,
+            }}
+          >
+            <MessageSquare size={24} color={colors.textPrimary} />
+            <Text style={{ ...typography.body2, color: colors.textPrimary }}>
+              トーク
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <SafeAreaBottom />
     </ScrollView>
   );
 };

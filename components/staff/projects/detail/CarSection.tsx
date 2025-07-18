@@ -44,7 +44,7 @@ const CarSection: React.FC<CarSectionProps> = ({ project, carData }) => {
       <Text style={{ ...typography.title3, color: colors.textPrimary }}>
         車両詳細
       </Text>
-      <TouchableOpacity style={{ flexDirection: "row", gap: 8 }}>
+      <View style={{ flexDirection: "row", gap: 8 }}>
         <Image
           source={{ uri: targetCarData?.images.front }}
           style={{ width: 72, height: 72, borderRadius: 8 }}
@@ -71,9 +71,8 @@ const CarSection: React.FC<CarSectionProps> = ({ project, carData }) => {
               {carData.grade.gradeName}
             </Text>
           </View>
-          <ChevronRight size={24} color={colors.textPrimary} />
         </View>
-      </TouchableOpacity>
+      </View>
       {isStock(targetCarData) && (
         <View style={{ flexDirection: "row", gap: 8 }}>
           <View style={{ flex: 1, gap: 4 }}>
