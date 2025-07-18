@@ -1,3 +1,5 @@
+import React from "react";
+import Divider from "@/components/common/Divider";
 import { useTheme } from "@/contexts/ThemeContext";
 import { ExtendedProject } from "@/hooks/staff/projects/useFetchProject";
 import { CarDetails } from "@/libs/transformCarData";
@@ -148,139 +150,151 @@ const CarSection: React.FC<CarSectionProps> = ({ project, carData }) => {
         </View>
       )}
       {isBuyOffer(project) && (
-        <View style={{ flexDirection: "row", gap: 8 }}>
-          <View style={{ flex: 1, gap: 4 }}>
-            <View
-              style={{
-                borderRadius: 4,
-                padding: 2,
-                borderWidth: 1,
-                borderColor: colors.error,
-                backgroundColor: colors.backgroundError,
-              }}
-            >
-              <Text
+        <>
+          <Divider />
+          <Text style={{ ...typography.title3, color: colors.textPrimary }}>
+            査定情報
+          </Text>
+          <View style={{ flexDirection: "row", gap: 8 }}>
+            <View style={{ flex: 1, gap: 4 }}>
+              <View
                 style={{
-                  ...typography.heading4,
-                  color: colors.error,
-                  textAlign: "center",
+                  borderRadius: 4,
+                  padding: 2,
+                  borderWidth: 1,
+                  borderColor: colors.error,
+                  backgroundColor: colors.backgroundError,
                 }}
               >
-                最低金額
+                <Text
+                  style={{
+                    ...typography.heading4,
+                    color: colors.error,
+                    textAlign: "center",
+                  }}
+                >
+                  最低金額
+                </Text>
+              </View>
+              <Text style={{ ...typography.title1, color: colors.textError }}>
+                <Text
+                  style={{
+                    ...typography.heading5,
+                    color: colors.textSecondary,
+                  }}
+                >
+                  ¥
+                </Text>
+                {buyOffer?.minPrice?.toLocaleString()}
               </Text>
             </View>
-            <Text style={{ ...typography.title1, color: colors.textError }}>
-              <Text
+            <View style={{ flex: 1, gap: 4 }}>
+              <View
                 style={{
-                  ...typography.heading5,
-                  color: colors.textSecondary,
+                  borderRadius: 4,
+                  padding: 2,
+                  borderWidth: 1,
+                  borderColor: colors.borderSuccess,
+                  backgroundColor: colors.backgroundSuccess,
                 }}
               >
-                ¥
-              </Text>
-              {buyOffer?.minPrice?.toLocaleString()}
-            </Text>
-          </View>
-          <View style={{ flex: 1, gap: 4 }}>
-            <View
-              style={{
-                borderRadius: 4,
-                padding: 2,
-                borderWidth: 1,
-                borderColor: colors.borderSuccess,
-                backgroundColor: colors.backgroundSuccess,
-              }}
-            >
-              <Text
-                style={{
-                  ...typography.heading4,
-                  color: colors.textSuccess,
-                  textAlign: "center",
-                }}
-              >
-                最高金額
+                <Text
+                  style={{
+                    ...typography.heading4,
+                    color: colors.textSuccess,
+                    textAlign: "center",
+                  }}
+                >
+                  最高金額
+                </Text>
+              </View>
+              <Text style={{ ...typography.title1, color: colors.textSuccess }}>
+                <Text
+                  style={{
+                    ...typography.heading5,
+                    color: colors.textSecondary,
+                  }}
+                >
+                  ¥
+                </Text>
+                {buyOffer?.maxPrice?.toLocaleString()}
               </Text>
             </View>
-            <Text style={{ ...typography.title1, color: colors.textSuccess }}>
-              <Text
-                style={{
-                  ...typography.heading5,
-                  color: colors.textSecondary,
-                }}
-              >
-                ¥
-              </Text>
-              {buyOffer?.maxPrice?.toLocaleString()}
-            </Text>
           </View>
-        </View>
+        </>
       )}
       {isBid(project) && (
-        <View style={{ flexDirection: "row", gap: 8 }}>
-          <View style={{ flex: 1, gap: 4 }}>
-            <View
-              style={{
-                backgroundColor: colors.primary,
-                borderRadius: 4,
-                padding: 2,
-                borderWidth: 1,
-                borderColor: colors.primary,
-              }}
-            >
-              <Text
+        <>
+          <Divider />
+          <Text style={{ ...typography.title3, color: colors.textPrimary }}>
+            査定情報
+          </Text>
+          <View style={{ flexDirection: "row", gap: 8 }}>
+            <View style={{ flex: 1, gap: 4 }}>
+              <View
                 style={{
-                  ...typography.heading4,
-                  color: colors.white,
-                  textAlign: "center",
+                  backgroundColor: colors.primary,
+                  borderRadius: 4,
+                  padding: 2,
+                  borderWidth: 1,
+                  borderColor: colors.primary,
                 }}
               >
-                最低金額
+                <Text
+                  style={{
+                    ...typography.heading4,
+                    color: colors.white,
+                    textAlign: "center",
+                  }}
+                >
+                  最低金額
+                </Text>
+              </View>
+              <Text style={{ ...typography.title1, color: colors.primary }}>
+                <Text
+                  style={{
+                    ...typography.heading5,
+                    color: colors.textSecondary,
+                  }}
+                >
+                  ¥
+                </Text>
+                {bid?.minPrice?.toLocaleString()}
               </Text>
             </View>
-            <Text style={{ ...typography.title1, color: colors.primary }}>
-              <Text
+            <View style={{ flex: 1, gap: 4 }}>
+              <View
                 style={{
-                  ...typography.heading5,
-                  color: colors.textSecondary,
+                  borderRadius: 4,
+                  padding: 2,
+                  borderWidth: 1,
+                  borderColor: colors.textSecondary,
                 }}
               >
-                ¥
-              </Text>
-              {bid?.minPrice?.toLocaleString()}
-            </Text>
-          </View>
-          <View style={{ flex: 1, gap: 4 }}>
-            <View
-              style={{
-                borderRadius: 4,
-                padding: 2,
-                borderWidth: 1,
-                borderColor: colors.textSecondary,
-              }}
-            >
-              <Text
-                style={{
-                  ...typography.heading4,
-                  color: colors.textSecondary,
-                  textAlign: "center",
-                }}
-              >
-                最高金額
+                <Text
+                  style={{
+                    ...typography.heading4,
+                    color: colors.textSecondary,
+                    textAlign: "center",
+                  }}
+                >
+                  最高金額
+                </Text>
+              </View>
+              <Text style={{ ...typography.title1, color: colors.textPrimary }}>
+                <Text
+                  style={{
+                    ...typography.heading5,
+                    color: colors.textSecondary,
+                  }}
+                >
+                  ¥
+                </Text>
+                {bid?.maxPrice?.toLocaleString()}
               </Text>
             </View>
-            <Text style={{ ...typography.title1, color: colors.textPrimary }}>
-              <Text
-                style={{
-                  ...typography.heading5,
-                  color: colors.textSecondary,
-                }}
-              >
-                ¥
-              </Text>
-              {bid?.maxPrice?.toLocaleString()}
-            </Text>
           </View>
-        </View>
+        </>
       )}
     </View>
   );
