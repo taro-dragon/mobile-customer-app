@@ -23,7 +23,9 @@ const RelatedItemSection: React.FC<RelatedItemSectionProps> = ({ project }) => {
         {
           title: "車両情報",
           icon: <CarIcon size={24} color={colors.textPrimary} />,
-          onPress: () => {},
+          onPress: () => {
+            router.push(`/stockCar/${project.targetCarId}`);
+          },
         },
         {
           title: "顧客情報",
@@ -50,7 +52,9 @@ const RelatedItemSection: React.FC<RelatedItemSectionProps> = ({ project }) => {
         {
           title: "車両情報",
           icon: <CarIcon size={24} color={colors.textPrimary} />,
-          onPress: () => {},
+          onPress: () => {
+            router.push(`/bulkAppraisalCars/${project.targetCarId}`);
+          },
         },
         {
           title: "顧客情報",
@@ -77,7 +81,9 @@ const RelatedItemSection: React.FC<RelatedItemSectionProps> = ({ project }) => {
         {
           title: "車両情報",
           icon: <CarIcon size={24} color={colors.textPrimary} />,
-          onPress: () => {},
+          onPress: () => {
+            router.push(`/bulkAppraisalCars/${project.targetCarId}`);
+          },
         },
         {
           title: "顧客情報",
