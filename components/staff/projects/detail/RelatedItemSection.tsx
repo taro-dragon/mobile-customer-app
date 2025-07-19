@@ -119,12 +119,12 @@ const RelatedItemSection: React.FC<RelatedItemSectionProps> = ({ project }) => {
               aspectRatio: 1,
               justifyContent: "center",
               alignItems: "center",
-              gap: 4,
+              gap: 8,
             }}
             onPress={panel.onPress}
           >
             {panel.icon}
-            <Text style={{ ...typography.body2, color: colors.textPrimary }}>
+            <Text style={{ ...typography.heading5, color: colors.textPrimary }}>
               {panel.title}
             </Text>
           </TouchableOpacity>
