@@ -40,7 +40,7 @@ const CarSection: React.FC<CarSectionProps> = ({ project, carData }) => {
   return (
     <View style={{ gap: 8 }}>
       <Text style={{ ...typography.title3, color: colors.textPrimary }}>
-        車両詳細
+        車両情報
       </Text>
       <View style={{ flexDirection: "row", gap: 8 }}>
         <Image
