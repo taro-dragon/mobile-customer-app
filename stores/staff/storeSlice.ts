@@ -10,9 +10,9 @@ export const createStoreSlice: StateCreator<StoreSlice, [], [], StoreSlice> = (
 ) => ({
   stores: [],
   storeLoading: false,
-  unsubscribe: undefined,
-  fetchStores: async (shopIds: string[]) => {
-    const currentUnsubscribe = get().unsubscribe;
+  storesUnsubscribe: undefined,
+  fetchStores: async (storeIds: string[]) => {
+    const currentUnsubscribe = get().storesUnsubscribe;
     if (currentUnsubscribe) {
       currentUnsubscribe();
     }
@@ -21,8 +21,8 @@ export const createStoreSlice: StateCreator<StoreSlice, [], [], StoreSlice> = (
 
     try {
       const stores = await Promise.all(
-        shopIds.map(async (shopId) => {
-          const shop = await firestore().collection("shops").doc(shopId).get();
+        storeIds.map(async (storeId) => {
+          const shop = await firestore().collection("shops").doc(storeId).get();
           const shopData = shop.data() as Shop;
           shopData.id = shop.id;
           return shopData;
@@ -30,15 +30,25 @@ export const createStoreSlice: StateCreator<StoreSlice, [], [], StoreSlice> = (
       );
       set((state) => ({ ...state, stores: stores, storeLoading: false }));
     } catch (error) {
-      console.error("Error setting up stores listener:", error);
+      console.error("Failed to fetch stores:", error);
       set((state) => ({ ...state, storeLoading: false }));
-      return undefined;
+      // エラー時はstoresを空配列にリセット
+      set((state) => ({ ...state, stores: [] }));
     }
   },
   setStoreLoading: (storeLoading: boolean) => {
     set((state) => ({ ...state, storeLoading }));
   },
   clearStores: () => {
-    set((state) => ({ ...state, stores: [], storeLoading: false }));
+    const currentUnsubscribe = get().storesUnsubscribe;
+    if (currentUnsubscribe) {
+      currentUnsubscribe();
+    }
+    set((state) => ({
+      ...state,
+      stores: [],
+      storeLoading: false,
+      storesUnsubscribe: undefined,
+    }));
   },
 });
