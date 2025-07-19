@@ -23,7 +23,6 @@ export type Message = {
     | "location"
     | "system";
   isAnswered?: boolean; //currentCarCheckRequestedの回答フラグ
-  isOpened?: boolean; //appraisalPriceの開封フラグ
   appraisalPrice?: string; //appraisalPriceの査定金額
   appraisalPriceNote?: string; //appraisalPriceの査定金額のメモ
   isOfficialOffer?: boolean; // 正式なオファーかどうか

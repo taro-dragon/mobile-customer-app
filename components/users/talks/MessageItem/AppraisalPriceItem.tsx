@@ -1,10 +1,13 @@
-import { useTheme } from "@/contexts/ThemeContext";
-import { TalkWithAffiliate } from "@/types/extendType/TalkWithAffiliate";
-import { Message } from "@/types/firestore_schema/messages";
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import dayjs from "dayjs";
 import { Image } from "expo-image";
 import { DollarSign } from "lucide-react-native";
-import { StyleSheet, Text, View } from "react-native";
+import firestore from "@react-native-firebase/firestore";
+
+import { useTheme } from "@/contexts/ThemeContext";
+import { TalkWithAffiliate } from "@/types/extendType/TalkWithAffiliate";
+import { Message } from "@/types/firestore_schema/messages";
 
 type AppraisalPriceItemProps = {
   talk: TalkWithAffiliate;
@@ -22,6 +25,17 @@ const AppraisalPriceItem: React.FC<AppraisalPriceItemProps> = ({
   bubbleColor,
 }) => {
   const { colors, typography } = useTheme();
+  const openAppraisalPrice = async () => {
+    await firestore()
+      .collection("talks")
+      .doc(talk.id)
+      .update({
+        appraisal: {
+          ...talk.appraisal,
+          isOpened: true,
+        },
+      });
+  };
   return (
     <View
       style={[
@@ -69,20 +83,43 @@ const AppraisalPriceItem: React.FC<AppraisalPriceItemProps> = ({
             )}
           </View>
 
-          <View
-            style={{
-              borderWidth: 1,
-              borderColor: colors.textPrimary,
-              padding: 12,
-              borderRadius: 12,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
-              ¥{Number(message.appraisalPrice).toLocaleString()}
-            </Text>
-          </View>
+          {talk.appraisal?.isOpened ? (
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: colors.textPrimary,
+                padding: 12,
+                borderRadius: 12,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text
+                style={{ color: colors.textPrimary, ...typography.heading3 }}
+              >
+                ¥{Number(talk.appraisal?.appraisalPrice).toLocaleString()}
+              </Text>
+            </View>
+          ) : (
+            <TouchableOpacity
+              style={{
+                borderWidth: 1,
+                borderColor: colors.borderSuccess,
+                padding: 12,
+                borderRadius: 12,
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: colors.backgroundSuccess,
+              }}
+              onPress={openAppraisalPrice}
+            >
+              <Text
+                style={{ color: colors.textSuccess, ...typography.heading3 }}
+              >
+                確認する
+              </Text>
+            </TouchableOpacity>
+          )}
 
           <View
             style={{

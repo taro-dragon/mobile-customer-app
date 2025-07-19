@@ -51,5 +51,6 @@ export type Talk = {
     appraisalPrice: number;
     appraisalPriceNote: string;
     expiryDate: FirebaseFirestoreTypes.Timestamp;
+    isOpened: boolean;
   };
 };
