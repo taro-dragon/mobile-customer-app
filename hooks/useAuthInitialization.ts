@@ -5,7 +5,7 @@ import { useStore } from "@/hooks/useStore";
 import { Staff } from "@/types/firestore_schema/staff";
 import { User } from "@/types/firestore_schema/users";
 
-export default function useAuthInitialization() {
+const useAuthInitialization = () => {
   const { setStaff, setUser, deleteUser, setAppReady } = useStore();
 
   useEffect(() => {
@@ -77,4 +77,6 @@ export default function useAuthInitialization() {
 
     return () => unsubscribe();
   }, []);
-}
+};
+
+export default useAuthInitialization;
