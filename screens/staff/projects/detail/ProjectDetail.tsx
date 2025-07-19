@@ -16,6 +16,7 @@ import {
   CarIcon,
   ChevronRight,
   CircleCheck,
+  DollarSign,
   FileText,
   Loader,
   MessageSquare,
@@ -110,24 +111,6 @@ const ProjectDetailScreen: React.FC<ProjectDetailScreenProps> = ({
           }}
         >
           <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
-            <Calendar size={24} color={colors.textPrimary} />
-            <Text style={{ ...typography.body2, color: colors.textPrimary }}>
-              作成日時
-            </Text>
-          </View>
-          <Text style={{ ...typography.title5, color: colors.textPrimary }}>
-            {dayjs(project.createdAt.toDate()).format("YYYY/MM/DD HH:mm")}
-          </Text>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            gap: 8,
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
             <Users size={24} color={colors.textPrimary} />
             <Text style={{ ...typography.body2, color: colors.textPrimary }}>
               担当者
@@ -173,6 +156,49 @@ const ProjectDetailScreen: React.FC<ProjectDetailScreenProps> = ({
               }
             })}
           </View>
+        </View>
+        {project.appraisal?.expiryDate && (
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 8,
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <View
+              style={{ flexDirection: "row", gap: 8, alignItems: "center" }}
+            >
+              <DollarSign size={24} color={colors.textPrimary} />
+              <Text style={{ ...typography.body2, color: colors.textPrimary }}>
+                査定金額有効期限
+              </Text>
+            </View>
+            <Text style={{ ...typography.title5, color: colors.textPrimary }}>
+              {dayjs(project.appraisal.expiryDate.toDate()).format(
+                "YYYY/MM/DD"
+              )}
+            </Text>
+          </View>
+        )}
+
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 8,
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
+            <Calendar size={24} color={colors.textPrimary} />
+            <Text style={{ ...typography.body2, color: colors.textPrimary }}>
+              作成日時
+            </Text>
+          </View>
+          <Text style={{ ...typography.title5, color: colors.textPrimary }}>
+            {dayjs(project.createdAt.toDate()).format("YYYY/MM/DD HH:mm")}
+          </Text>
         </View>
       </View>
       <Divider />

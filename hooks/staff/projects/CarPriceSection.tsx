@@ -1,4 +1,7 @@
 import { useTheme } from "@/contexts/ThemeContext";
+import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
+import dayjs from "dayjs";
+import { Calendar } from "lucide-react-native";
 import { Text, View } from "react-native";
 
 type CarPriceSectionProps = {
@@ -82,43 +85,45 @@ const CarPriceSection: React.FC<CarPriceSectionProps> = ({
         </View>
       </View>
       {finalPrice && (
-        <View style={{ flex: 1, gap: 4 }}>
-          <View
-            style={{
-              borderRadius: 4,
-              padding: 2,
-              borderWidth: 1,
-              borderColor: colors.borderInfo,
-              backgroundColor: colors.backgroundInfo,
-            }}
-          >
+        <View style={{ gap: 12 }}>
+          <View style={{ flex: 1, gap: 4 }}>
+            <View
+              style={{
+                borderRadius: 4,
+                padding: 2,
+                borderWidth: 1,
+                borderColor: colors.borderInfo,
+                backgroundColor: colors.backgroundInfo,
+              }}
+            >
+              <Text
+                style={{
+                  ...typography.heading4,
+                  color: colors.textInfo,
+                  textAlign: "center",
+                }}
+              >
+                正式査定金額
+              </Text>
+            </View>
             <Text
               style={{
-                ...typography.heading4,
+                ...typography.title1,
                 color: colors.textInfo,
                 textAlign: "center",
               }}
             >
-              正式査定金額
+              <Text
+                style={{
+                  ...typography.heading5,
+                  color: colors.textSecondary,
+                }}
+              >
+                ¥
+              </Text>
+              {finalPrice?.toLocaleString()}
             </Text>
           </View>
-          <Text
-            style={{
-              ...typography.title1,
-              color: colors.textInfo,
-              textAlign: "center",
-            }}
-          >
-            <Text
-              style={{
-                ...typography.heading5,
-                color: colors.textSecondary,
-              }}
-            >
-              ¥
-            </Text>
-            {finalPrice?.toLocaleString()}
-          </Text>
         </View>
       )}
     </View>
