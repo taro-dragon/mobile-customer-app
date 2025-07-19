@@ -10,6 +10,7 @@ import firestore from "@react-native-firebase/firestore";
 export const createAppraisalPriceZodSchema = z.object({
   appraisalPrice: z.string().min(1, { message: "査定金額は必須です" }),
   appraisalPriceNote: z.string().optional(),
+  expiryDate: z.date().optional(),
 });
 
 const CreateAppraisalPrice = () => {
@@ -18,6 +19,7 @@ const CreateAppraisalPrice = () => {
     defaultValues: {
       appraisalPrice: "",
       appraisalPriceNote: "",
+      expiryDate: new Date(),
     },
   });
   const router = useRouter();
