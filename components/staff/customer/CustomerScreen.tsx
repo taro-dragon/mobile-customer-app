@@ -65,14 +65,7 @@ const CustomerScreen: React.FC<CustomerScreenProps> = ({ customer }) => {
                 longitudeDelta: 0.0082,
               }}
               scrollEnabled={false}
-            >
-              <Marker
-                coordinate={{
-                  latitude: customer.lat,
-                  longitude: customer.lng,
-                }}
-              />
-            </MapView>
+            />
           </View>
         </View>
       )}

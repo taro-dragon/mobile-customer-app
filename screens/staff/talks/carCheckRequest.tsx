@@ -37,7 +37,6 @@ const CarCheckRequestScreen: React.FC<Props> = ({ preferredInfo }) => {
             希望日時
           </Text>
         </View>
-
         {preferredInfo?.preferredDates.map((dateField, index) => (
           <View
             key={index}
@@ -66,8 +65,6 @@ const CarCheckRequestScreen: React.FC<Props> = ({ preferredInfo }) => {
                 第{dateField.priority}希望
               </Text>
             </View>
-
-            {/* 日時選択 */}
             <View
               style={{
                 backgroundColor: colors.backgroundSecondary,
@@ -96,12 +93,11 @@ const CarCheckRequestScreen: React.FC<Props> = ({ preferredInfo }) => {
           </View>
         ))}
       </View>
-      {/* 位置情報セクション */}
+
       <View style={{ gap: 12 }}>
         <Text style={{ ...typography.heading2, color: colors.textPrimary }}>
           位置情報
         </Text>
-
         <View
           style={{
             borderWidth: 1,
@@ -143,6 +139,9 @@ const CarCheckRequestScreen: React.FC<Props> = ({ preferredInfo }) => {
             </MapView>
           </View>
         </View>
+        <Text style={{ ...typography.body4, color: colors.textSecondary }}>
+          ピンを押すとマップを開くことができます
+        </Text>
       </View>
       {preferredInfo?.comment && (
         <Alert

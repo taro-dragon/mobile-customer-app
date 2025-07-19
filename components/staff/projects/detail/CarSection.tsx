@@ -45,7 +45,7 @@ const CarSection: React.FC<CarSectionProps> = ({ project, carData }) => {
       <View style={{ flexDirection: "row", gap: 8 }}>
         <Image
           source={{ uri: targetCarData?.images.front }}
-          style={{ width: 72, height: 72, borderRadius: 8 }}
+          style={{ width: 88, height: 88, borderRadius: 8 }}
         />
         <View
           style={{
