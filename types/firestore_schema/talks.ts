@@ -47,4 +47,9 @@ export type Talk = {
     senderId: string;
     atSended: FirebaseFirestoreTypes.Timestamp;
   };
+  appraisal?: {
+    appraisalPrice: number;
+    appraisalPriceNote: string;
+    expiryDate: FirebaseFirestoreTypes.Timestamp;
+  };
 };

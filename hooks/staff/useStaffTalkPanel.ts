@@ -32,6 +32,9 @@ const useStaffTalkPanel = (
   const sentCheckCurrentCar = useMemo(() => {
     return !!talk.checkCurrentCarStatus;
   }, [talk.checkCurrentCarStatus]);
+  const sentAppraisalPrice = useMemo(() => {
+    return !!talk.appraisal;
+  }, [talk.appraisal]);
 
   const onPressCheckCurrentCar = async (talkId: string) => {
     try {
@@ -285,16 +288,22 @@ const useStaffTalkPanel = (
           disabled: isUploading || sentCheckCurrentCar,
         },
         {
-          label: "正式査定金額",
+          label: sentAppraisalPrice ? "金額提示済" : "正式査定金額",
           icon: DollarSign,
           onPress: () => {
             router.push(`/talks/${talk.id}/appraisalPrice/create`);
           },
-          disabled: isUploading,
+          disabled: isUploading || sentAppraisalPrice,
         },
       ];
     }
-  }, [talk.sourceType, talk.id, isUploading, sentCheckCurrentCar]);
+  }, [
+    talk.sourceType,
+    talk.id,
+    isUploading,
+    sentCheckCurrentCar,
+    sentAppraisalPrice,
+  ]);
 
   return {
     panel,
