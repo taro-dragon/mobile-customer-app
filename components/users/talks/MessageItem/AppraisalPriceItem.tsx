@@ -1,5 +1,11 @@
-import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import dayjs from "dayjs";
 import { Image } from "expo-image";
 import { DollarSign } from "lucide-react-native";
@@ -8,6 +14,7 @@ import firestore from "@react-native-firebase/firestore";
 import { useTheme } from "@/contexts/ThemeContext";
 import { TalkWithAffiliate } from "@/types/extendType/TalkWithAffiliate";
 import { Message } from "@/types/firestore_schema/messages";
+import Toast from "react-native-toast-message";
 
 type AppraisalPriceItemProps = {
   talk: TalkWithAffiliate;
@@ -25,16 +32,28 @@ const AppraisalPriceItem: React.FC<AppraisalPriceItemProps> = ({
   bubbleColor,
 }) => {
   const { colors, typography } = useTheme();
+  const [opening, setOpening] = useState(false);
   const openAppraisalPrice = async () => {
-    await firestore()
-      .collection("talks")
-      .doc(talk.id)
-      .update({
-        appraisal: {
-          ...talk.appraisal,
-          isOpened: true,
-        },
+    try {
+      setOpening(true);
+      await firestore()
+        .collection("talks")
+        .doc(talk.id)
+        .update({
+          appraisal: {
+            ...talk.appraisal,
+            isOpened: true,
+          },
+        });
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "エラーが発生しました",
+        text2: error instanceof Error ? error.message : "不明なエラー",
       });
+    } finally {
+      setOpening(false);
+    }
   };
   return (
     <View
@@ -102,6 +121,7 @@ const AppraisalPriceItem: React.FC<AppraisalPriceItemProps> = ({
             </View>
           ) : (
             <TouchableOpacity
+              disabled={opening}
               style={{
                 borderWidth: 1,
                 borderColor: colors.borderSuccess,
@@ -113,11 +133,15 @@ const AppraisalPriceItem: React.FC<AppraisalPriceItemProps> = ({
               }}
               onPress={openAppraisalPrice}
             >
-              <Text
-                style={{ color: colors.textSuccess, ...typography.heading3 }}
-              >
-                確認する
-              </Text>
+              {opening ? (
+                <ActivityIndicator size="small" color={colors.textSuccess} />
+              ) : (
+                <Text
+                  style={{ color: colors.textSuccess, ...typography.heading3 }}
+                >
+                  確認する
+                </Text>
+              )}
             </TouchableOpacity>
           )}
 
