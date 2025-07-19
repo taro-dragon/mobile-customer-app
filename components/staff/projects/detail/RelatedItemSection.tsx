@@ -47,7 +47,9 @@ const RelatedItemSection: React.FC<RelatedItemSectionProps> = ({ project }) => {
         {
           title: "査定情報",
           icon: <FileText size={24} color={colors.textPrimary} />,
-          onPress: () => {},
+          onPress: () => {
+            router.push(`/offers/${project.targetId}`);
+          },
         },
         {
           title: "車両情報",
@@ -76,7 +78,9 @@ const RelatedItemSection: React.FC<RelatedItemSectionProps> = ({ project }) => {
         {
           title: "査定情報",
           icon: <FileText size={24} color={colors.textPrimary} />,
-          onPress: () => {},
+          onPress: () => {
+            router.push(`/bulkAppraisalBid/${project.targetId}`);
+          },
         },
         {
           title: "車両情報",
