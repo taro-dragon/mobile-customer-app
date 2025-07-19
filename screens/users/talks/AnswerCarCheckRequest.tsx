@@ -347,6 +347,9 @@ const AnswerCarCheckRequestScreen: React.FC<
           setDateTimePickerOpen(null);
           setCurrentDateIndex(null);
         }}
+        title="希望日時"
+        confirmText="決定"
+        cancelText="キャンセル"
       />
     </>
   );
