@@ -19,11 +19,14 @@ import { useStore } from "../useStore";
 import { uploadTalkFile } from "@/libs/firestore/uploadTalkFile";
 import { Message } from "@/types/firestore_schema/messages";
 import { submitCheckCurrentCar } from "@/cloudFunctions/staff/talk/submitCheckCurrentCar";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const useStaffTalkPanel = (
   talk: TalkWithUser,
   setIsOpenPanel: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
+  const { colors } = useTheme();
   const router = useRouter();
   const { staff } = useStore();
   const [isUploading, setIsUploading] = useState(false);
@@ -255,6 +258,7 @@ const useStaffTalkPanel = (
             console.log("日程調整");
           },
           disabled: isUploading,
+          iconColor: colors.textSuccess,
         },
       ];
     } else {
@@ -286,6 +290,7 @@ const useStaffTalkPanel = (
             onPressCheckCurrentCar(talk.id);
           },
           disabled: isUploading || sentCheckCurrentCar,
+          iconColor: colors.textSuccess,
         },
         {
           label: sentAppraisalPrice ? "金額提示済" : "正式査定金額",
@@ -294,6 +299,7 @@ const useStaffTalkPanel = (
             router.push(`/talks/${talk.id}/appraisalPrice/create`);
           },
           disabled: isUploading || sentAppraisalPrice,
+          iconColor: colors.textWarning,
         },
       ];
     }

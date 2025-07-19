@@ -34,7 +34,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   setIsOpenPanel,
   talk,
 }) => {
-  const { colors } = useTheme();
+  const { colors, typography } = useTheme();
   const isClosed = talk.status === "closed";
   const { panel, isUploading, uploadProgress, isShowModal } = useStaffTalkPanel(
     talk,
@@ -176,22 +176,18 @@ const MessageInput: React.FC<MessageInputProps> = ({
                     justifyContent: "center",
                     alignItems: "center",
                     gap: 8,
-                    opacity: item.disabled ? 0.5 : 1,
+                    opacity: item.disabled ? 0.3 : 1,
                   }}
                   onPress={item.onPress}
                   disabled={item.disabled}
                 >
                   <item.icon
                     size={24}
-                    color={
-                      item.disabled
-                        ? colors.textSecondary
-                        : (item as any).iconColor || colors.textPrimary
-                    }
+                    color={item.iconColor || colors.textPrimary}
                   />
                   <Text
                     style={{
-                      fontSize: 12,
+                      ...typography.heading5,
                       color: item.disabled
                         ? colors.textSecondary
                         : colors.textPrimary,
