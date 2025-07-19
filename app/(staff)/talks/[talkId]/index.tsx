@@ -1,6 +1,6 @@
 import { useStore } from "@/hooks/useStore";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -41,6 +41,10 @@ const TalkDetail = () => {
   const flatListRef = useRef<FlatList>(null);
   const { colors, typography } = useTheme();
   const router = useRouter();
+  const isCurrentStaff = useMemo(
+    () => talk?.staffIds.includes(staff?.id || ""),
+    [talk, staff]
+  );
 
   // 最新のメッセージのタイムスタンプを追跡
   const [latestMessageTimestamp, setLatestMessageTimestamp] =
@@ -334,15 +338,18 @@ const TalkDetail = () => {
               minIndexForVisible: 0,
             }}
           />
-          <MessageInput
-            sendMessage={sendMessage}
-            sending={sending}
-            text={text}
-            setText={setText}
-            isOpenPanel={isOpenPanel}
-            setIsOpenPanel={setIsOpenPanel}
-            talk={talk}
-          />
+
+          {isCurrentStaff && (
+            <MessageInput
+              sendMessage={sendMessage}
+              sending={sending}
+              text={text}
+              setText={setText}
+              isOpenPanel={isOpenPanel}
+              setIsOpenPanel={setIsOpenPanel}
+              talk={talk}
+            />
+          )}
         </KeyboardAvoidingView>
         <SafeAreaBottom color={colors.backgroundPrimary} />
       </View>

@@ -35,7 +35,9 @@ const RelatedItemSection: React.FC<RelatedItemSectionProps> = ({ project }) => {
         {
           title: "トーク",
           icon: <MessageSquare size={24} color={colors.textPrimary} />,
-          onPress: () => {},
+          onPress: () => {
+            router.push(`/talks/${project.id}`);
+          },
         },
       ];
     } else if (project.type === "buy_offer") {
@@ -60,7 +62,9 @@ const RelatedItemSection: React.FC<RelatedItemSectionProps> = ({ project }) => {
         {
           title: "トーク",
           icon: <MessageSquare size={24} color={colors.textPrimary} />,
-          onPress: () => {},
+          onPress: () => {
+            router.push(`/talks/${project.id}`);
+          },
         },
       ];
     } else {
@@ -85,7 +89,9 @@ const RelatedItemSection: React.FC<RelatedItemSectionProps> = ({ project }) => {
         {
           title: "トーク",
           icon: <MessageSquare size={24} color={colors.textPrimary} />,
-          onPress: () => {},
+          onPress: () => {
+            router.push(`/talks/${project.id}`);
+          },
         },
       ];
     }
