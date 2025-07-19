@@ -7,9 +7,8 @@ import { Bid } from "@/types/firestore_schema/bids";
 import { BuyOffer } from "@/types/firestore_schema/buyOffers";
 import { Stock } from "@/types/firestore_schema/stock";
 import { Image } from "expo-image";
-import { useRouter } from "expo-router";
-import { ChevronRight } from "lucide-react-native";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, View } from "react-native";
+import CarPriceSection from "@/hooks/staff/projects/CarPriceSection";
 
 // 型ガード関数
 const isStock = (data: any): data is Stock => {
@@ -31,14 +30,13 @@ type CarSectionProps = {
 
 const CarSection: React.FC<CarSectionProps> = ({ project, carData }) => {
   const { colors, typography } = useTheme();
-  const router = useRouter();
   const isCarInquiry = project.type === "car_inquiry";
   const targetCarData = isCarInquiry
     ? project.targetStockCarData
     : project.targetCarData;
 
-  const buyOffer = project.buyOffer;
-  const bid = project.bid;
+  const buyOffer = project?.buyOffer;
+  const bid = project?.bid;
   return (
     <View style={{ gap: 8 }}>
       <Text style={{ ...typography.title3, color: colors.textPrimary }}>
@@ -154,72 +152,11 @@ const CarSection: React.FC<CarSectionProps> = ({ project, carData }) => {
           <Text style={{ ...typography.title3, color: colors.textPrimary }}>
             査定情報
           </Text>
-          <View style={{ flexDirection: "row", gap: 8 }}>
-            <View style={{ flex: 1, gap: 4 }}>
-              <View
-                style={{
-                  borderRadius: 4,
-                  padding: 2,
-                  borderWidth: 1,
-                  borderColor: colors.error,
-                  backgroundColor: colors.backgroundError,
-                }}
-              >
-                <Text
-                  style={{
-                    ...typography.heading4,
-                    color: colors.error,
-                    textAlign: "center",
-                  }}
-                >
-                  最低金額
-                </Text>
-              </View>
-              <Text style={{ ...typography.title1, color: colors.textError }}>
-                <Text
-                  style={{
-                    ...typography.heading5,
-                    color: colors.textSecondary,
-                  }}
-                >
-                  ¥
-                </Text>
-                {buyOffer?.minPrice?.toLocaleString()}
-              </Text>
-            </View>
-            <View style={{ flex: 1, gap: 4 }}>
-              <View
-                style={{
-                  borderRadius: 4,
-                  padding: 2,
-                  borderWidth: 1,
-                  borderColor: colors.borderSuccess,
-                  backgroundColor: colors.backgroundSuccess,
-                }}
-              >
-                <Text
-                  style={{
-                    ...typography.heading4,
-                    color: colors.textSuccess,
-                    textAlign: "center",
-                  }}
-                >
-                  最高金額
-                </Text>
-              </View>
-              <Text style={{ ...typography.title1, color: colors.textSuccess }}>
-                <Text
-                  style={{
-                    ...typography.heading5,
-                    color: colors.textSecondary,
-                  }}
-                >
-                  ¥
-                </Text>
-                {buyOffer?.maxPrice?.toLocaleString()}
-              </Text>
-            </View>
-          </View>
+          <CarPriceSection
+            minPrice={buyOffer?.minPrice || 0}
+            maxPrice={buyOffer?.maxPrice || 0}
+            finalPrice={project.appraisal?.appraisalPrice}
+          />
         </>
       )}
       {isBid(project) && (
@@ -228,71 +165,11 @@ const CarSection: React.FC<CarSectionProps> = ({ project, carData }) => {
           <Text style={{ ...typography.title3, color: colors.textPrimary }}>
             査定情報
           </Text>
-          <View style={{ flexDirection: "row", gap: 8 }}>
-            <View style={{ flex: 1, gap: 4 }}>
-              <View
-                style={{
-                  backgroundColor: colors.primary,
-                  borderRadius: 4,
-                  padding: 2,
-                  borderWidth: 1,
-                  borderColor: colors.primary,
-                }}
-              >
-                <Text
-                  style={{
-                    ...typography.heading4,
-                    color: colors.white,
-                    textAlign: "center",
-                  }}
-                >
-                  最低金額
-                </Text>
-              </View>
-              <Text style={{ ...typography.title1, color: colors.primary }}>
-                <Text
-                  style={{
-                    ...typography.heading5,
-                    color: colors.textSecondary,
-                  }}
-                >
-                  ¥
-                </Text>
-                {bid?.minPrice?.toLocaleString()}
-              </Text>
-            </View>
-            <View style={{ flex: 1, gap: 4 }}>
-              <View
-                style={{
-                  borderRadius: 4,
-                  padding: 2,
-                  borderWidth: 1,
-                  borderColor: colors.textSecondary,
-                }}
-              >
-                <Text
-                  style={{
-                    ...typography.heading4,
-                    color: colors.textSecondary,
-                    textAlign: "center",
-                  }}
-                >
-                  最高金額
-                </Text>
-              </View>
-              <Text style={{ ...typography.title1, color: colors.textPrimary }}>
-                <Text
-                  style={{
-                    ...typography.heading5,
-                    color: colors.textSecondary,
-                  }}
-                >
-                  ¥
-                </Text>
-                {bid?.maxPrice?.toLocaleString()}
-              </Text>
-            </View>
-          </View>
+          <CarPriceSection
+            minPrice={bid?.minPrice || 0}
+            maxPrice={bid?.maxPrice || 0}
+            finalPrice={project.appraisal?.appraisalPrice}
+          />
         </>
       )}
     </View>
