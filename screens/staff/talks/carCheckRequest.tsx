@@ -1,6 +1,7 @@
 import Alert from "@/components/common/Alert";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import { useTheme } from "@/contexts/ThemeContext";
+import { openMapWithLatlng } from "@/libs/openMapWithLatlng";
 import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import dayjs from "dayjs";
 import { ScrollView, Text, View } from "react-native";
@@ -128,6 +129,15 @@ const CarCheckRequestScreen: React.FC<Props> = ({ preferredInfo }) => {
                 coordinate={{
                   latitude: preferredInfo?.location?.lat || LATITUDE,
                   longitude: preferredInfo?.location?.lng || LONGITUDE,
+                }}
+                onPress={() => {
+                  openMapWithLatlng(
+                    {
+                      latitude: preferredInfo?.location?.lat || LATITUDE,
+                      longitude: preferredInfo?.location?.lng || LONGITUDE,
+                    },
+                    "査定依頼場所"
+                  );
                 }}
               />
             </MapView>
