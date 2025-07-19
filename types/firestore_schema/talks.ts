@@ -42,4 +42,9 @@ export type Talk = {
     };
     comment: string;
   };
+  checkCurrentCarStatus?: {
+    isAnswered: boolean;
+    senderId: string;
+    atSended: FirebaseFirestoreTypes.Timestamp;
+  };
 };

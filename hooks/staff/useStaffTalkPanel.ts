@@ -18,36 +18,42 @@ import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { useStore } from "../useStore";
 import { uploadTalkFile } from "@/libs/firestore/uploadTalkFile";
 import { Message } from "@/types/firestore_schema/messages";
+import { submitCheckCurrentCar } from "@/cloudFunctions/staff/talk/submitCheckCurrentCar";
 
-const useStaffTalkPanel = (talk: TalkWithUser) => {
+const useStaffTalkPanel = (
+  talk: TalkWithUser,
+  setIsOpenPanel: React.Dispatch<React.SetStateAction<boolean>>
+) => {
   const router = useRouter();
   const { staff } = useStore();
   const [isUploading, setIsUploading] = useState(false);
+  const [isShowModal, setIsShowModal] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const sentCheckCurrentCar = useMemo(() => {
+    return !!talk.checkCurrentCarStatus;
+  }, [talk.checkCurrentCarStatus]);
 
   const onPressCheckCurrentCar = async (talkId: string) => {
-    await firestore().runTransaction(async (transaction) => {
-      const messageRef = await firestore()
-        .collection("talks")
-        .doc(talkId)
-        .collection("messages")
-        .doc();
-      const talkRef = await firestore().collection("talks").doc(talkId);
-      await transaction.set(messageRef, {
+    try {
+      setIsShowModal(true);
+      await submitCheckCurrentCar({
         talkId,
-        text: "現車確認依頼",
-        createdAt: firestore.FieldValue.serverTimestamp(),
-        senderType: "staff",
-        senderId: staff?.id,
-        type: "currentCarCheckRequested",
-        read: false,
-        isAnswered: false,
+        shopId: talk.affiliateStoreId,
       });
-      await transaction.update(talkRef, {
-        lastMessage: "現車確認依頼",
-        lastMessageAt: firestore.Timestamp.now(),
+      Toast.show({
+        type: "success",
+        text1: "現車確認依頼を送信しました",
       });
-    });
+      setIsOpenPanel(false);
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "現車確認依頼に失敗しました",
+        text2: error instanceof Error ? error.message : "不明なエラー",
+      });
+    } finally {
+      setIsShowModal(false);
+    }
   };
 
   const onPressFile = async () => {
@@ -271,12 +277,12 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
           disabled: isUploading,
         },
         {
-          label: "現車確認依頼",
+          label: sentCheckCurrentCar ? "確認依頼済" : "現車確認依頼",
           icon: Car,
           onPress: () => {
             onPressCheckCurrentCar(talk.id);
           },
-          disabled: isUploading,
+          disabled: isUploading || sentCheckCurrentCar,
         },
         {
           label: "正式査定金額",
@@ -288,11 +294,12 @@ const useStaffTalkPanel = (talk: TalkWithUser) => {
         },
       ];
     }
-  }, [talk.sourceType, talk.id, isUploading]);
+  }, [talk.sourceType, talk.id, isUploading, sentCheckCurrentCar]);
 
   return {
     panel,
     isUploading,
+    isShowModal,
     uploadProgress,
   };
 };

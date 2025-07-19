@@ -31,4 +31,9 @@ export type Project = {
     };
     comment: string;
   };
+  checkCurrentCarStatus?: {
+    isAnswered: boolean;
+    senderId: string;
+    atSended: FirebaseFirestoreTypes.Timestamp;
+  };
 };
