@@ -5,12 +5,12 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { FormProvider, useForm } from "react-hook-form";
 import Toast from "react-native-toast-message";
 import { z } from "zod";
-import firestore from "@react-native-firebase/firestore";
+import { submitAppraisalPrice } from "@/cloudFunctions/staff/talk/submitAppraisalPrice";
 
 export const createAppraisalPriceZodSchema = z.object({
   appraisalPrice: z.string().min(1, { message: "査定金額は必須です" }),
   appraisalPriceNote: z.string().optional(),
-  expiryDate: z.date().optional(),
+  expiryDate: z.date(),
 });
 
 const CreateAppraisalPrice = () => {
@@ -38,29 +38,12 @@ const CreateAppraisalPrice = () => {
     data: z.infer<typeof createAppraisalPriceZodSchema>
   ) => {
     try {
-      await firestore().runTransaction(async (transaction) => {
-        const messageRef = await firestore()
-          .collection("talks")
-          .doc(talkId)
-          .collection("messages")
-          .doc();
-        const talkRef = await firestore().collection("talks").doc(talkId);
-        await transaction.set(messageRef, {
-          talkId,
-          appraisalPrice: data.appraisalPrice,
-          appraisalPriceNote: data.appraisalPriceNote || "",
-          createdAt: firestore.FieldValue.serverTimestamp(),
-          senderType: "staff",
-          senderId: staff?.id,
-          type: "appraisalPrice",
-          readBy: [],
-          isOpened: false,
-          text: "査定金額が提示されました",
-        });
-        await transaction.update(talkRef, {
-          lastMessage: "査定金額が提示されました",
-          lastMessageAt: firestore.Timestamp.now(),
-        });
+      await submitAppraisalPrice({
+        talkId,
+        shopId: talk.affiliateStoreId,
+        appraisalPrice: Number(data.appraisalPrice),
+        appraisalPriceNote: data.appraisalPriceNote,
+        expiryDate: data.expiryDate.toISOString(),
       });
       Toast.show({
         type: "success",
