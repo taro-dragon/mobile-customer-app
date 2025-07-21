@@ -21,6 +21,7 @@ import { Message } from "@/types/firestore_schema/messages";
 import { submitCheckCurrentCar } from "@/cloudFunctions/staff/talk/submitCheckCurrentCar";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useModal } from "@/contexts/ModalContext";
 
 const useStaffTalkPanel = (
   talk: TalkWithUser,
@@ -30,7 +31,7 @@ const useStaffTalkPanel = (
   const router = useRouter();
   const { staff } = useStore();
   const [isUploading, setIsUploading] = useState(false);
-  const [isShowModal, setIsShowModal] = useState(false);
+  const { showModal, hideModal } = useModal();
   const [uploadProgress, setUploadProgress] = useState(0);
   const sentCheckCurrentCar = useMemo(() => {
     return !!talk.checkCurrentCarStatus;
@@ -41,7 +42,7 @@ const useStaffTalkPanel = (
 
   const onPressCheckCurrentCar = async (talkId: string) => {
     try {
-      setIsShowModal(true);
+      showModal("送信中");
       await submitCheckCurrentCar({
         talkId,
         shopId: talk.affiliateStoreId,
@@ -58,7 +59,7 @@ const useStaffTalkPanel = (
         text2: error instanceof Error ? error.message : "不明なエラー",
       });
     } finally {
-      setIsShowModal(false);
+      hideModal();
     }
   };
 
@@ -314,7 +315,6 @@ const useStaffTalkPanel = (
   return {
     panel,
     isUploading,
-    isShowModal,
     uploadProgress,
   };
 };

@@ -12,6 +12,7 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 import ErrorService from "@/libs/ErrorService";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
+import { ModalProvider } from "@/contexts/ModalContext";
 
 SplashScreen.preventAutoHideAsync();
 export default function Layout() {
@@ -88,7 +89,9 @@ export default function Layout() {
           <GestureHandlerRootView style={{ flex: 1 }}>
             <ActionSheetProvider>
               <BottomSheetModalProvider>
-                <Slot />
+                <ModalProvider>
+                  <Slot />
+                </ModalProvider>
               </BottomSheetModalProvider>
             </ActionSheetProvider>
           </GestureHandlerRootView>

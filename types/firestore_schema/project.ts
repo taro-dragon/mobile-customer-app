@@ -40,5 +40,6 @@ export type Project = {
     appraisalPrice: number;
     appraisalPriceNote: string;
     expiryDate: FirebaseFirestoreTypes.Timestamp;
+    senderStaffId: string;
   };
 };

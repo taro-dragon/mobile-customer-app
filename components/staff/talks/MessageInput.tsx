@@ -36,7 +36,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
 }) => {
   const { colors, typography } = useTheme();
   const isClosed = talk.status === "closed";
-  const { panel, isUploading, uploadProgress, isShowModal } = useStaffTalkPanel(
+  const { panel, isUploading, uploadProgress } = useStaffTalkPanel(
     talk,
     setIsOpenPanel
   );
@@ -201,30 +201,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
           </View>
         )}
       </View>
-      <Modal visible={isShowModal} transparent={true} animationType="fade">
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "#00000080",
-          }}
-        >
-          <View
-            style={{
-              backgroundColor: "#00000080",
-              padding: 20,
-              borderRadius: 10,
-              gap: 8,
-            }}
-          >
-            <ActivityIndicator size="large" color={colors.white} />
-            <Text style={{ color: colors.textPrimary, fontSize: 16 }}>
-              送信中...
-            </Text>
-          </View>
-        </View>
-      </Modal>
     </>
   );
 };

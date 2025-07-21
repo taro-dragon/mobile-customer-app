@@ -6,6 +6,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import Toast from "react-native-toast-message";
 import { z } from "zod";
 import { submitAppraisalPrice } from "@/cloudFunctions/staff/talk/submitAppraisalPrice";
+import { useModal } from "@/contexts/ModalContext";
 
 export const createAppraisalPriceZodSchema = z.object({
   appraisalPrice: z.string().min(1, { message: "査定金額は必須です" }),
@@ -25,6 +26,7 @@ const CreateAppraisalPrice = () => {
   const router = useRouter();
   const { talkId } = useLocalSearchParams<{ talkId: string }>();
   const { staffTalks, staff } = useStore();
+  const { showModal, hideModal } = useModal();
   const talk = staffTalks.find((talk) => talk.id === talkId);
   if (!talk) {
     router.back();
@@ -38,6 +40,7 @@ const CreateAppraisalPrice = () => {
     data: z.infer<typeof createAppraisalPriceZodSchema>
   ) => {
     try {
+      showModal("送信中");
       await submitAppraisalPrice({
         talkId,
         shopId: talk.affiliateStoreId,
@@ -52,6 +55,8 @@ const CreateAppraisalPrice = () => {
       router.back();
     } catch (error) {
       throw error;
+    } finally {
+      hideModal();
     }
   };
   return (

@@ -21,6 +21,7 @@ import {
   Loader,
   MessageSquare,
   User,
+  User2,
   UserIcon,
   Users,
 } from "lucide-react-native";
@@ -158,28 +159,64 @@ const ProjectDetailScreen: React.FC<ProjectDetailScreenProps> = ({
           </View>
         </View>
         {project.appraisal?.expiryDate && (
-          <View
-            style={{
-              flexDirection: "row",
-              gap: 8,
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
+          <>
             <View
-              style={{ flexDirection: "row", gap: 8, alignItems: "center" }}
+              style={{
+                flexDirection: "row",
+                gap: 8,
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
             >
-              <DollarSign size={24} color={colors.textPrimary} />
-              <Text style={{ ...typography.body2, color: colors.textPrimary }}>
-                査定金額有効期限
+              <View
+                style={{ flexDirection: "row", gap: 8, alignItems: "center" }}
+              >
+                <DollarSign size={24} color={colors.textPrimary} />
+                <Text
+                  style={{ ...typography.body2, color: colors.textPrimary }}
+                >
+                  査定金額有効期限
+                </Text>
+              </View>
+              <Text style={{ ...typography.title5, color: colors.textPrimary }}>
+                {dayjs(project.appraisal.expiryDate.toDate()).format(
+                  "YYYY/MM/DD"
+                )}
               </Text>
             </View>
-            <Text style={{ ...typography.title5, color: colors.textPrimary }}>
-              {dayjs(project.appraisal.expiryDate.toDate()).format(
-                "YYYY/MM/DD"
-              )}
-            </Text>
-          </View>
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 8,
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <View
+                style={{ flexDirection: "row", gap: 8, alignItems: "center" }}
+              >
+                <User2 size={24} color={colors.textPrimary} />
+                <Text
+                  style={{ ...typography.body2, color: colors.textPrimary }}
+                >
+                  査定金額送信者
+                </Text>
+              </View>
+              <View>
+                {project.appraisal?.senderStaffId && (
+                  <Text
+                    style={{ ...typography.title5, color: colors.textPrimary }}
+                  >
+                    {
+                      currentStoreStaffs.find(
+                        (staff) => staff.id === project.appraisal?.senderStaffId
+                      )?.name
+                    }
+                  </Text>
+                )}
+              </View>
+            </View>
+          </>
         )}
 
         <View
