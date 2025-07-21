@@ -21,6 +21,7 @@ export type Message = {
     | "appraisalPrice"
     | "video"
     | "location"
+    | "transferConfirmation"
     | "system";
   isAnswered?: boolean; //currentCarCheckRequestedの回答フラグ
   appraisalPrice?: string; //appraisalPriceの査定金額

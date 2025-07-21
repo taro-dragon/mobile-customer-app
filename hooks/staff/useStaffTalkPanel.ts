@@ -7,6 +7,7 @@ import {
   File,
   Image,
   MapPin,
+  Send,
 } from "lucide-react-native";
 import firestore from "@react-native-firebase/firestore";
 import storage from "@react-native-firebase/storage";
@@ -22,6 +23,7 @@ import { submitCheckCurrentCar } from "@/cloudFunctions/staff/talk/submitCheckCu
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useModal } from "@/contexts/ModalContext";
+import { requestTransferConfirmation } from "@/libs/firestore/staff/requestTransferConfirmation";
 
 const useStaffTalkPanel = (
   talk: TalkWithUser,
@@ -229,6 +231,26 @@ const useStaffTalkPanel = (
     }
   };
 
+  const onPressTransferConfirmation = async () => {
+    try {
+      await requestTransferConfirmation({
+        talkId: talk.id,
+        senderId: staff?.id || "",
+        message: "買取金額の振込を実行しました。確認をお願いします",
+      });
+      Toast.show({
+        type: "success",
+        text1: "振込確認依頼を送信しました",
+      });
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "振込確認依頼に失敗しました",
+        text2: error instanceof Error ? error.message : "不明なエラー",
+      });
+    }
+  };
+
   const panel = useMemo(() => {
     if (talk.sourceType === "car_inquiry") {
       return [
@@ -301,6 +323,13 @@ const useStaffTalkPanel = (
           },
           disabled: isUploading || sentAppraisalPrice,
           iconColor: colors.textWarning,
+        },
+        {
+          label: "振込確認依頼",
+          icon: Send,
+          onPress: onPressTransferConfirmation,
+          disabled: isUploading,
+          iconColor: colors.textInfo,
         },
       ];
     }

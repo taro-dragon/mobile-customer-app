@@ -97,7 +97,9 @@ const TalkTextContent: React.FC<TalkTextContentProps> = ({
             gap: 8,
           }}
         >
-          {message.read && isMe && <Check size={12} color={colors.primary} />}
+          {message.readBy &&
+            message.readBy.includes(message.senderId) &&
+            isMe && <Check size={12} color={colors.textSuccess} />}
           <Text style={[styles.timeText, { color: colors.textSecondary }]}>
             {dayjs(message.createdAt.toDate()).format("HH:mm")}
           </Text>

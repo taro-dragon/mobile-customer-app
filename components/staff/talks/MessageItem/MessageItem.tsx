@@ -11,6 +11,7 @@ import ImageMessageItem from "./ImageMessageItem";
 import VideoMessageItem from "./VideoMessageItem";
 import LocationItem from "./LocationItem";
 import { View, Text } from "react-native";
+import TransferConfirmationItem from "./TransferConfirmationItem";
 
 type MessageItemProps = {
   message: Message;
@@ -110,6 +111,16 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, talk }) => {
   if (message.type === "location") {
     return (
       <LocationItem
+        bubbleColor={bubbleColor}
+        talk={talk}
+        message={message}
+        isMe={isMe}
+      />
+    );
+  }
+  if (message.type === "transferConfirmation") {
+    return (
+      <TransferConfirmationItem
         bubbleColor={bubbleColor}
         talk={talk}
         message={message}

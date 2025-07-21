@@ -3,11 +3,10 @@ import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { Message } from "@/types/firestore_schema/messages";
 import dayjs from "dayjs";
 import { Image } from "expo-image";
-import { useRouter } from "expo-router";
-import { Calendar, CarIcon, Check } from "lucide-react-native";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { DollarSign, Send } from "lucide-react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-type CurrentCarCheckRequestItemProps = {
+type TransferConfirmationItemProps = {
   talk: TalkWithUser;
   message: Message;
   bubbleColor: {
@@ -16,13 +15,12 @@ type CurrentCarCheckRequestItemProps = {
   };
   isMe: boolean;
 };
-const CurrentCarCheckRequestItem: React.FC<CurrentCarCheckRequestItemProps> = ({
+const TransferConfirmationItem: React.FC<TransferConfirmationItemProps> = ({
   talk,
   message,
   isMe,
   bubbleColor,
 }) => {
-  const router = useRouter();
   const { colors, typography } = useTheme();
 
   // アバター画像のURLを決定
@@ -82,58 +80,19 @@ const CurrentCarCheckRequestItem: React.FC<CurrentCarCheckRequestItemProps> = ({
         ]}
       >
         <View
-          style={[
-            styles.calendarWrapper,
-            { backgroundColor: colors.textSuccess },
-          ]}
+          style={[styles.calendarWrapper, { backgroundColor: colors.textInfo }]}
         >
-          <CarIcon size={36} color={colors.white} />
+          <Send size={36} color={colors.white} />
         </View>
         <View style={styles.messageAreaWrapper}>
           <View style={styles.messageWrapper}>
             <Text style={{ color: colors.textPrimary, ...typography.heading2 }}>
-              現車確認依頼
+              振込確認依頼
             </Text>
             <Text style={{ color: colors.textPrimary, ...typography.body3 }}>
               {message.text}
             </Text>
           </View>
-          {message.isAnswered ? (
-            <TouchableOpacity
-              style={{
-                borderWidth: 1,
-                borderColor: colors.borderSuccess,
-                backgroundColor: colors.backgroundSuccess,
-                padding: 12,
-                borderRadius: 12,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              onPress={() => router.push(`/talks/${talk.id}/carCheckRequest`)}
-            >
-              <Text
-                style={{ color: colors.textSuccess, ...typography.heading3 }}
-              >
-                確認する
-              </Text>
-            </TouchableOpacity>
-          ) : (
-            <View
-              style={{
-                borderWidth: 1,
-                borderColor: colors.gray400,
-                backgroundColor: colors.white,
-                padding: 12,
-                borderRadius: 12,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Text style={{ color: colors.gray500, ...typography.heading3 }}>
-                回答待ち
-              </Text>
-            </View>
-          )}
           <View
             style={{
               flexDirection: "row",
@@ -191,6 +150,8 @@ const styles = StyleSheet.create({
     aspectRatio: 16 / 9,
     alignItems: "center",
     justifyContent: "center",
+    borderTopLeftRadius: 18,
+    borderTopRightRadius: 18,
   },
   messageWrapper: {
     gap: 4,
@@ -209,4 +170,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CurrentCarCheckRequestItem;
+export default TransferConfirmationItem;
