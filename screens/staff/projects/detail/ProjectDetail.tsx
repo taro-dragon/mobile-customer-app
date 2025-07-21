@@ -55,7 +55,7 @@ const ProjectDetailScreen: React.FC<ProjectDetailScreenProps> = ({
       refreshControl={
         <RefreshControl refreshing={isLoading} onRefresh={mutate} />
       }
-      contentContainerStyle={{ padding: 16, gap: 12 }}
+      contentContainerStyle={{ padding: 16, gap: 20 }}
     >
       <View style={{ gap: 8 }}>
         <View>
@@ -243,52 +243,56 @@ const ProjectDetailScreen: React.FC<ProjectDetailScreenProps> = ({
       {project.type !== "car_inquiry" && (
         <>
           <Divider />
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Text style={{ ...typography.title3, color: colors.textPrimary }}>
-              現車確認情報
-            </Text>
-          </View>
-          {project.preferredInfo ? (
-            <TouchableOpacity
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-              onPress={() => {
-                router.push(`/projects/${project.id}/carCheckRequest`);
-              }}
-            >
-              <Text
-                style={{ ...typography.heading3, color: colors.textPrimary }}
-              >
-                現車確認回答情報を確認する
-              </Text>
-              <ChevronRight size={24} color={colors.textPrimary} />
-            </TouchableOpacity>
-          ) : (
+          <View>
             <View
               style={{
                 flexDirection: "row",
-                alignItems: "center",
                 justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
-              <Text
-                style={{ ...typography.body2, color: colors.textSecondary }}
-              >
-                現車確認回答情報がありません
+              <Text style={{ ...typography.title3, color: colors.textPrimary }}>
+                現車確認情報
               </Text>
             </View>
-          )}
+            {project.preferredInfo ? (
+              <TouchableOpacity
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+                onPress={() => {
+                  router.push(`/projects/${project.id}/carCheckRequest`);
+                }}
+              >
+                <Text
+                  style={{ ...typography.heading3, color: colors.textPrimary }}
+                >
+                  現車確認回答情報を確認する
+                </Text>
+                <ChevronRight size={24} color={colors.textPrimary} />
+              </TouchableOpacity>
+            ) : (
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text
+                  style={{ ...typography.body2, color: colors.textSecondary }}
+                >
+                  現車確認回答情報がありません
+                </Text>
+              </View>
+            )}
+          </View>
         </>
       )}
+      <Divider />
+      <RelatedItemSection project={project} />
       <Divider />
       <RelatedItemSection project={project} />
       <SafeAreaBottom />

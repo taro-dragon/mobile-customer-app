@@ -38,39 +38,48 @@ const CarSection: React.FC<CarSectionProps> = ({ project, carData }) => {
   const buyOffer = project?.buyOffer;
   const bid = project?.bid;
   return (
-    <View style={{ gap: 8 }}>
-      <Text style={{ ...typography.title3, color: colors.textPrimary }}>
-        車両情報
-      </Text>
-      <View style={{ flexDirection: "row", gap: 8 }}>
-        <Image
-          source={{ uri: targetCarData?.images.front }}
-          style={{ width: 88, height: 88, borderRadius: 8 }}
-        />
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flex: 1,
-          }}
-        >
-          <View style={{ gap: 4 }}>
-            <Text style={{ ...typography.body2, color: colors.textSecondary }}>
-              {carData.maker.name}
-            </Text>
-            <Text style={{ ...typography.title3, color: colors.textPrimary }}>
-              {carData.model.name}
-            </Text>
-            <Text style={{ ...typography.body3, color: colors.textSecondary }}>
-              {carData.year.year}
-            </Text>
-            <Text style={{ ...typography.body3, color: colors.textSecondary }}>
-              {carData.grade.gradeName}
-            </Text>
+    <View style={{ gap: 20 }}>
+      <View style={{ gap: 8 }}>
+        <Text style={{ ...typography.title3, color: colors.textPrimary }}>
+          車両情報
+        </Text>
+        <View style={{ flexDirection: "row", gap: 8 }}>
+          <Image
+            source={{ uri: targetCarData?.images.front }}
+            style={{ width: 88, height: 88, borderRadius: 8 }}
+          />
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              flex: 1,
+            }}
+          >
+            <View style={{ gap: 4 }}>
+              <Text
+                style={{ ...typography.body2, color: colors.textSecondary }}
+              >
+                {carData.maker.name}
+              </Text>
+              <Text style={{ ...typography.title3, color: colors.textPrimary }}>
+                {carData.model.name}
+              </Text>
+              <Text
+                style={{ ...typography.body3, color: colors.textSecondary }}
+              >
+                {carData.year.year}
+              </Text>
+              <Text
+                style={{ ...typography.body3, color: colors.textSecondary }}
+              >
+                {carData.grade.gradeName}
+              </Text>
+            </View>
           </View>
         </View>
       </View>
+      <Divider />
       {isStock(targetCarData) && (
         <View style={{ flexDirection: "row", gap: 8 }}>
           <View style={{ flex: 1, gap: 4 }}>
@@ -147,8 +156,7 @@ const CarSection: React.FC<CarSectionProps> = ({ project, carData }) => {
         </View>
       )}
       {isBuyOffer(project) && (
-        <>
-          <Divider />
+        <View style={{ gap: 8 }}>
           <Text style={{ ...typography.title3, color: colors.textPrimary }}>
             査定情報
           </Text>
@@ -157,11 +165,10 @@ const CarSection: React.FC<CarSectionProps> = ({ project, carData }) => {
             maxPrice={buyOffer?.maxPrice || 0}
             finalPrice={project.appraisal?.appraisalPrice}
           />
-        </>
+        </View>
       )}
       {isBid(project) && (
-        <>
-          <Divider />
+        <View style={{ gap: 8 }}>
           <Text style={{ ...typography.title3, color: colors.textPrimary }}>
             査定情報
           </Text>
@@ -170,7 +177,7 @@ const CarSection: React.FC<CarSectionProps> = ({ project, carData }) => {
             maxPrice={bid?.maxPrice || 0}
             finalPrice={project.appraisal?.appraisalPrice}
           />
-        </>
+        </View>
       )}
     </View>
   );
