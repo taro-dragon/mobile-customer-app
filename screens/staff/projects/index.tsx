@@ -12,7 +12,7 @@ const renderScene = SceneMap({
 
 const routes = [
   { key: "inProgress", title: "進行中" },
-  { key: "completed", title: "完了" },
+  { key: "completed", title: "終了" },
 ];
 
 const ProjectsScreen = () => {
