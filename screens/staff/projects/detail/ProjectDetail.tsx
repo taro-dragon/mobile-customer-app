@@ -13,16 +13,12 @@ import dayjs from "dayjs";
 import { Image } from "expo-image";
 import {
   Calendar,
-  CarIcon,
   ChevronRight,
   CircleCheck,
   DollarSign,
-  FileText,
   Loader,
-  MessageSquare,
   User,
   User2,
-  UserIcon,
   Users,
 } from "lucide-react-native";
 import { RefreshControl, TouchableOpacity } from "react-native";
