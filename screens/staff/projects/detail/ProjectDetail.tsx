@@ -51,6 +51,42 @@ const ProjectDetailScreen: React.FC<ProjectDetailScreenProps> = ({
   const { label: statusLabel, color: statusColor } = getProjectsStatusLabel(
     project.status
   );
+  const renderStaffImage = (staffId: string) => {
+    const staff = currentStoreStaffs.find((staff) => staff.id === staffId);
+    if (staff?.profileImageUrl) {
+      return (
+        <Image
+          key={staffId}
+          source={{ uri: staff?.profileImageUrl }}
+          style={{
+            width: 32,
+            height: 32,
+            borderRadius: 16,
+            borderWidth: 1,
+            borderColor: colors.borderPrimary,
+          }}
+        />
+      );
+    } else {
+      return (
+        <View
+          key={staffId}
+          style={{
+            width: 32,
+            height: 32,
+            backgroundColor: colors.backgroundPrimary,
+            borderRadius: 16,
+            justifyContent: "center",
+            alignItems: "center",
+            borderWidth: 1,
+            borderColor: colors.borderPrimary,
+          }}
+        >
+          <User size={16} color={colors.textSecondary} />
+        </View>
+      );
+    }
+  };
   return (
     <View style={{ flex: 1 }}>
       <ScrollView
@@ -127,42 +163,7 @@ const ProjectDetailScreen: React.FC<ProjectDetailScreenProps> = ({
             </View>
             <View style={{ flexDirection: "row", gap: 4 }}>
               {project?.managerStaffs?.map((staffId) => {
-                const staff = currentStoreStaffs.find(
-                  (staff) => staff.id === staffId
-                );
-                if (staff?.profileImageUrl) {
-                  return (
-                    <Image
-                      key={staffId}
-                      source={{ uri: staff?.profileImageUrl }}
-                      style={{
-                        width: 32,
-                        height: 32,
-                        borderRadius: 16,
-                        borderWidth: 1,
-                        borderColor: colors.borderPrimary,
-                      }}
-                    />
-                  );
-                } else {
-                  return (
-                    <View
-                      key={staffId}
-                      style={{
-                        width: 32,
-                        height: 32,
-                        backgroundColor: colors.backgroundPrimary,
-                        borderRadius: 16,
-                        justifyContent: "center",
-                        alignItems: "center",
-                        borderWidth: 1,
-                        borderColor: colors.borderPrimary,
-                      }}
-                    >
-                      <User size={16} color={colors.textSecondary} />
-                    </View>
-                  );
-                }
+                return renderStaffImage(staffId);
               })}
             </View>
           </View>
@@ -212,8 +213,15 @@ const ProjectDetailScreen: React.FC<ProjectDetailScreenProps> = ({
                     査定金額送信者
                   </Text>
                 </View>
-                <View>
-                  {project.appraisal?.senderStaffId && (
+
+                {project.appraisal?.senderStaffId && (
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      gap: 8,
+                      alignItems: "center",
+                    }}
+                  >
                     <Text
                       style={{
                         ...typography.title5,
@@ -227,8 +235,8 @@ const ProjectDetailScreen: React.FC<ProjectDetailScreenProps> = ({
                         )?.name
                       }
                     </Text>
-                  )}
-                </View>
+                  </View>
+                )}
               </View>
             </>
           )}
