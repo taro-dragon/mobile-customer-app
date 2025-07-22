@@ -34,7 +34,7 @@ const StoreManagementScreen = () => {
         <ManageStorePanel
           title="在庫管理"
           icon={<Car size={32} color={colors.primary} />}
-          onPress={() => {}}
+          onPress={() => router.push("/stockCars")}
         />
       </View>
       <View
