@@ -25,6 +25,7 @@ const schema = z.object({
 
 const RequestBulkAppraisal: React.FC = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const router = useRouter();
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -54,6 +55,7 @@ const RequestBulkAppraisal: React.FC = () => {
         repairStatus: data.repairStatus,
       });
       mutateBulkAppraisalRequest();
+      router.back();
       Toast.show({
         type: "success",
         text1: "一括査定を依頼しました",
