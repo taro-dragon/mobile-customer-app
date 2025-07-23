@@ -1,4 +1,4 @@
-import { ActivityIndicator, Dimensions, Text, View } from "react-native";
+import { Dimensions, Text, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 
 import BulkApprisalBidItem from "@/components/staff/bulkAppraisalBid/BulkApprisalBidItem";
