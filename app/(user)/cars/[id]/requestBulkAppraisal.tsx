@@ -38,15 +38,14 @@ const RequestBulkAppraisal: React.FC = () => {
   const { cars, user } = useStore();
   const car = cars.find((car) => car.id === id);
   const carData = transformCarData(car as Car);
-  const router = useRouter();
   const handleRequestBulkAppraisal = async (data: RequestBulkAppraisalForm) => {
     try {
       await requestBulkAppraisal({
         carId: id,
-        maker: carData.maker.name,
-        model: carData.model.name,
+        maker: car?.maker ?? "",
+        model: car?.model ?? "",
         year: Number(car?.year ?? 0),
-        grade: carData.grade.gradeName,
+        grade: car?.grade ?? "",
         modelNumber: car?.modelNumber ?? "",
         mileage: Number(data.mileage),
         userId: user?.id ?? "",

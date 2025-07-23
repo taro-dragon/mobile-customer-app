@@ -101,6 +101,8 @@ export const BulkAppraisalProvider: React.FC<{ children: React.ReactNode }> = ({
   const { getValues } = useFormContext();
   const filters = getValues();
 
+  console.log(JSON.stringify(filters, null, 2));
+
   const { data, error, size, setSize, isLoading, isValidating, mutate } =
     useSWRInfinite(
       (pageIndex, previousPageData) =>
@@ -132,6 +134,7 @@ export const BulkAppraisalProvider: React.FC<{ children: React.ReactNode }> = ({
   const refresh = () => {
     return mutate();
   };
+  console.log(error);
 
   const value = {
     requests,

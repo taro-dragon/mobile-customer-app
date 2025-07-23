@@ -11,7 +11,6 @@ import Loader from "@/components/common/Loader";
 
 const BulkAppraisalBidScreen = () => {
   const { requests, loadMore, isLoading, refresh } = useBulkAppraisalContext();
-  console.log(JSON.stringify(requests, null, 2));
   const { colors, typography } = useTheme();
   const headerHeight = useHeaderHeight();
   if (isLoading) {
