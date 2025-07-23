@@ -1,21 +1,20 @@
 import { useStore } from "@/hooks/useStore";
 import { Project } from "@/types/firestore_schema/project";
-import { Car } from "@/types/models/Car";
+import { Stock } from "@/types/firestore_schema/stock";
 import firestore from "@react-native-firebase/firestore";
 import useSWRInfinite from "swr/infinite";
 
 const PAGE_SIZE = 20;
 
-const fetchInProgressProjects = async (
+const fetchPublishedStockCars = async (
   storeId: string,
   lastDoc?: any
-): Promise<{ data: Project[]; lastDoc: any; hasMore: boolean }> => {
+): Promise<{ data: Stock[]; lastDoc: any; hasMore: boolean }> => {
   try {
     let query = firestore()
-      .collection("shops")
-      .doc(storeId)
-      .collection("projects")
-      .where("status", "==", "in_progress")
+      .collection("stockCars")
+      .where("status", "==", "published")
+      .where("storeId", "==", storeId)
       .orderBy("updatedAt", "desc")
       .limit(PAGE_SIZE);
 
@@ -24,16 +23,14 @@ const fetchInProgressProjects = async (
     }
 
     const snapshot = await query.get();
-
-    const data: Project[] = await Promise.all(
+    const data: Stock[] = await Promise.all(
       snapshot.docs.map(async (doc) => {
         return {
           id: doc.id,
           ...doc.data(),
-        } as Project;
+        } as Stock;
       })
     );
-
     const lastDocument = snapshot.docs[snapshot.docs.length - 1];
     const hasMore = snapshot.docs.length === PAGE_SIZE;
     return {
@@ -46,7 +43,7 @@ const fetchInProgressProjects = async (
   }
 };
 
-const useInProgressProjects = () => {
+const usePublishedStockCars = () => {
   const { currentStore } = useStore();
   const storeId = currentStore?.id;
   const { data, error, size, setSize, isValidating, isLoading, mutate } =
@@ -55,25 +52,27 @@ const useInProgressProjects = () => {
         if (!storeId) return null;
         const key =
           pageIndex === 0
-            ? [`inProgressProjects-${storeId}`, storeId, null]
+            ? [`publishedStockCars-${storeId}`, storeId, null]
             : !previousPageData?.hasMore
             ? null
             : [
-                `inProgressProjects-${storeId}`,
+                `publishedStockCars-${storeId}`,
                 storeId,
                 previousPageData.lastDoc,
               ];
         return key;
       },
       ([_, storeId, lastDoc]: [string, string, any]) =>
-        fetchInProgressProjects(storeId, lastDoc),
+        fetchPublishedStockCars(storeId, lastDoc),
       {
+        revalidateFirstPage: false,
+        revalidateAll: false,
         revalidateOnMount: true,
         revalidateOnFocus: false,
       }
     );
 
-  const projects: Project[] = data ? data.flatMap((page) => page.data) : [];
+  const stockCars: Stock[] = data ? data.flatMap((page) => page.data) : [];
   const hasMore =
     data && data.length > 0 ? data[data.length - 1]?.hasMore : false;
 
@@ -84,7 +83,7 @@ const useInProgressProjects = () => {
   };
 
   return {
-    projects,
+    stockCars,
     error,
     isLoading,
     isValidating,
@@ -94,4 +93,4 @@ const useInProgressProjects = () => {
   };
 };
 
-export default useInProgressProjects;
+export default usePublishedStockCars;

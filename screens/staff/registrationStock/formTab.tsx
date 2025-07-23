@@ -171,19 +171,14 @@ const RegistrationStockFormScreen: React.FC = () => {
     }
 
     try {
-      // Create a new stock document with an auto-generated ID
       const stockCarRef = firestore().collection("stockCars").doc();
 
-      // 全ての画像フィールドを収集
       const imageFields = collectImageFields(data);
 
-      // Upload images to Firebase Storage and get download URLs
       const imageUrls = await uploadStockImages(stockCarRef.id, imageFields);
 
-      // Create stock data without image URIs (we'll add the download URLs instead)
       const stockData = { ...data };
 
-      // 画像フィールドを削除
       Object.keys(stockData).forEach((key) => {
         if (
           REQUIRED_IMAGE_FIELDS.includes(key) ||
@@ -193,10 +188,8 @@ const RegistrationStockFormScreen: React.FC = () => {
         }
       });
 
-      // Remove undefined values to prevent Firestore error
       const cleanStockData = removeUndefined(stockData);
 
-      // Save to Firestore with metadata and image download URLs
       await stockCarRef.set({
         storeId: currentStore.id,
         createdAt: firestore.FieldValue.serverTimestamp(),
@@ -209,9 +202,8 @@ const RegistrationStockFormScreen: React.FC = () => {
         displacement: Number(cleanStockData.displacement),
         doorNumber: Number(cleanStockData.doorNumber),
         prefecture: currentStore.address1,
+        status: "active",
       });
-
-      // Navigate back
       navigation.getParent()?.goBack();
       Toast.show({
         type: "success",

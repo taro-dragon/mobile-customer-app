@@ -52,6 +52,8 @@ export const StockCarsProvider: React.FC<{
   const buildAlgoliaFilters = useCallback(() => {
     const filters: string[] = [];
 
+    filters.push("status:published");
+
     if (formValues.maker) {
       filters.push(`maker:${formValues.maker}`);
     }
