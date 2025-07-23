@@ -114,7 +114,6 @@ const FirstPasswordSettingScreen = () => {
       router.replace("/(staff)/(tabs)");
     } catch (error: any) {
       let errorMessage = "パスワードの更新に失敗しました。";
-      console.log(error);
       Alert.alert("エラー", errorMessage);
     }
   };

@@ -36,7 +36,6 @@ const fetchShopOffer = async (
       hasMore,
     };
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };

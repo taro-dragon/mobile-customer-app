@@ -43,7 +43,6 @@ const EditShopInfo = () => {
       });
       router.back();
     } catch (error) {
-      console.log(error);
       Toast.show({
         type: "error",
         text1: "店舗情報の更新に失敗しました",

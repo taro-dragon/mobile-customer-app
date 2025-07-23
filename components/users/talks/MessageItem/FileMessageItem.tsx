@@ -84,7 +84,6 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
       // 既存ファイルの確認
       const fileInfo = await FileSystem.getInfoAsync(fileUri);
       if (fileInfo.exists) {
-        console.log("既存ファイルを削除:", fileUri);
         await FileSystem.deleteAsync(fileUri);
       }
 

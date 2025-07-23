@@ -65,13 +65,9 @@ const ImageMessageItem: React.FC<ImageMessageItemProps> = ({
       const fileName = `image_${timestamp}.jpg`;
       const fileUri = `${FileSystem.documentDirectory}${fileName}`;
 
-      console.log("画像ダウンロード開始:", message.imageUrl);
-      console.log("保存先:", fileUri);
-
       // 既存ファイルの確認
       const fileInfo = await FileSystem.getInfoAsync(fileUri);
       if (fileInfo.exists) {
-        console.log("既存ファイルを削除:", fileUri);
         await FileSystem.deleteAsync(fileUri);
       }
 
@@ -86,7 +82,6 @@ const ImageMessageItem: React.FC<ImageMessageItemProps> = ({
               downloadProgress.totalBytesExpectedToWrite) *
             100;
           setDownloadProgress(progress);
-          console.log(`画像ダウンロード進捗: ${progress.toFixed(1)}%`);
         }
       );
 
@@ -94,7 +89,6 @@ const ImageMessageItem: React.FC<ImageMessageItemProps> = ({
 
       if (downloadResult && downloadResult.status === 200) {
         setDownloadProgress(100);
-        console.log("画像ダウンロード完了:", downloadResult.uri);
 
         // ファイルの存在確認
         const downloadedFileInfo = await FileSystem.getInfoAsync(
@@ -204,7 +198,9 @@ const ImageMessageItem: React.FC<ImageMessageItemProps> = ({
               marginTop: 8,
             }}
           >
-            {message.read && isMe && <Check size={12} color={colors.primary} />}
+            {message.readBy?.length && isMe && (
+              <Check size={12} color={colors.primary} />
+            )}
             <Text style={[styles.timeText, { color: colors.textSecondary }]}>
               {dayjs(message.createdAt.toDate()).format("HH:mm")}
             </Text>

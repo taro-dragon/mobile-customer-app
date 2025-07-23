@@ -10,7 +10,6 @@ const fetchInProgressProjects = async (
   storeId: string,
   lastDoc?: any
 ): Promise<{ data: Project[]; lastDoc: any; hasMore: boolean }> => {
-  console.log("storeId", storeId);
   try {
     let query = firestore()
       .collection("shops")

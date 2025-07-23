@@ -55,7 +55,6 @@ const NotificationInitializeScreen = () => {
                   isBulkStatusChange: true,
                 },
               });
-            console.log("Push token saved to Firestore");
           }
         }
       }

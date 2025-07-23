@@ -55,7 +55,6 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
       // 既存ファイルの確認
       const fileInfo = await FileSystem.getInfoAsync(fileUri);
       if (fileInfo.exists) {
-        console.log("既存ファイルを削除:", fileUri);
         await FileSystem.deleteAsync(fileUri);
       }
 
@@ -182,7 +181,9 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
               marginTop: 8,
             }}
           >
-            {message.read && isMe && <Check size={12} color={colors.primary} />}
+            {message.readBy?.length && isMe && (
+              <Check size={12} color={colors.primary} />
+            )}
             <Text style={[styles.timeText, { color: colors.textSecondary }]}>
               {dayjs(message.createdAt.toDate()).format("HH:mm")}
             </Text>

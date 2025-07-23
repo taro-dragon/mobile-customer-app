@@ -52,7 +52,6 @@ const fetchBuyOffersPage = async (
 
     return buyOffersWithStores;
   } catch (error) {
-    console.log(error);
     Toast.show({
       type: "error",
       text1: "エラーが発生しました",

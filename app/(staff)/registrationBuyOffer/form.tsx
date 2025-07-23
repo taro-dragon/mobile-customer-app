@@ -18,7 +18,6 @@ const RegistrationBuyOfferForm = () => {
     handleSubmit,
     formState: { errors },
   } = useFormContext<RegistrationBuyOfferFormData>();
-  console.log(errors);
   const { modelNumber } = getValues();
   const onSubmit = async (data: RegistrationBuyOfferFormData) => {
     const filteredData = Object.fromEntries(

@@ -21,9 +21,6 @@ const useStaffNotification = () => {
   const checkAndRequestPermissions = async () => {
     try {
       if (!Device.isDevice) {
-        console.log(
-          "Push notifications are only supported on physical devices"
-        );
         return;
       }
 
@@ -88,9 +85,6 @@ const useStaffNotification = () => {
         error instanceof Error &&
         error.message.includes("aps-environment")
       ) {
-        console.log(
-          "Push notifications are not configured for iOS. Please set up push notifications in your Apple Developer account and Xcode."
-        );
         return null;
       }
       console.error("Error registering for push notifications:", error);
