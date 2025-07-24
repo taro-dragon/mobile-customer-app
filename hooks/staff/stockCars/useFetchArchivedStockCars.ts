@@ -52,11 +52,11 @@ const useArchivedStockCars = () => {
         if (!storeId) return null;
         const key =
           pageIndex === 0
-            ? [`publishedStockCars-${storeId}`, storeId, null]
+            ? [`archivedStockCars-${storeId}`, storeId, null]
             : !previousPageData?.hasMore
             ? null
             : [
-                `publishedStockCars-${storeId}`,
+                `archivedStockCars-${storeId}`,
                 storeId,
                 previousPageData.lastDoc,
               ];

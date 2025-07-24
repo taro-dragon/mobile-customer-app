@@ -1,7 +1,7 @@
-import { View } from "react-native";
+import StockCarsScreen from "@/screens/staff/stockCars";
 
 const StockCars = () => {
-  return <View></View>;
+  return <StockCarsScreen />;
 };
 
 export default StockCars;

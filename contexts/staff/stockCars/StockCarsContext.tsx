@@ -1,3 +1,4 @@
+import useArchivedStockCars from "@/hooks/staff/stockCars/useFetchArchivedStockCars";
 import usePublishedStockCars from "@/hooks/staff/stockCars/useFetchPublishedStockCars";
 import { Stock } from "@/types/firestore_schema/stock";
 import { createContext, useContext } from "react";
@@ -5,10 +6,16 @@ import { createContext, useContext } from "react";
 type StockCarsContextType = {
   publishedStockCars: Stock[];
   isPublishedStockCarsLoading: boolean;
-  isPublishedStockCarsError: Error | null;
+  publishedStockCarsError?: Error;
   publishedStockCarsLoadMore: () => void;
   publishedStockCarsHasMore: boolean;
   publishedStockCarsMutate: () => void;
+  archivedStockCars: Stock[];
+  isArchivedStockCarsLoading: boolean;
+  archivedStockCarsError?: Error;
+  archivedStockCarsLoadMore: () => void;
+  archivedStockCarsHasMore: boolean;
+  archivedStockCarsMutate: () => void;
 };
 
 const StockCarsContext = createContext<StockCarsContextType | undefined>(
@@ -23,20 +30,35 @@ export const StockCarsProvider = ({
   const {
     stockCars: publishedStockCars,
     isLoading: isPublishedStockCarsLoading,
-    error: isPublishedStockCarsError,
+    error: publishedStockCarsError,
     loadMore: publishedStockCarsLoadMore,
     hasMore: publishedStockCarsHasMore,
     mutate: publishedStockCarsMutate,
   } = usePublishedStockCars();
+  const {
+    stockCars: archivedStockCars,
+    isLoading: isArchivedStockCarsLoading,
+    error: archivedStockCarsError,
+    loadMore: archivedStockCarsLoadMore,
+    hasMore: archivedStockCarsHasMore,
+    mutate: archivedStockCarsMutate,
+  } = useArchivedStockCars();
+
   return (
     <StockCarsContext.Provider
       value={{
         publishedStockCars,
         isPublishedStockCarsLoading,
-        isPublishedStockCarsError,
+        publishedStockCarsError,
         publishedStockCarsLoadMore,
         publishedStockCarsHasMore,
         publishedStockCarsMutate,
+        archivedStockCars,
+        isArchivedStockCarsLoading,
+        archivedStockCarsError,
+        archivedStockCarsLoadMore,
+        archivedStockCarsHasMore,
+        archivedStockCarsMutate,
       }}
     >
       {children}
@@ -45,5 +67,11 @@ export const StockCarsProvider = ({
 };
 
 export const useStockCarsContext = () => {
-  return useContext(StockCarsContext);
+  const context = useContext(StockCarsContext);
+  if (!context) {
+    throw new Error(
+      "useStockCarsContext must be used within a StockCarsProvider"
+    );
+  }
+  return context;
 };
