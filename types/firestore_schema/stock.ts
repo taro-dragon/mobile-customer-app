@@ -153,7 +153,7 @@ export type Stock = {
   status: "draft" | "published" | "archived";
 
   // 店舗情報
-  managerStaffs: Staff[];
+  managerStaffs: string[];
 };
 
 // 新規作成時のデータ型（Firestoreの自動フィールドを除く）
