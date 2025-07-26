@@ -18,7 +18,6 @@ const StockCarsItem: React.FC<StockCarsItemProps> = ({ stockCar }) => {
   const carData = transformCarData(stockCar as unknown as Car);
   const router = useRouter();
   const { typography, colors } = useTheme();
-  console.log(JSON.stringify(stockCar, null, 2));
   return (
     <TouchableOpacity
       onPress={() => {
@@ -49,7 +48,11 @@ const StockCarsItem: React.FC<StockCarsItemProps> = ({ stockCar }) => {
                 );
                 if (!staffData) return null;
                 return (
-                  <UserImage imageUrl={staffData.profileImageUrl} size={24} />
+                  <UserImage
+                    key={i}
+                    imageUrl={staffData.profileImageUrl}
+                    size={24}
+                  />
                 );
               })}
             </View>

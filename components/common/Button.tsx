@@ -1,3 +1,4 @@
+import React from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import {
   Text,
@@ -6,6 +7,7 @@ import {
   TextStyle,
   ActivityIndicator,
 } from "react-native";
+import * as LucideIcons from "lucide-react-native";
 
 type ButtonProps = {
   label: string;
@@ -16,9 +18,10 @@ type ButtonProps = {
   isBorder?: boolean;
   notBorder?: boolean;
   isLoading?: boolean;
+  icon?: keyof typeof LucideIcons; // lucideのアイコン名
 };
 
-const Button = ({
+const Button: React.FC<ButtonProps> = ({
   label,
   onPress,
   disabled,
@@ -27,7 +30,8 @@ const Button = ({
   isBorder,
   notBorder,
   isLoading,
-}: ButtonProps) => {
+  icon,
+}) => {
   const { colors, typography } = useTheme();
   const getButtonStyle = (): ViewStyle => {
     const baseStyle: ViewStyle = {
@@ -36,10 +40,12 @@ const Button = ({
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
+      flexDirection: "row",
       height: 40,
       borderRadius: 6,
       width: fullWidth ? "100%" : "auto",
       borderWidth: 1,
+      gap: 8,
     };
 
     // 背景色の決定
@@ -91,7 +97,22 @@ const Button = ({
       {isLoading ? (
         <ActivityIndicator size="small" color={colors.white} />
       ) : (
-        <Text style={getTextStyle()}>{label}</Text>
+        <>
+          {icon && LucideIcons[icon]
+            ? (() => {
+                const IconComponent = LucideIcons[
+                  icon as keyof typeof LucideIcons
+                ] as React.ComponentType<any>;
+                return IconComponent ? (
+                  <IconComponent
+                    size={20}
+                    color={getTextStyle().color as string}
+                  />
+                ) : null;
+              })()
+            : null}
+          <Text style={getTextStyle()}>{label}</Text>
+        </>
       )}
     </TouchableOpacity>
   );
