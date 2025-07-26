@@ -9,6 +9,7 @@ import { View } from "react-native";
 import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
 import InfoTab from "./tabs/InfoTab";
 import OptionTab from "./tabs/OptionTab";
+import ManagerTab from "./tabs/ManagerTab";
 
 type StockCarDetailScreenProps = {
   stock: Stock;
@@ -60,6 +61,9 @@ const StockCarDetailScreen: React.FC<StockCarDetailScreenProps> = ({
         </Tabs.Tab>
         <Tabs.Tab name="装備情報">
           <OptionTab stock={stock} />
+        </Tabs.Tab>
+        <Tabs.Tab name="担当者">
+          <ManagerTab stock={stock} />
         </Tabs.Tab>
       </Tabs.Container>
       <Divider />
