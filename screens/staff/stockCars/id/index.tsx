@@ -10,6 +10,7 @@ import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
 import InfoTab from "./tabs/InfoTab";
 import OptionTab from "./tabs/OptionTab";
 import ManagerTab from "./tabs/ManagerTab";
+import { useRouter } from "expo-router";
 
 type StockCarDetailScreenProps = {
   stock: Stock;
@@ -19,6 +20,7 @@ const StockCarDetailScreen: React.FC<StockCarDetailScreenProps> = ({
   stock,
 }) => {
   const { colors, typography } = useTheme();
+  const router = useRouter();
   const renderTabBar = useCallback(
     (props: any) => (
       <MaterialTabBar
@@ -83,7 +85,9 @@ const StockCarDetailScreen: React.FC<StockCarDetailScreenProps> = ({
             <Button
               label="編集"
               isBorder
-              onPress={() => {}}
+              onPress={() => {
+                router.push(`/stockCars/${stock.id}/edit`);
+              }}
               color={colors.textSuccess}
               icon="Pencil"
             />

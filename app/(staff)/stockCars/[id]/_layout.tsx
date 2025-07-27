@@ -32,6 +32,14 @@ const StockCarDetailLayout = () => {
             ),
           }}
         />
+        <Stack.Screen
+          name="edit"
+          options={{
+            headerTitle: "在庫編集",
+            headerShadowVisible: false,
+            headerBackButtonDisplayMode: "minimal",
+          }}
+        />
       </Stack>
     </StockCarProvider>
   );
