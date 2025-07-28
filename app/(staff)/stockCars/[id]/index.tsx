@@ -3,7 +3,7 @@ import { useStockCarContext } from "@/contexts/staff/stockCars/StockCarContext";
 import StockCarDetailScreen from "@/screens/staff/stockCars/id";
 
 const StockCarDetail = () => {
-  const { stockCar, isLoading, isError } = useStockCarContext();
+  const { stockCar, isLoading } = useStockCarContext();
 
   if (isLoading && !stockCar) return <Loader />;
 

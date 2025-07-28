@@ -29,6 +29,7 @@ import { removeUndefined } from "@/libs/removeUndefined";
 import RegistrationStockManagerFormScreen from "@/screens/staff/registrationStock/form/manager";
 import { Stock } from "@/types/firestore_schema/stock";
 import { useStockCarContext } from "@/contexts/staff/stockCars/StockCarContext";
+import { useStockCarsContext } from "@/contexts/staff/stockCars/StockCarsContext";
 
 const routes = [
   { key: "basic", title: "基本" },
@@ -61,6 +62,8 @@ const RegistrationStockFormScreen: React.FC<StockCarEditScreenProps> = ({
 }) => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { mutate } = useStockCarContext();
+  const { archivedStockCarsMutate, publishedStockCarsMutate } =
+    useStockCarsContext();
   const { colors, typography } = useTheme();
   const [isModalVisible, setModalVisible] = useState(false);
 
@@ -107,19 +110,14 @@ const RegistrationStockFormScreen: React.FC<StockCarEditScreenProps> = ({
 
     try {
       const stockCarRef = firestore().collection("stockCars").doc(id);
-
       const imageFields = collectImageFields(data);
-
-      // 既存の画像URLを取得して、変化を検出
       const existingImages = stock?.images || {};
       const imageUrls = await uploadStockImages(
         stockCarRef.id,
         imageFields,
         existingImages
       );
-
       const stockData = { ...data };
-
       Object.keys(stockData).forEach((key) => {
         if (
           REQUIRED_IMAGE_FIELDS.includes(key) ||
@@ -128,9 +126,7 @@ const RegistrationStockFormScreen: React.FC<StockCarEditScreenProps> = ({
           delete stockData[key];
         }
       });
-
       const cleanStockData = removeUndefined(stockData);
-
       await stockCarRef.update({
         ...cleanStockData,
         images: imageUrls,
@@ -138,6 +134,8 @@ const RegistrationStockFormScreen: React.FC<StockCarEditScreenProps> = ({
         updatedAt: firestore.Timestamp.now(),
       });
       mutate();
+      archivedStockCarsMutate();
+      publishedStockCarsMutate();
       router.back();
       Toast.show({
         type: "success",

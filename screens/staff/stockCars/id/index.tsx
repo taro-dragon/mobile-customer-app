@@ -5,12 +5,16 @@ import StockCarHeader from "@/components/staff/stockCar/CarHeader";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Stock } from "@/types/firestore_schema/stock";
 import React, { useCallback } from "react";
-import { View } from "react-native";
+import { Alert, View } from "react-native";
 import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
 import InfoTab from "./tabs/InfoTab";
 import OptionTab from "./tabs/OptionTab";
 import ManagerTab from "./tabs/ManagerTab";
 import { useRouter } from "expo-router";
+import firestore from "@react-native-firebase/firestore";
+import { useStore } from "@/hooks/useStore";
+import { useStockCarContext } from "@/contexts/staff/stockCars/StockCarContext";
+import { useStockCarsContext } from "@/contexts/staff/stockCars/StockCarsContext";
 
 type StockCarDetailScreenProps = {
   stock: Stock;
@@ -20,7 +24,28 @@ const StockCarDetailScreen: React.FC<StockCarDetailScreenProps> = ({
   stock,
 }) => {
   const { colors, typography } = useTheme();
+  const { mutate } = useStockCarContext();
+  const { archivedStockCarsMutate, publishedStockCarsMutate } =
+    useStockCarsContext();
+  const { staff } = useStore();
   const router = useRouter();
+  const archiveStockCar = async () => {
+    await firestore().collection("stockCars").doc(stock.id).update({
+      status: "archived",
+      updatedAt: firestore.Timestamp.now(),
+      updatedBy: staff?.id,
+    });
+    mutate();
+    archivedStockCarsMutate();
+    publishedStockCarsMutate();
+    router.back();
+  };
+  const onConfirm = () => {
+    Alert.alert("公開終了", "公開終了しますか？", [
+      { text: "キャンセル", style: "cancel" },
+      { text: "公開終了", onPress: archiveStockCar },
+    ]);
+  };
   const renderTabBar = useCallback(
     (props: any) => (
       <MaterialTabBar
@@ -92,14 +117,16 @@ const StockCarDetailScreen: React.FC<StockCarDetailScreenProps> = ({
               icon="Pencil"
             />
           </View>
-          <View style={{ flex: 1 }}>
-            <Button
-              label="公開終了"
-              onPress={() => {}}
-              color={colors.textError}
-              icon="X"
-            />
-          </View>
+          {stock.status === "published" && (
+            <View style={{ flex: 1 }}>
+              <Button
+                label="公開終了"
+                onPress={onConfirm}
+                color={colors.textError}
+                icon="X"
+              />
+            </View>
+          )}
         </View>
         <SafeAreaBottom />
       </View>
