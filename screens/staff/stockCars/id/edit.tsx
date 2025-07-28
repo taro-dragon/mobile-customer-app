@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -22,9 +22,7 @@ import Button from "@/components/common/Button";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import { useStore } from "@/hooks/useStore";
 import { useFormContext } from "react-hook-form";
-import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
-import { Alert } from "react-native";
-import { registrationStockDraftSchema } from "@/constants/schemas/registrationStockSchema";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { uploadStockImages } from "@/libs/uploadStockImages";
 import Toast from "react-native-toast-message";
 import { removeUndefined } from "@/libs/removeUndefined";
@@ -146,7 +144,6 @@ const RegistrationStockFormScreen: React.FC<StockCarEditScreenProps> = ({
         text1: "在庫情報を更新しました",
       });
     } catch (error) {
-      console.error("Stock registration error:", error);
       Toast.show({
         type: "error",
         text1: "在庫登録に失敗しました",

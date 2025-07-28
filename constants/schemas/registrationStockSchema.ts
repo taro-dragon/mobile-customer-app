@@ -18,7 +18,7 @@ export const registrationStockSchema = z.object({
     z.number().min(1, "初年度登録年を選択してください"),
   ]),
   // Other photos are optional
-  description: z.string().min(1, "車両説明は必須です"),
+  description: z.string().min(1, "車両説明を入力してください"),
   mileage: z.number().min(1, "走行距離を入力してください"),
   displacement: z.number().min(1, "排気量を入力してください"),
   doorNumber: z.number().optional(),
@@ -36,13 +36,13 @@ export const registrationStockSchema = z.object({
 
   // Guarantee fields
   guarantee: z.string().min(1, "保証有無を選択してください"),
-  guaranteePeriod: z.string().optional(),
-  guaranteeDistance: z.string().optional(),
+  guaranteePeriod: z.number().optional(),
+  guaranteeDistance: z.number().optional(),
   guaranteeContent: z.string().optional(),
   guaranteeCountSelect: z.string().optional(),
-  guaranteeCount: z.string().optional(),
+  guaranteeCount: z.number().optional(),
   guaranteeLimitSelect: z.string().optional(),
-  guaranteeLimit: z.string().optional(),
+  guaranteeLimit: z.number().optional(),
   guaranteeExemptionSelect: z.string().optional(),
   guaranteeExemption: z.string().optional(),
   guaranteeRoadServiceSelect: z.string().optional(),

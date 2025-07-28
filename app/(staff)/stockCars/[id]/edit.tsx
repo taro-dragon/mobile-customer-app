@@ -1,11 +1,15 @@
 import Loader from "@/components/common/Loader";
-import { RegistrationStockFormData } from "@/constants/schemas/registrationStockSchema";
+import {
+  RegistrationStockFormData,
+  registrationStockSchema,
+} from "@/constants/schemas/registrationStockSchema";
 import { useStockCarContext } from "@/contexts/staff/stockCars/StockCarContext";
 import StockCarEditScreen from "@/screens/staff/stockCars/id/edit";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 
 const StockCarEdit = () => {
-  const { stockCar, isLoading, isError, mutate } = useStockCarContext();
+  const { stockCar, isLoading } = useStockCarContext();
   const Form = useForm<RegistrationStockFormData>({
     defaultValues: {
       ...stockCar,
@@ -15,7 +19,10 @@ const StockCarEdit = () => {
       right: stockCar.images.right,
       interior: stockCar.images.interior,
     },
+    resolver: zodResolver(registrationStockSchema),
   });
+
+  console.log(JSON.stringify(Form.watch(), null, 2));
 
   if (isLoading) {
     return <Loader />;
