@@ -1,12 +1,10 @@
 import Loader from "@/components/common/Loader";
 import { useStockCarsContext } from "@/contexts/staff/CarSearchContext";
 import SearchScreen from "@/screens/users/tabs/search";
-import { useInstantSearch } from "react-instantsearch-core";
 
 const Search = () => {
-  const { cars, showMore, isLastPage } = useStockCarsContext();
-  const { status, refresh } = useInstantSearch();
-  if (cars.length === 0 && (status === "loading" || status === "stalled")) {
+  const { cars, showMore, isLastPage, refresh } = useStockCarsContext();
+  if (cars.length === 0) {
     return <Loader />;
   }
   return (

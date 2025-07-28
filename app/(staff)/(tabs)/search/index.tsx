@@ -4,8 +4,8 @@ import SearchScreen from "@/screens/staff/tabs/search";
 import { useInstantSearch } from "react-instantsearch-core";
 
 const Search = () => {
-  const { cars, showMore, isLastPage } = useStockCarsContext();
-  const { status, refresh } = useInstantSearch();
+  const { cars, showMore, isLastPage, refresh } = useStockCarsContext();
+  const { status } = useInstantSearch();
   if (cars.length === 0 && (status === "loading" || status === "stalled")) {
     return <Loader />;
   }

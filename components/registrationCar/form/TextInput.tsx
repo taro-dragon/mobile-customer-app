@@ -33,22 +33,39 @@ const TextInput = ({
     field: { value, onChange },
   } = useController({ control, name });
 
+  const isNumeric =
+    props.keyboardType === "numeric" || props.keyboardType === "number-pad";
+
+  // 数値を3桁ごとにカンマ区切りでフォーマット
+  const formatNumber = (num: number | undefined): string => {
+    if (num === undefined || num === null) return "";
+    return num.toLocaleString();
+  };
+
+  // カンマを除去して数値に変換
+  const parseNumber = (text: string): number | undefined => {
+    const cleanedText = text.replace(/,/g, "");
+    if (cleanedText === "") return undefined;
+    const num = Number(cleanedText);
+    return isNaN(num) ? undefined : num;
+  };
+
   const handleChange = (text: string) => {
-    if (
-      props.keyboardType === "numeric" ||
-      props.keyboardType === "number-pad"
-    ) {
-      // 空文字列の場合はundefined、それ以外は数値に変換
-      const numericValue = text === "" ? undefined : Number(text);
+    if (isNumeric) {
+      // 数値の場合はカンマを除去してから数値に変換
+      const numericValue = parseNumber(text);
       onChange(numericValue);
     } else {
       onChange(text);
     }
   };
 
-  // 表示用の値を文字列に変換
-  const displayValue =
-    value !== undefined && value !== null ? String(value) : "";
+  // 表示用の値を文字列に変換（数値の場合はカンマ区切りでフォーマット）
+  const displayValue = isNumeric
+    ? formatNumber(value as number)
+    : value !== undefined && value !== null
+    ? String(value)
+    : "";
 
   return (
     <View style={{ gap: 8 }}>

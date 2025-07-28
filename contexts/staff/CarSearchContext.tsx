@@ -11,9 +11,14 @@ import { useFormContext } from "react-hook-form";
 import { Shop } from "@/types/models/Shop";
 import { Stock } from "@/types/firestore_schema/stock";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import { useInfiniteHits, useConfigure } from "react-instantsearch-core";
+import {
+  useInfiniteHits,
+  useConfigure,
+  useInstantSearch,
+} from "react-instantsearch-core";
 import SortModal from "@/components/staff/search/SortModal";
 import type { Hit as AlgoliaHit } from "instantsearch.js";
+import { useFocusEffect } from "expo-router";
 
 export type ExtendedCar = Stock & {
   shop: Shop;
@@ -34,6 +39,7 @@ type StockCarContextType = {
   handleSortChange: (sortOption: SortOption) => void;
   showMore: () => void;
   isLastPage: boolean;
+  refresh: () => void;
 };
 
 const StockCarsContext = createContext<StockCarContextType | undefined>(
@@ -49,10 +55,21 @@ export const StockCarsProvider: React.FC<{
 
   const formValues = watch();
 
+  // refresh用のタイムスタンプを管理
+  const [refreshTimestamp, setRefreshTimestamp] = useState<number>(Date.now());
+
+  useFocusEffect(
+    useCallback(() => {
+      setRefreshTimestamp(Date.now());
+    }, [])
+  );
+
   const buildAlgoliaFilters = useCallback(() => {
     const filters: string[] = [];
 
     filters.push("status:published");
+
+    filters.push(`updatedAt <= ${refreshTimestamp}`);
 
     if (formValues.maker) {
       filters.push(`maker:${formValues.maker}`);
@@ -135,6 +152,10 @@ export const StockCarsProvider: React.FC<{
   const { items, showMore, isLastPage } = useInfiniteHits<StockHit>({
     escapeHTML: false,
   });
+
+  // useInstantSearchからrefresh関数を取得
+  const { refresh } = useInstantSearch();
+
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
   const handlePresentModalPress = useCallback(() => {
@@ -161,6 +182,7 @@ export const StockCarsProvider: React.FC<{
     handlePresentModalPress,
     handleDismissModalPress,
     handleSortChange,
+    refresh,
   };
 
   return (
