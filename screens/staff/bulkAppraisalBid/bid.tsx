@@ -106,6 +106,34 @@ const BulkAppraisalBidBidScreen: React.FC<BulkAppraisalBidBidScreenProps> = ({
     ]);
   };
 
+  const parseNumber = (text: string): number | undefined => {
+    const cleanedText = text.replace(/,/g, "");
+    if (cleanedText === "") return undefined;
+    const num = Number(cleanedText);
+    return isNaN(num) ? undefined : num;
+  };
+  const formatNumber = (num: number | undefined): string => {
+    if (num === undefined || num === null) return "";
+    return num.toLocaleString();
+  };
+
+  const handleChange = (
+    text: string,
+    onChange: (value: number | string | undefined) => void
+  ) => {
+    if (text === "") {
+      onChange("");
+    } else {
+      const numericValue = parseNumber(text);
+      onChange(numericValue);
+    }
+  };
+  const getDisplayValue = (value: number | string | undefined): string => {
+    return value !== undefined && value !== null
+      ? formatNumber(value as number)
+      : "";
+  };
+
   const managerStaffs = watch("managerStaffs");
 
   return (
@@ -175,9 +203,9 @@ const BulkAppraisalBidBidScreen: React.FC<BulkAppraisalBidBidScreenProps> = ({
                   }}
                 >
                   <TextInput
-                    value={minBid.toString()}
+                    value={getDisplayValue(minBid)}
                     keyboardType="numeric"
-                    onChangeText={(text) => setMinBid(Number(text))}
+                    onChangeText={(text) => handleChange(text, setMinBid)}
                     style={{
                       backgroundColor: colors.backgroundSecondary,
                       borderRadius: 8,
@@ -221,9 +249,9 @@ const BulkAppraisalBidBidScreen: React.FC<BulkAppraisalBidBidScreenProps> = ({
                   }}
                 >
                   <TextInput
-                    value={maxBid.toString()}
+                    value={getDisplayValue(maxBid)}
                     keyboardType="numeric"
-                    onChangeText={(text) => setMaxBid(Number(text))}
+                    onChangeText={(text) => handleChange(text, setMaxBid)}
                     style={{
                       backgroundColor: colors.backgroundSecondary,
                       borderRadius: 8,

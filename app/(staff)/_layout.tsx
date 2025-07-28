@@ -146,6 +146,15 @@ export default function Layout() {
           animation: "slide_from_bottom",
         }}
       />
+      <Stack.Screen
+        name="bulkAppraisalBids"
+        options={{
+          gestureDirection: "vertical",
+          headerShown: false,
+          gestureEnabled: false,
+          animation: "slide_from_bottom",
+        }}
+      />
       <Stack.Screen name="shopSelect" />
     </Stack>
   );

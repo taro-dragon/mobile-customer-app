@@ -46,7 +46,9 @@ const StoreManagementScreen = () => {
         <ManageStorePanel
           title="一括査定管理"
           icon={<Gavel size={32} color={colors.primary} />}
-          onPress={() => {}}
+          onPress={() => {
+            router.push("/bulkAppraisalBids");
+          }}
         />
         <ManageStorePanel
           title="オファー管理"
