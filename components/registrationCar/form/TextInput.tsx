@@ -52,7 +52,6 @@ const TextInput = ({
 
   const handleChange = (text: string) => {
     if (isNumeric) {
-      // 数値の場合はカンマを除去してから数値に変換
       const numericValue = parseNumber(text);
       onChange(numericValue);
     } else {
@@ -60,12 +59,15 @@ const TextInput = ({
     }
   };
 
-  // 表示用の値を文字列に変換（数値の場合はカンマ区切りでフォーマット）
-  const displayValue = isNumeric
-    ? formatNumber(value as number)
-    : value !== undefined && value !== null
-    ? String(value)
-    : "";
+  // 表示用の値を取得
+  const getDisplayValue = (): string => {
+    if (isNumeric) {
+      return value !== undefined && value !== null
+        ? formatNumber(value as number)
+        : "";
+    }
+    return value !== undefined && value !== null ? String(value) : "";
+  };
 
   return (
     <View style={{ gap: 8 }}>
@@ -76,7 +78,7 @@ const TextInput = ({
       <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 8 }}>
         <RNTextInput
           {...props}
-          value={displayValue}
+          value={getDisplayValue()}
           onChangeText={handleChange}
           multiline={multiline}
           editable={editable}

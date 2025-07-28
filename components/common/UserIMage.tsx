@@ -24,7 +24,7 @@ const UserImage: React.FC<UserImageProps> = ({ imageUrl, size = 32 }) => {
           alignItems: "center",
         }}
       >
-        <UserIcon size={size} color={colors.textPrimary} />
+        <UserIcon size={size / 1.5} color={colors.textPrimary} />
       </View>
     );
   }

@@ -41,7 +41,7 @@ const StockCarsItem: React.FC<StockCarsItemProps> = ({ stockCar }) => {
                 {carData.model.name}
               </Text>
             </View>
-            <View>
+            <View style={{ gap: 4, flexDirection: "row" }}>
               {stockCar.managerStaffs.map((staff, i) => {
                 const staffData = currentStoreStaffs.find(
                   (s) => s.id === staff

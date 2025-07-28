@@ -52,6 +52,7 @@ export const StockCarsProvider: React.FC<{
   setCurrentSort: (sort: SortOption) => void;
 }> = ({ children, currentSort, setCurrentSort }) => {
   const { watch } = useFormContext();
+  const { refresh } = useInstantSearch();
 
   const formValues = watch();
 
@@ -61,6 +62,7 @@ export const StockCarsProvider: React.FC<{
   useFocusEffect(
     useCallback(() => {
       setRefreshTimestamp(Date.now());
+      refresh();
     }, [])
   );
 
@@ -152,9 +154,6 @@ export const StockCarsProvider: React.FC<{
   const { items, showMore, isLastPage } = useInfiniteHits<StockHit>({
     escapeHTML: false,
   });
-
-  // useInstantSearchからrefresh関数を取得
-  const { refresh } = useInstantSearch();
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
