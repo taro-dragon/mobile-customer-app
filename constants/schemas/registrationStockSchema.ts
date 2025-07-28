@@ -1,12 +1,5 @@
 import { z } from "zod";
 
-// 共通の数値フィールド用スキーマ（カスタムメッセージ対応）
-const createNumberField = (message: string) =>
-  z.preprocess(
-    (val) => (val === "" ? undefined : Number(val)),
-    z.number({ required_error: message }).min(1, message)
-  );
-
 // Main schema that includes all fields from all tabs
 export const registrationStockSchema = z.object({
   // Basic info fields

@@ -76,6 +76,7 @@ const BulkAppraisalBidBidScreen: React.FC<BulkAppraisalBidBidScreenProps> = ({
           managerStaffIds: data.managerStaffs,
           isSelected: false,
           isArchived: false,
+          status: "in_progress",
         });
       Toast.show({
         type: "success",

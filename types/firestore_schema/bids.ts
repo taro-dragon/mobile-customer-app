@@ -9,7 +9,8 @@ export type Bid = {
   maxPrice: number; // 提示価格
   comment: string; // コメント
   isSelected: boolean; // ユーザーに選択されたかどうか
-  staffIds: string[];
+  managerStaffIds: string[]; // 担当者
+  status: "in_progress" | "waiting_selection" | "finished";
   createdAt: FirebaseFirestoreTypes.Timestamp;
   updatedAt: FirebaseFirestoreTypes.Timestamp;
 };

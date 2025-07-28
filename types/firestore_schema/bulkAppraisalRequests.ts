@@ -13,7 +13,7 @@ export type BulkAppraisalRequest = {
   mileage: number;
   repairStatus: string;
   sellTime: string;
-  status?: "in_progress" | "deadline" | "completed";
+  status?: "in_progress" | "waiting_selection" | "finished";
   deadline: FirebaseFirestoreTypes.Timestamp;
   createdAt: FirebaseFirestoreTypes.Timestamp;
   updatedAt: FirebaseFirestoreTypes.Timestamp;
