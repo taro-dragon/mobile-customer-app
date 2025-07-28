@@ -19,9 +19,9 @@ export const registrationStockSchema = z.object({
   ]),
   // Other photos are optional
   description: z.string().min(1, "車両説明は必須です"),
-  mileage: z.string().min(1, "走行距離を入力してください"),
-  displacement: z.string().min(1, "排気量を入力してください"),
-  doorNumber: z.string().optional(),
+  mileage: z.number().min(1, "走行距離を入力してください"),
+  displacement: z.number().min(1, "排気量を入力してください"),
+  doorNumber: z.number().optional(),
   fuelType: z.string().optional(),
   transmission: z.string().min(1, "ミッションを選択してください"),
   inspection: z.string().min(1, "車検を選択してください"),
@@ -29,8 +29,8 @@ export const registrationStockSchema = z.object({
   color: z.string().optional(),
 
   // Price fields
-  bodyPrice: z.string().min(1, "車両本体価格を入力してください"),
-  totalPayment: z.string().min(1, "支払い総額を入力してください"),
+  bodyPrice: z.number().min(1, "車両本体価格を入力してください"),
+  totalPayment: z.number().min(1, "支払い総額を入力してください"),
   legalRepair: z.string().min(1, "法定整備を選択してください"),
   legalRepairDescription: z.string().optional(),
 

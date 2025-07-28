@@ -33,6 +33,23 @@ const TextInput = ({
     field: { value, onChange },
   } = useController({ control, name });
 
+  const handleChange = (text: string) => {
+    if (
+      props.keyboardType === "numeric" ||
+      props.keyboardType === "number-pad"
+    ) {
+      // 空文字列の場合はundefined、それ以外は数値に変換
+      const numericValue = text === "" ? undefined : Number(text);
+      onChange(numericValue);
+    } else {
+      onChange(text);
+    }
+  };
+
+  // 表示用の値を文字列に変換
+  const displayValue =
+    value !== undefined && value !== null ? String(value) : "";
+
   return (
     <View style={{ gap: 8 }}>
       <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
@@ -42,8 +59,8 @@ const TextInput = ({
       <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 8 }}>
         <RNTextInput
           {...props}
-          value={value}
-          onChangeText={onChange}
+          value={displayValue}
+          onChangeText={handleChange}
           multiline={multiline}
           editable={editable}
           style={{

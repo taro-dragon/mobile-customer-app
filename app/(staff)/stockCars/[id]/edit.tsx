@@ -9,9 +9,11 @@ const StockCarEdit = () => {
   const Form = useForm<RegistrationStockFormData>({
     defaultValues: {
       ...stockCar,
-      mileage: String(stockCar.mileage),
-      totalPayment: String(stockCar.totalPayment),
-      bodyPrice: String(stockCar.bodyPrice),
+      front: stockCar.images.front,
+      back: stockCar.images.back,
+      left: stockCar.images.left,
+      right: stockCar.images.right,
+      interior: stockCar.images.interior,
     },
   });
 
@@ -21,7 +23,7 @@ const StockCarEdit = () => {
 
   return (
     <FormProvider {...Form}>
-      <StockCarEditScreen />
+      <StockCarEditScreen stock={stockCar} />
     </FormProvider>
   );
 };

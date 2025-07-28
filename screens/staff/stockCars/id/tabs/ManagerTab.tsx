@@ -84,6 +84,7 @@ const ManagerTab: React.FC<ManagerTabProps> = ({ stock }) => {
       contentContainerStyle={{
         padding: 16,
         paddingTop: 16,
+        gap: 8,
       }}
       renderItem={({ item }) => <RenderItem staffId={item} />}
     />

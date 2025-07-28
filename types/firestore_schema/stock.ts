@@ -18,8 +18,8 @@ export type Stock = {
     interior: string;
   };
   mileage: number;
-  displacement: string;
-  doorNumber?: string;
+  displacement: number;
+  doorNumber?: number;
   fuelType?: string;
   transmission: string;
   inspection: string;
@@ -29,8 +29,8 @@ export type Stock = {
   firstRegistrationYear?: string | number;
 
   // Price fields
-  bodyPrice: string;
-  totalPayment: string;
+  bodyPrice: number;
+  totalPayment: number;
   legalRepair: string;
   legalRepairDescription?: string;
   industrySales: string;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -29,6 +29,8 @@ import { uploadStockImages } from "@/libs/uploadStockImages";
 import Toast from "react-native-toast-message";
 import { removeUndefined } from "@/libs/removeUndefined";
 import RegistrationStockManagerFormScreen from "@/screens/staff/registrationStock/form/manager";
+import { Stock } from "@/types/firestore_schema/stock";
+import { useStockCarContext } from "@/contexts/staff/stockCars/StockCarContext";
 
 const routes = [
   { key: "basic", title: "基本" },
@@ -37,6 +39,10 @@ const routes = [
   { key: "options", title: "オプション" },
   { key: "manager", title: "担当者" },
 ];
+
+type StockCarEditScreenProps = {
+  stock: Stock;
+};
 
 const renderScene = SceneMap({
   basic: RegistrationStockBasicFormScreen,
@@ -52,18 +58,21 @@ const REQUIRED_IMAGE_FIELDS = ["front", "back", "left", "right", "interior"];
 // 追加可能な画像フィールドのベース名
 const ADDITIONAL_PHOTO_BASE = "otherPhoto";
 
-const RegistrationStockFormScreen: React.FC = () => {
+const RegistrationStockFormScreen: React.FC<StockCarEditScreenProps> = ({
+  stock,
+}) => {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { mutate } = useStockCarContext();
   const { colors, typography } = useTheme();
   const [isModalVisible, setModalVisible] = useState(false);
-  const { currentStore, staff } = useStore();
+
+  const { currentStore } = useStore();
   const router = useRouter();
   const [index, setIndex] = useState(0);
   const layout = useWindowDimensions();
   const {
-    watch,
     handleSubmit,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = useFormContext();
 
   const collectImageFields = (
@@ -103,7 +112,13 @@ const RegistrationStockFormScreen: React.FC = () => {
 
       const imageFields = collectImageFields(data);
 
-      const imageUrls = await uploadStockImages(stockCarRef.id, imageFields);
+      // 既存の画像URLを取得して、変化を検出
+      const existingImages = stock?.images || {};
+      const imageUrls = await uploadStockImages(
+        stockCarRef.id,
+        imageFields,
+        existingImages
+      );
 
       const stockData = { ...data };
 
@@ -119,20 +134,16 @@ const RegistrationStockFormScreen: React.FC = () => {
       const cleanStockData = removeUndefined(stockData);
 
       await stockCarRef.update({
-        updatedAt: firestore.FieldValue.serverTimestamp(),
-        images: imageUrls,
         ...cleanStockData,
-        bodyPrice: Number(cleanStockData.bodyPrice),
-        totalPayment: Number(cleanStockData.totalPayment),
-        mileage: Number(cleanStockData.mileage),
-        displacement: Number(cleanStockData.displacement),
-        doorNumber: Number(cleanStockData.doorNumber),
+        images: imageUrls,
         prefecture: currentStore.address1,
+        updatedAt: firestore.Timestamp.now(),
       });
+      mutate();
       router.back();
       Toast.show({
         type: "success",
-        text1: "在庫登録が完了しました",
+        text1: "在庫情報を更新しました",
       });
     } catch (error) {
       console.error("Stock registration error:", error);
