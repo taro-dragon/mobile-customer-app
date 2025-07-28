@@ -1,5 +1,12 @@
 import { z } from "zod";
 
+// 共通の数値フィールド用スキーマ（カスタムメッセージ対応）
+const createNumberField = (message: string) =>
+  z.preprocess(
+    (val) => (val === "" ? undefined : Number(val)),
+    z.number({ required_error: message }).min(1, message)
+  );
+
 // Main schema that includes all fields from all tabs
 export const registrationStockSchema = z.object({
   // Basic info fields
@@ -18,9 +25,15 @@ export const registrationStockSchema = z.object({
     z.number().min(1, "初年度登録年を選択してください"),
   ]),
   // Other photos are optional
-  description: z.string().min(1, "車両説明を入力してください"),
-  mileage: z.number().min(1, "走行距離を入力してください"),
-  displacement: z.number().min(1, "排気量を入力してください"),
+  description: z
+    .string({ required_error: "車両説明を入力してください" })
+    .min(1, "車両説明を入力してください"),
+  mileage: z
+    .number({ required_error: "走行距離を入力してください" })
+    .min(1, "走行距離を入力してください"),
+  displacement: z
+    .number({ required_error: "排気量を入力してください" })
+    .min(1, "排気量を入力してください"),
   doorNumber: z.number().optional(),
   fuelType: z.string().optional(),
   transmission: z.string().min(1, "ミッションを選択してください"),
@@ -29,8 +42,12 @@ export const registrationStockSchema = z.object({
   color: z.string().optional(),
 
   // Price fields
-  bodyPrice: z.number().min(1, "車両本体価格を入力してください"),
-  totalPayment: z.number().min(1, "支払い総額を入力してください"),
+  bodyPrice: z
+    .number({ required_error: "車両本体価格を入力してください" })
+    .min(1, "車両本体価格を入力してください"),
+  totalPayment: z
+    .number({ required_error: "支払い総額を入力してください" })
+    .min(1, "支払い総額を入力してください"),
   legalRepair: z.string().min(1, "法定整備を選択してください"),
   legalRepairDescription: z.string().optional(),
 

@@ -22,8 +22,6 @@ const StockCarEdit = () => {
     resolver: zodResolver(registrationStockSchema),
   });
 
-  console.log(JSON.stringify(Form.watch(), null, 2));
-
   if (isLoading) {
     return <Loader />;
   }

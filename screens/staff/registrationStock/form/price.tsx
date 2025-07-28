@@ -1,9 +1,6 @@
 import ModalPicker from "@/components/registrationCar/form/ModalPicker";
 import TextInput from "@/components/registrationCar/form/TextInput";
-import {
-  industrySalesOptions,
-  legalRepairOptions,
-} from "@/constants/registrationStockOptions";
+import { legalRepairOptions } from "@/constants/registrationStockOptions";
 import { useFormContext } from "react-hook-form";
 import { ScrollView, View } from "react-native";
 

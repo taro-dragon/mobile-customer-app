@@ -125,7 +125,7 @@ const StockCarHeader: React.FC<StockCarHeaderProps> = ({ stock }) => {
           <View style={{ flexDirection: "row", gap: 4, alignItems: "center" }}>
             <Clock size={20} color={colors.textPrimary} />
             <Text style={{ ...typography.body4, color: colors.textSecondary }}>
-              {dayjs(stock.updatedAt.toDate()).format("YYYY/MM/DD HH:mm")}
+              {dayjs(stock.updatedAt.toDate()).format("YYYY/MM/DD HH:mm:ss")}
             </Text>
           </View>
           <View style={{ flexDirection: "row", gap: 4, alignItems: "center" }}>

@@ -4,7 +4,7 @@ import React from "react";
 
 type CarInfoItemProps = {
   label: string;
-  value: string;
+  value: string | number;
   multiline?: boolean;
 };
 

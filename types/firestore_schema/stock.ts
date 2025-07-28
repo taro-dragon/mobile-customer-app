@@ -37,13 +37,13 @@ export type Stock = {
 
   // Guarantee fields
   guarantee: string;
-  guaranteePeriod?: string;
-  guaranteeDistance?: string;
+  guaranteePeriod?: number;
+  guaranteeDistance?: number;
   guaranteeContent?: string;
   guaranteeCountSelect?: string;
-  guaranteeCount?: string;
+  guaranteeCount?: number;
   guaranteeLimitSelect?: string;
-  guaranteeLimit?: string;
+  guaranteeLimit?: number;
   guaranteeExemptionSelect?: string;
   guaranteeExemption?: string;
   guaranteeRoadServiceSelect?: string;

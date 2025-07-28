@@ -52,8 +52,12 @@ const TextInput = ({
 
   const handleChange = (text: string) => {
     if (isNumeric) {
-      const numericValue = parseNumber(text);
-      onChange(numericValue);
+      if (text === "") {
+        onChange("");
+      } else {
+        const numericValue = parseNumber(text);
+        onChange(numericValue);
+      }
     } else {
       onChange(text);
     }
