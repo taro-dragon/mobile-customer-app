@@ -15,6 +15,7 @@ import firestore from "@react-native-firebase/firestore";
 import { useStore } from "@/hooks/useStore";
 import { useStockCarContext } from "@/contexts/staff/stockCars/StockCarContext";
 import { useStockCarsContext } from "@/contexts/staff/stockCars/StockCarsContext";
+import Toast from "react-native-toast-message";
 
 type StockCarDetailScreenProps = {
   stock: Stock;
@@ -35,6 +36,25 @@ const StockCarDetailScreen: React.FC<StockCarDetailScreenProps> = ({
       updatedAt: firestore.Timestamp.now(),
       updatedBy: staff?.id,
     });
+    Toast.show({
+      type: "success",
+      text1: "公開終了しました",
+    });
+    mutate();
+    archivedStockCarsMutate();
+    publishedStockCarsMutate();
+    router.back();
+  };
+  const publishStockCar = async () => {
+    await firestore().collection("stockCars").doc(stock.id).update({
+      status: "published",
+      updatedAt: firestore.Timestamp.now(),
+      updatedBy: staff?.id,
+    });
+    Toast.show({
+      type: "success",
+      text1: "公開しました",
+    });
     mutate();
     archivedStockCarsMutate();
     publishedStockCarsMutate();
@@ -44,6 +64,12 @@ const StockCarDetailScreen: React.FC<StockCarDetailScreenProps> = ({
     Alert.alert("公開終了", "公開終了しますか？", [
       { text: "キャンセル", style: "cancel" },
       { text: "公開終了", onPress: archiveStockCar },
+    ]);
+  };
+  const onPublish = () => {
+    Alert.alert("公開", "公開しますか？", [
+      { text: "キャンセル", style: "cancel" },
+      { text: "公開", onPress: publishStockCar },
     ]);
   };
   const renderTabBar = useCallback(
@@ -124,6 +150,16 @@ const StockCarDetailScreen: React.FC<StockCarDetailScreenProps> = ({
                 onPress={onConfirm}
                 color={colors.textError}
                 icon="X"
+              />
+            </View>
+          )}
+          {stock.status === "archived" && (
+            <View style={{ flex: 1 }}>
+              <Button
+                label="公開する"
+                onPress={onPublish}
+                color={colors.textInfo}
+                icon="Check"
               />
             </View>
           )}
