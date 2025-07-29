@@ -26,7 +26,7 @@ const BulkAppraisalBidsList: React.FC<BulkAppraisalBidsListProps> = ({
   return (
     <FlatList
       data={bids}
-      contentContainerStyle={{ padding: 16 }}
+      contentContainerStyle={{ padding: 16, gap: 12 }}
       renderItem={({ item }) => <BulkAppraisalBidsItem bid={item} />}
       onEndReachedThreshold={0.5}
       onEndReached={() => {
