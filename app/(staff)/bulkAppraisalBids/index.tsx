@@ -1,7 +1,7 @@
-import { View } from "react-native";
+import BulkAppraisalBidsScreen from "@/screens/staff/bulkAppraisalBids";
 
 const BulkAppraisalBids = () => {
-  return <View></View>;
+  return <BulkAppraisalBidsScreen />;
 };
 
 export default BulkAppraisalBids;
