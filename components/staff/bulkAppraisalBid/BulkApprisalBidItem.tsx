@@ -71,7 +71,10 @@ const BulkApprisalBidItem: React.FC<BulkApprisalBidItemProps> = ({ item }) => {
           <Text style={{ ...typography.body4, color: colors.textSecondary }}>
             {year.year}
           </Text>
-          <Text style={{ ...typography.body4, color: colors.textSecondary }}>
+          <Text
+            numberOfLines={1}
+            style={{ ...typography.body4, color: colors.textSecondary }}
+          >
             {grade.gradeName}
           </Text>
           <Text style={{ ...typography.body3, color: colors.textSecondary }}>

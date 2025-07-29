@@ -1,5 +1,5 @@
 import { ExBulkAppraisalBid } from "@/hooks/staff/bulkAppraisalBids/type";
-import { Dimensions, RefreshControl, Text, View } from "react-native";
+import { Dimensions, FlatList, RefreshControl, Text, View } from "react-native";
 import BulkAppraisalBidsItem from "./BulkAppraisalBidsItem";
 import { FlashList } from "@shopify/flash-list";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -24,7 +24,7 @@ const BulkAppraisalBidsList: React.FC<BulkAppraisalBidsListProps> = ({
   const { typography, colors } = useTheme();
   const headerHeight = useHeaderHeight();
   return (
-    <FlashList
+    <FlatList
       data={bids}
       contentContainerStyle={{ padding: 16 }}
       renderItem={({ item }) => <BulkAppraisalBidsItem bid={item} />}
@@ -58,7 +58,7 @@ const BulkAppraisalBidsList: React.FC<BulkAppraisalBidsListProps> = ({
           >
             <Gavel size={48} color={colors.iconSecondary} strokeWidth={1.5} />
             <Text style={{ color: colors.textSecondary, ...typography.body2 }}>
-              対象の車両がありません
+              対象の一括査定入札がありません
             </Text>
           </View>
         </View>
