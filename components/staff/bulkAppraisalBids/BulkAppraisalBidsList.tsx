@@ -1,7 +1,10 @@
 import { ExBulkAppraisalBid } from "@/hooks/staff/bulkAppraisalBids/type";
-import { RefreshControl } from "react-native";
+import { Dimensions, RefreshControl, Text, View } from "react-native";
 import BulkAppraisalBidsItem from "./BulkAppraisalBidsItem";
 import { FlashList } from "@shopify/flash-list";
+import { useTheme } from "@/contexts/ThemeContext";
+import { useHeaderHeight } from "@react-navigation/elements";
+import { Gavel } from "lucide-react-native";
 
 type BulkAppraisalBidsListProps = {
   bids: ExBulkAppraisalBid[];
@@ -18,6 +21,8 @@ const BulkAppraisalBidsList: React.FC<BulkAppraisalBidsListProps> = ({
   isLoading,
   mutate,
 }) => {
+  const { typography, colors } = useTheme();
+  const headerHeight = useHeaderHeight();
   return (
     <FlashList
       data={bids}
@@ -37,6 +42,27 @@ const BulkAppraisalBidsList: React.FC<BulkAppraisalBidsListProps> = ({
           }}
         />
       }
+      ListEmptyComponent={() => (
+        <View
+          style={{
+            height: Dimensions.get("window").height - headerHeight - 32 - 56,
+          }}
+        >
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 16,
+            }}
+          >
+            <Gavel size={48} color={colors.iconSecondary} strokeWidth={1.5} />
+            <Text style={{ color: colors.textSecondary, ...typography.body2 }}>
+              対象の車両がありません
+            </Text>
+          </View>
+        </View>
+      )}
     />
   );
 };
