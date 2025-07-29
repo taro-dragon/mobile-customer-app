@@ -10,9 +10,11 @@ const FinishedBulkAppraisalBidsTab = () => {
     finishedBidsHasMore,
     finishedBidsMutate,
   } = useBulkAppraisalBidsContext();
+
   if (isFinishedBidsLoading) {
     return <Loader />;
   }
+
   return (
     <BulkAppraisalBidsList
       bids={finishedBids}

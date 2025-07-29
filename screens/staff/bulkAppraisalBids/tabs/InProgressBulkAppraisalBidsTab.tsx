@@ -10,9 +10,11 @@ const InProgressBulkAppraisalBidsTab = () => {
     inProgressBidsHasMore,
     inProgressBidsMutate,
   } = useBulkAppraisalBidsContext();
+
   if (isInProgressBidsLoading) {
     return <Loader />;
   }
+
   return (
     <BulkAppraisalBidsList
       bids={inProgressBids}

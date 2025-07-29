@@ -10,9 +10,11 @@ const WaitingSelectionBulkAppraisalBidsTab = () => {
     waitingSelectionBidsHasMore,
     waitingSelectionBidsMutate,
   } = useBulkAppraisalBidsContext();
+
   if (isWaitingSelectionBidsLoading) {
     return <Loader />;
   }
+
   return (
     <BulkAppraisalBidsList
       bids={waitingSelectionBids}
