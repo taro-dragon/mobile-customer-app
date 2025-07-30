@@ -3,6 +3,7 @@ import Button from "@/components/common/Button";
 import Card from "@/components/common/Card";
 import Divider from "@/components/common/Divider";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useStore } from "@/hooks/useStore";
 import { transformCarData } from "@/libs/transformCarData";
 import { BuyOffer } from "@/types/firestore_schema/buyOffers";
 import { Car } from "@/types/models/Car";
@@ -19,6 +20,7 @@ const OfferDetailScreen: React.FC<OfferDetailScreenProps> = ({
   handleDeleteOffer,
 }) => {
   const { colors, typography } = useTheme();
+  const { currentStoreStaffs } = useStore();
   const carData = transformCarData(offer as unknown as Car);
   return (
     <View style={{ flex: 1, paddingBottom: 24 }}>
@@ -165,6 +167,25 @@ const OfferDetailScreen: React.FC<OfferDetailScreenProps> = ({
                   style={{ ...typography.body2, color: colors.textPrimary }}
                 >
                   {offer.contactUsers.length}件
+                </Text>
+              </View>
+              <View style={{ gap: 4 }}>
+                <Text
+                  style={{
+                    ...typography.heading3,
+                    color: colors.textSecondary,
+                  }}
+                >
+                  オファー作成者
+                </Text>
+                <Text
+                  style={{ ...typography.body2, color: colors.textPrimary }}
+                >
+                  {
+                    currentStoreStaffs.find(
+                      (staff) => staff.id === offer.senderStaffId
+                    )?.name
+                  }
                 </Text>
               </View>
             </View>
