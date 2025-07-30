@@ -1,14 +1,14 @@
-import { BulkAppraisalBidsProvider } from "@/contexts/staff/bulkAppraisalBids/BulkAppraisalBidsContext";
+import { BulkAppraisalBidProvider } from "@/contexts/staff/bulkAppraisalBids/BulkAppraisalBidContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Stack, useRouter } from "expo-router";
 import { X } from "lucide-react-native";
 import { TouchableOpacity } from "react-native";
 
-const BulkAppraisalBidsLayout = () => {
-  const { colors } = useTheme();
+const BulkAppraisalBidLayout = () => {
   const router = useRouter();
+  const { colors } = useTheme();
   return (
-    <BulkAppraisalBidsProvider>
+    <BulkAppraisalBidProvider>
       <Stack
         screenOptions={{
           contentStyle: {
@@ -23,7 +23,7 @@ const BulkAppraisalBidsLayout = () => {
         <Stack.Screen
           name="index"
           options={{
-            title: "一括査定管理",
+            title: "一括査定詳細",
             headerShadowVisible: false,
             headerRight: () => (
               <TouchableOpacity onPress={() => router.back()}>
@@ -32,18 +32,9 @@ const BulkAppraisalBidsLayout = () => {
             ),
           }}
         />
-        <Stack.Screen
-          name="[id]"
-          options={{
-            gestureDirection: "vertical",
-            headerShown: false,
-            gestureEnabled: false,
-            animation: "slide_from_bottom",
-          }}
-        />
       </Stack>
-    </BulkAppraisalBidsProvider>
+    </BulkAppraisalBidProvider>
   );
 };
 
-export default BulkAppraisalBidsLayout;
+export default BulkAppraisalBidLayout;

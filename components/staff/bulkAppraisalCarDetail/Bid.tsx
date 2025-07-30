@@ -10,17 +10,12 @@ const Bid = ({ bid }: { bid: ExtendedBid }) => {
       <Card>
         <View
           style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
             gap: 8,
           }}
         >
           <View
             style={{
               flexDirection: "row",
-              justifyContent: "space-between",
-              flex: 1,
             }}
           >
             <View style={{ gap: 4 }}>
@@ -34,18 +29,70 @@ const Bid = ({ bid }: { bid: ExtendedBid }) => {
                 {bid.affiliateStore.address2}
                 {bid.affiliateStore.address3}
               </Text>
-              <View>
+            </View>
+          </View>
+          <View style={{ flexDirection: "row", gap: 8 }}>
+            <View style={{ flex: 1, gap: 4 }}>
+              <View
+                style={{
+                  borderRadius: 4,
+                  padding: 2,
+                  borderWidth: 1,
+                  borderColor: colors.textError,
+                }}
+              >
                 <Text
                   style={{
-                    ...typography.title2,
-                    color: colors.primary,
-                    fontWeight: "700",
+                    ...typography.heading4,
+                    color: colors.textError,
+                    textAlign: "center",
                   }}
                 >
-                  ¥{bid.minPrice.toLocaleString()} - ¥
-                  {bid.maxPrice.toLocaleString()}
+                  最低査定価格
                 </Text>
               </View>
+              <Text style={{ ...typography.title2, color: colors.textError }}>
+                {(Number(bid.minPrice) / 10000).toFixed(1)}
+                <Text
+                  style={{
+                    ...typography.heading5,
+                    color: colors.textSecondary,
+                  }}
+                >
+                  万円
+                </Text>
+              </Text>
+            </View>
+            <View style={{ flex: 1, gap: 4 }}>
+              <View
+                style={{
+                  borderRadius: 4,
+                  padding: 2,
+                  borderWidth: 1,
+                  borderColor: colors.textSuccess,
+                }}
+              >
+                <Text
+                  style={{
+                    ...typography.heading4,
+                    color: colors.textSuccess,
+                    textAlign: "center",
+                  }}
+                >
+                  最高査定価格
+                </Text>
+              </View>
+              <Text style={{ ...typography.title2, color: colors.textSuccess }}>
+                {(Number(bid.maxPrice) / 10000).toFixed(1)}
+                <Text
+                  style={{
+                    ...typography.heading5,
+                    color: colors.textSecondary,
+                  }}
+                >
+                  万円
+                </Text>
+              </Text>
             </View>
           </View>
         </View>

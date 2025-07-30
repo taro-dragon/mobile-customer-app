@@ -10,12 +10,18 @@ const AppraisalStatusTag: React.FC<AppraisalStatusTagProps> = ({
 }) => {
   if (!bulkAppraisalRequest?.status) return null;
   const { status } = bulkAppraisalRequest;
+  console.log(status);
   const label = {
     in_progress: "査定中",
-    deadline: "査定締切",
-    completed: "査定完了",
+    waiting_selection: "査定締切",
+    finished: "査定完了",
   }[status];
-  return <Tag label={label} color="info" />;
+  const color = {
+    in_progress: "info",
+    waiting_selection: "warning",
+    finished: "success",
+  }[status];
+  return <Tag label={label} color={color as "info" | "warning" | "success"} />;
 };
 
 export default AppraisalStatusTag;

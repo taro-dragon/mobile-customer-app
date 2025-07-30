@@ -3,6 +3,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { ExBulkAppraisalBid } from "@/hooks/staff/bulkAppraisalBids/type";
 import { transformCarData } from "@/libs/transformCarData";
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import { Text, TouchableOpacity, View } from "react-native";
 
 type BulkAppraisalBidsItemProps = {
@@ -13,6 +14,7 @@ const BulkAppraisalBidsItem: React.FC<BulkAppraisalBidsItemProps> = ({
   bid,
 }) => {
   const carData = transformCarData(bid.car);
+  const router = useRouter();
   const { typography, colors } = useTheme();
   return (
     <TouchableOpacity
@@ -22,6 +24,7 @@ const BulkAppraisalBidsItem: React.FC<BulkAppraisalBidsItemProps> = ({
         backgroundColor: colors.backgroundSecondary,
         gap: 8,
       }}
+      onPress={() => router.push(`/bulkAppraisalBids/${bid.id}`)}
     >
       <View style={{ flexDirection: "row", gap: 8 }}>
         <Image

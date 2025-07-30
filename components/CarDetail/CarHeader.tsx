@@ -21,14 +21,14 @@ const CarDetailHeader: React.FC = () => {
   const car = cars.find((car) => car.id === id);
   const carData = transformCarData(car as Car);
   const imageOrder = ["front", "back", "left", "right", "interior"] as const;
-  const basicImages = imageOrder
-    .map((key) => car?.images?.[key])
-    .filter((url): url is string => Boolean(url));
   const colorValue = useMemo(() => {
     return (
       colorOptions.find((option) => option.color === car?.color)?.bgColor || ""
     );
   }, [car?.color]);
+  const basicImages = imageOrder
+    .map((key) => car?.images?.[key])
+    .filter((url): url is string => Boolean(url));
 
   const additionalImages = Object.keys(car?.images ?? {})
     .filter((key) => key.startsWith("otherPhoto"))
