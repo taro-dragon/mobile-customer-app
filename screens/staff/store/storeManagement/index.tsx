@@ -2,7 +2,7 @@ import ManageStorePanel from "@/components/staff/manageStore/Panel";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useRouter } from "expo-router";
 import { Car, Gavel, Handshake, Store, Users } from "lucide-react-native";
-import { Text, TouchableOpacity, View } from "react-native";
+import { View } from "react-native";
 
 const StoreManagementScreen = () => {
   const { colors } = useTheme();

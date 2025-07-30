@@ -5,7 +5,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { transformCarData } from "@/libs/transformCarData";
 import { Car } from "@/types/models/Car";
 import Divider from "../common/Divider";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 type ShopCarOfferItemProps = {
   offer: BuyOffer;
 };
@@ -20,7 +20,6 @@ const ShopCarOfferItem: React.FC<ShopCarOfferItemProps> = ({ offer }) => {
   };
   const carData = transformCarData(car as unknown as Car);
   const router = useRouter();
-  const { id } = useLocalSearchParams<{ id: string }>();
 
   return (
     <Card onPress={() => router.push(`/offers/${offer.id}`)}>
