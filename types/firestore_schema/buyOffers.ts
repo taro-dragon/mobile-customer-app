@@ -12,6 +12,7 @@ export type BuyOffer = {
   description: string; // 説明
   isActive: boolean; // 有効かどうか
   contactUsers: string[]; // 連絡先ユーザーID
+  status: "published" | "archived"; // 公開状態
   expiresAt: FirebaseFirestoreTypes.Timestamp; // 有効期限
   createdAt: FirebaseFirestoreTypes.Timestamp;
   updatedAt: FirebaseFirestoreTypes.Timestamp;

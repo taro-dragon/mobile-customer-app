@@ -53,7 +53,9 @@ const StoreManagementScreen = () => {
         <ManageStorePanel
           title="オファー管理"
           icon={<Handshake size={32} color={colors.primary} />}
-          onPress={() => {}}
+          onPress={() => {
+            router.push("/offers");
+          }}
         />
         <View style={{ flex: 3 }} />
       </View>
