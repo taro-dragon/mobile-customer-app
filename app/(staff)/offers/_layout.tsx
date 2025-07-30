@@ -29,6 +29,7 @@ const OfferDetailLayout = () => {
           options={{
             title: "買取オファー一覧",
             headerBackVisible: false,
+            headerShadowVisible: false,
             headerRight: () => (
               <TouchableOpacity onPress={() => router.back()}>
                 <X size={24} color={colors.primary} />

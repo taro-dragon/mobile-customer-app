@@ -1,7 +1,7 @@
-import { View } from "react-native";
+import OffersScreen from "@/screens/staff/offers";
 
 const Offers = () => {
-  return <View></View>;
+  return <OffersScreen />;
 };
 
 export default Offers;

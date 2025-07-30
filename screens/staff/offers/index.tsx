@@ -1,21 +1,20 @@
+import ArchivedOffersTab from "@/components/staff/offers/tabs/ArchivedOffersTab";
+import PublishedOffersTab from "@/components/staff/offers/tabs/PublishedOffersTab";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useState } from "react";
 import { useWindowDimensions, View } from "react-native";
 import { SceneMap, TabBar, TabView } from "react-native-tab-view";
-import PublishedStockCarTab from "./tabs/PublishedStockCarTab";
-import ArchivedStockCarTab from "./tabs/ArchivedStockCarTab";
 
 const renderScene = SceneMap({
-  published: PublishedStockCarTab,
-  archived: ArchivedStockCarTab,
+  published: PublishedOffersTab,
+  archived: ArchivedOffersTab,
 });
 
 const routes = [
   { key: "published", title: "公開中" },
   { key: "archived", title: "公開終了" },
 ];
-
-const StockCarsScreen = () => {
+const OffersScreen = () => {
   const [index, setIndex] = useState(0);
   const layout = useWindowDimensions();
   const { typography, colors } = useTheme();
@@ -46,4 +45,4 @@ const StockCarsScreen = () => {
   );
 };
 
-export default StockCarsScreen;
+export default OffersScreen;

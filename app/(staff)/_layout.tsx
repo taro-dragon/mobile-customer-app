@@ -125,6 +125,7 @@ export default function Layout() {
         options={{
           gestureDirection: "vertical",
           headerShown: false,
+          gestureEnabled: false,
           animation: "slide_from_bottom",
         }}
       />
