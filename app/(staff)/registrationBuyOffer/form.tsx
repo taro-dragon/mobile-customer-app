@@ -10,7 +10,7 @@ import Loader from "@/components/common/Loader";
 
 const RegistrationBuyOfferForm = () => {
   const { getValues } = useFormContext();
-  const { currentStore, currentStoreStaffs, currentStoreStaffsLoading } =
+  const { currentStore, currentStoreStaffs, currentStoreStaffsLoading, staff } =
     useStore();
   const router = useRouter();
 
@@ -47,6 +47,7 @@ const RegistrationBuyOfferForm = () => {
       const submitData = {
         ...filteredData,
         managerStaffs: data.managerStaffs,
+        senderStaffId: staff?.id,
         affiliateStoreId: currentStore?.id,
         createdAt: firestore.FieldValue.serverTimestamp(),
         updatedAt: firestore.FieldValue.serverTimestamp(),

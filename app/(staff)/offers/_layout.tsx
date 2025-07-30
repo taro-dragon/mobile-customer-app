@@ -40,18 +40,10 @@ const OfferDetailLayout = () => {
         <Stack.Screen
           name="[id]"
           options={{
-            title: "買取オファー詳細",
-            headerShadowVisible: false,
-            headerBackVisible: false,
-            headerTintColor: colors.white,
-            headerStyle: {
-              backgroundColor: colors.primary,
-            },
-            headerRight: () => (
-              <TouchableOpacity onPress={() => router.back()}>
-                <X size={24} color={colors.white} />
-              </TouchableOpacity>
-            ),
+            gestureDirection: "vertical",
+            headerShown: false,
+            gestureEnabled: false,
+            animation: "slide_from_bottom",
           }}
         />
       </Stack>

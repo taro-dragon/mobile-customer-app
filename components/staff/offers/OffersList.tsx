@@ -25,7 +25,7 @@ const OffersList: React.FC<Props> = ({
   const { colors, typography } = useTheme();
   return (
     <FlashList
-      data={[...offers, ...offers, ...offers, ...offers, ...offers]}
+      data={offers}
       renderItem={({ item }) => <OffersListItem offer={item} />}
       estimatedItemSize={126}
       keyExtractor={(item, index) => index.toString()}
