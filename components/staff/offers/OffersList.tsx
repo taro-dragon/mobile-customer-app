@@ -25,7 +25,7 @@ const OffersList: React.FC<Props> = ({
   const { colors, typography } = useTheme();
   return (
     <FlashList
-      data={offers}
+      data={[...offers, ...offers, ...offers, ...offers, ...offers]}
       renderItem={({ item }) => <OffersListItem offer={item} />}
       estimatedItemSize={126}
       keyExtractor={(item, index) => index.toString()}
@@ -34,6 +34,8 @@ const OffersList: React.FC<Props> = ({
           loadMore();
         }
       }}
+      contentContainerStyle={{ padding: 16 }}
+      ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
       onEndReachedThreshold={0.5}
       refreshControl={
         <RefreshControl
