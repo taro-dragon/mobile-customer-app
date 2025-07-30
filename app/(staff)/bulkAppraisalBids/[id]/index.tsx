@@ -3,7 +3,7 @@ import Loader from "@/components/common/Loader";
 import BulkAppraisalBidScreen from "@/screens/staff/bulkAppraisalBids/bulkAppraisalBid";
 
 const BulkAppraisalBid = () => {
-  const { bulkAppraisalBid, isLoading } = useBulkAppraisalBidContext();
+  const { isLoading } = useBulkAppraisalBidContext();
   if (isLoading) {
     return <Loader />;
   }

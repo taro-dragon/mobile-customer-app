@@ -31,7 +31,9 @@ const CarInfoItem: React.FC<CarInfoItemProps> = ({
         style={{
           ...typography.body3,
           color: colors.textPrimary,
-          wordWrap: "break-word",
+
+          flexWrap: "wrap",
+          flexShrink: 1,
         }}
       >
         {value}

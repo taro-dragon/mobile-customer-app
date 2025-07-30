@@ -11,18 +11,16 @@ const ListTab = () => {
   const {
     targetBulkAppraisalBids,
     isLoadingTargetBulkAppraisalBids,
-    errorTargetBulkAppraisalBids,
     mutateTargetBulkAppraisalBids,
     hasMoreTargetBulkAppraisalBids,
     loadMoreTargetBulkAppraisalBids,
   } = useBulkAppraisalBidContext();
 
-  console.log(JSON.stringify(targetBulkAppraisalBids, null, 2));
   return (
     <Tabs.FlatList
       data={targetBulkAppraisalBids}
       renderItem={({ item }) => <Bid bid={item as ExtendedBid} />}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item, index) => index.toString()}
       onEndReached={
         hasMoreTargetBulkAppraisalBids
           ? loadMoreTargetBulkAppraisalBids
