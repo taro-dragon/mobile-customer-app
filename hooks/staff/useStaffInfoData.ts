@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useStore } from "../useStore";
 import { AsyncStorageKey } from "@/constants/AsyncStorageKey";
-import { loadAsyncStorage, saveAsyncStorage } from "@/libs/asyncStorage";
+import { loadAsyncStorage } from "@/libs/asyncStorage";
 
 const useStaffInfoData = () => {
   const {
@@ -9,6 +9,7 @@ const useStaffInfoData = () => {
     stores,
     fetchStores,
     fetchCurrentStore,
+    setCurrentStore,
     fetchStaffTalks,
     fetchCurrentStoreStaffs,
   } = useStore();
@@ -26,13 +27,14 @@ const useStaffInfoData = () => {
         AsyncStorageKey.SELECTED_SHOP_ID
       );
       if (localStorageStoreId) {
-        fetchCurrentStore(localStorageStoreId);
+        const store = stores.find((store) => store.id === localStorageStoreId);
+        if (store) {
+          setCurrentStore(store);
+        } else {
+          fetchCurrentStore(localStorageStoreId);
+        }
         fetchStaffTalks(localStorageStoreId, staff?.id || "");
         fetchCurrentStoreStaffs(localStorageStoreId);
-      } else {
-        await saveAsyncStorage(AsyncStorageKey.SELECTED_SHOP_ID, stores[0].id);
-        fetchCurrentStore(stores[0].id);
-        fetchStaffTalks(stores[0].id, staff?.id || "");
       }
     };
     if (stores.length > 0) {

@@ -17,6 +17,9 @@ export const createCurrentStoreSlice: StateCreator<
   currentStoreStaffsLoading: false,
   currentStoreUnsubscribe: undefined,
   currentStoreStaffsUnsubscribe: undefined,
+  setCurrentStore: (store: Shop) => {
+    set((state) => ({ ...state, currentStore: store }));
+  },
   fetchCurrentStore: async (shopId: string) => {
     const currentUnsubscribe = get().currentStoreUnsubscribe;
     if (currentUnsubscribe) {

@@ -51,7 +51,11 @@ export default function Layout() {
       );
       if (staff) {
         if (staff.isFirstLogin) return "/(staff)/firstPasswordSetting";
-        if (staff.shops?.length !== 1 && !localStorageStoreId)
+        if (
+          staff.shops?.length &&
+          staff.shops?.length > 1 &&
+          !localStorageStoreId
+        )
           return "/(staff)/shopSelect";
         return "/(staff)/(tabs)";
       }

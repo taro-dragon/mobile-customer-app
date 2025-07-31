@@ -7,6 +7,7 @@ export type CurrentStoreSlice = {
   currentStoreLoading: boolean;
   currentStoreStaffsLoading: boolean;
   currentStoreUnsubscribe?: () => void;
+  setCurrentStore: (store: Shop) => void;
   currentStoreStaffsUnsubscribe?: () => void;
   fetchCurrentStore: (storeId: string) => void;
   fetchCurrentStoreStaffs: (storeId: string) => void;
