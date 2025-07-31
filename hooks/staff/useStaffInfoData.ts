@@ -3,6 +3,7 @@ import { useStore } from "../useStore";
 import { AsyncStorageKey } from "@/constants/AsyncStorageKey";
 import { loadAsyncStorage, saveAsyncStorage } from "@/libs/asyncStorage";
 import { useRouter } from "expo-router";
+import Toast from "react-native-toast-message";
 
 const useStaffInfoData = () => {
   const router = useRouter();
@@ -29,6 +30,11 @@ const useStaffInfoData = () => {
       saveAsyncStorage(AsyncStorageKey.SELECTED_SHOP_ID, currentStore.id);
       fetchStaffTalks(currentStore.id, staff?.id || "");
       fetchCurrentStoreStaffs(currentStore.id);
+      Toast.show({
+        type: "success",
+        text1: "店舗切り替え",
+        text2: `${currentStore.shopName}にログインしました`,
+      });
       router.replace("/(staff)/(tabs)");
       if (router.canDismiss()) {
         router.dismissAll();

@@ -5,7 +5,6 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { FlashList } from "@shopify/flash-list";
 import { MessageSquare } from "lucide-react-native";
-import { useMemo } from "react";
 import { Dimensions, Text, View } from "react-native";
 
 const TalksScreen = () => {
@@ -13,12 +12,10 @@ const TalksScreen = () => {
   const { colors, typography } = useTheme();
   const bottomTabheight = useBottomTabBarHeight();
   const headerHeight = useHeaderHeight();
-  const talks = useMemo(() => {
-    return staffTalks;
-  }, [staffTalks]);
+
   return (
     <FlashList
-      data={talks}
+      data={staffTalks}
       scrollEnabled={!!staffTalks?.length}
       ListEmptyComponent={() => (
         <View
