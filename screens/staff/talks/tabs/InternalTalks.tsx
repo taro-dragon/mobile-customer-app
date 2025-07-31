@@ -59,7 +59,11 @@ const InternalTalksTab = () => {
         )}
         renderItem={({ item }) => <TalkItem talk={item} />}
       />
-      <FAB onPress={() => {}} icon="Plus" opacity={isScrolling ? 0.5 : 1} />
+      <FAB
+        onPress={() => {}}
+        icon="MessageSquarePlus"
+        opacity={isScrolling ? 0.5 : 1}
+      />
     </View>
   );
 };

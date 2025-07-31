@@ -23,13 +23,13 @@ const FAB: React.FC<FABProps> = ({ onPress, icon, opacity = 1, color }) => {
         right: 12,
         zIndex: 1000,
         borderRadius: 100,
-        padding: 8,
+        padding: 12,
         opacity,
         backgroundColor: color || colors.primary,
       }}
       onPress={onPress}
     >
-      <IconComponent size={32} color={colors.white} />
+      <IconComponent size={28} color={colors.white} />
     </TouchableOpacity>
   );
 };
