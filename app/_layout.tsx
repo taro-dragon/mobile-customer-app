@@ -43,7 +43,6 @@ export default function Layout() {
   }, []);
 
   useEffect(() => {
-    // isAppReadyがtrueで、かつ認証状態が確定している場合のみルートを決定
     if (!isAppReady) return;
 
     const determineRoute = async () => {

@@ -6,12 +6,14 @@ import {
   View,
 } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Car, FolderOpen, Gavel, Handshake } from "lucide-react-native";
+import { Car, FolderOpen, Gavel, Handshake, LogOut } from "lucide-react-native";
 import { useRouter } from "expo-router";
+import { useLogout } from "@/hooks/staff/useLogout";
 
 const StaffIndexScreen = () => {
   const { colors, typography } = useTheme();
   const router = useRouter();
+  const { logout } = useLogout();
   const styles = StyleSheet.create({
     button: {
       flex: 1,
@@ -97,6 +99,16 @@ const StaffIndexScreen = () => {
                 style={{ color: colors.textPrimary, ...typography.heading4 }}
               >
                 買取オファー登録
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ flexDirection: "row", gap: 8 }}>
+            <TouchableOpacity onPress={logout} style={styles.button}>
+              <LogOut size={24} color={colors.primary} />
+              <Text
+                style={{ color: colors.textPrimary, ...typography.heading4 }}
+              >
+                ログアウト
               </Text>
             </TouchableOpacity>
           </View>

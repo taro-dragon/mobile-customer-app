@@ -8,3 +8,7 @@ export const loadAsyncStorage = async (key: string) => {
 export const saveAsyncStorage = async (key: string, value: string) => {
   await AsyncStorage.setItem(key, value);
 };
+
+export const removeAsyncStorage = async (key: string) => {
+  await AsyncStorage.removeItem(key);
+};
