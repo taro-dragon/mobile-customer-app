@@ -17,6 +17,7 @@ const CustomerTalksTab = () => {
     <FlashList
       data={staffTalks}
       scrollEnabled={!!staffTalks?.length}
+      estimatedItemSize={90}
       ListEmptyComponent={() => (
         <View
           style={{
