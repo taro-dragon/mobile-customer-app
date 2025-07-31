@@ -22,6 +22,7 @@ export default function Layout() {
   const segments = useSegments();
   const { user, staff, isAppReady } = useStore();
   const [initialRoute, setInitialRoute] = useState<string | null>(null);
+  const [isInitializing, setIsInitializing] = useState(true);
   useAuthInitialization();
 
   useEffect(() => {
@@ -42,6 +43,7 @@ export default function Layout() {
   }, []);
 
   useEffect(() => {
+    // isAppReadyがtrueで、かつ認証状態が確定している場合のみルートを決定
     if (!isAppReady) return;
 
     const determineRoute = async () => {
@@ -61,13 +63,14 @@ export default function Layout() {
     const fetchRoute = async () => {
       const route = await determineRoute();
       setInitialRoute(route);
+      setIsInitializing(false);
     };
 
     fetchRoute();
   }, [user, staff, isAppReady]);
 
   useEffect(() => {
-    if (!initialRoute) return;
+    if (!initialRoute || isInitializing) return;
 
     const initialSegment = initialRoute.split("/")[1];
     const currentSegment = segments.length > 0 ? segments[0] : "";
@@ -87,9 +90,10 @@ export default function Layout() {
     } else {
       setTimeout(hideSplashScreen, 150);
     }
-  }, [initialRoute, segments, router]);
+  }, [initialRoute, segments, router, isInitializing]);
 
-  if (!isAppReady || !initialRoute) {
+  // アプリが準備できていない間、または初期化中は何も表示しない（スプラッシュスクリーンが表示される）
+  if (!isAppReady || isInitializing) {
     return null;
   }
 
