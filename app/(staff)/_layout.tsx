@@ -1,9 +1,10 @@
 import { useTheme } from "@/contexts/ThemeContext";
+import useStaffInfoData from "@/hooks/staff/useStaffInfoData";
 import { Stack } from "expo-router/stack";
 
 export default function Layout() {
   const { colors } = useTheme();
-
+  useStaffInfoData();
   return (
     <Stack
       screenOptions={{
@@ -156,7 +157,12 @@ export default function Layout() {
           animation: "slide_from_bottom",
         }}
       />
-      <Stack.Screen name="shopSelect" />
+      <Stack.Screen
+        name="shopSelect"
+        options={{
+          title: "店舗選択",
+        }}
+      />
     </Stack>
   );
 }

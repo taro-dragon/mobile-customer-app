@@ -1,5 +1,4 @@
 import { useTheme } from "@/contexts/ThemeContext";
-import useStaffInfoData from "@/hooks/staff/useStaffInfoData";
 import useStaffNotification from "@/hooks/staff/useStaffNotification";
 import { useStore } from "@/hooks/useStore";
 
@@ -14,7 +13,6 @@ import {
 
 export default function TabLayout() {
   useStaffNotification();
-  useStaffInfoData();
   const { staff } = useStore();
   const { colors } = useTheme();
   return (

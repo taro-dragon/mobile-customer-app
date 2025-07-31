@@ -13,6 +13,8 @@ import ErrorService from "@/libs/ErrorService";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import { ModalProvider } from "@/contexts/ModalContext";
+import { AsyncStorageKey } from "@/constants/AsyncStorageKey";
+import { loadAsyncStorage } from "@/libs/asyncStorage";
 
 SplashScreen.preventAutoHideAsync();
 export default function Layout() {
@@ -42,17 +44,26 @@ export default function Layout() {
   useEffect(() => {
     if (!isAppReady) return;
 
-    const determineRoute = () => {
+    const determineRoute = async () => {
+      const localStorageStoreId = await loadAsyncStorage(
+        AsyncStorageKey.SELECTED_SHOP_ID
+      );
       if (staff) {
         if (staff.isFirstLogin) return "/(staff)/firstPasswordSetting";
-        if (staff.shops?.length !== 1) return "/(staff)/shopSelect";
+        if (staff.shops?.length !== 1 && !localStorageStoreId)
+          return "/(staff)/shopSelect";
         return "/(staff)/(tabs)";
       }
       if (user) return "/(user)/(tabs)";
       return "/(unauth)";
     };
 
-    setInitialRoute(determineRoute());
+    const fetchRoute = async () => {
+      const route = await determineRoute();
+      setInitialRoute(route);
+    };
+
+    fetchRoute();
   }, [user, staff, isAppReady]);
 
   useEffect(() => {
