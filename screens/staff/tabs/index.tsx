@@ -6,14 +6,26 @@ import {
   View,
 } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Car, FolderOpen, Gavel, Handshake, LogOut } from "lucide-react-native";
+import {
+  Bell,
+  Building2,
+  Car,
+  Check,
+  FolderOpen,
+  Gavel,
+  Handshake,
+  LogOut,
+} from "lucide-react-native";
 import { useRouter } from "expo-router";
 import { useLogout } from "@/hooks/staff/useLogout";
+import { useStore } from "@/hooks/useStore";
+import { Image } from "expo-image";
 
 const StaffIndexScreen = () => {
   const { colors, typography } = useTheme();
   const router = useRouter();
   const { logout } = useLogout();
+  const { currentStore } = useStore();
   const styles = StyleSheet.create({
     button: {
       flex: 1,
@@ -50,6 +62,127 @@ const StaffIndexScreen = () => {
             gap: 8,
           }}
         >
+          <View
+            style={{
+              gap: 8,
+              borderWidth: 1,
+              borderColor: colors.borderPrimary,
+              padding: 12,
+              borderRadius: 8,
+              flexDirection: "row",
+            }}
+          >
+            <View
+              style={{
+                width: 48,
+                height: 48,
+                borderRadius: 8,
+                overflow: "hidden",
+              }}
+            >
+              {currentStore?.imageUrls?.[0] ? (
+                <Image
+                  source={{ uri: currentStore?.imageUrls?.[0] }}
+                  style={{ width: 48, height: 48, borderRadius: 8 }}
+                />
+              ) : (
+                <View
+                  style={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: 8,
+                    backgroundColor: colors.backgroundSecondary,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: colors.textPrimary,
+                      ...typography.heading3,
+                    }}
+                  >
+                    {currentStore?.shopName.slice(0, 2)}
+                  </Text>
+                </View>
+              )}
+            </View>
+            <View style={{ gap: 8, flex: 1 }}>
+              <View style={{ gap: 4 }}>
+                <Text
+                  style={{ color: colors.textPrimary, ...typography.heading3 }}
+                >
+                  {currentStore?.shopName}
+                </Text>
+                <Text
+                  numberOfLines={1}
+                  style={{ color: colors.textSecondary, ...typography.body3 }}
+                >
+                  {currentStore?.address1} {currentStore?.address2}{" "}
+                  {currentStore?.address3}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 8,
+                  justifyContent: "flex-end",
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => {
+                    router.push("/shopSelect");
+                  }}
+                  style={{
+                    backgroundColor: colors.backgroundSecondary,
+                    padding: 8,
+                    borderRadius: "100%",
+                    borderWidth: 1,
+                    borderColor: colors.borderPrimary,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 4,
+                  }}
+                >
+                  <Building2 size={16} color={colors.primary} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    router.push("/shopSelect");
+                  }}
+                  style={{
+                    backgroundColor: colors.backgroundSecondary,
+                    padding: 8,
+                    borderRadius: "100%",
+                    borderWidth: 1,
+                    borderColor: colors.borderPrimary,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 4,
+                  }}
+                >
+                  <Check size={16} color={colors.primary} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    router.push("/shopSelect");
+                  }}
+                  style={{
+                    backgroundColor: colors.backgroundSecondary,
+                    padding: 8,
+                    borderRadius: "100%",
+                    borderWidth: 1,
+                    borderColor: colors.borderPrimary,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 4,
+                  }}
+                >
+                  <Bell size={16} color={colors.primary} />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
           <TouchableOpacity
             onPress={() => {
               router.push("/projects");
@@ -102,7 +235,7 @@ const StaffIndexScreen = () => {
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={{ flexDirection: "row", gap: 8 }}>
+          {/* <View style={{ flexDirection: "row", gap: 8 }}>
             <TouchableOpacity onPress={logout} style={styles.button}>
               <LogOut size={24} color={colors.primary} />
               <Text
@@ -111,7 +244,7 @@ const StaffIndexScreen = () => {
                 ログアウト
               </Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       </View>
     </ScrollView>

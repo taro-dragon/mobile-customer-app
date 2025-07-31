@@ -15,11 +15,16 @@ export default function Layout() {
         headerStyle: {
           backgroundColor: colors.backgroundPrimary,
         },
+        headerBackButtonDisplayMode: "minimal",
       }}
     >
       <Stack.Screen
         name="(tabs)"
-        options={{ headerShown: false, title: "ホーム" }}
+        options={{
+          headerShown: false,
+          title: "ホーム",
+          animation: "flip",
+        }}
       />
       <Stack.Screen
         name="registrationStock"
