@@ -1,4 +1,4 @@
-import TalksScreen from "@/screens/staff/tabs/talks";
+import TalksScreen from "@/screens/staff/talks";
 
 const Talk = () => {
   return <TalksScreen />;
