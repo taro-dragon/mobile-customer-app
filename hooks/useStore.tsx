@@ -8,12 +8,17 @@ import { createAppSlice } from "@/stores/appSlice";
 import { createBulkAppraisalSlice } from "@/stores/bulkAppraisalSlice";
 import { BulkAppraisalSlice } from "@/types/slices/BulkAppraisalSlice";
 import { createTalkSlice } from "@/stores/talkSlice";
-import { StaffTalkSlice, TalkSlice } from "@/types/slices/TalkSlice";
+import {
+  InternalTalkSlice,
+  StaffTalkSlice,
+  TalkSlice,
+} from "@/types/slices/TalkSlice";
 import { createStoreSlice } from "@/stores/staff/storeSlice";
 import { StoreSlice } from "@/types/slices/staff/storeSlice";
 import { createCurrentStoreSlice } from "@/stores/staff/currentStoreSlice";
 import { CurrentStoreSlice } from "@/types/slices/staff/currentStoreSlice";
 import { createStaffTalkSlice } from "@/stores/staff/talkSlice";
+import { createInternalTalkSlice } from "@/stores/staff/internalTalkSlice";
 export const useStore = create<
   AuthSlice &
     CarSlice &
@@ -22,7 +27,8 @@ export const useStore = create<
     TalkSlice &
     StoreSlice &
     CurrentStoreSlice &
-    StaffTalkSlice
+    StaffTalkSlice &
+    InternalTalkSlice
 >()((...a) => ({
   ...createAuthSlice(...a),
   ...createCarSlice(...a),
@@ -32,4 +38,5 @@ export const useStore = create<
   ...createStoreSlice(...a),
   ...createCurrentStoreSlice(...a),
   ...createStaffTalkSlice(...a),
+  ...createInternalTalkSlice(...a),
 }));

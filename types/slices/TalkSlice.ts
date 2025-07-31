@@ -1,6 +1,15 @@
 import { TalkWithAffiliate } from "../extendType/TalkWithAffiliate";
 import { TalkWithUser } from "../extendType/TalkWithUser";
 
+export type InternalTalkSlice = {
+  internalTalks: TalkWithUser[];
+  internalTalkLoading: boolean;
+  internalTalkUnsubscribe?: () => void;
+  fetchInternalTalks: (shopId: string, staffId: string) => void;
+  deleteInternalTalk: () => void;
+  setInternalTalkLoading: (internalTalkLoading: boolean) => void;
+  clearInternalTalks: () => void;
+};
 export type StaffTalkSlice = {
   staffTalks: TalkWithUser[];
   staffTalkLoading: boolean;

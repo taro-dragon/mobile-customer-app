@@ -11,7 +11,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { useStore } from "@/hooks/useStore";
 
 const InternalTalksTab = () => {
-  const { staffTalks } = useStore();
+  const { internalTalks } = useStore();
   const { colors, typography } = useTheme();
   const bottomTabheight = useBottomTabBarHeight();
   const headerHeight = useHeaderHeight();
@@ -20,9 +20,9 @@ const InternalTalksTab = () => {
   return (
     <View style={{ flex: 1, position: "relative" }}>
       <FlashList
-        data={staffTalks}
+        data={internalTalks}
         estimatedItemSize={90}
-        scrollEnabled={!!staffTalks?.length}
+        scrollEnabled={!!internalTalks?.length}
         onScrollBeginDrag={() => setIsScrolling(true)}
         onScrollEndDrag={() => setIsScrolling(false)}
         onMomentumScrollBegin={() => setIsScrolling(true)}

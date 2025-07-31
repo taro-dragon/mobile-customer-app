@@ -15,6 +15,7 @@ const useStaffInfoData = () => {
     fetchCurrentStore,
     setCurrentStore,
     fetchStaffTalks,
+    fetchInternalTalks,
     fetchCurrentStoreStaffs,
   } = useStore();
   useEffect(() => {
@@ -29,6 +30,7 @@ const useStaffInfoData = () => {
     if (currentStore) {
       saveAsyncStorage(AsyncStorageKey.SELECTED_SHOP_ID, currentStore.id);
       fetchStaffTalks(currentStore.id, staff?.id || "");
+      fetchInternalTalks(currentStore.id, staff?.id || "");
       fetchCurrentStoreStaffs(currentStore.id);
       Toast.show({
         type: "success",
@@ -40,7 +42,7 @@ const useStaffInfoData = () => {
         router.dismissAll();
       }
     }
-  }, [currentStore]);
+  }, [currentStore?.id]);
   useEffect(() => {
     const fetchSelectedStore = async () => {
       const localStorageStoreId = await loadAsyncStorage(
