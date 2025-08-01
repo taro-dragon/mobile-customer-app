@@ -9,6 +9,7 @@ import FAB from "@/components/buttons/FAB";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useStore } from "@/hooks/useStore";
 import { useRouter } from "expo-router";
+import InternalTalkItem from "@/components/staff/talks/InternalTalkitem";
 
 const InternalTalksTab = () => {
   const { internalTalks } = useStore();
@@ -58,7 +59,7 @@ const InternalTalksTab = () => {
             </View>
           </View>
         )}
-        renderItem={({ item }) => <Text>{item.name}</Text>}
+        renderItem={({ item }) => <InternalTalkItem talk={item} />}
       />
       <FAB
         onPress={() => {
