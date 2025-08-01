@@ -15,11 +15,13 @@ import {
   Gavel,
   Handshake,
   LogOut,
+  MoveVertical,
 } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import { useLogout } from "@/hooks/staff/useLogout";
 import { useStore } from "@/hooks/useStore";
 import { Image } from "expo-image";
+import Divider from "@/components/common/Divider";
 
 const StaffIndexScreen = () => {
   const { colors, typography } = useTheme();
@@ -52,137 +54,99 @@ const StaffIndexScreen = () => {
     },
   });
   return (
-    <ScrollView
-      style={{ flex: 1 }}
-      contentContainerStyle={{ padding: 16, gap: 24 }}
-    >
-      <View style={{ gap: 8 }}>
+    <View style={{ flex: 1 }}>
+      <View
+        style={{
+          gap: 8,
+          padding: 16,
+          flexDirection: "row",
+        }}
+      >
         <View
           style={{
-            gap: 8,
+            width: 48,
+            height: 48,
+            borderRadius: 8,
+            overflow: "hidden",
           }}
         >
-          <View
-            style={{
-              gap: 8,
-              borderWidth: 1,
-              borderColor: colors.borderPrimary,
-              padding: 12,
-              borderRadius: 8,
-              flexDirection: "row",
-            }}
-          >
+          {currentStore?.imageUrls?.[0] ? (
+            <Image
+              source={{ uri: currentStore?.imageUrls?.[0] }}
+              style={{ width: 48, height: 48, borderRadius: 8 }}
+            />
+          ) : (
             <View
               style={{
                 width: 48,
                 height: 48,
                 borderRadius: 8,
-                overflow: "hidden",
+                backgroundColor: colors.backgroundSecondary,
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              {currentStore?.imageUrls?.[0] ? (
-                <Image
-                  source={{ uri: currentStore?.imageUrls?.[0] }}
-                  style={{ width: 48, height: 48, borderRadius: 8 }}
-                />
-              ) : (
-                <View
-                  style={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: 8,
-                    backgroundColor: colors.backgroundSecondary,
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: colors.textPrimary,
-                      ...typography.heading3,
-                    }}
-                  >
-                    {currentStore?.shopName.slice(0, 2)}
-                  </Text>
-                </View>
-              )}
-            </View>
-            <View style={{ gap: 8, flex: 1 }}>
-              <View style={{ gap: 4 }}>
-                <Text
-                  style={{ color: colors.textPrimary, ...typography.heading3 }}
-                >
-                  {currentStore?.shopName}
-                </Text>
-                <Text
-                  numberOfLines={1}
-                  style={{ color: colors.textSecondary, ...typography.body3 }}
-                >
-                  {currentStore?.address1} {currentStore?.address2}{" "}
-                  {currentStore?.address3}
-                </Text>
-              </View>
-              <View
+              <Text
                 style={{
-                  flexDirection: "row",
-                  gap: 8,
-                  justifyContent: "flex-end",
+                  color: colors.textPrimary,
+                  ...typography.heading3,
                 }}
               >
-                <TouchableOpacity
-                  onPress={() => {
-                    router.push("/shopSelect");
-                  }}
-                  style={{
-                    backgroundColor: colors.backgroundSecondary,
-                    padding: 8,
-                    borderRadius: "100%",
-                    borderWidth: 1,
-                    borderColor: colors.borderPrimary,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 4,
-                  }}
-                >
-                  <Building2 size={16} color={colors.primary} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    router.push("/shopSelect");
-                  }}
-                  style={{
-                    backgroundColor: colors.backgroundSecondary,
-                    padding: 8,
-                    borderRadius: "100%",
-                    borderWidth: 1,
-                    borderColor: colors.borderPrimary,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 4,
-                  }}
-                >
-                  <Check size={16} color={colors.primary} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    router.push("/shopSelect");
-                  }}
-                  style={{
-                    backgroundColor: colors.backgroundSecondary,
-                    padding: 8,
-                    borderRadius: "100%",
-                    borderWidth: 1,
-                    borderColor: colors.borderPrimary,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 4,
-                  }}
-                >
-                  <Bell size={16} color={colors.primary} />
-                </TouchableOpacity>
-              </View>
+                {currentStore?.shopName.slice(0, 2)}
+              </Text>
             </View>
+          )}
+        </View>
+        <View
+          style={{
+            gap: 8,
+            flex: 1,
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexDirection: "row",
+          }}
+        >
+          <View style={{ gap: 4 }}>
+            <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
+              {currentStore?.shopName}
+            </Text>
+            <Text
+              numberOfLines={1}
+              style={{ color: colors.textSecondary, ...typography.body3 }}
+            >
+              {currentStore?.address1} {currentStore?.address2}{" "}
+              {currentStore?.address3}
+            </Text>
           </View>
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 16,
+              alignItems: "center",
+            }}
+          >
+            <MoveVertical
+              onPress={() => {
+                router.push("/shopSelect");
+              }}
+              size={24}
+              color={colors.primary}
+            />
+
+            <Bell size={24} color={colors.primary} />
+          </View>
+        </View>
+      </View>
+      <Divider />
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ padding: 16, gap: 24 }}
+      >
+        <View
+          style={{
+            gap: 8,
+          }}
+        >
           <TouchableOpacity
             onPress={() => {
               router.push("/projects");
@@ -246,8 +210,8 @@ const StaffIndexScreen = () => {
             </TouchableOpacity>
           </View> */}
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 

@@ -39,6 +39,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "ホーム",
+          headerShadowVisible: false,
           tabBarIcon: ({ color }) => <House size={24} color={color} />,
         }}
       />

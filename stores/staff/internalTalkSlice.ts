@@ -19,7 +19,6 @@ export const createInternalTalkSlice: StateCreator<
     if (currentUnsubscribe) {
       currentUnsubscribe();
     }
-    console.log("fetchInternalTalks", shopId, staffId);
     set((state) => ({ ...state, talkLoading: true }));
     const unsubscribe = firestore()
       .collection("shops")
