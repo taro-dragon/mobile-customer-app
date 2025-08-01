@@ -2,15 +2,14 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  Touchable,
   TouchableOpacity,
   View,
 } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
 import {
   Bell,
-  Building2,
   Car,
-  Check,
   FolderOpen,
   Gavel,
   Handshake,
@@ -107,7 +106,7 @@ const StaffIndexScreen = () => {
           }}
         >
           <View style={{ gap: 4 }}>
-            <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
+            <Text style={{ color: colors.textPrimary, ...typography.heading2 }}>
               {currentStore?.shopName}
             </Text>
             <Text
@@ -132,8 +131,20 @@ const StaffIndexScreen = () => {
               size={24}
               color={colors.primary}
             />
-
-            <Bell size={24} color={colors.primary} />
+            <TouchableOpacity
+              style={{
+                backgroundColor: colors.backgroundSecondary,
+                padding: 8,
+                borderRadius: 8,
+                borderWidth: 1,
+                borderColor: colors.borderPrimary,
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 4,
+              }}
+            >
+              <Bell size={20} color={colors.primary} />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -199,7 +210,7 @@ const StaffIndexScreen = () => {
               </Text>
             </TouchableOpacity>
           </View>
-          {/* <View style={{ flexDirection: "row", gap: 8 }}>
+          <View style={{ flexDirection: "row", gap: 8 }}>
             <TouchableOpacity onPress={logout} style={styles.button}>
               <LogOut size={24} color={colors.primary} />
               <Text
@@ -208,7 +219,7 @@ const StaffIndexScreen = () => {
                 ログアウト
               </Text>
             </TouchableOpacity>
-          </View> */}
+          </View>
         </View>
       </ScrollView>
     </View>

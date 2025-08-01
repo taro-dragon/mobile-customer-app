@@ -307,11 +307,6 @@ const TalkDetail = () => {
         options={{
           title: "トーク",
           headerTitleStyle: styles.headerTitle,
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => router.back()}>
-              <ChevronLeft size={24} color={colors.primary} />
-            </TouchableOpacity>
-          ),
         }}
       />
       <View style={{ flex: 1 }}>

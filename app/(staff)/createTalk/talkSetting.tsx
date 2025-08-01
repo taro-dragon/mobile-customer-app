@@ -72,7 +72,7 @@ const TalkSettingScreen = () => {
       if (photoUrl) {
         submitData.photoUrl = photoUrl;
       }
-      firestore().runTransaction(async (transaction) => {
+      await firestore().runTransaction(async (transaction) => {
         const talkRef = firestore()
           .collection("shops")
           .doc(currentStore?.id)
@@ -85,10 +85,8 @@ const TalkSettingScreen = () => {
           .doc(talkRef.id)
           .collection("messages")
           .doc();
-        transaction.update(talkRef, {
-          updatedAt: firestore.Timestamp.now(),
-        });
-        transaction.set(messageRef, {
+        await transaction.set(talkRef, submitData);
+        await transaction.set(messageRef, {
           content: "トークを作成しました",
           senderId: "system",
           type: "system",
@@ -103,6 +101,7 @@ const TalkSettingScreen = () => {
       });
       navigation.getParent()?.goBack();
     } catch (error) {
+      console.log("error", error);
       Toast.show({
         type: "error",
         text1: "エラーが発生しました",

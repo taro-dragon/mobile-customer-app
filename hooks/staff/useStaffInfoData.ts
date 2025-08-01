@@ -32,13 +32,13 @@ const useStaffInfoData = () => {
       fetchStaffTalks(currentStore.id, staff?.id || "");
       fetchInternalTalks(currentStore.id, staff?.id || "");
       fetchCurrentStoreStaffs(currentStore.id);
-      Toast.show({
-        type: "success",
-        text1: "店舗切り替え",
-        text2: `${currentStore.shopName}にログインしました`,
-      });
       router.replace("/(staff)/(tabs)");
       if (router.canDismiss()) {
+        Toast.show({
+          type: "success",
+          text1: "店舗切り替え",
+          text2: `${currentStore.shopName}にログインしました`,
+        });
         router.dismissAll();
       }
     }
