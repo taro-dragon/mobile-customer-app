@@ -65,6 +65,14 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
+        name="internalTalk/[id]"
+        options={{
+          headerShown: false,
+          animation: "slide_from_right",
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
+      <Stack.Screen
         name="bulkAppraisalCars"
         options={{
           gestureDirection: "vertical",

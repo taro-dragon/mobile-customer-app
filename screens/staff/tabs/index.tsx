@@ -80,7 +80,8 @@ const StaffIndexScreen = () => {
                 width: 48,
                 height: 48,
                 borderRadius: 8,
-                backgroundColor: colors.backgroundSecondary,
+                borderWidth: 1,
+                borderColor: colors.borderPrimary,
                 alignItems: "center",
                 justifyContent: "center",
               }}
@@ -120,17 +121,27 @@ const StaffIndexScreen = () => {
           <View
             style={{
               flexDirection: "row",
-              gap: 16,
+              gap: 8,
               alignItems: "center",
             }}
           >
-            <MoveVertical
+            <TouchableOpacity
               onPress={() => {
                 router.push("/shopSelect");
               }}
-              size={24}
-              color={colors.primary}
-            />
+              style={{
+                backgroundColor: colors.backgroundSecondary,
+                padding: 8,
+                borderRadius: 8,
+                borderWidth: 1,
+                borderColor: colors.borderPrimary,
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 4,
+              }}
+            >
+              <MoveVertical size={20} color={colors.primary} />
+            </TouchableOpacity>
             <TouchableOpacity
               style={{
                 backgroundColor: colors.backgroundSecondary,

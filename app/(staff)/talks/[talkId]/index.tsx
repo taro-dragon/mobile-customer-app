@@ -16,7 +16,6 @@ import firestore, {
 } from "@react-native-firebase/firestore";
 import { Message } from "@/types/firestore_schema/messages";
 import { useTheme } from "@/contexts/ThemeContext";
-import { ChevronLeft } from "lucide-react-native";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import MessageItem from "@/components/staff/talks/MessageItem/MessageItem";
 import TalkHeader from "@/components/staff/talks/TalkHeader";
@@ -40,7 +39,6 @@ const TalkDetail = () => {
   const [sending, setSending] = useState(false);
   const flatListRef = useRef<FlatList>(null);
   const { colors, typography } = useTheme();
-  const router = useRouter();
   const isCurrentStaff = useMemo(
     () => talk?.staffIds.includes(staff?.id || ""),
     [talk, staff]
@@ -325,7 +323,6 @@ const TalkDetail = () => {
             keyExtractor={(item) => item.id}
             contentContainerStyle={styles.messagesContainer}
             inverted
-            ListFooterComponent={renderLoadMoreButton}
             onEndReached={loadMoreMessages}
             onEndReachedThreshold={0.1}
             showsVerticalScrollIndicator={false}

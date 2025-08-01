@@ -27,7 +27,7 @@ const InternalTalkItem: React.FC<TalkItemProps> = ({ talk }) => {
   const { colors, typography } = useTheme();
   const router = useRouter();
   const handlePress = () => {
-    router.push(`/talks/${talk.id}`);
+    router.push(`/internalTalk/${talk.id}`);
   };
 
   return (
