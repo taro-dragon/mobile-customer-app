@@ -163,6 +163,15 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
+        name="createTalk"
+        options={{
+          gestureDirection: "vertical",
+          headerShown: false,
+          gestureEnabled: false,
+          animation: "slide_from_bottom",
+        }}
+      />
+      <Stack.Screen
         name="shopSelect"
         options={{
           title: "店舗選択",

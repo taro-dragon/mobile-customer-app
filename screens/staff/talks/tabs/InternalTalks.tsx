@@ -6,12 +6,13 @@ import { FlashList } from "@shopify/flash-list";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 import FAB from "@/components/buttons/FAB";
-import TalkItem from "@/components/staff/talks/TalkItem";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useStore } from "@/hooks/useStore";
+import { useRouter } from "expo-router";
 
 const InternalTalksTab = () => {
   const { internalTalks } = useStore();
+  const router = useRouter();
   const { colors, typography } = useTheme();
   const bottomTabheight = useBottomTabBarHeight();
   const headerHeight = useHeaderHeight();
@@ -57,10 +58,12 @@ const InternalTalksTab = () => {
             </View>
           </View>
         )}
-        renderItem={({ item }) => <TalkItem talk={item} />}
+        renderItem={({ item }) => <Text>{item.name}</Text>}
       />
       <FAB
-        onPress={() => {}}
+        onPress={() => {
+          router.push("/createTalk");
+        }}
         icon="MessageSquarePlus"
         opacity={isScrolling ? 0.5 : 1}
       />

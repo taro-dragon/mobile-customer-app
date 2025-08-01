@@ -1,8 +1,9 @@
 import { TalkWithAffiliate } from "../extendType/TalkWithAffiliate";
 import { TalkWithUser } from "../extendType/TalkWithUser";
+import { InternalTalk } from "../firestore_schema/talks";
 
 export type InternalTalkSlice = {
-  internalTalks: TalkWithUser[];
+  internalTalks: InternalTalk[];
   internalTalkLoading: boolean;
   internalTalkUnsubscribe?: () => void;
   fetchInternalTalks: (shopId: string, staffId: string) => void;

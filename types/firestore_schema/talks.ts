@@ -54,3 +54,13 @@ export type Talk = {
     isOpened: boolean;
   };
 };
+
+export type InternalTalk = {
+  id: string;
+  name: string;
+  photoUrl?: string;
+  staffIds: string[];
+  lastMessage: string;
+  createdAt: FirebaseFirestoreTypes.Timestamp;
+  updatedAt: FirebaseFirestoreTypes.Timestamp;
+};

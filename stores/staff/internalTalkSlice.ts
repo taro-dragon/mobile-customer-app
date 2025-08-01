@@ -3,6 +3,7 @@ import { StateCreator } from "zustand";
 import { InternalTalkSlice } from "@/types/slices/TalkSlice";
 import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { Staff } from "@/types/firestore_schema/staff";
+import { InternalTalk } from "@/types/firestore_schema/talks";
 
 export const createInternalTalkSlice: StateCreator<
   InternalTalkSlice,
@@ -18,13 +19,14 @@ export const createInternalTalkSlice: StateCreator<
     if (currentUnsubscribe) {
       currentUnsubscribe();
     }
+    console.log("fetchInternalTalks", shopId, staffId);
     set((state) => ({ ...state, talkLoading: true }));
     const unsubscribe = firestore()
       .collection("shops")
       .doc(shopId)
       .collection("talks")
       .where("staffIds", "array-contains", staffId)
-      .orderBy("lastMessageAt", "desc")
+      .orderBy("updatedAt", "desc")
       .onSnapshot(
         async (snapshot) => {
           try {
@@ -32,48 +34,12 @@ export const createInternalTalkSlice: StateCreator<
               return {
                 id: doc.id,
                 ...doc.data(),
-              } as TalkWithUser;
+              } as InternalTalk;
             });
 
-            const internalTalks = await Promise.all(
-              talks.map(async (talk) => {
-                try {
-                  const staffIds = talk.staffIds || [];
-                  const staffsMap = new Map<string, Staff>();
-
-                  if (staffIds.length > 0) {
-                    const staffPromises = staffIds.map(async (staffId) => {
-                      try {
-                        const staffDoc = await firestore()
-                          .collection("staffs")
-                          .doc(staffId)
-                          .get();
-                        if (staffDoc.exists()) {
-                          const staffData = staffDoc.data() as Staff;
-                          staffsMap.set(staffId, staffData);
-                        }
-                      } catch (error) {
-                        console.error(
-                          `Error fetching staff ${staffId}:`,
-                          error
-                        );
-                      }
-                    });
-                    await Promise.all(staffPromises);
-                  }
-                  return {
-                    ...talk,
-                    staffs: staffsMap,
-                  };
-                } catch (error) {
-                  console.error("Error fetching affiliate store:", error);
-                  return talk;
-                }
-              })
-            );
             set((state) => ({
               ...state,
-              internalTalks: internalTalks,
+              internalTalks: talks,
               internalTalkLoading: false,
             }));
           } catch (error) {
