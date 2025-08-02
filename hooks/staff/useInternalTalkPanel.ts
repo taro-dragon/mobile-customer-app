@@ -244,7 +244,7 @@ const useInternalTalkPanel = (talk: InternalTalk) => {
       label: "位置情報",
       icon: MapPin,
       onPress: () => {
-        router.push(`/talks/${talk.id}/map`);
+        router.push(`/internalTalk/${talk.id}/map`);
       },
       disabled: isUploading,
     },

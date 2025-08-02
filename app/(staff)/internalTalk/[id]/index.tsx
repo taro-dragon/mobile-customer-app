@@ -237,7 +237,11 @@ const InternalTalkDetail = () => {
       <View
         style={[
           styles.container,
-          { backgroundColor: colors.backgroundPrimary },
+          {
+            backgroundColor: colors.backgroundPrimary,
+            alignItems: "center",
+            justifyContent: "center",
+          },
         ]}
       >
         <ActivityIndicator size="large" color={colors.primary} />
@@ -247,7 +251,15 @@ const InternalTalkDetail = () => {
 
   if (!talk) {
     return (
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          {
+            alignItems: "center",
+            justifyContent: "center",
+          },
+        ]}
+      >
         <Text>トークが見つかりません</Text>
       </View>
     );

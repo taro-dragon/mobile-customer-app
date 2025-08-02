@@ -47,6 +47,7 @@ export default function TabLayout() {
         name="talk"
         options={{
           title: "トーク",
+          headerShadowVisible: false,
           tabBarIcon: ({ color }) => <MessageSquare size={24} color={color} />,
         }}
       />
