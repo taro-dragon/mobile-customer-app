@@ -1,9 +1,8 @@
 import React from "react";
-import { StyleSheet } from "react-native";
 
-import { TalkWithUser } from "@/types/extendType/TalkWithUser";
-import useStaffTalkPanel from "@/hooks/staff/useStaffTalkPanel";
 import MessageInputComponent from "@/components/common/talks/MessageInput";
+import { InternalTalk } from "@/types/firestore_schema/talks";
+import useInternalTalkPanel from "@/hooks/staff/useInternalTalkPanel";
 
 type MessageInputProps = {
   text: string;
@@ -12,7 +11,7 @@ type MessageInputProps = {
   sending: boolean;
   isOpenPanel: boolean;
   setIsOpenPanel: React.Dispatch<React.SetStateAction<boolean>>;
-  talk: TalkWithUser;
+  talk: InternalTalk;
 };
 
 const MessageInput: React.FC<MessageInputProps> = ({
@@ -25,7 +24,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   talk,
 }) => {
   const isClosed = talk.status === "closed";
-  const { panel, isUploading, uploadProgress } = useStaffTalkPanel(
+  const { panel, isUploading, uploadProgress } = useInternalTalkPanel(
     talk,
     setIsOpenPanel
   );

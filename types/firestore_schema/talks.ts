@@ -63,4 +63,5 @@ export type InternalTalk = {
   lastMessage: string;
   createdAt: FirebaseFirestoreTypes.Timestamp;
   updatedAt: FirebaseFirestoreTypes.Timestamp;
+  status: "active" | "closed"; // チャットの状態
 };

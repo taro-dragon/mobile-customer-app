@@ -1,6 +1,6 @@
 import { useTheme } from "@/contexts/ThemeContext";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useLocalSearchParams } from "expo-router";
+import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -8,8 +8,6 @@ import {
   Platform,
   StyleSheet,
   Text,
-  TextInput,
-  TouchableOpacity,
   View,
 } from "react-native";
 import firestore, {
@@ -20,17 +18,18 @@ import { useStore } from "@/hooks/useStore";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import Toast from "react-native-toast-message";
 import DateSeparatorWrapper from "@/components/common/DateSeparatorWrapper";
+import MessageInput from "@/components/staff/internalTalks/MessageInput";
 
 const MESSAGES_PER_PAGE = 30;
 
 const InternalTalkDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { colors, typography } = useTheme();
-  const { staff, internalTalks, currentStore } = useStore();
-  const router = useRouter();
-
+  const { staff, currentStore, internalTalks } = useStore();
+  const talk = internalTalks.find((talk) => talk.id === id);
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isOpenPanel, setIsOpenPanel] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMoreMessages, setHasMoreMessages] = useState(true);
   const [text, setText] = useState("");
@@ -146,9 +145,6 @@ const InternalTalkDetail = () => {
       !currentStore?.id
     )
       return;
-
-    console.log("fire");
-
     try {
       setLoadingMore(true);
 
@@ -296,9 +292,17 @@ const InternalTalkDetail = () => {
     );
   }
 
+  if (!talk) {
+    return (
+      <View style={styles.container}>
+        <Text>トークが見つかりません</Text>
+      </View>
+    );
+  }
+
   return (
     <KeyboardAvoidingView
-      style={[styles.container, { backgroundColor: colors.backgroundPrimary }]}
+      style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
     >
@@ -332,50 +336,16 @@ const InternalTalkDetail = () => {
           ) : null
         }
       />
-
-      {/* Message Input */}
-      <View
-        style={[
-          styles.inputContainer,
-          { backgroundColor: colors.backgroundSecondary },
-        ]}
-      >
-        <TextInput
-          style={[
-            styles.textInput,
-            {
-              backgroundColor: colors.backgroundPrimary,
-              color: colors.textPrimary,
-              borderColor: colors.borderPrimary,
-            },
-          ]}
-          value={text}
-          onChangeText={setText}
-          placeholder="メッセージを入力..."
-          placeholderTextColor={colors.textSecondary}
-          multiline
-          maxLength={1000}
-        />
-        <TouchableOpacity
-          style={[
-            styles.sendButton,
-            {
-              backgroundColor: text.trim()
-                ? colors.primary
-                : colors.backgroundQuaternary,
-            },
-          ]}
-          onPress={sendMessage}
-          disabled={!text.trim() || sending}
-        >
-          {sending ? (
-            <ActivityIndicator size="small" color={colors.backgroundPrimary} />
-          ) : (
-            <Text style={styles.sendButtonText}>送信</Text>
-          )}
-        </TouchableOpacity>
-      </View>
-      <SafeAreaBottom color={colors.backgroundSecondary} />
+      <MessageInput
+        sendMessage={sendMessage}
+        sending={sending}
+        text={text}
+        setText={setText}
+        isOpenPanel={isOpenPanel}
+        setIsOpenPanel={setIsOpenPanel}
+        talk={talk}
+      />
+      <SafeAreaBottom color={colors.backgroundPrimary} />
     </KeyboardAvoidingView>
   );
 };
