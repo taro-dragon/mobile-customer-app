@@ -55,9 +55,6 @@ const useStaffInfoData = () => {
         } else {
           fetchCurrentStore(localStorageStoreId);
         }
-      } else {
-        const store = stores[0];
-        setCurrentStore(store);
       }
     };
     if (stores.length > 0) {

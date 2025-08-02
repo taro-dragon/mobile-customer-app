@@ -5,13 +5,15 @@ import { AsyncStorageKey } from "@/constants/AsyncStorageKey";
 import { removeAsyncStorage } from "@/libs/asyncStorage";
 
 export const useLogout = () => {
-  const { deleteStaff, clearCurrentStore, clearStaffTalks } = useStore();
+  const { deleteStaff, clearCurrentStore, clearStaffTalks, clearStores } =
+    useStore();
   const logout = async () => {
     try {
       await auth().signOut();
       deleteStaff();
       clearCurrentStore();
       clearStaffTalks();
+      clearStores();
       await removeAsyncStorage(AsyncStorageKey.SELECTED_SHOP_ID);
       Toast.show({
         type: "success",
