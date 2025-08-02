@@ -107,7 +107,6 @@ const TalkDetail = () => {
     loadInitialMessages();
   }, [talkId]);
 
-  // リアルタイムで新メッセージを監視
   useEffect(() => {
     if (!talkId || !latestMessageTimestamp) return;
 
@@ -182,7 +181,6 @@ const TalkDetail = () => {
         setHasMoreMessages(false);
       }
     } catch (error) {
-      console.error("Error loading more messages:", error);
       Toast.show({
         type: "error",
         text1: "メッセージの読み込みに失敗しました",
@@ -229,26 +227,6 @@ const TalkDetail = () => {
     } finally {
       setSending(false);
     }
-  };
-
-  const renderLoadMoreButton = () => {
-    if (!hasMoreMessages || loadingMore) return null;
-
-    return (
-      <TouchableOpacity
-        style={styles.loadMoreButton}
-        onPress={loadMoreMessages}
-        disabled={loadingMore}
-      >
-        {loadingMore ? (
-          <ActivityIndicator size="small" color={colors.primary} />
-        ) : (
-          <Text style={[styles.loadMoreText, { color: colors.primary }]}>
-            さらに古いメッセージを読み込む
-          </Text>
-        )}
-      </TouchableOpacity>
-    );
   };
 
   const renderMessageWithDateSeparator = ({
@@ -304,7 +282,6 @@ const TalkDetail = () => {
       <Stack.Screen
         options={{
           title: `${talk.user.familyName} ${talk.user.givenName}`,
-          headerTitleStyle: styles.headerTitle,
         }}
       />
       <View style={{ flex: 1 }}>
@@ -352,10 +329,6 @@ const TalkDetail = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  headerTitle: {
-    fontSize: 16,
-    fontWeight: "600",
   },
   headerMenu: {
     flex: 1,

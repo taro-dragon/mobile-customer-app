@@ -87,7 +87,7 @@ const TalkSettingScreen = () => {
           .doc();
         await transaction.set(talkRef, submitData);
         await transaction.set(messageRef, {
-          content: "トークを作成しました",
+          text: "トークを作成しました",
           senderId: "system",
           type: "system",
           createdAt: firestore.Timestamp.now(),

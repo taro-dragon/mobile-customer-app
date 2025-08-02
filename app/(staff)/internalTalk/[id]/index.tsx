@@ -19,15 +19,17 @@ import SafeAreaBottom from "@/components/common/SafeAreaBottom";
 import Toast from "react-native-toast-message";
 import DateSeparatorWrapper from "@/components/common/DateSeparatorWrapper";
 import MessageInput from "@/components/staff/internalTalks/MessageInput";
+import { InternalMessage } from "@/types/firestore_schema/internalMessage";
+import MessageItem from "@/components/staff/internalTalk/MessageItem/MessageItem";
 
 const MESSAGES_PER_PAGE = 30;
 
 const InternalTalkDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { colors, typography } = useTheme();
+  const { colors } = useTheme();
   const { staff, currentStore, internalTalks } = useStore();
   const talk = internalTalks.find((talk) => talk.id === id);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<InternalMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [isOpenPanel, setIsOpenPanel] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -61,7 +63,7 @@ const InternalTalkDetail = () => {
         const messagesData = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-        })) as Message[];
+        })) as InternalMessage[];
 
         setMessages(messagesData);
 
@@ -106,7 +108,7 @@ const InternalTalkDetail = () => {
             const messageData = {
               id: latestMessage.id,
               ...latestMessage.data(),
-            } as Message;
+            } as InternalMessage;
 
             // 新しいメッセージが追加された場合のみ更新
             if (
@@ -163,7 +165,7 @@ const InternalTalkDetail = () => {
       const olderMessages = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-      })) as Message[];
+      })) as InternalMessage[];
 
       if (olderMessages.length > 0) {
         setMessages((prevMessages) => [...prevMessages, ...olderMessages]);
@@ -221,7 +223,6 @@ const InternalTalkDetail = () => {
         flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
       }, 100);
     } catch (error) {
-      console.error("Error sending message:", error);
       Toast.show({
         type: "error",
         text1: "メッセージの送信に失敗しました",
@@ -229,54 +230,6 @@ const InternalTalkDetail = () => {
     } finally {
       setSending(false);
     }
-  };
-
-  const renderMessageWithDateSeparator = ({
-    item,
-    index,
-  }: {
-    item: Message;
-    index: number;
-  }) => {
-    const isCurrentUser = item.senderId === staff?.id;
-    return (
-      <DateSeparatorWrapper message={item} index={index} messages={messages}>
-        <View
-          style={[
-            styles.messageContainer,
-            isCurrentUser ? styles.currentUserMessage : styles.otherUserMessage,
-          ]}
-        >
-          <Text
-            style={[
-              styles.messageText,
-              {
-                color: isCurrentUser
-                  ? colors.backgroundPrimary
-                  : colors.textPrimary,
-              },
-            ]}
-          >
-            {item.text}
-          </Text>
-          <Text
-            style={[
-              styles.messageTime,
-              {
-                color: isCurrentUser
-                  ? colors.backgroundPrimary
-                  : colors.textSecondary,
-              },
-            ]}
-          >
-            {new Date(item.createdAt.toMillis()).toLocaleTimeString("ja-JP", {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </Text>
-        </View>
-      </DateSeparatorWrapper>
-    );
   };
 
   if (loading) {
@@ -300,13 +253,26 @@ const InternalTalkDetail = () => {
     );
   }
 
+  const renderMessageWithDateSeparator = ({
+    item,
+    index,
+  }: {
+    item: InternalMessage;
+    index: number;
+  }) => {
+    return (
+      <DateSeparatorWrapper message={item} index={index} messages={messages}>
+        <MessageItem message={item} talk={talk} />
+      </DateSeparatorWrapper>
+    );
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
     >
-      {/* Messages List */}
       <FlatList
         ref={flatListRef}
         data={messages}

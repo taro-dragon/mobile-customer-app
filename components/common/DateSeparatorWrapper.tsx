@@ -3,11 +3,12 @@ import { View } from "react-native";
 import { Message } from "@/types/firestore_schema/messages";
 import { isSameDate } from "@/utils/dateUtils";
 import DateSeparator from "@/components/staff/talks/MessageItem/DateSeparator";
+import { InternalMessage } from "@/types/firestore_schema/internalMessage";
 
 type DateSeparatorWrapperProps = {
-  message: Message;
+  message: Message | InternalMessage;
   index: number;
-  messages: Message[];
+  messages: Message[] | InternalMessage[];
   children: React.ReactNode;
 };
 

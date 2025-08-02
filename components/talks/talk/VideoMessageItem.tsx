@@ -10,22 +10,31 @@ import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import DownloadProgressModal from "@/components/common/Modal/DownloadProgressModal";
 import { useVideoPlayer, VideoView } from "expo-video";
+import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 
 type VideoMessageItemProps = {
-  talk: TalkWithUser;
-  message: Message;
   bubbleColor: {
     backgroundColor: string;
     borderColor: string;
   };
   isMe: boolean;
+  senderName: string;
+  avatarUrl?: string;
+  readCount: number;
+  createdAt: FirebaseFirestoreTypes.Timestamp;
+  videoUrl: string;
+  fileName: string;
 };
 
 const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
-  talk,
-  message,
   isMe,
   bubbleColor,
+  senderName,
+  avatarUrl,
+  readCount,
+  createdAt,
+  videoUrl,
+  fileName,
 }) => {
   const { colors } = useTheme();
   const [isDownloading, setIsDownloading] = useState(false);
@@ -33,40 +42,10 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
   const [showProgressModal, setShowProgressModal] = useState(false);
 
   // expo-videoの新しいAPIを使用
-  const player = useVideoPlayer(message.videoUrl || "");
-
-  // アバター画像のURLを決定
-  const getAvatarUrl = () => {
-    if (message.senderType === "staff") {
-      // スタッフのプロフィール画像は都度fetchするため、デフォルト画像を使用
-      return ""; // デフォルト画像が表示される
-    } else {
-      return (
-        talk.sourceCar?.images.front || talk.sourceStockCar?.images.front || ""
-      ); // 車両画像
-    }
-  };
-
-  // 送信者名を取得
-  const getSenderName = () => {
-    if (message.senderType === "staff") {
-      if (isMe) {
-        return "自分";
-      } else {
-        // talkオブジェクトからスタッフ情報を取得
-        const staff = talk.staffs?.get(message.senderId);
-        return staff ? staff.name : "不明なスタッフ";
-      }
-    } else {
-      // talkオブジェクトからユーザー情報を取得
-      return talk.user
-        ? `${talk.user.familyName} ${talk.user.givenName}`
-        : "不明なユーザー";
-    }
-  };
+  const player = useVideoPlayer(videoUrl || "");
 
   const handleDownload = async () => {
-    if (!message.videoUrl) return;
+    if (!videoUrl) return;
 
     setIsDownloading(true);
     setShowProgressModal(true);
@@ -77,7 +56,7 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
       const fileUri = `${FileSystem.documentDirectory}${fileName}`;
 
       const downloadResumable = FileSystem.createDownloadResumable(
-        message.videoUrl,
+        videoUrl,
         fileUri,
         {},
         (downloadProgress) => {
@@ -112,7 +91,7 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
         {!isMe && (
           <Image
             source={{
-              uri: getAvatarUrl(),
+              uri: avatarUrl,
             }}
             style={styles.avatar}
           />
@@ -131,7 +110,7 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
           {/* 送信者名表示 */}
           {!isMe && (
             <Text style={[styles.senderName, { color: colors.textSecondary }]}>
-              {getSenderName()}
+              {senderName}
             </Text>
           )}
 
@@ -172,9 +151,11 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
               marginTop: 8,
             }}
           >
-            {/* {message.read && isMe && <Check size={12} color={colors.primary} />} */}
+            {readCount > 0 && isMe && (
+              <Check size={12} color={colors.primary} />
+            )}
             <Text style={[styles.timeText, { color: colors.textSecondary }]}>
-              {dayjs(message.createdAt.toDate()).format("HH:mm")}
+              {dayjs(createdAt.toDate()).format("HH:mm")}
             </Text>
           </View>
         </View>
@@ -183,7 +164,7 @@ const VideoMessageItem: React.FC<VideoMessageItemProps> = ({
       <DownloadProgressModal
         visible={showProgressModal}
         downloadProgress={downloadProgress}
-        fileName={message.fileName || "動画ファイル"}
+        fileName={fileName || "動画ファイル"}
       />
     </>
   );
