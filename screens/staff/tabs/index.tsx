@@ -26,7 +26,7 @@ const StaffIndexScreen = () => {
   const { colors, typography } = useTheme();
   const router = useRouter();
   const { logout } = useLogout();
-  const { currentStore } = useStore();
+  const { currentStore, staff } = useStore();
   const styles = StyleSheet.create({
     button: {
       flex: 1,
@@ -125,23 +125,25 @@ const StaffIndexScreen = () => {
               alignItems: "center",
             }}
           >
-            <TouchableOpacity
-              onPress={() => {
-                router.push("/shopSelect");
-              }}
-              style={{
-                backgroundColor: colors.backgroundSecondary,
-                padding: 8,
-                borderRadius: 8,
-                borderWidth: 1,
-                borderColor: colors.borderPrimary,
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 4,
-              }}
-            >
-              <MoveVertical size={20} color={colors.primary} />
-            </TouchableOpacity>
+            {staff?.shops?.length && staff?.shops?.length > 1 && (
+              <TouchableOpacity
+                onPress={() => {
+                  router.push("/shopSelect");
+                }}
+                style={{
+                  backgroundColor: colors.backgroundSecondary,
+                  padding: 8,
+                  borderRadius: 8,
+                  borderWidth: 1,
+                  borderColor: colors.borderPrimary,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 4,
+                }}
+              >
+                <MoveVertical size={20} color={colors.primary} />
+              </TouchableOpacity>
+            )}
             <TouchableOpacity
               style={{
                 backgroundColor: colors.backgroundSecondary,
