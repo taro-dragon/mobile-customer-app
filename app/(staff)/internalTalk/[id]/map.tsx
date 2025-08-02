@@ -44,7 +44,7 @@ const TalkMap = () => {
             longitude: lng,
             address: address || "",
           },
-          read: false,
+          readBy: [],
         };
 
         await transaction.set(messageRef, locationMessage);

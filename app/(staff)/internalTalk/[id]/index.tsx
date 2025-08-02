@@ -138,6 +138,10 @@ const InternalTalkDetail = () => {
     return () => unsubscribe();
   }, [id, currentStore?.id, latestMessageTimestamp]);
 
+  const scrillToTop = () => {
+    flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
+  };
+
   const loadMoreMessages = async () => {
     if (
       !id ||
@@ -322,6 +326,7 @@ const InternalTalkDetail = () => {
         isOpenPanel={isOpenPanel}
         setIsOpenPanel={setIsOpenPanel}
         talk={talk}
+        scrillToTop={scrillToTop}
       />
       <SafeAreaBottom color={colors.backgroundPrimary} />
     </KeyboardAvoidingView>

@@ -12,6 +12,7 @@ type MessageInputProps = {
   isOpenPanel: boolean;
   setIsOpenPanel: React.Dispatch<React.SetStateAction<boolean>>;
   talk: InternalTalk;
+  scrillToTop: () => void;
 };
 
 const MessageInput: React.FC<MessageInputProps> = ({
@@ -22,9 +23,13 @@ const MessageInput: React.FC<MessageInputProps> = ({
   isOpenPanel,
   setIsOpenPanel,
   talk,
+  scrillToTop,
 }) => {
   const isClosed = talk.status === "closed";
-  const { panel, isUploading, uploadProgress } = useInternalTalkPanel(talk);
+  const { panel, isUploading, uploadProgress } = useInternalTalkPanel(
+    talk,
+    scrillToTop
+  );
 
   return (
     <MessageInputComponent

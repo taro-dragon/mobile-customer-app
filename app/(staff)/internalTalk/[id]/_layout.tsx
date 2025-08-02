@@ -4,7 +4,7 @@ import { Stack, useRouter } from "expo-router";
 
 const InternalTalkLayout = () => {
   const router = useRouter();
-  const { colors, typography } = useTheme();
+  const { colors } = useTheme();
   return (
     <Stack
       screenOptions={{

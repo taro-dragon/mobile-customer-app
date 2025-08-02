@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "expo-router";
-import { Calendar, Car, File, Image, MapPin } from "lucide-react-native";
+import { File, FolderOpen, Image, MapPin } from "lucide-react-native";
 import firestore from "@react-native-firebase/firestore";
 import storage from "@react-native-firebase/storage";
 import * as DocumentPicker from "expo-document-picker";
@@ -9,12 +9,10 @@ import Toast from "react-native-toast-message";
 
 import { useStore } from "../useStore";
 import { Message } from "@/types/firestore_schema/messages";
-import { useTheme } from "@/contexts/ThemeContext";
 import { InternalTalk } from "@/types/firestore_schema/talks";
 import { uploadFile } from "@/libs/uploadFile";
 
-const useInternalTalkPanel = (talk: InternalTalk) => {
-  const { colors } = useTheme();
+const useInternalTalkPanel = (talk: InternalTalk, scrillToTop: () => void) => {
   const router = useRouter();
   const { staff, currentStore } = useStore();
   const [isUploading, setIsUploading] = useState(false);
@@ -91,7 +89,7 @@ const useInternalTalkPanel = (talk: InternalTalk) => {
           senderType: "staff",
           senderId: staff.id,
           type: "file",
-          read: false,
+          readBy: [],
         });
 
         await transaction.update(talkRef, {
@@ -103,6 +101,7 @@ const useInternalTalkPanel = (talk: InternalTalk) => {
       setTimeout(() => {
         setIsUploading(false);
         setUploadProgress(0);
+        scrillToTop();
       }, 500); // 完了表示を少し表示
     } catch (error) {
       console.error("ファイル送信エラー:", error);
@@ -217,6 +216,7 @@ const useInternalTalkPanel = (talk: InternalTalk) => {
           setTimeout(() => {
             setIsUploading(false);
             setUploadProgress(0);
+            scrillToTop();
           }, 500); // 完了表示を少し表示
         }
       );
@@ -245,6 +245,14 @@ const useInternalTalkPanel = (talk: InternalTalk) => {
       icon: MapPin,
       onPress: () => {
         router.push(`/internalTalk/${talk.id}/map`);
+      },
+      disabled: isUploading,
+    },
+    {
+      label: "案件情報",
+      icon: FolderOpen,
+      onPress: () => {
+        router.push(`/internalTalk/${talk.id}/project`);
       },
       disabled: isUploading,
     },

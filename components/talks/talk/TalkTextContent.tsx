@@ -6,7 +6,7 @@ import { InternalTalk } from "@/types/firestore_schema/talks";
 import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 import dayjs from "dayjs";
 import { Image } from "expo-image";
-import { Check } from "lucide-react-native";
+import { Check, User } from "lucide-react-native";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -41,12 +41,25 @@ const TalkTextContent: React.FC<TalkTextContentProps> = ({
       ]}
     >
       {!isMe && (
-        <Image
-          source={{
-            uri: avatarUrl,
-          }}
-          style={styles.avatar}
-        />
+        <>
+          {avatarUrl ? (
+            <Image
+              source={{
+                uri: avatarUrl,
+              }}
+              style={styles.avatar}
+            />
+          ) : (
+            <View
+              style={[
+                styles.avatar,
+                { backgroundColor: colors.backgroundPrimary },
+              ]}
+            >
+              <User size={20} color={colors.textPrimary} />
+            </View>
+          )}
+        </>
       )}
       <View
         style={[
@@ -108,6 +121,8 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 15,
     marginRight: 8,
+    justifyContent: "center",
+    alignItems: "center",
   },
   messageBubble: {
     maxWidth: "85%",
