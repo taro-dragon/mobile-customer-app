@@ -24,10 +24,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   talk,
 }) => {
   const isClosed = talk.status === "closed";
-  const { panel, isUploading, uploadProgress } = useInternalTalkPanel(
-    talk,
-    setIsOpenPanel
-  );
+  const { panel, isUploading, uploadProgress } = useInternalTalkPanel(talk);
 
   return (
     <MessageInputComponent

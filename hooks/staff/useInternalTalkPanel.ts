@@ -1,42 +1,27 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "expo-router";
-import {
-  Calendar,
-  Car,
-  DollarSign,
-  File,
-  Image,
-  MapPin,
-  Send,
-} from "lucide-react-native";
+import { Calendar, Car, File, Image, MapPin } from "lucide-react-native";
 import firestore from "@react-native-firebase/firestore";
 import storage from "@react-native-firebase/storage";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import Toast from "react-native-toast-message";
 
-import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { useStore } from "../useStore";
-import { uploadTalkFile } from "@/libs/firestore/uploadTalkFile";
 import { Message } from "@/types/firestore_schema/messages";
-import { submitCheckCurrentCar } from "@/cloudFunctions/staff/talk/submitCheckCurrentCar";
 import { useTheme } from "@/contexts/ThemeContext";
-import { useModal } from "@/contexts/ModalContext";
 import { InternalTalk } from "@/types/firestore_schema/talks";
+import { uploadFile } from "@/libs/uploadFile";
 
-const useInternalTalkPanel = (
-  talk: InternalTalk,
-  setIsOpenPanel: React.Dispatch<React.SetStateAction<boolean>>
-) => {
+const useInternalTalkPanel = (talk: InternalTalk) => {
   const { colors } = useTheme();
   const router = useRouter();
-  const { staff } = useStore();
+  const { staff, currentStore } = useStore();
   const [isUploading, setIsUploading] = useState(false);
-  const { showModal, hideModal } = useModal();
   const [uploadProgress, setUploadProgress] = useState(0);
 
   const onPressFile = async () => {
-    if (isUploading) return; // アップロード中は重複実行を防ぐ
+    if (isUploading || !currentStore || !staff) return; // アップロード中は重複実行を防ぐ
 
     try {
       setUploadProgress(0);
@@ -72,12 +57,47 @@ const useInternalTalkPanel = (
       setIsUploading(true);
       setUploadProgress(10); // ファイル選択完了
 
+      const path = `shops/${currentStore.id}/talks/${
+        talk.id
+      }/files/${Date.now()}_${file.name}`;
       // 共通アップロード関数を利用
-      await uploadTalkFile({
-        talkId: talk.id,
-        staffId: staff?.id ?? "",
+      const downloadURL = await uploadFile({
+        path,
         file,
         onProgress: setUploadProgress,
+      });
+
+      await firestore().runTransaction(async (transaction) => {
+        const messageRef = firestore()
+          .collection("shops")
+          .doc(currentStore.id)
+          .collection("talks")
+          .doc(talk.id)
+          .collection("messages")
+          .doc();
+        const talkRef = firestore()
+          .collection("shops")
+          .doc(currentStore.id)
+          .collection("talks")
+          .doc(talk.id);
+
+        await transaction.set(messageRef, {
+          talkId: talk.id,
+          text: `ファイル: ${file.name}`,
+          fileUrl: downloadURL,
+          fileName: file.name,
+          fileSize: file.size,
+          createdAt: firestore.FieldValue.serverTimestamp(),
+          senderType: "staff",
+          senderId: staff.id,
+          type: "file",
+          read: false,
+        });
+
+        await transaction.update(talkRef, {
+          lastMessage: `ファイル: ${file.name}`,
+          updatedAt: firestore.Timestamp.now(),
+        });
       });
 
       setTimeout(() => {
@@ -92,7 +112,7 @@ const useInternalTalkPanel = (
   };
 
   const onPressMedia = async () => {
-    if (isUploading) return; // アップロード中は重複実行を防ぐ
+    if (isUploading || !currentStore) return; // アップロード中は重複実行を防ぐ
 
     try {
       setUploadProgress(0);
@@ -124,7 +144,7 @@ const useInternalTalkPanel = (
       const fileName = `${Date.now()}_${
         isVideo ? "video" : "image"
       }.${fileExtension}`;
-      const storagePath = `talks/${talk.id}/${
+      const storagePath = `shops/${currentStore.id}/talks/${talk.id}/${
         isVideo ? "videos" : "images"
       }/${fileName}`;
 
@@ -152,12 +172,18 @@ const useInternalTalkPanel = (
           // Firestoreにメッセージとして保存
           await firestore().runTransaction(async (transaction) => {
             const messageRef = firestore()
+              .collection("shops")
+              .doc(currentStore.id)
               .collection("talks")
               .doc(talk.id)
               .collection("messages")
               .doc();
 
-            const talkRef = firestore().collection("talks").doc(talk.id);
+            const talkRef = firestore()
+              .collection("shops")
+              .doc(currentStore.id)
+              .collection("talks")
+              .doc(talk.id);
 
             const messageData: Message = {
               id: messageRef.id,
@@ -183,7 +209,7 @@ const useInternalTalkPanel = (
 
             await transaction.update(talkRef, {
               lastMessage: isVideo ? "動画" : "画像",
-              lastMessageAt: firestore.Timestamp.now(),
+              updatedAt: firestore.Timestamp.now(),
             });
           });
 
@@ -221,15 +247,6 @@ const useInternalTalkPanel = (
         router.push(`/talks/${talk.id}/map`);
       },
       disabled: isUploading,
-    },
-    {
-      label: "来店日程調整",
-      icon: Calendar,
-      onPress: () => {
-        console.log("日程調整");
-      },
-      disabled: isUploading,
-      iconColor: colors.textSuccess,
     },
   ];
 
