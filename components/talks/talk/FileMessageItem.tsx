@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
-import { TalkWithUser } from "@/types/extendType/TalkWithUser";
-import { Message } from "@/types/firestore_schema/messages";
 import dayjs from "dayjs";
 import { Image } from "expo-image";
 import { Download, Check } from "lucide-react-native";

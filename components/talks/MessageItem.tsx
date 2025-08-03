@@ -78,7 +78,9 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, talk }) => {
             gap: 8,
           }}
         >
-          {message.read && isUser && <Check size={12} color={colors.primary} />}
+          {message.readBy && isUser && (
+            <Check size={12} color={colors.primary} />
+          )}
           <Text style={[styles.timeText, { color: colors.textSecondary }]}>
             {dayjs(message.createdAt.toDate()).format("HH:mm")}
           </Text>

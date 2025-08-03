@@ -28,7 +28,7 @@ const MESSAGES_PER_PAGE = 30;
 const TalkDetail = () => {
   const { talkId } = useLocalSearchParams<{ talkId: string }>();
   const { staff } = useStore();
-  const { talk, isTalkLoading, talkError } = useTalk();
+  const { talk, isTalkLoading } = useTalk();
   const [messages, setMessages] = useState<Message[]>([]);
   const [isOpenPanel, setIsOpenPanel] = useState(false);
   const [loading, setLoading] = useState(true);
