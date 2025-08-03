@@ -6,6 +6,7 @@ import { User } from "@/types/firestore_schema/users";
 import { TalkWithUser } from "@/types/extendType/TalkWithUser";
 import { Stock } from "@/types/firestore_schema/stock";
 import { Staff } from "@/types/firestore_schema/staff";
+import { Talk } from "@/types/firestore_schema/talks";
 
 export const createStaffTalkSlice: StateCreator<
   StaffTalkSlice,
@@ -35,7 +36,7 @@ export const createStaffTalkSlice: StateCreator<
               return {
                 id: doc.id,
                 ...doc.data(),
-              } as TalkWithUser;
+              } as Talk;
             });
 
             const talkWithUser = await Promise.all(
@@ -84,7 +85,7 @@ export const createStaffTalkSlice: StateCreator<
                       user: user,
                       staffs: staffsMap,
                       sourceStockCar: stockCar.data() as Stock,
-                    };
+                    } as TalkWithUser;
                   } else if (sourceType === "buy_offer") {
                     const car = await firestore()
                       .collection("cars")
@@ -95,7 +96,7 @@ export const createStaffTalkSlice: StateCreator<
                       user: user,
                       staffs: staffsMap,
                       sourceCar: car.data() as Car,
-                    };
+                    } as TalkWithUser;
                   } else {
                     const car = await firestore()
                       .collection("cars")
@@ -106,11 +107,10 @@ export const createStaffTalkSlice: StateCreator<
                       user: user,
                       staffs: staffsMap,
                       sourceCar: car.data() as Car,
-                    };
+                    } as TalkWithUser;
                   }
                 } catch (error) {
-                  console.error("Error fetching affiliate store:", error);
-                  return talk;
+                  throw error;
                 }
               })
             );

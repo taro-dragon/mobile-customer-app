@@ -1,5 +1,5 @@
 import { useStore } from "@/hooks/useStore";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -8,7 +8,6 @@ import {
   Platform,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
 import firestore, {
@@ -22,14 +21,14 @@ import TalkHeader from "@/components/staff/talks/TalkHeader";
 import MessageInput from "@/components/staff/talks/MessageInput";
 import Toast from "react-native-toast-message";
 import DateSeparatorWrapper from "@/components/common/DateSeparatorWrapper";
+import useTalk from "@/hooks/staff/talks/useTalk";
 
 const MESSAGES_PER_PAGE = 30;
 
 const TalkDetail = () => {
   const { talkId } = useLocalSearchParams<{ talkId: string }>();
-  const { staffTalks, staff } = useStore();
-  const talk = staffTalks.find((talk) => talk.id === talkId);
-  const isClosed = talk?.status === "closed";
+  const { staff } = useStore();
+  const { talk, isTalkLoading, talkError } = useTalk();
   const [messages, setMessages] = useState<Message[]>([]);
   const [isOpenPanel, setIsOpenPanel] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -245,14 +244,7 @@ const TalkDetail = () => {
     );
   };
 
-  if (!talk) {
-    return (
-      <View style={styles.centerContainer}>
-        <Text>トークが見つかりません</Text>
-      </View>
-    );
-  }
-  if (loading) {
+  if (loading || isTalkLoading) {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color={colors.primary} />
@@ -262,6 +254,14 @@ const TalkDetail = () => {
       </View>
     );
   }
+  if (!talk) {
+    return (
+      <View style={styles.centerContainer}>
+        <Text>トークが見つかりません</Text>
+      </View>
+    );
+  }
+  const isClosed = talk?.status === "closed";
 
   return (
     <>
