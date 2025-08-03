@@ -279,11 +279,7 @@ const TalkDetail = () => {
           </Text>
         </View>
       )}
-      <Stack.Screen
-        options={{
-          title: `${talk.user.familyName} ${talk.user.givenName}`,
-        }}
-      />
+
       <View style={{ flex: 1 }}>
         <TalkHeader talk={talk} />
         <KeyboardAvoidingView

@@ -1,5 +1,6 @@
 import { useTheme } from "@/contexts/ThemeContext";
-import { ActivityIndicator, Modal, StyleSheet, Text, View } from "react-native";
+import { Modal, StyleSheet, Text, View } from "react-native";
+import { useEffect, useState } from "react";
 
 type DownloadProgressModalProps = {
   visible: boolean;
@@ -13,6 +14,20 @@ const DownloadProgressModal: React.FC<DownloadProgressModalProps> = ({
   fileName,
 }) => {
   const { colors } = useTheme();
+  const [displayProgress, setDisplayProgress] = useState(0);
+
+  // プログレスバーのアニメーションを滑らかにする
+  useEffect(() => {
+    if (visible) {
+      const timer = setTimeout(() => {
+        setDisplayProgress(downloadProgress);
+      }, 100);
+      return () => clearTimeout(timer);
+    } else {
+      setDisplayProgress(0);
+    }
+  }, [downloadProgress, visible]);
+
   return (
     <Modal visible={visible} transparent={true} animationType="fade">
       <View style={styles.modalOverlay}>
@@ -37,7 +52,7 @@ const DownloadProgressModal: React.FC<DownloadProgressModalProps> = ({
                   styles.progressFill,
                   {
                     backgroundColor: colors.primary,
-                    width: `${downloadProgress}%`,
+                    width: `${displayProgress}%`,
                   },
                 ]}
               />
@@ -45,11 +60,12 @@ const DownloadProgressModal: React.FC<DownloadProgressModalProps> = ({
             <Text
               style={[styles.progressText, { color: colors.textSecondary }]}
             >
-              {Math.round(downloadProgress)}%
+              {Math.round(displayProgress)}%
             </Text>
           </View>
           <Text
             style={[styles.progressFileName, { color: colors.textSecondary }]}
+            numberOfLines={2}
           >
             {fileName}
           </Text>
@@ -101,6 +117,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textAlign: "center",
     maxWidth: 200,
+  },
+  completeText: {
+    fontSize: 14,
+    fontWeight: "600",
+    textAlign: "center",
   },
 });
 

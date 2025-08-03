@@ -63,25 +63,64 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
     try {
       const fileUri = `${FileSystem.documentDirectory}${fileName}`;
 
+      // 既存のファイルがある場合は削除
+      try {
+        const fileInfo = await FileSystem.getInfoAsync(fileUri);
+        if (fileInfo.exists) {
+          await FileSystem.deleteAsync(fileUri);
+        }
+      } catch (error) {
+        console.log("既存ファイルの削除に失敗:", error);
+      }
+
       const downloadResumable = FileSystem.createDownloadResumable(
         fileUrl,
         fileUri,
         {},
         (downloadProgress) => {
-          const progress =
-            downloadProgress.totalBytesWritten /
-            downloadProgress.totalBytesExpectedToWrite;
-          setDownloadProgress(progress);
+          // プログレス計算の改善
+          if (downloadProgress.totalBytesExpectedToWrite > 0) {
+            const progress =
+              downloadProgress.totalBytesWritten /
+              downloadProgress.totalBytesExpectedToWrite;
+
+            // プログレスを0-100の範囲に制限し、小数点以下を適切に処理
+            const clampedProgress = Math.min(Math.max(progress, 0), 1);
+            const percentageProgress = Math.round(clampedProgress * 100);
+
+            setDownloadProgress(percentageProgress);
+          } else {
+            // totalBytesExpectedToWriteが0の場合は、書き込みバイト数から推定
+            const estimatedProgress = Math.min(
+              downloadProgress.totalBytesWritten / (fileSize || 1),
+              0.95 // 95%まで表示し、完了時に100%にする
+            );
+            const percentageProgress = Math.round(estimatedProgress * 100);
+            setDownloadProgress(percentageProgress);
+          }
         }
       );
 
       const result = await downloadResumable.downloadAsync();
       if (result && result.uri) {
+        setDownloadProgress(100);
+
         await Sharing.shareAsync(result.uri);
+        setTimeout(() => {
+          setIsDownloading(false);
+          setShowProgressModal(false);
+          setDownloadProgress(0);
+        }, 100);
+      } else {
+        throw new Error("ダウンロードが完了しませんでした");
       }
     } catch (error) {
       console.error("Download failed:", error);
-    } finally {
+      Toast.show({
+        type: "error",
+        text1: "ダウンロードに失敗しました",
+        text2: "ネットワーク接続を確認してください",
+      });
       setIsDownloading(false);
       setShowProgressModal(false);
       setDownloadProgress(0);
@@ -115,44 +154,58 @@ const FileMessageItem: React.FC<FileMessageItemProps> = ({
             },
           ]}
         >
-          {/* 送信者名表示 */}
           {!isMe && (
             <Text style={[styles.senderName, { color: colors.textSecondary }]}>
               {senderName}
             </Text>
           )}
 
-          <TouchableOpacity
-            style={styles.fileContainer}
-            onPress={handleDownload}
-            disabled={isDownloading}
-          >
-            <View style={styles.fileIconContainer}>
-              <FileIcon size={24} color={fileIconColor} />
-            </View>
-            <View style={styles.fileInfo}>
-              <Text
-                style={[
-                  styles.fileName,
-                  { color: colors.textPrimary },
-                  typography.body1,
-                ]}
-                numberOfLines={2}
+          <View style={styles.fileContainer}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 12,
+                flex: 1,
+              }}
+            >
+              <View style={styles.fileIconContainer}>
+                <FileIcon size={24} color={fileIconColor} />
+              </View>
+              <View style={styles.fileInfo}>
+                <Text
+                  style={[
+                    styles.fileName,
+                    { color: colors.textPrimary },
+                    typography.body1,
+                  ]}
+                  numberOfLines={2}
+                >
+                  {fileName}
+                </Text>
+                <Text
+                  style={[
+                    styles.fileSize,
+                    { color: colors.textSecondary },
+                    typography.body4,
+                  ]}
+                >
+                  {formatFileSize(fileSize)}
+                </Text>
+              </View>
+              <TouchableOpacity
+                onPress={handleDownload}
+                disabled={isDownloading}
+                style={{
+                  padding: 8,
+                  borderRadius: 100,
+                  backgroundColor: colors.backgroundSecondary,
+                }}
               >
-                {fileName}
-              </Text>
-              <Text
-                style={[
-                  styles.fileSize,
-                  { color: colors.textSecondary },
-                  typography.body4,
-                ]}
-              >
-                {(fileSize / 1024 / 1024).toFixed(1)} MB`
-              </Text>
+                <Download size={16} color={colors.textSecondary} />
+              </TouchableOpacity>
             </View>
-            <Download size={16} color={colors.textSecondary} />
-          </TouchableOpacity>
+          </View>
 
           <View
             style={{
@@ -201,7 +254,8 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   bubble: {
-    maxWidth: "85%",
+    maxWidth: "60%",
+    flex: 1,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 18,
@@ -218,6 +272,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 8,
     gap: 12,
+    flex: 1,
   },
   fileIconContainer: {
     width: 40,
