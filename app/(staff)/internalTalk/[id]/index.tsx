@@ -1,6 +1,5 @@
 import { useTheme } from "@/contexts/ThemeContext";
-import { useLocalSearchParams } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -10,233 +9,35 @@ import {
   Text,
   View,
 } from "react-native";
-import firestore, {
-  FirebaseFirestoreTypes,
-} from "@react-native-firebase/firestore";
-import { Message } from "@/types/firestore_schema/messages";
-import { useStore } from "@/hooks/useStore";
 import SafeAreaBottom from "@/components/common/SafeAreaBottom";
-import Toast from "react-native-toast-message";
 import DateSeparatorWrapper from "@/components/common/DateSeparatorWrapper";
 import MessageInput from "@/components/staff/internalTalks/MessageInput";
 import { InternalMessage } from "@/types/firestore_schema/internalMessage";
 import MessageItem from "@/components/staff/internalTalk/MessageItem/MessageItem";
-
-const MESSAGES_PER_PAGE = 30;
+import useInternalTalk from "@/hooks/staff/talks/useInternalTalk";
 
 const InternalTalkDetail = () => {
-  const { id } = useLocalSearchParams<{ id: string }>();
   const { colors } = useTheme();
-  const { staff, currentStore, internalTalks } = useStore();
-  const talk = internalTalks.find((talk) => talk.id === id);
-  const [messages, setMessages] = useState<InternalMessage[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [isOpenPanel, setIsOpenPanel] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [hasMoreMessages, setHasMoreMessages] = useState(true);
-  const [text, setText] = useState("");
-  const [sending, setSending] = useState(false);
+  const {
+    internalTalk,
+    isInternalTalkLoading,
+    messages,
+    loading,
+    sendMessage,
+    text,
+    setText,
+    sending,
+    loadMoreMessages,
+    loadingMore,
+  } = useInternalTalk();
   const flatListRef = useRef<FlatList>(null);
-
-  // 最新のメッセージのタイムスタンプを追跡
-  const [latestMessageTimestamp, setLatestMessageTimestamp] =
-    useState<FirebaseFirestoreTypes.Timestamp | null>(null);
-
-  useEffect(() => {
-    if (!id) return;
-
-    const loadInitialMessages = async () => {
-      try {
-        setLoading(true);
-
-        // 最新のメッセージを取得
-        const messagesRef = firestore()
-          .collection("shops")
-          .doc(currentStore?.id || "")
-          .collection("talks")
-          .doc(id)
-          .collection("messages")
-          .orderBy("createdAt", "desc")
-          .limit(MESSAGES_PER_PAGE);
-
-        const snapshot = await messagesRef.get();
-        const messagesData = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as InternalMessage[];
-
-        setMessages(messagesData);
-
-        // 最新メッセージのタイムスタンプを保存
-        if (messagesData.length > 0) {
-          setLatestMessageTimestamp(messagesData[0].createdAt);
-        }
-
-        // さらに古いメッセージがあるかチェック
-        if (snapshot.docs.length < MESSAGES_PER_PAGE) {
-          setHasMoreMessages(false);
-        }
-      } catch (error) {
-        console.error("Error loading initial messages:", error);
-        Toast.show({
-          type: "error",
-          text1: "メッセージの読み込みに失敗しました",
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadInitialMessages();
-  }, [id, currentStore?.id]);
-
-  useEffect(() => {
-    if (!id || !currentStore?.id) return;
-
-    const unsubscribe = firestore()
-      .collection("shops")
-      .doc(currentStore.id)
-      .collection("talks")
-      .doc(id)
-      .collection("messages")
-      .orderBy("createdAt", "desc")
-      .limit(1)
-      .onSnapshot(
-        (snapshot) => {
-          if (!snapshot.empty) {
-            const latestMessage = snapshot.docs[0];
-            const messageData = {
-              id: latestMessage.id,
-              ...latestMessage.data(),
-            } as InternalMessage;
-
-            // 新しいメッセージが追加された場合のみ更新
-            if (
-              !latestMessageTimestamp ||
-              messageData.createdAt.toMillis() >
-                latestMessageTimestamp.toMillis()
-            ) {
-              setMessages((prevMessages) => {
-                // 既存のメッセージをチェック
-                const exists = prevMessages.some(
-                  (msg) => msg.id === messageData.id
-                );
-                if (!exists) {
-                  return [messageData, ...prevMessages];
-                }
-                return prevMessages;
-              });
-              setLatestMessageTimestamp(messageData.createdAt);
-            }
-          }
-        },
-        (error) => {
-          console.error("Error listening to messages:", error);
-        }
-      );
-
-    return () => unsubscribe();
-  }, [id, currentStore?.id, latestMessageTimestamp]);
+  const [isOpenPanel, setIsOpenPanel] = useState(false);
 
   const scrillToTop = () => {
     flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
   };
 
-  const loadMoreMessages = async () => {
-    if (
-      !id ||
-      loadingMore ||
-      !hasMoreMessages ||
-      messages.length === 0 ||
-      !currentStore?.id
-    )
-      return;
-    try {
-      setLoadingMore(true);
-
-      const oldestMessage = messages[messages.length - 1];
-      const messagesRef = firestore()
-        .collection("shops")
-        .doc(currentStore.id)
-        .collection("talks")
-        .doc(id)
-        .collection("messages")
-        .orderBy("createdAt", "desc")
-        .startAfter(oldestMessage.createdAt)
-        .limit(MESSAGES_PER_PAGE);
-
-      const snapshot = await messagesRef.get();
-      const olderMessages = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as InternalMessage[];
-
-      if (olderMessages.length > 0) {
-        setMessages((prevMessages) => [...prevMessages, ...olderMessages]);
-      }
-
-      // さらに古いメッセージがない場合はフラグを更新
-      if (snapshot.docs.length < MESSAGES_PER_PAGE) {
-        setHasMoreMessages(false);
-      }
-    } catch (error) {
-      console.error("Error loading more messages:", error);
-      Toast.show({
-        type: "error",
-        text1: "メッセージの読み込みに失敗しました",
-      });
-    } finally {
-      setLoadingMore(false);
-    }
-  };
-
-  const sendMessage = async () => {
-    if (!text.trim() || !staff || !id || !currentStore?.id) return;
-
-    setSending(true);
-    try {
-      const messageData: Omit<Message, "id"> = {
-        talkId: id,
-        senderId: staff.id,
-        senderType: "staff",
-        senderName: staff.name,
-        text: text.trim(),
-        readBy: [staff.id],
-        createdAt: firestore.Timestamp.now(),
-        type: "text",
-      };
-
-      await firestore().runTransaction(async (transaction) => {
-        const talkRef = firestore()
-          .collection("shops")
-          .doc(currentStore.id)
-          .collection("talks")
-          .doc(id);
-        const messageRef = talkRef.collection("messages").doc();
-
-        transaction.set(messageRef, messageData);
-        transaction.update(talkRef, {
-          lastMessage: text.trim(),
-          updatedAt: firestore.Timestamp.now(),
-        });
-      });
-      setText("");
-
-      // メッセージ送信後に最新までスクロール
-      setTimeout(() => {
-        flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
-      }, 100);
-    } catch (error) {
-      Toast.show({
-        type: "error",
-        text1: "メッセージの送信に失敗しました",
-      });
-    } finally {
-      setSending(false);
-    }
-  };
-
-  if (loading) {
+  if (isInternalTalkLoading || loading) {
     return (
       <View
         style={[
@@ -253,7 +54,7 @@ const InternalTalkDetail = () => {
     );
   }
 
-  if (!talk) {
+  if (!internalTalk) {
     return (
       <View
         style={[
@@ -269,6 +70,13 @@ const InternalTalkDetail = () => {
     );
   }
 
+  const handleSendMessage = async () => {
+    await sendMessage();
+    setTimeout(() => {
+      scrillToTop();
+    }, 100);
+  };
+
   const renderMessageWithDateSeparator = ({
     item,
     index,
@@ -278,7 +86,7 @@ const InternalTalkDetail = () => {
   }) => {
     return (
       <DateSeparatorWrapper message={item} index={index} messages={messages}>
-        <MessageItem message={item} talk={talk} />
+        <MessageItem message={item} talk={internalTalk} />
       </DateSeparatorWrapper>
     );
   };
@@ -319,13 +127,13 @@ const InternalTalkDetail = () => {
         }
       />
       <MessageInput
-        sendMessage={sendMessage}
+        sendMessage={handleSendMessage}
         sending={sending}
         text={text}
         setText={setText}
         isOpenPanel={isOpenPanel}
         setIsOpenPanel={setIsOpenPanel}
-        talk={talk}
+        talk={internalTalk}
         scrillToTop={scrillToTop}
       />
       <SafeAreaBottom color={colors.backgroundPrimary} />

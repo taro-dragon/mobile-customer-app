@@ -167,6 +167,7 @@ const useInternalTalkPanel = (talk: InternalTalk, scrillToTop: () => void) => {
         async () => {
           setUploadProgress(90); // アップロード完了
           const downloadURL = await mediaRef.getDownloadURL();
+          console.log("downloadURL", downloadURL);
 
           // Firestoreにメッセージとして保存
           await firestore().runTransaction(async (transaction) => {
