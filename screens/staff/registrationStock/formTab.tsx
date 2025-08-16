@@ -202,7 +202,7 @@ const RegistrationStockFormScreen: React.FC = () => {
         displacement: Number(cleanStockData.displacement),
         doorNumber: Number(cleanStockData.doorNumber),
         prefecture: currentStore.address1,
-        status: "active",
+        status: "published",
       });
       navigation.getParent()?.goBack();
       Toast.show({

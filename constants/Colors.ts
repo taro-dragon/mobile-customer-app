@@ -87,6 +87,7 @@ export const SemanticColors = {
     userTalkBubbleBackground: "#6DE67B",
     otherTalkBubbleBackground: "#fff",
     toastBackground: "#11111190",
+    shadow: "#000000",
   },
   dark: {
     // Background colors
@@ -176,5 +177,6 @@ export const SemanticColors = {
     userTalkBubbleBackground: "#6DE67B",
     otherTalkBubbleBackground: "#2A2A2A",
     toastBackground: "#11111190",
+    shadow: "#FFFFFF",
   },
 };

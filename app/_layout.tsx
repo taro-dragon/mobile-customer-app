@@ -9,7 +9,6 @@ import { ToastConfig } from "@/constants/ToastConfig";
 import * as SplashScreen from "expo-splash-screen";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ErrorBoundary from "@/components/ErrorBoundary";
-import ErrorService from "@/libs/ErrorService";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import { ModalProvider } from "@/contexts/ModalContext";
@@ -24,23 +23,6 @@ export default function Layout() {
   const [initialRoute, setInitialRoute] = useState<string | null>(null);
   const [isInitializing, setIsInitializing] = useState(true);
   useAuthInitialization();
-
-  useEffect(() => {
-    ErrorService.setupGlobalHandlers();
-
-    const customHandler = (error: Error, isFatal?: boolean) => {
-      console.log(
-        `Custom handler caught ${isFatal ? "fatal" : ""} error:`,
-        error.message
-      );
-    };
-
-    ErrorService.addErrorHandler(customHandler);
-
-    return () => {
-      ErrorService.removeErrorHandler(customHandler);
-    };
-  }, []);
 
   useEffect(() => {
     if (!isAppReady) return;

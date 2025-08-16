@@ -20,218 +20,197 @@ import { useRouter } from "expo-router";
 import { useLogout } from "@/hooks/staff/useLogout";
 import { useStore } from "@/hooks/useStore";
 import { Image } from "expo-image";
-import Divider from "@/components/common/Divider";
+import TopHeader from "@/components/base/TopHeader";
+import { useHeaderHeight } from "@react-navigation/elements";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const StaffIndexScreen = () => {
-  const { colors, typography } = useTheme();
+  const { colors, typography, isDark } = useTheme();
   const router = useRouter();
   const { logout } = useLogout();
+  const headerHeight = useHeaderHeight();
+  const { top } = useSafeAreaInsets();
   const { currentStore, staff } = useStore();
   const styles = StyleSheet.create({
     button: {
       flex: 1,
-      backgroundColor: colors.backgroundSecondary,
+      backgroundColor: colors.backgroundPrimary,
       height: 88,
       borderRadius: 8,
       justifyContent: "center",
       alignItems: "center",
       gap: 8,
-      borderWidth: 1,
-      borderColor: colors.borderPrimary,
-    },
-    carRegistrationButton: {
-      flex: 1,
-      backgroundColor: colors.backgroundSecondary,
-      height: 96,
-      borderRadius: 8,
-      padding: 16,
-      justifyContent: "center",
-      alignItems: "center",
-      gap: 8,
-      borderWidth: 1,
-      borderColor: colors.borderPrimary,
+      shadowColor: colors.shadow,
+      shadowOffset: {
+        width: 0,
+        height: 0,
+      },
+      shadowOpacity: 0.1,
+      shadowRadius: 3.84,
+      elevation: 1,
     },
   });
   return (
     <View style={{ flex: 1 }}>
-      <View
-        style={{
-          gap: 8,
-          padding: 16,
-          flexDirection: "row",
+      <ScrollView
+        style={{ flex: 1, backgroundColor: colors.backgroundSecondary }}
+        contentContainerStyle={{
+          gap: 24,
+          paddingTop: headerHeight + top,
+          paddingHorizontal: 16,
         }}
       >
-        <View
-          style={{
-            width: 48,
-            height: 48,
-            borderRadius: 8,
-            overflow: "hidden",
-          }}
-        >
-          {currentStore?.imageUrls?.[0] ? (
-            <Image
-              source={{ uri: currentStore?.imageUrls?.[0] }}
-              style={{ width: 48, height: 48, borderRadius: 8 }}
-            />
-          ) : (
+        <TopHeader>
+          <View style={{ gap: 24 }}>
             <View
               style={{
-                width: 48,
-                height: 48,
-                borderRadius: 8,
-                borderWidth: 1,
-                borderColor: colors.borderPrimary,
+                justifyContent: "flex-end",
                 alignItems: "center",
-                justifyContent: "center",
+                flexDirection: "row",
               }}
             >
-              <Text
+              <Bell size={24} color={colors.white} />
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 8,
+                alignItems: "center",
+                height: 48,
+              }}
+            >
+              <View
                 style={{
-                  color: colors.textPrimary,
-                  ...typography.heading3,
+                  width: 48,
+                  height: 48,
+                  borderRadius: 8,
+                  overflow: "hidden",
                 }}
               >
-                {currentStore?.shopName.slice(0, 2)}
-              </Text>
+                {currentStore?.imageUrls?.[0] ? (
+                  <Image
+                    source={{ uri: currentStore?.imageUrls?.[0] }}
+                    style={{ width: 48, height: 48, borderRadius: 8 }}
+                  />
+                ) : (
+                  <View
+                    style={{
+                      width: 48,
+                      height: 48,
+                      borderRadius: 8,
+                      borderWidth: 1,
+                      borderColor: colors.white,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: colors.white,
+                        ...typography.heading2,
+                      }}
+                    >
+                      {currentStore?.shopName.slice(0, 2)}
+                    </Text>
+                  </View>
+                )}
+              </View>
+              <View style={{ gap: 4, flex: 1 }}>
+                <Text
+                  numberOfLines={1}
+                  style={{ color: colors.white, ...typography.body4 }}
+                >
+                  {currentStore?.address1} {currentStore?.address2}{" "}
+                  {currentStore?.address3}
+                </Text>
+                <Text style={{ color: colors.white, ...typography.heading2 }}>
+                  {currentStore?.shopName}
+                </Text>
+              </View>
+              {staff?.shops?.length && staff?.shops?.length > 1 && (
+                <MoveVertical
+                  onPress={() => {
+                    router.push("/shopSelect");
+                  }}
+                  size={24}
+                  color={colors.white}
+                />
+              )}
             </View>
-          )}
-        </View>
-        <View
-          style={{
-            gap: 8,
-            flex: 1,
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexDirection: "row",
-          }}
-        >
-          <View style={{ gap: 4 }}>
-            <Text style={{ color: colors.textPrimary, ...typography.heading2 }}>
-              {currentStore?.shopName}
-            </Text>
-            <Text
-              numberOfLines={1}
-              style={{ color: colors.textSecondary, ...typography.body3 }}
-            >
-              {currentStore?.address1} {currentStore?.address2}{" "}
-              {currentStore?.address3}
-            </Text>
           </View>
+        </TopHeader>
+        <View style={{ paddingBottom: 16 }}>
           <View
             style={{
-              flexDirection: "row",
               gap: 8,
-              alignItems: "center",
             }}
           >
-            {staff?.shops?.length && staff?.shops?.length > 1 && (
+            <View style={{ flexDirection: "row", gap: 8 }}>
               <TouchableOpacity
                 onPress={() => {
-                  router.push("/shopSelect");
+                  router.push("/projects");
                 }}
-                style={{
-                  backgroundColor: colors.backgroundSecondary,
-                  padding: 8,
-                  borderRadius: 8,
-                  borderWidth: 1,
-                  borderColor: colors.borderPrimary,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 4,
-                }}
+                style={styles.button}
               >
-                <MoveVertical size={20} color={colors.primary} />
+                <FolderOpen size={24} color={colors.primary} />
+                <Text
+                  style={{ color: colors.textPrimary, ...typography.heading3 }}
+                >
+                  案件管理
+                </Text>
               </TouchableOpacity>
-            )}
-            <TouchableOpacity
-              style={{
-                backgroundColor: colors.backgroundSecondary,
-                padding: 8,
-                borderRadius: 8,
-                borderWidth: 1,
-                borderColor: colors.borderPrimary,
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 4,
-              }}
-            >
-              <Bell size={20} color={colors.primary} />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-      <Divider />
-      <ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={{ padding: 16, gap: 24 }}
-      >
-        <View
-          style={{
-            gap: 8,
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => {
-              router.push("/projects");
-            }}
-            style={styles.carRegistrationButton}
-          >
-            <FolderOpen size={24} color={colors.primary} />
-            <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
-              案件管理
-            </Text>
-          </TouchableOpacity>
-          <View style={{ flexDirection: "row", gap: 8 }}>
-            <TouchableOpacity
-              onPress={() => {
-                router.push("/registrationStock");
-              }}
-              style={styles.button}
-            >
-              <Car size={24} color={colors.primary} />
-              <Text
-                style={{ color: colors.textPrimary, ...typography.heading3 }}
+              <TouchableOpacity
+                onPress={() => {
+                  router.push("/registrationStock");
+                }}
+                style={styles.button}
               >
-                在庫車両登録
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                router.push("/bulkAppraisalBid");
-              }}
-              style={styles.button}
-            >
-              <Gavel size={24} color={colors.primary} />
-              <Text
-                style={{ color: colors.textPrimary, ...typography.heading4 }}
+                <Car size={24} color={colors.primary} />
+                <Text
+                  style={{ color: colors.textPrimary, ...typography.heading4 }}
+                >
+                  在庫車両登録
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{ flexDirection: "row", gap: 8 }}>
+              <TouchableOpacity
+                onPress={() => {
+                  router.push("/bulkAppraisalBid");
+                }}
+                style={styles.button}
               >
-                一括査定入札
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                router.push("/registrationBuyOffer");
-              }}
-              style={styles.button}
-            >
-              <Handshake size={24} color={colors.primary} />
-              <Text
-                style={{ color: colors.textPrimary, ...typography.heading4 }}
+                <Gavel size={24} color={colors.primary} />
+                <Text
+                  style={{ color: colors.textPrimary, ...typography.heading4 }}
+                >
+                  一括査定入札
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  router.push("/registrationBuyOffer");
+                }}
+                style={styles.button}
               >
-                買取オファー登録
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{ flexDirection: "row", gap: 8 }}>
-            <TouchableOpacity onPress={logout} style={styles.button}>
-              <LogOut size={24} color={colors.primary} />
-              <Text
-                style={{ color: colors.textPrimary, ...typography.heading4 }}
-              >
-                ログアウト
-              </Text>
-            </TouchableOpacity>
+                <Handshake size={24} color={colors.primary} />
+                <Text
+                  style={{ color: colors.textPrimary, ...typography.heading4 }}
+                >
+                  買取オファー登録
+                </Text>
+              </TouchableOpacity>
+            </View>
+            {/* <View style={{ flexDirection: "row", gap: 8 }}>
+              <TouchableOpacity onPress={logout} style={styles.button}>
+                <LogOut size={24} color={colors.primary} />
+                <Text
+                  style={{ color: colors.textPrimary, ...typography.heading4 }}
+                >
+                  ログアウト
+                </Text>
+              </TouchableOpacity>
+            </View> */}
           </View>
         </View>
       </ScrollView>

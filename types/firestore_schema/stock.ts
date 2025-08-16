@@ -151,7 +151,6 @@ export type Stock = {
   updatedBy: string;
   storeId: string;
   status: "draft" | "published" | "archived";
-
   // 店舗情報
   managerStaffs: string[];
 };

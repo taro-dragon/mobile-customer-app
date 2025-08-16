@@ -42,7 +42,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
           >
             <ActivityIndicator size="large" color={colors.white} />
             {modalText && (
-              <Text style={{ color: colors.textPrimary, fontSize: 16 }}>
+              <Text style={{ color: colors.white, fontSize: 16 }}>
                 {modalText}
               </Text>
             )}

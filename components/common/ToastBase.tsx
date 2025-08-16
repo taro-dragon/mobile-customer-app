@@ -58,7 +58,7 @@ const ToastBase = (props: ToastBaseProps) => {
           </Text>
         </View>
         {props.text2 && (
-          <Text style={{ ...typography.body2, color: colors.textPrimary }}>
+          <Text style={{ ...typography.body2, color: colors.textSecondary }}>
             {props.text2}
           </Text>
         )}
