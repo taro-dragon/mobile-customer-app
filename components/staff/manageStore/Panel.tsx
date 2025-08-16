@@ -26,11 +26,17 @@ const ManageStorePanel: React.FC<ManageStorePanelProps> = ({
         style={{
           borderRadius: 8,
           aspectRatio: 1,
-          backgroundColor: colors.backgroundSecondary,
+          backgroundColor: colors.backgroundPrimary,
           alignItems: "center",
           justifyContent: "center",
-          borderWidth: 1,
-          borderColor: colors.borderPrimary,
+          shadowColor: colors.shadow,
+          shadowOffset: {
+            width: 0,
+            height: 0,
+          },
+          shadowOpacity: 0.1,
+          shadowRadius: 3.84,
+          elevation: 1,
         }}
       >
         {icon}

@@ -11,7 +11,7 @@ const StoreLayout = () => {
     <Stack
       screenOptions={{
         contentStyle: {
-          backgroundColor: colors.backgroundPrimary,
+          backgroundColor: colors.backgroundSecondary,
         },
         headerStyle: {
           backgroundColor: colors.backgroundPrimary,
