@@ -24,7 +24,7 @@ const StockCarsItem: React.FC<StockCarsItemProps> = ({ stockCar }) => {
         router.push(`/stockCars/${stockCar.id}`);
       }}
     >
-      <Card style={{ backgroundColor: colors.backgroundSecondary }}>
+      <Card style={{ backgroundColor: colors.backgroundPrimary }}>
         <View style={{ gap: 4 }}>
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}

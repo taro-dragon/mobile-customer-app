@@ -16,10 +16,16 @@ const Card: React.FC<CardProps> = ({
   const { colors } = useTheme();
   const styles = StyleSheet.create({
     card: {
-      borderWidth: 1,
-      borderColor: isSecondary ? colors.borderSecondary : colors.borderPrimary,
       padding: 12,
       borderRadius: 12,
+      shadowColor: colors.shadow,
+      shadowOffset: {
+        width: 0,
+        height: 0,
+      },
+      shadowOpacity: 0.1,
+      shadowRadius: 3.84,
+      elevation: 1,
     },
   });
   return onPress ? (

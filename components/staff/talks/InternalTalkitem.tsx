@@ -6,12 +6,7 @@ import dayjs from "dayjs";
 import { useRouter } from "expo-router";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ja";
-import Tag from "@/components/common/Tag";
 import Divider from "@/components/common/Divider";
-import { TalkWithUser } from "@/types/extendType/TalkWithUser";
-import { getSourceTypeLabel } from "@/libs/getSourceTypeLabel";
-import { transformCarData } from "@/libs/transformCarData";
-import { Car } from "@/types/models/Car";
 import { InternalTalk } from "@/types/firestore_schema/talks";
 import { Users } from "lucide-react-native";
 
@@ -32,7 +27,13 @@ const InternalTalkItem: React.FC<TalkItemProps> = ({ talk }) => {
 
   return (
     <>
-      <TouchableOpacity style={styles.container} onPress={handlePress}>
+      <TouchableOpacity
+        style={[
+          styles.container,
+          { backgroundColor: colors.backgroundPrimary },
+        ]}
+        onPress={handlePress}
+      >
         {talk.photoUrl ? (
           <Image
             source={{

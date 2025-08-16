@@ -36,7 +36,13 @@ const TalkItem: React.FC<TalkItemProps> = ({ talk }) => {
 
   return (
     <>
-      <TouchableOpacity style={styles.container} onPress={handlePress}>
+      <TouchableOpacity
+        style={[
+          styles.container,
+          { backgroundColor: colors.backgroundPrimary },
+        ]}
+        onPress={handlePress}
+      >
         <Image
           source={{
             uri:

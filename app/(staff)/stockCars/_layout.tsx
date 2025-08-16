@@ -12,7 +12,7 @@ const StockCarsLayout = () => {
       <Stack
         screenOptions={{
           contentStyle: {
-            backgroundColor: colors.backgroundPrimary,
+            backgroundColor: colors.backgroundSecondary,
           },
           headerTintColor: colors.primary,
           headerStyle: {
