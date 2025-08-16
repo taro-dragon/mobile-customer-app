@@ -27,8 +27,7 @@ const StoreTab: React.FC<StoreTabProps> = ({ store }) => {
           <View
             style={{
               gap: 8,
-              borderWidth: 1,
-              borderColor: colors.borderPrimary,
+              backgroundColor: colors.backgroundPrimary,
               padding: 12,
               borderRadius: 12,
             }}

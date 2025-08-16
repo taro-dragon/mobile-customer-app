@@ -25,10 +25,18 @@ const ShopSelectScreen: React.FC<Store> = ({ stores }) => {
             setCurrentStore(item);
           }}
           style={{
-            backgroundColor: colors.backgroundSecondary,
+            backgroundColor: colors.backgroundPrimary,
             padding: 16,
             borderRadius: 8,
             gap: 4,
+            shadowColor: colors.shadow,
+            shadowOffset: {
+              width: 0,
+              height: 0,
+            },
+            shadowOpacity: 0.1,
+            shadowRadius: 3.84,
+            elevation: 1,
             borderWidth: 1,
             borderColor:
               currentStore?.id === item.id

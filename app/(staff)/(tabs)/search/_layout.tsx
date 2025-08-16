@@ -61,13 +61,6 @@ const SearchLayout = () => {
                 contentStyle: {
                   backgroundColor: colors.backgroundSecondary,
                 },
-                headerRight: () => (
-                  <TouchableOpacity
-                    onPress={() => router.push("/search/filter")}
-                  >
-                    <SlidersHorizontal size={24} color={colors.primary} />
-                  </TouchableOpacity>
-                ),
               }}
             />
             <Stack.Screen

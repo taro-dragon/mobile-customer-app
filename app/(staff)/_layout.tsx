@@ -183,6 +183,9 @@ export default function Layout() {
         name="shopSelect"
         options={{
           title: "店舗選択",
+          contentStyle: {
+            backgroundColor: colors.backgroundSecondary,
+          },
         }}
       />
     </Stack>

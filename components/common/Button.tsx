@@ -52,7 +52,7 @@ const Button: React.FC<ButtonProps> = ({
     if (disabled) {
       baseStyle.backgroundColor = colors.gray200;
     } else if (notBorder || isBorder) {
-      baseStyle.backgroundColor = "transparent";
+      baseStyle.backgroundColor = colors.backgroundPrimary;
     } else {
       baseStyle.backgroundColor = color;
     }

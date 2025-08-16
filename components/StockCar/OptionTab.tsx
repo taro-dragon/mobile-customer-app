@@ -24,7 +24,10 @@ const OptionTab: React.FC<OptionTabProps> = ({ stockCar }) => {
         key={optionName}
         style={[
           styles.optionItem,
-          { borderColor: isEnabled ? colors.primary : colors.borderPrimary },
+          {
+            borderColor: isEnabled ? colors.primary : colors.borderPrimary,
+            backgroundColor: colors.backgroundPrimary,
+          },
         ]}
       >
         <Text
@@ -61,7 +64,10 @@ const OptionTab: React.FC<OptionTabProps> = ({ stockCar }) => {
         key={pickerName}
         style={[
           styles.optionItem,
-          { borderColor: hasValue ? colors.primary : colors.borderPrimary },
+          {
+            borderColor: hasValue ? colors.primary : colors.borderPrimary,
+            backgroundColor: colors.backgroundPrimary,
+          },
         ]}
       >
         <Text
@@ -92,7 +98,7 @@ const OptionTab: React.FC<OptionTabProps> = ({ stockCar }) => {
   };
 
   return (
-    <Tabs.ScrollView style={{ backgroundColor: colors.backgroundPrimary }}>
+    <Tabs.ScrollView style={{ backgroundColor: colors.backgroundSecondary }}>
       <View style={styles.container}>
         {Object.keys(options).map(renderCategory)}
 
