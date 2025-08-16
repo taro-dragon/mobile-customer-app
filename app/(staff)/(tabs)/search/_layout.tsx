@@ -58,6 +58,9 @@ const SearchLayout = () => {
               name="index"
               options={{
                 title: "在庫検索",
+                contentStyle: {
+                  backgroundColor: colors.backgroundSecondary,
+                },
                 headerRight: () => (
                   <TouchableOpacity
                     onPress={() => router.push("/search/filter")}

@@ -44,12 +44,18 @@ const StockCarItem: React.FC<StockCarItemProps> = ({ car }) => {
         router.push(`/stockCar/${car.objectID}`);
       }}
       style={{
-        backgroundColor: colors.backgroundSecondary,
-        borderWidth: 1,
-        borderColor: colors.borderPrimary,
+        backgroundColor: colors.backgroundPrimary,
         padding: 8,
         borderRadius: 8,
         gap: 8,
+        shadowColor: colors.shadow,
+        shadowOffset: {
+          width: 0,
+          height: 0,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 3.84,
+        elevation: 1,
       }}
     >
       <View>

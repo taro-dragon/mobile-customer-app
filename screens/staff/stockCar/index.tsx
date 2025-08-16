@@ -173,7 +173,7 @@ const StockCarScreen: React.FC<StockCarProps> = ({
           }}
           renderTabBar={renderTabBar}
           containerStyle={{
-            backgroundColor: colors.backgroundPrimary,
+            backgroundColor: colors.backgroundSecondary,
           }}
         >
           <Tabs.Tab name="車両情報">

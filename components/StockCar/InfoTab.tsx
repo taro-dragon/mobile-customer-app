@@ -102,8 +102,7 @@ const InfoTab: React.FC<InfoTabProps> = ({ stockCar }) => {
           <View
             style={{
               gap: 8,
-              borderWidth: 1,
-              borderColor: colors.borderPrimary,
+              backgroundColor: colors.backgroundPrimary,
               padding: 12,
               borderRadius: 12,
             }}
@@ -177,8 +176,7 @@ const InfoTab: React.FC<InfoTabProps> = ({ stockCar }) => {
           <View
             style={{
               gap: 8,
-              borderWidth: 1,
-              borderColor: colors.borderPrimary,
+              backgroundColor: colors.backgroundPrimary,
               padding: 12,
               borderRadius: 12,
             }}
@@ -237,8 +235,7 @@ const InfoTab: React.FC<InfoTabProps> = ({ stockCar }) => {
           <View
             style={{
               gap: 8,
-              borderWidth: 1,
-              borderColor: colors.borderPrimary,
+              backgroundColor: colors.backgroundPrimary,
               padding: 12,
               borderRadius: 12,
             }}
@@ -269,8 +266,7 @@ const InfoTab: React.FC<InfoTabProps> = ({ stockCar }) => {
           <View
             style={{
               gap: 8,
-              borderWidth: 1,
-              borderColor: colors.borderPrimary,
+              backgroundColor: colors.backgroundPrimary,
               padding: 12,
               borderRadius: 12,
             }}
