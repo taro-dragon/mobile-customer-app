@@ -49,6 +49,11 @@ const StaffIndexScreen = () => {
       shadowRadius: 3.84,
       elevation: 1,
     },
+    usageStatus: {
+      flex: 1,
+      alignItems: "center",
+      gap: 4,
+    },
   });
   return (
     <View style={{ flex: 1 }}>
@@ -139,6 +144,68 @@ const StaffIndexScreen = () => {
             </View>
           </View>
         </TopHeader>
+        <TouchableOpacity
+          onPress={() => {
+            router.push("/projects");
+          }}
+          style={{
+            flex: 1,
+            backgroundColor: colors.backgroundPrimary,
+            borderRadius: 8,
+            padding: 16,
+            gap: 24,
+            shadowColor: colors.shadow,
+            shadowOffset: {
+              width: 0,
+              height: 0,
+            },
+            shadowOpacity: 0.1,
+            shadowRadius: 3.84,
+            elevation: 1,
+          }}
+        >
+          <Text
+            style={{
+              color: colors.textPrimary,
+              ...typography.heading3,
+              textAlign: "center",
+            }}
+          >
+            今月の利用状況
+          </Text>
+          <View style={{ flexDirection: "row", gap: 8 }}>
+            <View style={styles.usageStatus}>
+              <Text
+                style={{ color: colors.textPrimary, ...typography.heading3 }}
+              >
+                入札
+              </Text>
+              <Text style={{ color: colors.textPrimary, ...typography.title1 }}>
+                100
+              </Text>
+            </View>
+            <View style={styles.usageStatus}>
+              <Text
+                style={{ color: colors.textPrimary, ...typography.heading3 }}
+              >
+                マッチ
+              </Text>
+              <Text style={{ color: colors.textPrimary, ...typography.title1 }}>
+                100
+              </Text>
+            </View>
+            <View style={styles.usageStatus}>
+              <Text
+                style={{ color: colors.textPrimary, ...typography.heading3 }}
+              >
+                オファー依頼
+              </Text>
+              <Text style={{ color: colors.textPrimary, ...typography.title1 }}>
+                100
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
         <View style={{ paddingBottom: 16 }}>
           <View
             style={{

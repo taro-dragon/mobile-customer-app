@@ -11,8 +11,15 @@ const RegistrationStockIndexScreen: React.FC = () => {
       <TouchableOpacity
         style={{
           ...styles.button,
-          backgroundColor: colors.backgroundSecondary,
-          borderColor: colors.borderPrimary,
+          backgroundColor: colors.backgroundPrimary,
+          shadowColor: colors.shadow,
+          shadowOffset: {
+            width: 0,
+            height: 0,
+          },
+          shadowOpacity: 0.1,
+          shadowRadius: 3.84,
+          elevation: 1,
         }}
         onPress={() => {
           router.push("/registrationStock/selectTargetType");
@@ -26,8 +33,15 @@ const RegistrationStockIndexScreen: React.FC = () => {
       <TouchableOpacity
         style={{
           ...styles.button,
-          backgroundColor: colors.backgroundSecondary,
-          borderColor: colors.borderPrimary,
+          backgroundColor: colors.backgroundPrimary,
+          shadowColor: colors.shadow,
+          shadowOffset: {
+            width: 0,
+            height: 0,
+          },
+          shadowOpacity: 0.1,
+          shadowRadius: 3.84,
+          elevation: 1,
         }}
         onPress={() => {
           router.push("/registrationStock/selectDraft");
@@ -56,6 +70,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 8,
-    borderWidth: 1,
   },
 });

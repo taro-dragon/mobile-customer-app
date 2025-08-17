@@ -39,7 +39,7 @@ const RegistrationStockLayout = () => {
       <Stack
         screenOptions={{
           contentStyle: {
-            backgroundColor: colors.backgroundPrimary,
+            backgroundColor: colors.backgroundSecondary,
           },
           headerTintColor: colors.primary,
           headerStyle: {
@@ -51,7 +51,7 @@ const RegistrationStockLayout = () => {
           name="index"
           options={{
             title: "在庫登録",
-            headerLeft: () => (
+            headerRight: () => (
               <TouchableOpacity onPress={handleGoBack}>
                 <X size={24} color={colors.primary} />
               </TouchableOpacity>
