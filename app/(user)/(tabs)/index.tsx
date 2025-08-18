@@ -5,7 +5,7 @@ const CustomerIndex = () => {
   const { cars, bulkAppraisalRequests } = useStore();
   const currentAppraisalRequests = bulkAppraisalRequests.filter(
     (request) =>
-      request.status === "in_progress" || request.status === "deadline"
+      request.status === "in_progress" || request.status === "waiting_selection"
   );
   const currentAppraisalCars = cars.filter((car) => {
     const request = currentAppraisalRequests.find(

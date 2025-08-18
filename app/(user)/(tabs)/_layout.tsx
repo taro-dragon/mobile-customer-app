@@ -34,7 +34,7 @@ export default function TabLayout() {
               borderTopWidth: 0,
             },
             sceneStyle: {
-              backgroundColor: colors.backgroundPrimary,
+              backgroundColor: colors.backgroundSecondary,
             },
             headerStyle: {
               backgroundColor: colors.backgroundPrimary,
@@ -47,7 +47,7 @@ export default function TabLayout() {
           <Tabs.Screen
             name="index"
             options={{
-              title: "ホーム",
+              headerShown: false,
               tabBarIcon: ({ color }) => <House size={24} color={color} />,
             }}
           />

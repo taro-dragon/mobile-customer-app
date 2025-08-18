@@ -4,19 +4,12 @@ import { View, TouchableOpacity, StyleSheet, ViewProps } from "react-native";
 type CardProps = ViewProps & {
   children: React.ReactNode;
   onPress?: () => void;
-  isSecondary?: boolean;
 };
 
-const Card: React.FC<CardProps> = ({
-  children,
-  onPress,
-  isSecondary,
-  style,
-}) => {
+const Card: React.FC<CardProps> = ({ children, onPress, style }) => {
   const { colors } = useTheme();
   const styles = StyleSheet.create({
     card: {
-      padding: 12,
       borderRadius: 12,
       shadowColor: colors.shadow,
       shadowOffset: {

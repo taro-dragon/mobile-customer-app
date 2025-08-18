@@ -166,7 +166,7 @@ const StaffIndexScreen = () => {
         >
           <Text
             style={{
-              color: colors.textPrimary,
+              color: colors.textInfo,
               ...typography.heading3,
               textAlign: "center",
             }}
@@ -198,7 +198,7 @@ const StaffIndexScreen = () => {
               <Text
                 style={{ color: colors.textPrimary, ...typography.heading3 }}
               >
-                オファー依頼
+                オファー
               </Text>
               <Text style={{ color: colors.textPrimary, ...typography.title1 }}>
                 100
@@ -268,7 +268,7 @@ const StaffIndexScreen = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-            {/* <View style={{ flexDirection: "row", gap: 8 }}>
+            <View style={{ flexDirection: "row", gap: 8 }}>
               <TouchableOpacity onPress={logout} style={styles.button}>
                 <LogOut size={24} color={colors.primary} />
                 <Text
@@ -277,7 +277,15 @@ const StaffIndexScreen = () => {
                   ログアウト
                 </Text>
               </TouchableOpacity>
-            </View> */}
+            </View>
+          </View>
+        </View>
+        <View style={{ gap: 8 }}>
+          <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
+            新着一括査定依頼
+          </Text>
+          <View style={{ gap: 8 }}>
+            <View></View>
           </View>
         </View>
       </ScrollView>

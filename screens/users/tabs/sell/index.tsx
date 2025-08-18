@@ -15,7 +15,7 @@ const renderScene = SceneMap({
 const routes = [
   { key: "beforeBulkAppraisal", title: "一括査定依頼前" },
   { key: "progressBulkAppraisal", title: "一括査定進行中" },
-  { key: "completedBulkAppraisal", title: "一括査定依頼完了" },
+  { key: "completedBulkAppraisal", title: "一括査定完了" },
 ];
 
 const SellIndexScreen = () => {

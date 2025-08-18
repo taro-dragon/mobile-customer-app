@@ -5,7 +5,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { useRegistrationGuard } from "@/hooks/useRegistrationGuard";
 import CarInfoItem from "@/components/CarInfo/CarInfoItem";
 import { useRouter } from "expo-router";
-import { CarIcon, ShoppingCart, Tag } from "lucide-react-native";
+import { Bell, CarIcon, ShoppingCart, Tag } from "lucide-react-native";
 import {
   ScrollView,
   StyleSheet,
@@ -16,6 +16,10 @@ import {
 import { Car } from "@/types/models/Car";
 import { BulkAppraisalRequest } from "@/types/firestore_schema/bulkAppraisalRequests";
 import CurrentAppraisalCarsList from "@/components/CurrentAppraisalCarsList/CurrentAppraisalCarsList";
+import { useHeaderHeight } from "@react-navigation/elements";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import TopHeader from "@/components/base/TopHeader";
+import { useStore } from "@/hooks/useStore";
 
 type UserIndexScreenProps = {
   currentAppraisalCars: Car[];
@@ -28,71 +32,91 @@ const UserIndexScreen: React.FC<UserIndexScreenProps> = ({
 }) => {
   const { colors, typography } = useTheme();
   const router = useRouter();
+  const { user } = useStore();
   const guard = useRegistrationGuard();
+  const headerHeight = useHeaderHeight();
+  const { top } = useSafeAreaInsets();
   const styles = StyleSheet.create({
     container: {
       flex: 1,
     },
-    carRegistrationButton: {
-      flex: 1,
-      backgroundColor: colors.backgroundSecondary,
-      height: 96,
-      borderRadius: 8,
-      padding: 16,
-      justifyContent: "center",
-      alignItems: "center",
-      flexDirection: "row",
-      gap: 8,
-      borderWidth: 1,
-      borderColor: colors.borderPrimary,
-    },
     secondaryButton: {
       flex: 1,
-      backgroundColor: colors.backgroundSecondary,
-      height: 88,
+      backgroundColor: colors.backgroundPrimary,
       borderRadius: 8,
       padding: 16,
       justifyContent: "center",
       alignItems: "center",
       flexDirection: "row",
       gap: 8,
-      borderWidth: 1,
-      borderColor: colors.borderPrimary,
     },
   });
   return (
     <ScrollView
       style={{ flex: 1 }}
-      contentContainerStyle={{ padding: 16, gap: 24 }}
+      contentContainerStyle={{
+        padding: 16,
+        gap: 24,
+        paddingTop: headerHeight + top,
+      }}
     >
-      <View style={{ gap: 8 }}>
-        <View style={{ flexDirection: "row", gap: 8 }}>
-          <TouchableOpacity
-            style={styles.secondaryButton}
-            onPress={guard(() => {
-              router.push("/(user)/(tabs)/sell");
-            })}
+      <TopHeader>
+        <View style={{ gap: 24 }}>
+          <View
+            style={{
+              justifyContent: "flex-end",
+              alignItems: "center",
+              flexDirection: "row",
+            }}
           >
-            <Tag size={24} color={colors.primary} />
-            <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
-              クルマを売る
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.secondaryButton}
-            onPress={guard(() => {
-              router.push("/(user)/(tabs)/search");
-            })}
+            <Bell size={24} color={colors.white} />
+          </View>
+          <View
+            style={{
+              gap: 8,
+            }}
           >
-            <ShoppingCart size={24} color={colors.primary} />
-            <Text style={{ color: colors.textPrimary, ...typography.heading3 }}>
-              クルマを買う
+            <Text style={{ color: colors.white, ...typography.heading3 }}>
+              こんにちは
             </Text>
-          </TouchableOpacity>
+            <Text style={{ color: colors.white, ...typography.title2 }}>
+              {user?.familyName} {user?.givenName}さん
+            </Text>
+          </View>
+          <View style={{ gap: 8 }}>
+            <View style={{ flexDirection: "row", gap: 8 }}>
+              <TouchableOpacity
+                style={styles.secondaryButton}
+                onPress={guard(() => {
+                  router.push("/(user)/(tabs)/sell");
+                })}
+              >
+                <Tag size={24} color={colors.primary} />
+                <Text
+                  style={{ color: colors.textPrimary, ...typography.heading3 }}
+                >
+                  クルマを売る
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.secondaryButton}
+                onPress={guard(() => {
+                  router.push("/(user)/(tabs)/search");
+                })}
+              >
+                <ShoppingCart size={24} color={colors.primary} />
+                <Text
+                  style={{ color: colors.textPrimary, ...typography.heading3 }}
+                >
+                  クルマを買う
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
-      </View>
+      </TopHeader>
       <View style={{ gap: 8 }}>
-        <Text style={{ ...typography.heading2, color: colors.textPrimary }}>
+        <Text style={{ ...typography.heading3, color: colors.textPrimary }}>
           査定中の車両
         </Text>
         {currentAppraisalCars?.length > 0 ? (
@@ -110,12 +134,12 @@ const UserIndexScreen: React.FC<UserIndexScreenProps> = ({
                 justifyContent: "center",
                 gap: 8,
                 paddingVertical: 12,
+                backgroundColor: colors.backgroundPrimary,
+                borderRadius: 8,
               }}
             >
               <CarIcon size={24} color={colors.textSecondary} />
-              <Text
-                style={{ ...typography.body2, color: colors.textSecondary }}
-              >
+              <Text style={{ ...typography.body2, color: colors.textPrimary }}>
                 査定中の車両はありません
               </Text>
               <Button
@@ -128,6 +152,11 @@ const UserIndexScreen: React.FC<UserIndexScreenProps> = ({
             </View>
           </Card>
         )}
+      </View>
+      <View style={{ gap: 8 }}>
+        <Text style={{ ...typography.heading3, color: colors.textPrimary }}>
+          新着在庫車両
+        </Text>
       </View>
     </ScrollView>
   );
