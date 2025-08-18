@@ -7,17 +7,19 @@ import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import Toast from "react-native-toast-message";
 import { useStore } from "@/hooks/useStore";
+import { useRegistrationGuard } from "@/hooks/useRegistrationGuard";
 
 const StockCar = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { stockCar, isLoading } = useFetchStockCar(id);
   const { userTalks } = useStore();
+  const guard = useRegistrationGuard();
   const [isInquiring, setIsInquiring] = useState(false);
   const isInquiry = userTalks.some((talk) => talk.sourceId === id);
   if (isLoading || !stockCar) {
     return <ShopDetailSkeleton />;
   }
-  const onInquire = async () => {
+  const onInquire = guard(async () => {
     const userInquire = functions().httpsCallable("userInquire");
     setIsInquiring(true);
     try {
@@ -36,7 +38,7 @@ const StockCar = () => {
     } finally {
       setIsInquiring(false);
     }
-  };
+  });
   return (
     <StockCarScreen
       stockCar={stockCar}

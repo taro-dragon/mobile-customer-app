@@ -100,6 +100,7 @@ const MultiFAB: React.FC<MultiFABProps> = ({
             styles.menuButton,
             {
               backgroundColor: color || colors.primary,
+              shadowColor: colors.shadow,
             },
           ]}
           onPress={() => {

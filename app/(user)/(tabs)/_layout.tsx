@@ -70,6 +70,7 @@ export default function TabLayout() {
             name="talk"
             options={{
               title: "トーク",
+              headerShadowVisible: true,
               tabBarIcon: ({ color }) => (
                 <MessageSquare size={24} color={color} />
               ),
@@ -79,7 +80,6 @@ export default function TabLayout() {
             name="settings"
             options={{
               title: "設定",
-              headerShadowVisible: false,
               tabBarIcon: ({ color }) => <Settings size={24} color={color} />,
             }}
           />
