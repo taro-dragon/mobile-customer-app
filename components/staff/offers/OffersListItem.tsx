@@ -1,3 +1,4 @@
+import Card from "@/components/common/Card";
 import Divider from "@/components/common/Divider";
 import { useTheme } from "@/contexts/ThemeContext";
 import { transformCarData } from "@/libs/transformCarData";
@@ -15,13 +16,8 @@ const OffersListItem: React.FC<Props> = ({ offer }) => {
   const router = useRouter();
   const carData = transformCarData(offer as unknown as Car);
   return (
-    <TouchableOpacity
-      style={{
-        padding: 8,
-        borderRadius: 8,
-        backgroundColor: colors.backgroundSecondary,
-        gap: 8,
-      }}
+    <Card
+      style={{ backgroundColor: colors.backgroundPrimary, padding: 8, gap: 8 }}
       onPress={() => router.push(`/offers/${offer.id}`)}
     >
       <View style={{ flexDirection: "row", gap: 8 }}>
@@ -112,7 +108,7 @@ const OffersListItem: React.FC<Props> = ({ offer }) => {
           </Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </Card>
   );
 };
 

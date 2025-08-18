@@ -8,26 +8,16 @@ import ListItem from "@/components/registrationCar/ListItem";
 import { useRouter } from "expo-router";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Model } from "@/types/models/carData/model";
+import { useFetchModels } from "@/hooks/common/carData/useFetchModels";
 
 const SelectCar = () => {
   const router = useRouter();
   const { colors } = useTheme();
   const { watch, control } = useFormContext();
   const maker = watch("maker");
-  const { manufacturers } = fullCarData as FullCarData;
-  const [cars, setCars] = useState<Model[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const selectCars = () => {
-      return (
-        manufacturers.find((m) => m.manufacturerId === maker)?.carModels || []
-      );
-    };
-    const selectedCars = selectCars();
-    setCars(selectedCars);
-    setIsLoading(false);
-  }, [maker, manufacturers]);
+  const { models, isLoading } = useFetchModels({
+    manufacturerId: maker,
+  });
 
   const {
     field: { onChange },
@@ -56,7 +46,7 @@ const SelectCar = () => {
 
   return (
     <FlatList
-      data={cars}
+      data={models}
       contentContainerStyle={{
         paddingBottom: 24,
       }}

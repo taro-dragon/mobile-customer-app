@@ -1,24 +1,15 @@
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
-import fullCarData from "@/constants/full_car_catalog.json";
-import { FullCarData } from "@/types/models/carData/fullCarData";
+import { ActivityIndicator, FlatList, View } from "react-native";
 import ListItem from "@/components/registrationCar/ListItem";
 import { useController, useFormContext } from "react-hook-form";
 import { useRouter } from "expo-router";
 import { useTheme } from "@/contexts/ThemeContext";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback } from "react";
+import { useFetchManufacturers } from "@/hooks/common/carData/useFetchManufacturers";
 
 const RegistrationCar = () => {
-  const { manufacturers } = fullCarData as FullCarData;
+  const { manufacturers, isLoading } = useFetchManufacturers();
   const { control } = useFormContext();
   const { colors } = useTheme();
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    if (manufacturers.length > 0) {
-      setIsLoading(false);
-    }
-  }, [manufacturers]);
-
   const {
     field: { onChange },
   } = useController({

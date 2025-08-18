@@ -284,16 +284,6 @@ const StaffIndexScreen = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-            <View style={{ flexDirection: "row", gap: 8 }}>
-              <TouchableOpacity onPress={logout} style={styles.button}>
-                <LogOut size={24} color={colors.primary} />
-                <Text
-                  style={{ color: colors.textPrimary, ...typography.heading4 }}
-                >
-                  ログアウト
-                </Text>
-              </TouchableOpacity>
-            </View>
           </View>
         </View>
         <View style={{ gap: 8 }}>

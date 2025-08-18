@@ -1,13 +1,13 @@
 import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 
-export type manufacturer = {
+export type Manufacturer = {
   country: string;
   manufacturerId: string;
   name: string;
   updatedAt: FirebaseFirestoreTypes.Timestamp;
 };
 
-export type model = {
+export type Model = {
   group?: string;
   modelId: string;
   name: string;
@@ -15,7 +15,7 @@ export type model = {
   updatedAt: FirebaseFirestoreTypes.Timestamp;
 };
 
-export type year = {
+export type Year = {
   year: string;
   yearId: string;
   updatedAt: FirebaseFirestoreTypes.Timestamp;

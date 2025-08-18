@@ -7,7 +7,7 @@ import { Stock } from "@/types/firestore_schema/stock";
 import { Car } from "@/types/models/Car";
 import dayjs from "dayjs";
 import { useRouter } from "expo-router";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, View } from "react-native";
 
 type StockCarsItemProps = {
   stockCar: Stock;
@@ -19,57 +19,48 @@ const StockCarsItem: React.FC<StockCarsItemProps> = ({ stockCar }) => {
   const router = useRouter();
   const { typography, colors } = useTheme();
   return (
-    <TouchableOpacity
+    <Card
+      style={{ backgroundColor: colors.backgroundPrimary, padding: 8 }}
       onPress={() => {
         router.push(`/stockCars/${stockCar.id}`);
       }}
     >
-      <Card style={{ backgroundColor: colors.backgroundPrimary }}>
-        <View style={{ gap: 4 }}>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <View style={{ gap: 4 }}>
-              <Text
-                style={{ ...typography.body3, color: colors.textSecondary }}
-              >
-                {carData.maker.name}
-              </Text>
-              <Text
-                style={{ ...typography.heading2, color: colors.textPrimary }}
-              >
-                {carData.model.name}
-              </Text>
-            </View>
-            <View style={{ gap: 4, flexDirection: "row" }}>
-              {stockCar.managerStaffs.map((staff, i) => {
-                const staffData = currentStoreStaffs.find(
-                  (s) => s.id === staff
-                );
-                if (!staffData) return null;
-                return (
-                  <UserImage
-                    key={i}
-                    imageUrl={staffData.profileImageUrl}
-                    size={24}
-                  />
-                );
-              })}
-            </View>
+      <View style={{ gap: 4 }}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <View style={{ gap: 4 }}>
+            <Text style={{ ...typography.body3, color: colors.textSecondary }}>
+              {carData.maker.name}
+            </Text>
+            <Text style={{ ...typography.heading2, color: colors.textPrimary }}>
+              {carData.model.name}
+            </Text>
           </View>
-          <Text style={{ ...typography.body3, color: colors.textSecondary }}>
-            {carData.year.year}
-          </Text>
-          <Text style={{ ...typography.body3, color: colors.textSecondary }}>
-            {carData.grade.gradeName}
-          </Text>
-          <Text style={{ ...typography.body3, color: colors.textSecondary }}>
-            更新日時:
-            {dayjs(stockCar.updatedAt.toDate()).format("YYYY/MM/DD HH:mm:ss")}
-          </Text>
+          <View style={{ gap: 4, flexDirection: "row" }}>
+            {stockCar.managerStaffs.map((staff, i) => {
+              const staffData = currentStoreStaffs.find((s) => s.id === staff);
+              if (!staffData) return null;
+              return (
+                <UserImage
+                  key={i}
+                  imageUrl={staffData.profileImageUrl}
+                  size={24}
+                />
+              );
+            })}
+          </View>
         </View>
-      </Card>
-    </TouchableOpacity>
+        <Text style={{ ...typography.body3, color: colors.textSecondary }}>
+          {carData.year.year}
+        </Text>
+        <Text style={{ ...typography.body3, color: colors.textSecondary }}>
+          {carData.grade.gradeName}
+        </Text>
+        <Text style={{ ...typography.body3, color: colors.textSecondary }}>
+          更新日時:
+          {dayjs(stockCar.updatedAt.toDate()).format("YYYY/MM/DD HH:mm:ss")}
+        </Text>
+      </View>
+    </Card>
   );
 };
 

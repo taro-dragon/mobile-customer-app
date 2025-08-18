@@ -23,7 +23,7 @@ const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
   const router = useRouter();
   return (
     <Card
-      style={{ backgroundColor: colors.backgroundSecondary }}
+      style={{ backgroundColor: colors.backgroundPrimary, padding: 16 }}
       onPress={() => router.push(`/projects/${project.id}`)}
     >
       <View style={{ gap: 8 }}>
