@@ -80,7 +80,9 @@ const UserIndexScreen: React.FC<UserIndexScreenProps> = ({
               こんにちは
             </Text>
             <Text style={{ color: colors.white, ...typography.title2 }}>
-              {user?.familyName} {user?.givenName}さん
+              {user?.familyName && user?.givenName
+                ? `${user.familyName} ${user.givenName}さん`
+                : "ユーザーさん"}
             </Text>
           </View>
           <View style={{ gap: 8 }}>
@@ -133,13 +135,15 @@ const UserIndexScreen: React.FC<UserIndexScreenProps> = ({
                 alignItems: "center",
                 justifyContent: "center",
                 gap: 8,
-                paddingVertical: 12,
+                paddingVertical: 24,
                 backgroundColor: colors.backgroundPrimary,
                 borderRadius: 8,
               }}
             >
               <CarIcon size={24} color={colors.textSecondary} />
-              <Text style={{ ...typography.body2, color: colors.textPrimary }}>
+              <Text
+                style={{ ...typography.heading4, color: colors.textPrimary }}
+              >
                 査定中の車両はありません
               </Text>
               <Button
