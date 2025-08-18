@@ -26,6 +26,14 @@ const FAB: React.FC<FABProps> = ({ onPress, icon, opacity = 1, color }) => {
         padding: 12,
         opacity,
         backgroundColor: color || colors.primary,
+        elevation: 8,
+        shadowColor: colors.shadow,
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
       }}
       onPress={onPress}
     >

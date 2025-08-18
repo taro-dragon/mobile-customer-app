@@ -47,6 +47,7 @@ const MultiFAB: React.FC<MultiFABProps> = ({
           {
             opacity,
             backgroundColor: color || colors.primary,
+            shadowColor: colors.shadow,
           },
         ]}
         onPress={item.onPress}
@@ -182,7 +183,6 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     padding: 12,
     elevation: 8,
-    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,

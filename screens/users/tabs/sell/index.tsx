@@ -1,7 +1,10 @@
+import FAB from "@/components/buttons/FAB";
 import BeforeBulkAppraisal from "@/components/CarList/BeforeBulkAppraisal";
 import CompletedBulkAppraisal from "@/components/CarList/CompletedBulkAppraisal";
 import ProgressBulkAppraisal from "@/components/CarList/ProgressBulkAppraisal";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useRegistrationGuard } from "@/hooks/useRegistrationGuard";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useWindowDimensions, View } from "react-native";
 import { SceneMap, TabBar, TabView } from "react-native-tab-view";
@@ -22,8 +25,10 @@ const SellIndexScreen = () => {
   const { typography, colors } = useTheme();
   const [index, setIndex] = useState(0);
   const layout = useWindowDimensions();
+  const router = useRouter();
+  const guard = useRegistrationGuard();
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, position: "relative" }}>
       <TabView
         navigationState={{ index, routes }}
         renderScene={renderScene}
@@ -45,6 +50,7 @@ const SellIndexScreen = () => {
           />
         )}
       />
+      <FAB onPress={guard(() => router.push("/registrationCar"))} icon="Plus" />
     </View>
   );
 };

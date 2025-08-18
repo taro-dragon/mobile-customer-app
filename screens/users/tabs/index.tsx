@@ -77,7 +77,7 @@ const UserIndexScreen: React.FC<UserIndexScreenProps> = ({
             }}
           >
             <Text style={{ color: colors.white, ...typography.heading3 }}>
-              こんにちは
+              {user?.isAnonymous ? "初めまして" : "こんにちは"}
             </Text>
             <Text style={{ color: colors.white, ...typography.title2 }}>
               {user?.familyName && user?.givenName
