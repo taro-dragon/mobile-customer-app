@@ -10,8 +10,9 @@ import { FlashList } from "@shopify/flash-list";
 import { CarIcon, SortDesc } from "lucide-react-native";
 
 import { Dimensions, Text, TouchableOpacity, View } from "react-native";
-import { Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { RefreshControl } from "react-native-gesture-handler";
+import MultiFAB from "@/components/buttons/MultiFAB";
 
 type SearchScreenProps = {
   cars: StockHit[];
@@ -34,66 +35,71 @@ const SearchScreen: React.FC<SearchScreenProps> = ({
     await refresh();
     setRefreshing(false);
   };
+  const router = useRouter();
   const { handlePresentModalPress } = useStockCarsContext();
+  const fabItems = [
+    {
+      icon: "SlidersHorizontal" as const,
+      onPress: () => {
+        router.push("/search/filter");
+      },
+      label: "絞り込み",
+    },
+    {
+      icon: "SortDesc" as const,
+      onPress: handlePresentModalPress,
+      label: "並び替え",
+    },
+  ];
   return (
-    <>
-      <Stack.Screen
-        options={{
-          headerLeft: () => (
-            <TouchableOpacity onPress={handlePresentModalPress}>
-              <SortDesc size={24} color={colors.primary} />
-            </TouchableOpacity>
-          ),
+    <View style={{ flex: 1, position: "relative" }}>
+      <FlashList
+        data={cars}
+        contentContainerStyle={{
+          padding: 16,
         }}
-      />
-      <View style={{ flex: 1 }}>
-        <FlashList
-          data={cars}
-          contentContainerStyle={{
-            padding: 16,
-          }}
-          estimatedItemSize={126}
-          ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
-          keyExtractor={(item, index) => `${item.id}-${index}`}
-          renderItem={({ item }) => <StockCarItem car={item} />}
-          onEndReached={() => {
-            if (!isLastPage) {
-              showMore();
-            }
-          }}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        estimatedItemSize={126}
+        ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
+        keyExtractor={(item, index) => `${item.id}-${index}`}
+        renderItem={({ item }) => <StockCarItem car={item} />}
+        onEndReached={() => {
+          if (!isLastPage) {
+            showMore();
           }
-          ListEmptyComponent={() => (
+        }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        ListEmptyComponent={() => (
+          <View
+            style={{
+              height: Dimensions.get("window").height - headerHeight - 32,
+            }}
+          >
             <View
               style={{
-                height: Dimensions.get("window").height - headerHeight - 32,
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 16,
               }}
             >
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: 16,
-                }}
+              <CarIcon
+                size={48}
+                color={colors.iconSecondary}
+                strokeWidth={1.5}
+              />
+              <Text
+                style={{ color: colors.textSecondary, ...typography.body2 }}
               >
-                <CarIcon
-                  size={48}
-                  color={colors.iconSecondary}
-                  strokeWidth={1.5}
-                />
-                <Text
-                  style={{ color: colors.textSecondary, ...typography.body2 }}
-                >
-                  対象の車両がありません
-                </Text>
-              </View>
+                対象の車両がありません
+              </Text>
             </View>
-          )}
-        />
-      </View>
-    </>
+          </View>
+        )}
+      />
+      <MultiFAB items={fabItems} mainIcon="Filter" />
+    </View>
   );
 };
 

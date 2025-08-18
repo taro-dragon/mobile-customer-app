@@ -46,7 +46,7 @@ const SearchLayout = () => {
           <Stack
             screenOptions={{
               contentStyle: {
-                backgroundColor: colors.backgroundPrimary,
+                backgroundColor: colors.backgroundSecondary,
               },
               headerTintColor: colors.primary,
               headerStyle: {
@@ -58,13 +58,6 @@ const SearchLayout = () => {
               name="index"
               options={{
                 title: "買う",
-                headerRight: () => (
-                  <TouchableOpacity
-                    onPress={() => router.push("/search/filter")}
-                  >
-                    <SlidersHorizontal size={24} color={colors.primary} />
-                  </TouchableOpacity>
-                ),
               }}
             />
             <Stack.Screen
