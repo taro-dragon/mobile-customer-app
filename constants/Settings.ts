@@ -51,3 +51,49 @@ export const SettingItems = [
     ],
   },
 ];
+
+export const StaffSettingItems = [
+  {
+    title: "設定",
+    content: [
+      {
+        title: "通知設定",
+        route: "/(staff)/notificationSetting",
+      },
+    ],
+  },
+  {
+    title: "サポート",
+    content: [
+      {
+        title: "ヘルプ",
+        route: "/(staff)/help",
+      },
+      {
+        title: "お問い合わせ",
+        route: "/(staff)/contact",
+      },
+    ],
+  },
+  {
+    title: "その他",
+    content: [
+      {
+        title: "利用規約",
+        route: "/(staff)/terms",
+      },
+      {
+        title: "プライバシーポリシー",
+        route: "/(staff)/privacy",
+      },
+      {
+        title: "反社会的勢力に対する基本方針",
+        route: "/antiSocialForce",
+      },
+      {
+        title: "ライセンス表記",
+        route: "/license",
+      },
+    ],
+  },
+];

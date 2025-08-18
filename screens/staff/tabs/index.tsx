@@ -25,7 +25,7 @@ import { useHeaderHeight } from "@react-navigation/elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const StaffIndexScreen = () => {
-  const { colors, typography, isDark } = useTheme();
+  const { colors, typography } = useTheme();
   const router = useRouter();
   const { logout } = useLogout();
   const headerHeight = useHeaderHeight();
@@ -78,10 +78,24 @@ const StaffIndexScreen = () => {
             </View>
             <View
               style={{
+                gap: 8,
+              }}
+            >
+              <Text style={{ color: colors.white, ...typography.heading3 }}>
+                こんにちは
+              </Text>
+              <Text style={{ color: colors.white, ...typography.title2 }}>
+                {staff?.name} さん
+              </Text>
+            </View>
+            <View
+              style={{
                 flexDirection: "row",
                 gap: 8,
                 alignItems: "center",
-                height: 48,
+                backgroundColor: colors.backgroundPrimary,
+                borderRadius: 8,
+                padding: 8,
               }}
             >
               <View
@@ -104,14 +118,14 @@ const StaffIndexScreen = () => {
                       height: 48,
                       borderRadius: 8,
                       borderWidth: 1,
-                      borderColor: colors.white,
+                      borderColor: colors.primary,
                       alignItems: "center",
                       justifyContent: "center",
                     }}
                   >
                     <Text
                       style={{
-                        color: colors.white,
+                        color: colors.primary,
                         ...typography.heading2,
                       }}
                     >
@@ -123,12 +137,14 @@ const StaffIndexScreen = () => {
               <View style={{ gap: 4, flex: 1 }}>
                 <Text
                   numberOfLines={1}
-                  style={{ color: colors.white, ...typography.body4 }}
+                  style={{ color: colors.textSecondary, ...typography.body4 }}
                 >
                   {currentStore?.address1} {currentStore?.address2}{" "}
                   {currentStore?.address3}
                 </Text>
-                <Text style={{ color: colors.white, ...typography.heading2 }}>
+                <Text
+                  style={{ color: colors.textPrimary, ...typography.heading2 }}
+                >
                   {currentStore?.shopName}
                 </Text>
               </View>
@@ -138,7 +154,7 @@ const StaffIndexScreen = () => {
                     router.push("/shopSelect");
                   }}
                   size={24}
-                  color={colors.white}
+                  color={colors.primary}
                 />
               )}
             </View>

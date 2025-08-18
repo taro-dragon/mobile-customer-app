@@ -39,6 +39,14 @@ const Index = () => {
           padding: 16,
           paddingVertical: 24,
           borderRadius: 16,
+          shadowColor: colors.shadow,
+          shadowOffset: {
+            width: 0,
+            height: 0,
+          },
+          shadowOpacity: 0.1,
+          shadowRadius: 3.84,
+          elevation: 1,
         }}
       >
         <View

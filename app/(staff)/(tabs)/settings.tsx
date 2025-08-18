@@ -1,7 +1,7 @@
-import StaffIndexScreen from "@/screens/staff/tabs";
+import StaffSettingScreen from "@/screens/staff/tabs/setting";
 
 const Settings = () => {
-  return <StaffIndexScreen />;
+  return <StaffSettingScreen />;
 };
 
 export default Settings;
