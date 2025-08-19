@@ -3,7 +3,6 @@ import { Text, View } from "react-native";
 import { Car } from "@/types/models/Car";
 
 import { useTheme } from "@/contexts/ThemeContext";
-import { transformCarData } from "@/libs/transformCarData";
 import { useRouter } from "expo-router";
 import Divider from "../common/Divider";
 import Tag from "../common/Tag";
@@ -15,7 +14,6 @@ type CarInfoItemProps = {
 
 const CarInfoItem: React.FC<CarInfoItemProps> = ({ car }) => {
   const { colors, typography } = useTheme();
-  const carData = transformCarData(car);
   const router = useRouter();
   return (
     <Pressable
@@ -23,12 +21,18 @@ const CarInfoItem: React.FC<CarInfoItemProps> = ({ car }) => {
       style={({ pressed }) => ({
         flexDirection: "row",
         gap: 8,
-        backgroundColor: colors.backgroundSecondary,
+        backgroundColor: colors.backgroundPrimary,
         padding: 8,
         borderRadius: 12,
-        borderWidth: 1,
-        borderColor: colors.borderPrimary,
         opacity: pressed ? 0.5 : 1,
+        shadowColor: colors.shadow,
+        shadowOffset: {
+          width: 0,
+          height: 0,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 3.84,
+        elevation: 1,
       })}
     >
       <View
@@ -54,12 +58,12 @@ const CarInfoItem: React.FC<CarInfoItemProps> = ({ car }) => {
                 style={{ color: colors.textPrimary, ...typography.heading2 }}
                 numberOfLines={1}
               >
-                {carData.model.name}
+                {car.modelName}
               </Text>
               <Text
                 style={{ color: colors.textSecondary, ...typography.heading3 }}
               >
-                {carData.maker.name}
+                {car.makerName}
               </Text>
             </View>
             <Divider />
@@ -73,7 +77,7 @@ const CarInfoItem: React.FC<CarInfoItemProps> = ({ car }) => {
                 style={{ color: colors.textPrimary, ...typography.body3 }}
                 numberOfLines={1}
               >
-                {carData.year.year}
+                {car.minorModelName}
               </Text>
             </View>
             <View>
@@ -86,7 +90,7 @@ const CarInfoItem: React.FC<CarInfoItemProps> = ({ car }) => {
                 style={{ color: colors.textPrimary, ...typography.body3 }}
                 numberOfLines={1}
               >
-                {carData.grade?.gradeName}
+                {car.gradeName}
               </Text>
             </View>
           </View>

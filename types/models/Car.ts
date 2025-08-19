@@ -5,9 +5,15 @@ export type Car = {
   id: string;
   ownerId: string;
   maker: string;
+  makerName: string;
   model: string;
-  year: string;
+  modelName: string;
+  generation: string;
+  generationName: string;
+  minorModel: string;
+  minorModelName: string;
   grade: string;
+  gradeName: string;
   modelNumber: string;
   condition?: string;
   images: {

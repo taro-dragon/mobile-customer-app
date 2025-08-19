@@ -1,9 +1,8 @@
 import { useTheme } from "@/contexts/ThemeContext";
-import { Stack, useNavigation, useRouter } from "expo-router";
-import { ChevronLeft, X } from "lucide-react-native";
+import { Stack, useRouter } from "expo-router";
+import { X } from "lucide-react-native";
 import { FormProvider, useForm } from "react-hook-form";
 import { TouchableOpacity } from "react-native";
-import { useCallback } from "react";
 import {
   RegistrationCarFormData,
   registrationCarSchema,
@@ -13,8 +12,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 const RegistrationCarLayout = () => {
   const { colors } = useTheme();
   const router = useRouter();
-  const navigation = useNavigation();
-  const parent = navigation.getParent();
   const form = useForm<RegistrationCarFormData>({
     resolver: zodResolver(registrationCarSchema),
     defaultValues: {

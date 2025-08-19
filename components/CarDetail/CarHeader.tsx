@@ -3,11 +3,8 @@ import { useStore } from "@/hooks/useStore";
 import { useLocalSearchParams } from "expo-router";
 import { Text, View } from "react-native";
 import AppraisalStatusTag from "../appraisal/AppraisalStatusTag";
-import { transformCarData } from "@/libs/transformCarData";
-import { Car } from "@/types/models/Car";
 import CarInfoItem from "./CarInfoIten";
 import ImageCarousel from "../common/ImageCarousel";
-import { BulkAppraisalRequest } from "@/types/firestore_schema/bulkAppraisalRequests";
 import Alert from "../common/Alert";
 import { useMemo } from "react";
 import { colorOptions } from "../registrationCar/form/ColorSelect";
@@ -19,7 +16,6 @@ const CarDetailHeader: React.FC = () => {
   const { cars } = useStore();
   const { id } = useLocalSearchParams<{ id: string }>();
   const car = cars.find((car) => car.id === id);
-  const carData = transformCarData(car as Car);
   const imageOrder = ["front", "back", "left", "right", "interior"] as const;
   const colorValue = useMemo(() => {
     return (
@@ -48,10 +44,10 @@ const CarDetailHeader: React.FC = () => {
       <View style={{ padding: 16, gap: 24 }} pointerEvents="none">
         <View style={{ alignItems: "flex-start", gap: 4 }}>
           <Text style={{ ...typography.heading3, color: colors.primary }}>
-            {carData.maker.name}
+            {car?.makerName}
           </Text>
           <Text style={{ ...typography.title1, color: colors.textPrimary }}>
-            {carData.model.name}
+            {car?.modelName}
           </Text>
           <AppraisalStatusTag bulkAppraisalRequest={bulkAppraisalRequest} />
         </View>
@@ -80,8 +76,12 @@ const CarDetailHeader: React.FC = () => {
             {car?.modelNumber && (
               <CarInfoItem label="型式" value={car?.modelNumber} />
             )}
-            <CarInfoItem label="年式" value={carData.year.year} />
-            <CarInfoItem label="グレード" value={carData.grade.gradeName} />
+            {car?.minorModelName && (
+              <CarInfoItem label="年式" value={car?.minorModelName} />
+            )}
+            {car?.gradeName && (
+              <CarInfoItem label="グレード" value={car?.gradeName} />
+            )}
             <View
               style={{
                 flexDirection: "row",
