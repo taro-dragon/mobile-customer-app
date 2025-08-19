@@ -37,7 +37,11 @@ const RegistrationCarLayout = () => {
             backgroundColor: colors.backgroundPrimary,
           },
           headerRight: () => (
-            <TouchableOpacity onPress={() => parent?.goBack()}>
+            <TouchableOpacity
+              onPress={() => {
+                router.dismissTo("/(user)/(tabs)/sell");
+              }}
+            >
               <X size={24} color={colors.primary} />
             </TouchableOpacity>
           ),
