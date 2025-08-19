@@ -6,6 +6,7 @@ import ListItem from "@/components/registrationCar/ListItem";
 import { useRouter } from "expo-router";
 import { useFetchGenerations } from "@/hooks/common/carData/useFetchGenerations";
 import { useTheme } from "@/contexts/ThemeContext";
+import { Generation } from "@/types/firestore_schema/manufacturers";
 
 const SelectYear = () => {
   const { watch, control } = useFormContext();
@@ -24,9 +25,16 @@ const SelectYear = () => {
     name: "generation",
     control,
   });
+  const {
+    field: { onChange: onChangeGenerationName },
+  } = useController({
+    name: "generationName",
+    control,
+  });
 
-  const handleGenerationSelect = (generationId: string) => {
-    onChange(generationId);
+  const handleGenerationSelect = (generation: Generation) => {
+    onChange(generation.generationId);
+    onChangeGenerationName(generation.fullChangeName);
     router.push("/registrationCar/selectMinerModel");
   };
 
@@ -47,7 +55,7 @@ const SelectYear = () => {
       renderItem={({ item }) => (
         <ListItem
           label={item.fullChangeName}
-          onPress={() => handleGenerationSelect(item.generationId)}
+          onPress={() => handleGenerationSelect(item)}
         />
       )}
     />

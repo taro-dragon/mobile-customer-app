@@ -11,8 +11,6 @@ import {
 import storage from "@react-native-firebase/storage";
 import firestore from "@react-native-firebase/firestore";
 
-import { transformCarData } from "@/libs/transformCarData";
-import { Car } from "@/types/models/Car";
 import { useTheme } from "@/contexts/ThemeContext";
 import DisplaySelectItem from "../../../components/registrationCar/form/DisplaySelectItem";
 import TakePhoto from "../../../components/registrationCar/form/TakePhoto";
@@ -81,9 +79,15 @@ const RegistrationCarForm = () => {
         id: carRef.id,
         ownerId: user?.id,
         maker,
+        makerName,
         model,
-        year,
+        modelName,
+        generation,
+        generationName,
+        minorModel,
+        minorModelName,
         grade,
+        gradeName,
         modelNumber: data.modelNumber,
         images: downloadURLs,
         createdAt: firestore.Timestamp.now(),
@@ -155,8 +159,12 @@ const RegistrationCarForm = () => {
               value={minorModelName}
             />
           )}
-          <DisplaySelectItem label="グレード" value={gradeName} />
-          <DisplaySelectItem label="型番" value={modelNumber} />
+          {gradeName && (
+            <DisplaySelectItem label="グレード" value={gradeName} />
+          )}
+          {modelNumber && (
+            <DisplaySelectItem label="型番" value={modelNumber} />
+          )}
         </View>
         <View style={{ gap: 8, paddingVertical: 16 }}>
           <Text

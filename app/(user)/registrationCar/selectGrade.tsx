@@ -31,6 +31,12 @@ const SelectGrade = () => {
     control,
   });
   const {
+    field: { onChange: onChangeGradeName },
+  } = useController({
+    name: "gradeName",
+    control,
+  });
+  const {
     field: { onChange: onChangeModelNumber },
   } = useController({
     name: "modelNumber",
@@ -54,7 +60,8 @@ const SelectGrade = () => {
               gap: 8,
             }}
             onPress={() => {
-              onChange(item.gradeName);
+              onChange(item.gradeId);
+              onChangeGradeName(item.gradeName);
               onChangeModelNumber(item.modelNumber);
               router.push("/registrationCar/form");
             }}

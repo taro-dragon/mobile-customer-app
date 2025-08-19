@@ -15,7 +15,6 @@ const RegistrationCarLayout = () => {
   const router = useRouter();
   const navigation = useNavigation();
   const parent = navigation.getParent();
-  console.log("parent", parent);
   const form = useForm<RegistrationCarFormData>({
     resolver: zodResolver(registrationCarSchema),
     defaultValues: {
