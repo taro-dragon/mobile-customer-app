@@ -1,14 +1,14 @@
-import { useEffect, useMemo, useState, useCallback } from "react";
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { useCallback } from "react";
+import { ActivityIndicator, FlatList, View } from "react-native";
 import { useController, useFormContext } from "react-hook-form";
 
-import { FullCarData } from "@/types/models/carData/fullCarData";
-import fullCarData from "@/constants/full_car_catalog.json";
 import ListItem from "@/components/registrationCar/ListItem";
 import { useRouter } from "expo-router";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Model } from "@/types/models/carData/model";
-import { useFetchModels } from "@/hooks/common/carData/useFetchModels";
+import {
+  ModelWithGenerations,
+  useFetchModels,
+} from "@/hooks/common/carData/useFetchModels";
 
 const SelectCar = () => {
   const router = useRouter();
@@ -25,13 +25,22 @@ const SelectCar = () => {
     name: "model",
     control,
   });
+  const {
+    field: { onChange: onChangeModelName },
+  } = useController({
+    name: "modelName",
+    control,
+  });
 
   const handleCarSelect = useCallback(
-    (modelId: string) => {
-      onChange(modelId);
-      setTimeout(() => {
+    (model: ModelWithGenerations) => {
+      onChange(model.id);
+      onChangeModelName(model.name);
+      if (model.hasGenerations) {
         router.push("/registrationCar/selectYear");
-      }, 50);
+      } else {
+        router.push("/registrationCar/form");
+      }
     },
     [onChange, router]
   );
@@ -51,10 +60,7 @@ const SelectCar = () => {
         paddingBottom: 24,
       }}
       renderItem={({ item }) => (
-        <ListItem
-          label={item.name}
-          onPress={() => handleCarSelect(item.modelId)}
-        />
+        <ListItem label={item.name} onPress={() => handleCarSelect(item)} />
       )}
       ListEmptyComponent={
         <View

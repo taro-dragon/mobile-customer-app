@@ -2,9 +2,15 @@ import { z } from "zod";
 
 export const registrationCarSchema = z.object({
   maker: z.string(),
+  makerName: z.string(),
   model: z.string(),
-  year: z.string(),
+  modelName: z.string(),
+  generation: z.string().optional(),
+  generationName: z.string().optional(),
+  minorModel: z.string().optional(),
+  minorModelName: z.string().optional(),
   grade: z.string(),
+  gradeName: z.string(),
   modelNumber: z.string(),
   front: z.string().min(1, "正面写真は必須です"),
   back: z.string().min(1, "背面写真は必須です"),

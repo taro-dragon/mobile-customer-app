@@ -5,6 +5,7 @@ import { useRouter } from "expo-router";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useCallback } from "react";
 import { useFetchManufacturers } from "@/hooks/common/carData/useFetchManufacturers";
+import { Manufacturer } from "@/types/firestore_schema/manufacturers";
 
 const RegistrationCar = () => {
   const { manufacturers, isLoading } = useFetchManufacturers();
@@ -16,14 +17,19 @@ const RegistrationCar = () => {
     name: "maker",
     control,
   });
+  const {
+    field: { onChange: onChangeMakerName },
+  } = useController({
+    name: "makerName",
+    control,
+  });
   const router = useRouter();
 
   const handleMakerSelect = useCallback(
-    (manufacturerId: string) => {
-      onChange(manufacturerId);
-      setTimeout(() => {
-        router.push("/registrationCar/selectCar");
-      }, 50);
+    (manufacturer: Manufacturer) => {
+      onChange(manufacturer.manufacturerId);
+      onChangeMakerName(manufacturer.name);
+      router.push("/registrationCar/selectCar");
     },
     [onChange, router]
   );
@@ -43,10 +49,7 @@ const RegistrationCar = () => {
         paddingBottom: 24,
       }}
       renderItem={({ item }) => (
-        <ListItem
-          label={item.name}
-          onPress={() => handleMakerSelect(item.manufacturerId)}
-        />
+        <ListItem label={item.name} onPress={() => handleMakerSelect(item)} />
       )}
       ListEmptyComponent={
         <View

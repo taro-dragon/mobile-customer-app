@@ -4,8 +4,9 @@ import { useController, useFormContext } from "react-hook-form";
 
 import ListItem from "@/components/registrationCar/ListItem";
 import { useRouter } from "expo-router";
-import { useFetchGenerations } from "@/hooks/common/carData/useFetchGenerations";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useFetchMinorModel } from "@/hooks/common/carData/useFetchMinorModel";
+import { MinorModel } from "@/types/firestore_schema/manufacturers";
 
 const SelectYear = () => {
   const { watch, control } = useFormContext();
@@ -13,22 +14,36 @@ const SelectYear = () => {
   const router = useRouter();
   const maker = watch("maker");
   const model = watch("model");
-  const { generations, isLoading } = useFetchGenerations({
+  const generation = watch("generation");
+  const { minorModels, isLoading } = useFetchMinorModel({
     manufacturerId: maker,
     modelId: model,
+    generationId: generation,
   });
 
   const {
     field: { onChange },
   } = useController({
-    name: "generation",
+    name: "minorModel",
+    control,
+  });
+  const {
+    field: { onChange: onChangeMinorModelName },
+  } = useController({
+    name: "minorModelName",
     control,
   });
 
-  const handleGenerationSelect = (generationId: string) => {
-    onChange(generationId);
-    router.push("/registrationCar/selectMinerModel");
-  };
+  const handleYearSelect = useCallback(
+    (minorModel: MinorModel) => {
+      onChange(minorModel.minorChangeId);
+      onChangeMinorModelName(minorModel.minorChangeName);
+      setTimeout(() => {
+        router.push("/registrationCar/selectGrade");
+      }, 50);
+    },
+    [onChange, router]
+  );
 
   if (isLoading) {
     return (
@@ -40,14 +55,14 @@ const SelectYear = () => {
 
   return (
     <FlatList
-      data={generations}
+      data={minorModels}
       contentContainerStyle={{
         paddingBottom: 24,
       }}
       renderItem={({ item }) => (
         <ListItem
-          label={item.fullChangeName}
-          onPress={() => handleGenerationSelect(item.generationId)}
+          label={item.minorChangeName}
+          onPress={() => handleYearSelect(item)}
         />
       )}
     />

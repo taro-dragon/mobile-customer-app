@@ -3,8 +3,11 @@ import firestore from "@react-native-firebase/firestore";
 import useSWR from "swr";
 
 type ModelWithId = Model & { id: string };
+export type ModelWithGenerations = ModelWithId & { hasGenerations: boolean };
 
-const fetchModels = async (manufacturerId: string): Promise<ModelWithId[]> => {
+const fetchModels = async (
+  manufacturerId: string
+): Promise<ModelWithGenerations[]> => {
   try {
     const manufacturersSnapshot = await firestore()
       .collection("manufacturers")
@@ -13,16 +16,28 @@ const fetchModels = async (manufacturerId: string): Promise<ModelWithId[]> => {
       .orderBy("name")
       .get();
 
-    const manufacturers: ModelWithId[] = manufacturersSnapshot.docs.map(
-      (doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })
-    ) as ModelWithId[];
+    const modelsWithGenerations: ModelWithGenerations[] = await Promise.all(
+      manufacturersSnapshot.docs.map(async (doc) => {
+        const generationsSnapshot = await firestore()
+          .collection("manufacturers")
+          .doc(manufacturerId)
+          .collection("models")
+          .doc(doc.id)
+          .collection("generations")
+          .limit(1)
+          .get();
 
-    return manufacturers;
+        return {
+          id: doc.id,
+          ...doc.data(),
+          hasGenerations: !generationsSnapshot.empty,
+        } as ModelWithGenerations;
+      })
+    );
+
+    return modelsWithGenerations;
   } catch (error) {
-    console.error("Error fetching manufacturers:", error);
+    console.error("Error fetching models:", error);
     throw error;
   }
 };

@@ -1,5 +1,5 @@
 import { useTheme } from "@/contexts/ThemeContext";
-import { Stack, useRouter } from "expo-router";
+import { Stack, useNavigation, useRouter } from "expo-router";
 import { ChevronLeft, X } from "lucide-react-native";
 import { FormProvider, useForm } from "react-hook-form";
 import { TouchableOpacity } from "react-native";
@@ -13,6 +13,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 const RegistrationCarLayout = () => {
   const { colors } = useTheme();
   const router = useRouter();
+  const navigation = useNavigation();
+  const parent = navigation.getParent();
+  console.log("parent", parent);
   const form = useForm<RegistrationCarFormData>({
     resolver: zodResolver(registrationCarSchema),
     defaultValues: {
@@ -26,12 +29,6 @@ const RegistrationCarLayout = () => {
     },
   });
 
-  const handleGoBack = useCallback(() => {
-    setTimeout(() => {
-      router.back();
-    }, 10);
-  }, [router]);
-
   return (
     <FormProvider {...form}>
       <Stack
@@ -39,11 +36,11 @@ const RegistrationCarLayout = () => {
           contentStyle: {
             backgroundColor: colors.backgroundPrimary,
           },
-          animation: "slide_from_right",
-          gestureEnabled: true,
-          gestureDirection: "horizontal",
-          animationDuration: 200,
-          presentation: "card",
+          headerRight: () => (
+            <TouchableOpacity onPress={() => parent?.goBack()}>
+              <X size={24} color={colors.primary} />
+            </TouchableOpacity>
+          ),
         }}
       >
         <Stack.Screen
@@ -54,11 +51,6 @@ const RegistrationCarLayout = () => {
             },
             headerTintColor: colors.primary,
             headerTitle: "メーカー選択",
-            headerLeft: () => (
-              <TouchableOpacity onPress={handleGoBack}>
-                <X size={24} color={colors.primary} />
-              </TouchableOpacity>
-            ),
           }}
         />
         <Stack.Screen
@@ -69,11 +61,6 @@ const RegistrationCarLayout = () => {
             },
             headerTintColor: colors.primary,
             headerTitle: "車種選択",
-            headerLeft: () => (
-              <TouchableOpacity onPress={handleGoBack}>
-                <ChevronLeft size={24} color={colors.primary} />
-              </TouchableOpacity>
-            ),
           }}
         />
         <Stack.Screen
@@ -84,11 +71,16 @@ const RegistrationCarLayout = () => {
             },
             headerTintColor: colors.primary,
             headerTitle: "年式選択",
-            headerLeft: () => (
-              <TouchableOpacity onPress={handleGoBack}>
-                <ChevronLeft size={24} color={colors.primary} />
-              </TouchableOpacity>
-            ),
+          }}
+        />
+        <Stack.Screen
+          name="selectMinerModel"
+          options={{
+            headerStyle: {
+              backgroundColor: colors.backgroundPrimary,
+            },
+            headerTintColor: colors.primary,
+            headerTitle: "マイナーチェンジ選択",
           }}
         />
         <Stack.Screen
@@ -99,11 +91,6 @@ const RegistrationCarLayout = () => {
             },
             headerTintColor: colors.primary,
             headerTitle: "グレード選択",
-            headerLeft: () => (
-              <TouchableOpacity onPress={handleGoBack}>
-                <ChevronLeft size={24} color={colors.primary} />
-              </TouchableOpacity>
-            ),
           }}
         />
         <Stack.Screen

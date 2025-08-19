@@ -36,14 +36,20 @@ const RegistrationCarForm = () => {
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useFormContext();
-  const { grade, model, year, maker, modelNumber } = watch();
-  const formCar = {
+  const {
     grade,
     model,
     year,
     maker,
-  };
-  const carData = transformCarData(formCar as Car);
+    modelNumber,
+    generation,
+    minorModel,
+    makerName,
+    modelName,
+    gradeName,
+    generationName,
+    minorModelName,
+  } = watch();
   const onSubmit = handleSubmit(async (data) => {
     try {
       const carRef = firestore().collection("cars").doc();
@@ -138,10 +144,18 @@ const RegistrationCarForm = () => {
             gap: 8,
           }}
         >
-          <DisplaySelectItem label="メーカー" value={carData.maker.name} />
-          <DisplaySelectItem label="車種" value={carData.model.name} />
-          <DisplaySelectItem label="年式" value={carData.year.year} />
-          <DisplaySelectItem label="グレード" value={carData.grade.gradeName} />
+          <DisplaySelectItem label="メーカー" value={makerName} />
+          <DisplaySelectItem label="車種" value={modelName} />
+          {generation && (
+            <DisplaySelectItem label="モデル" value={generationName} />
+          )}
+          {minorModel && (
+            <DisplaySelectItem
+              label="マイナーチェンジ"
+              value={minorModelName}
+            />
+          )}
+          <DisplaySelectItem label="グレード" value={gradeName} />
           <DisplaySelectItem label="型番" value={modelNumber} />
         </View>
         <View style={{ gap: 8, paddingVertical: 16 }}>
