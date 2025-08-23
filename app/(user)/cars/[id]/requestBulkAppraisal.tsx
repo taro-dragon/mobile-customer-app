@@ -38,15 +38,20 @@ const RequestBulkAppraisal: React.FC = () => {
   const { handleSubmit } = form;
   const { cars, user } = useStore();
   const car = cars.find((car) => car.id === id);
-  const carData = transformCarData(car as Car);
   const handleRequestBulkAppraisal = async (data: RequestBulkAppraisalForm) => {
     try {
       await requestBulkAppraisal({
         carId: id,
         maker: car?.maker ?? "",
+        makerName: car?.makerName ?? "",
         model: car?.model ?? "",
-        year: Number(car?.year ?? 0),
+        modelName: car?.modelName ?? "",
+        generation: car?.generation ?? "",
+        generationName: car?.generationName ?? "",
+        minorModel: car?.minorModel ?? "",
+        minorModelName: car?.minorModelName ?? "",
         grade: car?.grade ?? "",
+        gradeName: car?.gradeName ?? "",
         modelNumber: car?.modelNumber ?? "",
         mileage: Number(data.mileage),
         userId: user?.id ?? "",
@@ -73,7 +78,7 @@ const RequestBulkAppraisal: React.FC = () => {
 
   return (
     <FormProvider {...form}>
-      <RequestBulkAppraisalScreen carData={carData} onSubmit={onSubmit} />
+      <RequestBulkAppraisalScreen car={car as Car} onSubmit={onSubmit} />
     </FormProvider>
   );
 };

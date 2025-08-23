@@ -10,17 +10,18 @@ import {
 } from "@/constants/registrationCarOptions";
 import { useTheme } from "@/contexts/ThemeContext";
 import { CarDetails } from "@/libs/transformCarData";
+import { Car } from "@/types/models/Car";
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import { ActivityIndicator, Modal, ScrollView, Text, View } from "react-native";
 
 type RequestBulkAppraisalScreenProps = {
-  carData: CarDetails;
+  car: Car;
   onSubmit: () => void;
 };
 
 const RequestBulkAppraisalScreen: React.FC<RequestBulkAppraisalScreenProps> = ({
-  carData,
+  car,
   onSubmit,
 }) => {
   const { colors, typography } = useTheme();
@@ -41,13 +42,20 @@ const RequestBulkAppraisalScreen: React.FC<RequestBulkAppraisalScreenProps> = ({
               gap: 8,
             }}
           >
-            <DisplaySelectItem label="メーカー" value={carData.maker.name} />
-            <DisplaySelectItem label="車種" value={carData.model.name} />
-            <DisplaySelectItem label="年式" value={carData.year.year} />
-            <DisplaySelectItem
-              label="グレード"
-              value={carData.grade.gradeName}
-            />
+            <DisplaySelectItem label="メーカー" value={car.makerName} />
+            <DisplaySelectItem label="車種" value={car.modelName} />
+            {car.generationName && (
+              <DisplaySelectItem label="モデル" value={car.generationName} />
+            )}
+            {car.minorModelName && (
+              <DisplaySelectItem
+                label="マイナーチェンジ"
+                value={car.minorModelName}
+              />
+            )}
+            {car.gradeName && (
+              <DisplaySelectItem label="グレード" value={car.gradeName} />
+            )}
           </View>
           <View style={{ paddingHorizontal: 16 }}>
             <ModalPicker

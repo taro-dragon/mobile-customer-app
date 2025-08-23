@@ -123,7 +123,7 @@ const RegistrationCarLayout = () => {
               backgroundColor: colors.gray600,
             },
             headerTintColor: colors.white,
-            headerLeft: () => (
+            headerRight: () => (
               <TouchableOpacity
                 onPress={() => {
                   router.back();

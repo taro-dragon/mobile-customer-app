@@ -4,9 +4,15 @@ import dayjs from "dayjs";
 export type RequestBulkAppraisalParams = {
   carId: string;
   maker: string;
+  makerName: string;
   model: string;
-  year: number;
+  modelName: string;
+  generation: string;
+  generationName: string;
+  minorModel: string;
+  minorModelName: string;
   grade: string;
+  gradeName: string;
   modelNumber: string;
   mileage: number;
   prefecture: string;
@@ -23,9 +29,15 @@ export const requestBulkAppraisal = async (
     await firestore().collection("bulkAppraisalRequests").add({
       carId: params.carId,
       maker: params.maker,
+      makerName: params.makerName,
       model: params.model,
-      year: params.year,
+      modelName: params.modelName,
+      generation: params.generation,
+      generationName: params.generationName,
+      minorModel: params.minorModel,
+      minorModelName: params.minorModelName,
       grade: params.grade,
+      gradeName: params.gradeName,
       modelNumber: params.modelNumber,
       mileage: params.mileage,
       status: "in_progress",
